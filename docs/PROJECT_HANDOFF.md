@@ -2,7 +2,7 @@
 
 > 续开发先读本文件顶部。中文「百灵」/ 英文「Mynah」。神鸟家族成员（玄鸟/金乌/青鸟/朱雀/百灵）。
 
-## 🔴 当前状态（2026-07-24 · v0.3.0）
+## 🔴 当前状态（2026-07-24 · v0.3.1）
 
 **一句话**：Windows AI 语音输入，越用越懂你。核心链路 + 知识库 RAG + 专名同音纠错 + 专名词库 + 场景感知 + 智能梳理结构 + 快速修正学习闭环全部落地；**v0.3.0 完成 UI 重设计：宣纸墨朱 × 苹果 HUD**。
 
@@ -11,7 +11,7 @@
 **对外渠道（2026-07-24 上线）**：
 - **GitHub**：`github.com/msaysay/bailing`（开源，main 分支；Release v0.3.0 挂**无 Key** 安装包 `BailingMynah-Setup-0.3.0.exe`）。推送用本机 git 凭据（msaysay）。
 - **官网**：`https://49.gx.cn/bailing/`（静态单页，源在 `site/`）。服务器 `root@159.75.115.84`（密钥 `D:/cd/ssjf-deploy/secrets/deploy_ed25519`），目录 `/var/www/bailing`，Nginx 在 `xiakehui.conf` 的 49.gx.cn 块加了 `location /bailing/ { alias /var/www/bailing/; }`——**别动坊主会/知更/aiops 的块**。
-- **百度网盘**：`https://pan.baidu.com/s/12daNlpuBJmkKa7MLSvhIPg?pwd=faaw`（提取码 faaw，用户自传无 Key 包）。
+- **百度网盘**：`https://pan.baidu.com/s/1BbicfCfsBgCmAUKcXigw0Q?pwd=83vw`（提取码 83vw，用户自传无 Key 包）。
 - ⚠️ **打包红线**：`extraResources` 会把 `.env`（含 key）打进安装包；`data/` 只放行 `terms.default.json`（filter），history/learned 等个人数据绝不进包。**对外发包前必须临时换成 .env.example 再 dist**（首版曾误带 key+个人数据上线，已换净化版，用户已知情需重置 key）。
 - 主标语（全渠道统一）：**「连着你的第二大脑，越说越懂你」**。官网文案定稿在 `docs/website-content.md`。
 
