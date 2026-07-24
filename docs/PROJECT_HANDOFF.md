@@ -6,7 +6,7 @@
 
 **一句话**：Windows AI 语音输入，越用越懂你。**v0.4.0 开箱即用：默认走「百灵云服务」中转（服务器存 key，每日 3000 字免费额度，作者承担），新用户零配置直接体验；首启四步引导；接入方可换任何 OpenAI 兼容算法。**
 
-**云服务架构**：App → `49.gx.cn/bailing-api/`（`relay/server.js`，127.0.0.1:8350，systemd `bailing-relay`）→ MiMo。计量按装机 ID（首启随机 UUID 存 settings.json）每日 3000 字，超了 429 引导配 BYOK。**中转不记内容只记字数**。key 在服务器 `secrets.env`。
+**云服务架构（已上线✅）**：App → `49.gx.cn/bailing-api/`（`relay/server.js`，127.0.0.1:8350，systemd `bailing-relay`，node 在 `/root/.nvm/versions/node/v22.22.0/bin/node`）→ MiMo。已端到端验证：额度计数、MiMo 转发、429 提示全通。计量按装机 ID（首启随机 UUID 存 settings.json）每日 3000 字，超了 429 引导配 BYOK。**中转不记内容只记字数**。key 在服务器 `secrets.env`。
 
 **App 提供方层**（`src/main/provider.js`）：`endpoint()` 统一决定 ASR/润色走云服务还是 BYOK 直连；`config.provider.mode` = cloud（默认）| byok。通用 ASR 新增 `asr/openai-audio.js`（Whisper API 格式）。设置页「接入方」区块：云服务（显示今日额度）/ 自定义（baseURL+key+预设填 MiMo/DeepSeek）。
 
