@@ -24,7 +24,7 @@ const RESET = `
 
 app.whenReady().then(async () => {
   const win = new BrowserWindow({
-    width: 500, height: 150, show: false, frame: false,
+    width: 1120, height: 280, show: false, frame: false,
     transparent: true, backgroundColor: '#00000000',
     webPreferences: {
       preload: path.join(ROOT, 'src/renderer/preload.js'),
@@ -32,14 +32,15 @@ app.whenReady().then(async () => {
     },
   });
   await win.loadFile(path.join(ROOT, 'src/renderer/indicator.html'));
+  win.webContents.setZoomFactor(2);
   await win.webContents.executeJavaScript(`
     document.getElementById('pill').style.width='200px';
     document.getElementById('pill').style.height='60px';
     document.getElementById('pill').style.borderRadius='8px';
-    document.getElementById('pill').style.margin='25px auto';
-    document.body.style.background='#c9c9c9';
+    document.getElementById('pill').style.margin='36px auto';
+    document.getElementById('pill').style.boxShadow='0 12px 40px rgba(42,39,35,.18)';
+    document.body.style.background='#faf7f1';
   `);
-  await win.webContents.executeJavaScript(`document.getElementById('pill').style.zoom='2';`);
   for (const [name, js] of STATES) {
     await win.webContents.executeJavaScript(RESET + js);
     await new Promise((r) => setTimeout(r, 250));

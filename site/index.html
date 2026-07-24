@@ -7,97 +7,156 @@
 <meta name="description" content="百灵 Mynah —— 给构建知识库的人做的新时代语音输入法（Windows）。接入你的 Obsidian，懂你的领域，写对你的专名；改一次，以后都对。" />
 <style>
   :root{
-    --paper:#faf7f1; --card:#ffffff; --ink:#2a2723; --ink-dim:#8c857a;
-    --zhu:#c8402a; --zhu-soft:#f5e6e1; --hairline:rgba(42,39,35,.08);
+    --paper:#faf7f1; --card:#ffffff; --ink:#2a2723; --ink-deep:#171310;
+    --ink-dim:#8c857a; --zhu:#c8402a; --zhu-bright:#e05a44; --zhu-soft:#f5e6e1;
+    --hairline:rgba(42,39,35,.08); --paper-on-ink:#f0ebe2; --dim-on-ink:#a39a8c;
   }
   *{ margin:0; padding:0; box-sizing:border-box; }
   html{ scroll-behavior:smooth; }
   body{ font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
         background:var(--paper); color:var(--ink); line-height:1.75; font-size:16px;
         -webkit-font-smoothing:antialiased; }
-  .wrap{ max-width:760px; margin:0 auto; padding:0 22px; }
-  section{ padding:64px 0 8px; }
+  .wrap{ max-width:1080px; margin:0 auto; padding:0 28px; }
+  section{ padding:88px 0 12px; }
 
-  /* Hero */
-  .hero{ text-align:center; padding:88px 0 40px; }
-  .hero img.logo{ width:96px; height:96px; border-radius:24px;
-    box-shadow:0 8px 30px rgba(42,39,35,.12); }
-  .hero h1{ font-size:34px; font-weight:700; letter-spacing:.5px; margin-top:26px; line-height:1.35; }
-  .hero h1 .zhu{ color:var(--zhu); }
-  .hero .sub{ margin-top:14px; font-size:17px; color:var(--ink-dim); }
-  .cta{ margin-top:34px; display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
-  .btn{ display:inline-block; padding:13px 28px; border-radius:12px; font-size:15px; font-weight:600;
-        text-decoration:none; transition:transform .15s, box-shadow .15s; }
-  .btn.primary{ background:var(--zhu); color:#faf7f1; box-shadow:0 6px 18px rgba(200,64,42,.28); }
-  .btn.primary:hover{ transform:translateY(-1px); box-shadow:0 8px 22px rgba(200,64,42,.34); }
-  .btn.ghost{ background:transparent; color:var(--ink); border:1px solid rgba(42,39,35,.18); }
-  .btn.ghost:hover{ background:rgba(42,39,35,.04); }
-  .hero .hud{ margin-top:44px; }
-  .hero .hud img{ width:340px; max-width:88%; border-radius:12px;
-    box-shadow:0 10px 36px rgba(42,39,35,.14); }
+  /* ===== Hero · 墨色科技感 ===== */
+  .hero{ position:relative; overflow:hidden; text-align:center; color:var(--paper-on-ink);
+         background:
+           radial-gradient(720px 420px at 78% -8%, rgba(200,64,42,.32), transparent 62%),
+           radial-gradient(560px 380px at 8% 108%, rgba(200,64,42,.12), transparent 60%),
+           var(--ink-deep);
+         padding:96px 0 0; }
+  .hero::before{ content:""; position:absolute; inset:0;
+         background-image:radial-gradient(rgba(240,235,226,.05) 1px, transparent 1px);
+         background-size:26px 26px; pointer-events:none; }
+  .hero .inner{ position:relative; }
+  .hero img.logo{ width:92px; height:92px; border-radius:50%;
+         box-shadow:0 10px 40px rgba(0,0,0,.5), 0 0 0 1px rgba(240,235,226,.12); }
+  .hero h1{ font-size:52px; font-weight:800; letter-spacing:1px; margin-top:30px; line-height:1.3; }
+  .hero h1 .zhu{ color:var(--zhu-bright); }
+  .hero .sub{ margin:18px auto 0; max-width:620px; font-size:18px; color:var(--dim-on-ink); }
+  .cta{ margin-top:38px; display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
+  .btn{ display:inline-block; padding:15px 34px; border-radius:14px; font-size:16px; font-weight:600;
+        text-decoration:none; transition:transform .18s, box-shadow .18s, background .18s; }
+  .btn.primary{ background:var(--zhu); color:#faf7f1; box-shadow:0 8px 26px rgba(200,64,42,.4); }
+  .btn.primary:hover{ transform:translateY(-2px); box-shadow:0 12px 32px rgba(200,64,42,.5); }
+  .btn.ghost{ background:transparent; color:var(--paper-on-ink); border:1px solid rgba(240,235,226,.3); }
+  .btn.ghost:hover{ background:rgba(240,235,226,.08); }
+  .hero .hud{ margin:64px auto 0; max-width:720px; padding:0 28px; }
+  .hero .hud img{ width:100%; display:block; border-radius:18px;
+         box-shadow:0 -10px 60px rgba(0,0,0,.45), 0 0 0 1px rgba(240,235,226,.08); }
 
-  /* 章节标题 */
-  .kicker{ font-size:13px; font-weight:700; letter-spacing:2px; color:var(--zhu); }
-  h2{ font-size:26px; font-weight:700; margin-top:10px; line-height:1.4; }
-  .lead{ margin-top:14px; color:var(--ink); }
+  /* ===== 章节标题 ===== */
+  .kicker{ font-size:13px; font-weight:700; letter-spacing:3px; color:var(--zhu); }
+  h2{ font-size:34px; font-weight:800; margin-top:12px; line-height:1.4; letter-spacing:.5px; }
+  .lead{ margin-top:16px; font-size:17px; max-width:680px; }
   .dim{ color:var(--ink-dim); }
+  .zhu{ color:var(--zhu); }
 
-  /* 故事 */
-  .story p{ margin-top:16px; }
-  .story p.em{ font-weight:600; }
+  /* ===== 故事 ===== */
+  .story{ max-width:760px; }
+  .story p{ margin-top:18px; font-size:17px; }
+  .story p.em{ font-size:19px; font-weight:700; color:var(--ink);
+    border-left:4px solid var(--zhu); padding-left:18px; margin-top:28px; }
 
-  /* 卡片 */
-  .cards{ margin-top:26px; display:grid; gap:14px; }
-  .card{ background:var(--card); border:1px solid var(--hairline); border-radius:16px; padding:22px 24px; }
-  .card h3{ font-size:17px; font-weight:700; }
-  .card h3 .no{ color:var(--zhu); margin-right:8px; font-variant-numeric:tabular-nums; }
-  .card p{ margin-top:8px; font-size:15px; color:var(--ink-dim); }
+  /* ===== 卡片 ===== */
+  .cards{ margin-top:36px; display:grid; gap:18px; }
+  .card{ background:var(--card); border:1px solid var(--hairline); border-radius:20px; padding:30px 32px;
+         transition:transform .18s, box-shadow .18s; }
+  .card:hover{ transform:translateY(-3px); box-shadow:0 14px 40px rgba(42,39,35,.08); }
+  .card h3{ font-size:19px; font-weight:700; }
+  .card h3 .no{ color:var(--zhu); margin-right:10px; font-variant-numeric:tabular-nums; }
+  .card p{ margin-top:10px; font-size:15.5px; color:var(--ink-dim); }
   .card p b{ color:var(--ink); }
   .grid2{ grid-template-columns:1fr 1fr; }
-  @media (max-width:640px){ .grid2{ grid-template-columns:1fr; } }
 
-  /* 表格 */
-  table{ width:100%; border-collapse:collapse; margin-top:24px; background:var(--card);
-         border-radius:16px; overflow:hidden; font-size:15px; }
-  th,td{ padding:13px 16px; text-align:left; border-bottom:1px solid var(--hairline); }
+  /* ===== 真实效果 demo ===== */
+  .demo{ margin-top:36px; background:var(--ink-deep); border-radius:24px; padding:44px 44px 40px;
+         color:var(--paper-on-ink); }
+  .demo .tag{ display:inline-block; font-size:12.5px; font-weight:700; letter-spacing:1.5px;
+         padding:5px 14px; border-radius:999px; margin-bottom:14px; }
+  .demo .tag.raw{ background:rgba(240,235,226,.12); color:var(--dim-on-ink); }
+  .demo .tag.out{ background:var(--zhu); color:#faf7f1; }
+  .demo .cols{ display:grid; grid-template-columns:1fr 1fr; gap:36px; }
+  .demo .pane{ font-size:16.5px; line-height:2; }
+  .demo .raw s{ color:rgba(240,235,226,.4); text-decoration-color:rgba(224,90,68,.7); }
+  .demo .out b{ color:var(--zhu-bright); }
+  .demo .arrow{ display:none; }
+
+  /* ===== 算力账 ===== */
+  .bignum{ margin-top:36px; display:flex; align-items:baseline; gap:18px; flex-wrap:wrap; }
+  .bignum .n{ font-size:72px; font-weight:800; color:var(--zhu); letter-spacing:-1px; line-height:1; }
+  .bignum .t{ font-size:19px; font-weight:600; }
+  table{ width:100%; border-collapse:collapse; margin-top:28px; background:var(--card);
+         border-radius:18px; overflow:hidden; font-size:15.5px;
+         box-shadow:0 2px 16px rgba(42,39,35,.05); }
+  th,td{ padding:15px 20px; text-align:left; border-bottom:1px solid var(--hairline); }
   th{ background:var(--ink); color:#f0ebe2; font-weight:600; }
   tr:last-child td{ border-bottom:none; }
   td.yes{ color:var(--zhu); font-weight:700; }
-  .punch{ margin-top:18px; font-size:18px; font-weight:700; }
-  .punch .zhu{ color:var(--zhu); }
 
-  /* 截图 */
-  .shot{ margin-top:28px; text-align:center; }
-  .shot img{ width:100%; max-width:520px; border-radius:16px; box-shadow:0 10px 36px rgba(42,39,35,.12); }
-  .shot .cap{ margin-top:10px; font-size:13px; color:var(--ink-dim); }
+  /* ===== 截图 ===== */
+  .shot{ margin-top:36px; text-align:center; }
+  .shot img{ width:100%; max-width:560px; border-radius:20px; box-shadow:0 16px 50px rgba(42,39,35,.14); }
+  .shot .cap{ margin-top:12px; font-size:13.5px; color:var(--ink-dim); }
 
-  /* 页脚 */
-  footer{ margin-top:80px; padding:48px 0 56px; text-align:center;
-          background:var(--ink); color:#f0ebe2; }
-  footer .qr{ width:180px; height:180px; border-radius:16px; background:#fff; padding:8px; }
-  footer .say{ margin-top:18px; font-size:17px; font-weight:600; }
-  footer .fine{ margin-top:22px; font-size:13px; color:#8f887b; line-height:2; }
-  footer a{ color:#e08a76; text-decoration:none; }
+  /* ===== 下载 ===== */
+  .download{ margin-top:96px; background:var(--ink-deep); color:var(--paper-on-ink);
+             padding:88px 0; text-align:center; position:relative; overflow:hidden; }
+  .download::before{ content:""; position:absolute; inset:0;
+             background:radial-gradient(640px 320px at 50% -10%, rgba(200,64,42,.25), transparent 60%); }
+  .download .inner{ position:relative; }
+  .download h2{ color:var(--paper-on-ink); }
+  .download .btn.ghost{ color:var(--paper-on-ink); }
+  .download .note{ margin-top:16px; font-size:14px; color:var(--dim-on-ink); }
+
+  /* ===== 页脚 ===== */
+  footer{ padding:72px 0 56px; text-align:center; }
+  footer .qr{ width:168px; height:168px; border-radius:14px;
+    box-shadow:0 8px 28px rgba(42,39,35,.14); }
+  footer .say{ margin-top:20px; font-size:17px; font-weight:600; }
+  footer .fine{ margin-top:26px; font-size:13px; color:var(--ink-dim); line-height:2; }
+  footer a{ color:var(--zhu); text-decoration:none; }
+
+  /* ===== 移动端适配 ===== */
+  @media (max-width:820px){
+    section{ padding:56px 0 8px; }
+    .wrap{ padding:0 20px; }
+    .hero{ padding:64px 0 0; }
+    .hero h1{ font-size:34px; }
+    .hero .sub{ font-size:16px; }
+    h2{ font-size:26px; }
+    .grid2{ grid-template-columns:1fr; }
+    .demo{ padding:28px 24px; }
+    .demo .cols{ grid-template-columns:1fr; gap:24px; }
+    .bignum .n{ font-size:52px; }
+    .btn{ width:100%; text-align:center; padding:14px 20px; }
+    .cta{ flex-direction:column; align-items:stretch; }
+    th,td{ padding:11px 12px; font-size:14px; }
+    .card{ padding:22px 22px; }
+  }
 </style>
 </head>
 <body>
 
-<div class="wrap">
-
-  <!-- 1 · Hero -->
-  <div class="hero">
-    <img class="logo" src="assets/icon.png" alt="百灵 Mynah" />
-    <h1>连着你的<span class="zhu">第二大脑</span><br />越说越懂你</h1>
-    <p class="sub">百灵 Mynah —— 给构建知识库的人做的新时代语音输入法（Windows）<br />
-    按住说话，松开出字。它读你的 Obsidian，懂你的领域，写对你的专名。</p>
-    <div class="cta">
-      <a class="btn primary" href="https://github.com/msaysay/bailing/releases/latest">免费下载 Windows 版</a>
-      <a class="btn ghost" href="https://github.com/msaysay/bailing">GitHub 看源码</a>
+<!-- 1 · Hero -->
+<header class="hero">
+  <div class="inner">
+    <div class="wrap">
+      <img class="logo" src="assets/badge.png" alt="百灵 Mynah" />
+      <h1>连着你的<span class="zhu">第二大脑</span><br />越说越懂你</h1>
+      <p class="sub">百灵 Mynah —— 给构建知识库的人做的新时代语音输入法（Windows）<br />
+      按住说话，松开出字。它读你的 Obsidian，懂你的领域，写对你的专名。</p>
+      <div class="cta">
+        <a class="btn primary" href="https://github.com/msaysay/bailing/releases/latest">免费下载 Windows 版</a>
+        <a class="btn ghost" href="https://github.com/msaysay/bailing">GitHub 看源码</a>
+      </div>
     </div>
-    <div class="hud">
-      <img src="assets/shot-hud.png" alt="百灵悬浮窗：按住说话" />
-    </div>
+    <div class="hud"><img src="assets/shot-hud.png" alt="百灵悬浮窗：按住说话" /></div>
   </div>
+</header>
+
+<div class="wrap">
 
   <!-- 2 · 为什么做 -->
   <section class="story">
@@ -115,7 +174,7 @@
     <div class="kicker">它是怎么做到的</div>
     <h2>越说越懂你，靠四层逻辑</h2>
     <p class="lead">它不靠你手动教。它自己从你的知识库、和你的每一次修改里学。</p>
-    <div class="cards">
+    <div class="cards grid2">
       <div class="card"><h3><span class="no">01</span>冷启动：你的笔记就是它的词表</h3>
         <p>装上后选你的 Obsidian 库（或任何装 .md 的文件夹），它在本地把笔记建成索引——<b>一个字都不上传</b>。你的行业、术语、上下文，它先通读一遍。</p></div>
       <div class="card"><h3><span class="no">02</span>说话时：先查笔记，再下笔</h3>
@@ -127,7 +186,26 @@
     </div>
   </section>
 
-  <!-- 4 · 四个不一样 -->
+  <!-- 4 · 真实效果 -->
+  <section>
+    <div class="kicker">真实效果</div>
+    <h2>随口一说，它出的是成稿</h2>
+    <div class="demo">
+      <div class="cols">
+        <div class="pane raw">
+          <span class="tag raw">随口说</span>
+          <div>嗯那个就是，<s>呃</s>我们跟<s>那个</s>太抖酒，<s>不对不对，</s>泰斗，泰斗酒那边的合作，下周三，<s>哦不对，</s>下周四上午十点碰一下，然后呢把四季坊，<s>那个</s>肆拾玖坊的报价也带上</div>
+        </div>
+        <div class="pane out">
+          <span class="tag out">百灵出字</span>
+          <div>下周<b>四上午 10 点</b>，和<b>泰斗酒</b>碰合作，带上<b>肆拾玖坊</b>的报价。</div>
+        </div>
+      </div>
+    </div>
+    <p class="dim" style="margin-top:14px;font-size:14px">口误自动修正 · 专名写对 · 口水词剔除 · 数字日期规范化 · 可开关的智能梳理结构</p>
+  </section>
+
+  <!-- 5 · 四个不一样 -->
   <section>
     <div class="kicker">四个不一样</div>
     <h2>它和别的输入法，不一样在哪</h2>
@@ -147,22 +225,23 @@
     </div>
   </section>
 
-  <!-- 5 · 算力账 -->
+  <!-- 6 · 算力账 -->
   <section>
     <div class="kicker">算力账</div>
     <h2>说满两个小时，识别费一块钱</h2>
-    <p class="lead">百灵不收订阅费。你唯一要付的，是云服务商（小米 MiMo）按量计的 API 费，<a href="https://mimo.mi.com/docs/zh-CN/price/pay-as-you-go" style="color:var(--zhu)">官方定价公开可查</a>。算一笔重度使用的账——每天实打实说满 2 个小时（绝大多数人远达不到）：</p>
+    <div class="bignum"><span class="n">¥1</span><span class="t">= 2 小时语音识别的全部费用<br /><span class="dim" style="font-size:15px;font-weight:400">小米 MiMo 官方定价 ¥0.5/小时，按秒计</span></span></div>
+    <p class="lead">百灵不收订阅费。你唯一要付的，是云服务商按量计的 API 费，<a href="https://mimo.mi.com/docs/zh-CN/price/pay-as-you-go" class="zhu">官方定价公开可查</a>。算一笔重度使用的账——每天实打实说满 2 个小时（绝大多数人远达不到）：</p>
     <table>
       <tr><th>项目</th><th>用量</th><th>费用</th></tr>
       <tr><td>语音识别（ASR）</td><td>2 小时 × ¥0.5/小时</td><td>¥1.00</td></tr>
       <tr><td>润色（含知识库检索注入）</td><td>约 150 次口述</td><td>约 ¥0.3 ~ 0.5</td></tr>
       <tr><td><b>一天合计</b></td><td></td><td><b>约 ¥1.3 ~ 1.5</b></td></tr>
     </table>
-    <p class="punch">一个月重度使用 ≈ 40 块上下，<span class="zhu">一杯手冲咖啡的钱</span>。<br />
-    <span class="dim" style="font-size:15px;font-weight:400">对比订阅制同类工具 $10~30/月。百灵按量付费——说多少付多少，不说一分钱不花。</span></p>
+    <p class="lead" style="margin-top:22px"><b>一个月重度使用 ≈ 40 块上下，一杯手冲咖啡的钱。</b><br />
+    <span class="dim">对比订阅制同类工具 $10~30/月。百灵按量付费——说多少付多少，不说一分钱不花。</span></p>
   </section>
 
-  <!-- 6 · 对比表 -->
+  <!-- 7 · 对比表 -->
   <section>
     <div class="kicker">横向对比</div>
     <h2>和别的输入法比</h2>
@@ -177,7 +256,7 @@
     </table>
   </section>
 
-  <!-- 7 · 两种用法 -->
+  <!-- 8 · 两种用法 -->
   <section>
     <div class="kicker">两种用法</div>
     <h2>它不卖钱，它交朋友</h2>
@@ -191,17 +270,27 @@
 
 </div>
 
-<!-- 8 · 下载 + 联系 -->
+<!-- 9 · 下载 -->
+<section class="download">
+  <div class="inner wrap">
+    <div class="kicker">开始使用</div>
+    <h2>现在就让输入法<br />连上你的第二大脑</h2>
+    <div class="cta">
+      <a class="btn primary" href="https://github.com/msaysay/bailing/releases/latest">GitHub 下载（推荐）</a>
+      <a class="btn ghost" href="#" id="netdisk" onclick="return false" style="opacity:.55">百度网盘下载（链接稍后补上）</a>
+    </div>
+    <p class="note">Windows 10/11 · 安装包 ~82MB · 数据全部保存在你自己的电脑上</p>
+  </div>
+</section>
+
+<!-- 10 · 页脚 -->
 <footer>
   <div class="wrap">
+    <img class="qr" src="assets/qr.jpg" alt="陈宁的微信二维码" />
     <p class="say">做知识库的同路人，加个微信聊聊</p>
-    <p style="margin-top:18px"><img class="qr" src="assets/qr.jpg" alt="陈宁的微信二维码" /></p>
-    <p style="margin-top:26px">
-      <a class="btn primary" href="https://github.com/msaysay/bailing/releases/latest">免费下载 Windows 版</a>
-    </p>
     <p class="fine">
       百灵 Mynah · 神鸟家族 · 一个不懂代码的创业者，用 AI 协作开发<br />
-      源码与下载：<a href="https://github.com/msaysay/bailing">github.com/msaysay/bailing</a> · 数据全部保存在你自己的电脑上
+      源码与下载：<a href="https://github.com/msaysay/bailing">github.com/msaysay/bailing</a>
     </p>
   </div>
 </footer>
