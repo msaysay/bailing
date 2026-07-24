@@ -8,6 +8,13 @@
 
 **产物**：`dist/百灵Mynah-安装包-0.3.0.exe`（NSIS 免管理员，桌面快捷方式「百灵」）。默认热键 **右 Ctrl**（按住说话/松开出字，短按=持续录音再按停）。
 
+**对外渠道（2026-07-24 上线）**：
+- **GitHub**：`github.com/msaysay/bailing`（开源，main 分支；Release v0.3.0 挂**无 Key** 安装包 `BailingMynah-Setup-0.3.0.exe`）。推送用本机 git 凭据（msaysay）。
+- **官网**：`https://49.gx.cn/bailing/`（静态单页，源在 `site/`）。服务器 `root@159.75.115.84`（密钥 `D:/cd/ssjf-deploy/secrets/deploy_ed25519`），目录 `/var/www/bailing`，Nginx 在 `xiakehui.conf` 的 49.gx.cn 块加了 `location /bailing/ { alias /var/www/bailing/; }`——**别动坊主会/知更/aiops 的块**。
+- **百度网盘**：`https://pan.baidu.com/s/1Vs5IUEae33lyUsRgv_NOpA`（提取码 hisb，用户自传无 Key 包）。
+- ⚠️ **打包红线**：`extraResources` 会把 `.env`（含 key）打进安装包。**对外发包前必须临时换成 .env.example 再 dist**（首版曾误带 key 上线，已换无 Key 版，用户已知情需重置 key）。
+- 主标语（全渠道统一）：**「连着你的第二大脑，越说越懂你」**。官网文案定稿在 `docs/website-content.md`。
+
 **v0.3.0 设计系统（宣纸墨朱 × 苹果极简）**：
 - **形态**：悬浮窗改 **200×60 HUD 圆角卡片**，`roundedCorners:true`（Win11 DWM 原生圆角+投影，系统级抗锯齿），**废弃 setShape 条带裁形**（无抗锯齿、边角必然锯齿）。无描边无 inset 高光。
 - **色板**：`--paper #FAF7F1 宣纸` / `--ink #2A2723 墨色` / `--ink-dim #8C857A 灰墨` / `--zhu #C8402A 朱砂`（深色：#201D1A/#F0EBE2/#8F887B/#E05A44）。青蓝渐变全项目废弃。
