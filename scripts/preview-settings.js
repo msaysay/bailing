@@ -23,7 +23,7 @@ app.whenReady().then(async () => {
     ['polishEnabled','structureMode','autoPaste','autoScene','kbEnabled'].forEach(id => {
       const el = document.getElementById(id); if (el) el.classList.add('on');
     });
-    const kb = document.getElementById('kbVaultPath'); if (kb) kb.value = 'Documents/赚钱/ChenNing-Operating-Wiki';
+    const kb = document.getElementById('kbVaultPath'); if (kb) kb.value = 'Documents/Obsidian-Vault';
     const msg = document.getElementById('kbMsg'); if (msg) { msg.textContent = '136 篇 · 716 块 · 已就绪'; msg.className = 'test-msg ok'; }
   `);
   await new Promise((r) => setTimeout(r, 150));

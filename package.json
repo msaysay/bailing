@@ -54,7 +54,10 @@
       },
       {
         "from": "data",
-        "to": "data"
+        "to": "data",
+        "filter": [
+          "terms.default.json"
+        ]
       }
     ],
     "asarUnpack": [

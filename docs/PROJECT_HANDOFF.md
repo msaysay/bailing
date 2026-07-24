@@ -12,7 +12,7 @@
 - **GitHub**：`github.com/msaysay/bailing`（开源，main 分支；Release v0.3.0 挂**无 Key** 安装包 `BailingMynah-Setup-0.3.0.exe`）。推送用本机 git 凭据（msaysay）。
 - **官网**：`https://49.gx.cn/bailing/`（静态单页，源在 `site/`）。服务器 `root@159.75.115.84`（密钥 `D:/cd/ssjf-deploy/secrets/deploy_ed25519`），目录 `/var/www/bailing`，Nginx 在 `xiakehui.conf` 的 49.gx.cn 块加了 `location /bailing/ { alias /var/www/bailing/; }`——**别动坊主会/知更/aiops 的块**。
 - **百度网盘**：`https://pan.baidu.com/s/1Vs5IUEae33lyUsRgv_NOpA`（提取码 hisb，用户自传无 Key 包）。
-- ⚠️ **打包红线**：`extraResources` 会把 `.env`（含 key）打进安装包。**对外发包前必须临时换成 .env.example 再 dist**（首版曾误带 key 上线，已换无 Key 版，用户已知情需重置 key）。
+- ⚠️ **打包红线**：`extraResources` 会把 `.env`（含 key）打进安装包；`data/` 只放行 `terms.default.json`（filter），history/learned 等个人数据绝不进包。**对外发包前必须临时换成 .env.example 再 dist**（首版曾误带 key+个人数据上线，已换净化版，用户已知情需重置 key）。
 - 主标语（全渠道统一）：**「连着你的第二大脑，越说越懂你」**。官网文案定稿在 `docs/website-content.md`。
 
 **v0.3.0 设计系统（宣纸墨朱 × 苹果极简）**：
@@ -63,7 +63,7 @@
 ## 知识库 RAG（`src/main/kb.js`）
 
 - **本地 TF-IDF 检索**，零嵌入 API、离线、快。中文 2-gram + 英文词分词。
-- 索引 Obsidian 库：默认 `C:/Users/chenn/Documents/赚钱/ChenNing-Operating-Wiki`（`config.kb.vaultPath`，可设置页改）。
+- 索引 Obsidian 库：**默认空**（v0.3.0 起不预置任何个人路径），用户在设置页「选择文件夹」指定自己的库（`config.kb.vaultPath`）。
 - **排噪**：`excludeDirs` 默认排除 07_Logs/02_Raw_Sources/10_Journal/09_Scripts/11_Finance/05_Templates/99_Attachments 等原始/流水目录（转写稿噪声大）。当前有效 136 篇/716 块/~150ms。
 - **锚点词过滤**：命中必须匹配到 IDF≥3.5 的稀有区分词，避免只撞常见字的噪声。`minScore=5`。
 - **注入**：`pipeline` 用 ASR 原文检索 top3 → 拼成背景喂 `polish`，prompt 明令「仅帮理解领域/写对专名，严禁加进输出」。
@@ -134,7 +134,7 @@
 ## 决策已定（用户拍板）
 - 定位：神鸟家族商业新成员（自用+外售同码分 DB，照青鸟模式）。
 - ASR：云端优先（默认 MiMo；生产可切火山/讯飞）。
-- 知识库：先做 RAG（已完成）+ 整个 ChenNing-Operating-Wiki 库。
+- 知识库：先做 RAG（已完成）+ 用户的 Obsidian 库（设置页自选路径）。
 - 视觉：用户设计工具定稿（青蓝鸟标），代码已实现。
 
 ## 凭证

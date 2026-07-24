@@ -48,7 +48,7 @@ const config = {
   kb: {
     // 知识库 RAG：口述时检索 Obsidian 相关笔记喂给润色，让它懂你的领域/专名。
     enabled: process.env.BAILING_KB !== '0',
-    vaultPath: process.env.BAILING_VAULT || 'C:/Users/chenn/Documents/赚钱/ChenNing-Operating-Wiki',
+    vaultPath: process.env.BAILING_VAULT || '', // 默认空：用户在设置页选自己的库（不预置任何个人路径）
     topK: 3,
     maxChunkChars: 500,
     minScore: 5,
