@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8" />
+  <title>百灵 · 设置</title>
+  <style>
+    :root {
+      --brand:#c8402a; --hero:#2a2723;
+      --bg:#f5f2ec; --card:#fdfbf7; --elev:#fdfbf7;
+      --text:#2a2723; --sub:#8c857a; --line:#e9e3d8; --line-2:#f0ebe0;
+      --field:#f8f5ef; --ok:#1e9e6a; --err:#c8402a;
+    }
+    @media (prefers-color-scheme: dark){
+      :root{ --brand:#e05a44; --hero:#2e2a25;
+             --bg:#161311; --card:#201d1a; --elev:#262220; --text:#f0ebe2; --sub:#8f887b;
+             --line:#33302a; --line-2:#2a2723; --field:#1b1815; }
+    }
+    *{ box-sizing:border-box; margin:0; padding:0; -webkit-user-select:none; }
+    body{ font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+          background:var(--bg); color:var(--text); font-size:14px; padding-bottom:78px; }
+
+    /* 品牌头：墨底 + 朱砂光晕（标题栏隐形，hero 兼作拖动区） */
+    .hero{ position:relative; padding:22px 22px 20px; overflow:hidden; -webkit-app-region:drag;
+           background:var(--hero); color:#f0ebe2; }
+    .hero::after{ content:""; position:absolute; right:-40px; top:-40px; width:180px; height:180px;
+                  border-radius:50%; background:rgba(200,64,42,.28); }
+    .brandrow{ display:flex; align-items:center; gap:11px; position:relative; z-index:1; }
+    .logo-badge{ width:44px; height:44px; flex:none; }
+    .logo-badge .b-bg{ fill:#2a2723; stroke:rgba(240,235,226,.35); stroke-width:1.2; }
+    .logo-badge .b-line{ fill:none; stroke:#f0ebe2; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+    .logo-badge .b-eye{ fill:#e05a44; }
+    .brandrow h1{ font-size:18px; font-weight:700; letter-spacing:.3px; }
+    .brandrow .en{ font-weight:400; opacity:.82; font-size:13px; margin-left:2px; }
+    .hero p{ position:relative; z-index:1; margin-top:7px; font-size:12.5px; opacity:.9; }
+
+    /* 自绘窗口按钮：融进墨底 hero 的幽灵钮 */
+    .winctrl{ position:absolute; top:0; right:0; display:flex; z-index:2; -webkit-app-region:no-drag; }
+    .winctrl button{ width:42px; height:34px; border:none; background:transparent; cursor:pointer;
+             display:flex; align-items:center; justify-content:center; color:rgba(240,235,226,.6);
+             transition:background .15s, color .15s; }
+    .winctrl button:hover{ background:rgba(240,235,226,.12); color:#f0ebe2; }
+    .winctrl button.close:hover{ background:var(--brand); color:#faf7f1; }
+
+    .wrap{ padding:18px 18px 0; }
+    .group{ font-size:12px; color:var(--sub); font-weight:600; margin:18px 4px 8px; letter-spacing:.3px; }
+    .group:first-child{ margin-top:6px; }
+    .card{ background:var(--card); border:1px solid var(--line); border-radius:14px; overflow:hidden; }
+    .row{ display:flex; align-items:center; justify-content:space-between; gap:14px; padding:13px 15px; }
+    .row + .row{ border-top:1px solid var(--line-2); }
+    .row .l .t{ font-size:13.5px; }
+    .row .l .h{ font-size:11.5px; color:var(--sub); margin-top:3px; line-height:1.5; max-width:270px; }
+    .row .l .h b{ color:var(--text); font-weight:600; }
+
+    input[type=text], input[type=password], select{
+      font-size:13px; padding:8px 11px; border:1px solid var(--line); border-radius:9px;
+      background:var(--field); color:var(--text); min-width:180px; outline:none; transition:border-color .15s; }
+    input:focus, select:focus{ border-color:var(--brand); }
+    select{ cursor:pointer; }
+
+    .hotkey{ cursor:pointer; text-align:center; font-weight:600; letter-spacing:.6px; min-width:170px;
+             background:var(--field); }
+    .hotkey.capturing{ border-color:var(--brand); color:var(--brand); }
+
+    .switch{ width:46px; height:27px; border-radius:20px; background:var(--line); position:relative; cursor:pointer;
+             transition:background .2s; flex:none; }
+    .switch.on{ background:var(--brand); }
+    .switch i{ position:absolute; top:3px; left:3px; width:21px; height:21px; border-radius:50%; background:#fff;
+               transition:left .2s; box-shadow:0 1px 3px rgba(0,0,0,.25); }
+    .switch.on i{ left:22px; }
+
+    .keyfield{ display:flex; gap:8px; align-items:center; }
+    .keyfield input{ min-width:0; width:210px; font-family:ui-monospace,"SF Mono",Consolas,monospace; letter-spacing:.5px; }
+    .eye{ width:34px; height:34px; flex:none; border:1px solid var(--line); border-radius:9px; background:var(--field);
+          color:var(--sub); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:15px; }
+    .keyrow{ flex-direction:column; align-items:stretch; gap:11px; }
+    .keyrow .top{ display:flex; align-items:center; justify-content:space-between; gap:14px; }
+    .testbar{ display:flex; align-items:center; gap:10px; }
+    .btn-ghost{ font-size:12.5px; padding:7px 14px; border:1px solid var(--line); border-radius:9px;
+                background:var(--field); color:var(--text); cursor:pointer; }
+    .btn-ghost:active{ transform:scale(.97); }
+    .test-msg{ font-size:12px; }
+    .test-msg.ok{ color:var(--ok); } .test-msg.err{ color:var(--err); } .test-msg.run{ color:var(--sub); }
+
+    .foot{ position:fixed; left:0; right:0; bottom:0; padding:13px 18px;
+           background:var(--card); border-top:1px solid var(--line);
+           display:flex; align-items:center; gap:12px; }
+    .save{ font-size:14px; font-weight:600; padding:10px 26px; border:none; border-radius:10px; color:#faf7f1; cursor:pointer;
+           background:var(--brand);
+           box-shadow:0 4px 14px rgba(200,64,42,.30); }
+    .save:active{ transform:translateY(1px); }
+    .saved{ font-size:12.5px; color:var(--ok); opacity:0; transition:opacity .2s; }
+    .saved.show{ opacity:1; }
+    .privacy{ font-size:11.5px; color:var(--sub); line-height:1.6; margin:14px 4px 2px; }
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <div class="winctrl">
+      <button id="wcMin" title="最小化"><svg width="12" height="12" viewBox="0 0 12 12"><line x1="2" y1="6" x2="10" y2="6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></button>
+      <button id="wcClose" class="close" title="关闭"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M2.5 2.5 L9.5 9.5 M9.5 2.5 L2.5 9.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="brandrow">
+      <svg class="logo-badge" viewBox="0 0 48 48" aria-hidden="true">
+        <circle class="b-bg" cx="24" cy="24" r="23.4" />
+        <path class="b-line" d="M36 28 Q38 16 27 12 Q18.5 8.8 13.8 15.5 L8.8 18.6 L13.6 20.6 Q13 30 21.5 33.5 Q29 36 36 28" />
+        <path class="b-line" d="M36 28 Q42 27 41.5 22 Q41 18.5 38 20.5" />
+        <circle class="b-eye" cx="18" cy="16.5" r="1.7" />
+      </svg>
+      <div><h1>百灵<span class="en">Mynah</span></h1></div>
+    </div>
+    <p>连着你的第二大脑，越说越懂你 · 数据本地存储</p>
+  </div>
+
+  <div class="wrap">
+    <div class="group">快捷键</div>
+    <div class="card">
+      <div class="row">
+        <div class="l">
+          <div class="t">全局唤起键</div>
+          <div class="h">点一下后按你想要的组合键。<b>按住</b>说话：按住录音、松开出字；<b>短按</b>：点一下开始、再点结束。</div>
+        </div>
+        <input type="text" id="hotkey" class="hotkey" readonly value="加载中…" />
+      </div>
+    </div>
+
+    <div class="group">识别与润色</div>
+    <div class="card">
+      <div class="row">
+        <div class="l"><div class="t">语音识别引擎</div>
+          <div class="h">MiMo：同一个 key、中文强、自带标点（推荐）。本地 Whisper：离线兜底。</div></div>
+        <select id="asrProvider">
+          <option value="mimo">MiMo ASR（云 · 推荐）</option>
+          <option value="whisper-local">本地 Whisper（离线）</option>
+          <option value="huoshan">火山 BigASR（待接）</option>
+          <option value="xunfei">讯飞（待接）</option>
+        </select>
+      </div>
+      <div class="row">
+        <div class="l"><div class="t">AI 润色</div>
+          <div class="h">开：整理成干净文本；关：识别原文秒出（更快）。</div></div>
+        <div class="switch" id="polishEnabled"><i></i></div>
+      </div>
+      <div class="row">
+        <div class="l"><div class="t">智能梳理结构</div>
+          <div class="h">开：识别并列要点、把颠三倒四的口述理成清晰结构（分点/编号）；关：只顺句整理。</div></div>
+        <div class="switch" id="structureMode"><i></i></div>
+      </div>
+      <div class="row">
+        <div class="l"><div class="t">自动粘贴到光标</div>
+          <div class="h">开：直接落到当前输入框；关：只复制。<b>无论开关，结果都留在剪贴板</b>，焦点丢了也能 Ctrl+V。</div></div>
+        <div class="switch" id="autoPaste"><i></i></div>
+      </div>
+      <div class="row">
+        <div class="l"><div class="t">润色模型</div>
+          <div class="h">建议低延迟模型；已默认关闭长思考提速。</div></div>
+        <input type="text" id="polishModel" value="" placeholder="mimo-v2.5-pro" />
+      </div>
+      <div class="row">
+        <div class="l"><div class="t">自动识别场景</div>
+          <div class="h">按前台窗口自动切档：微信=口语、代码=保留英文、邮件=正式、文档=书面。</div></div>
+        <div class="switch" id="autoScene"><i></i></div>
+      </div>
+      <div class="row">
+        <div class="l"><div class="t">默认场景</div>
+          <div class="h">自动识别不出时（未知窗口）回落到这个场景。</div></div>
+        <select id="defaultScene">
+          <option value="default">通用</option>
+          <option value="chat">聊天（微信 / IM）</option>
+          <option value="doc">文档 / 写作</option>
+          <option value="code">代码 / 技术</option>
+          <option value="email">邮件</option>
+          <option value="social">社交（小红书）</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="group">密钥（BYOK · 本地存储）</div>
+    <div class="card">
+      <div class="row keyrow">
+        <div class="top">
+          <div class="l"><div class="t">MiMo API Key</div>
+            <div class="h">识别与润色共用。仅存本地，直连小米服务，不经过第三方。</div></div>
+          <div class="keyfield">
+            <input type="password" id="apiKey" placeholder="sk-…" />
+            <div class="eye" id="toggleKey" title="显示 / 隐藏">👁</div>
+          </div>
+        </div>
+        <div class="testbar">
+          <button class="btn-ghost" id="testBtn">测试连接</button>
+          <span class="test-msg" id="testMsg"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="group">知识库（RAG · 接入 Obsidian）</div>
+    <div class="card">
+      <div class="row">
+        <div class="l"><div class="t">知识库增强</div>
+          <div class="h">开：口述时检索你 Obsidian 里的相关笔记，让润色<b>懂你的领域、把专名写对</b>。</div></div>
+        <div class="switch" id="kbEnabled"><i></i></div>
+      </div>
+      <div class="row keyrow">
+        <div class="top">
+          <div class="l"><div class="t">知识库文件夹</div>
+            <div class="h">选一个含 .md/.txt 的目录（Obsidian 库或任意笔记文件夹）。只读、不上传，选完自动建索引。</div></div>
+          <input type="text" id="kbVaultPath" placeholder="点右侧“选择文件夹”" style="width:150px;font-size:12px;" />
+        </div>
+        <div class="testbar">
+          <button class="btn-ghost" id="kbPickBtn">选择文件夹</button>
+          <button class="btn-ghost" id="kbReindexBtn">重建索引</button>
+          <span class="test-msg" id="kbMsg"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="group">专名词库（让它写对你的名字）</div>
+    <div class="card">
+      <div class="row">
+        <div class="l"><div class="t">专名词库</div>
+          <div class="h">放进你的人名/公司/产品/黑话正字，说话时同音听错的自动纠回来。可从知识库一键建议。</div></div>
+        <button class="btn-ghost" id="openTermlib">管理词库…</button>
+      </div>
+    </div>
+
+    <div class="privacy">🔒 所有录音、历史、词库、密钥、知识库索引均保存在本机，不上传任何服务器。识别 / 润色请求直连你配置的服务商。</div>
+  </div>
+
+  <div class="foot">
+    <button class="save" id="save">保存设置</button>
+    <span class="saved" id="saved">已保存 ✓</span>
+  </div>
+
+  <script src="settings-ui.js"></script>
+  <script>
+    document.getElementById('wcMin').onclick = () => window.bailingSettings.winControl('minimize');
+    document.getElementById('wcClose').onclick = () => window.bailingSettings.winControl('close');
+  </script>
+</body>
+</html>
