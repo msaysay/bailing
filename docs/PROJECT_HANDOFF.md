@@ -161,7 +161,7 @@ npm run dist && mv .env.real-backup .env
 | GitHub | `github.com/msaysay/bailing`（公开；推送用本机 git 凭据 msaysay） |
 | 官网 | `https://49.gx.cn/bailing/`（+ `/guide/` 教程页） |
 | 云服务 | `https://49.gx.cn/bailing-api/`（relay 127.0.0.1:8350） |
-| 百度网盘 | `https://pan.baidu.com/s/1BbicfCfsBgCmAUKcXigw0Q?pwd=83vw`（提取码 83vw，用户自传） |
+| 百度网盘 | `https://pan.baidu.com/s/16SR0QmHTyAigheEhdndhPg?pwd=Sy5w`（提取码 Sy5w，文件：`百灵Mynah-安装包-0.4.1-无Key.exe`，用户自传） |
 | 下载文件名 | `BailingMynah-Setup-x.y.z.exe`（ASCII 名——GitHub 会吞中文文件名） |
 
 **凭证纪律**：MiMo key 只许出现在三处——本机 `.env`（gitignore）、服务器 `secrets.env`、小米后台。**绝不进源码/文档/安装包**。
