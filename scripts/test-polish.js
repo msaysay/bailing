@@ -4,7 +4,7 @@ const { polish } = require('../src/main/polish');
 
 const RAW =
   '嗯那个我想说的就是说啊咱们这个百灵这个项目呢它的核心就是那个越用越懂我嘛' +
-  '然后呢就是它跟那个typefree不一样的地方在于说它会自己学我的说话习惯然后' +
+  '然后呢就是它跟别的语音输入不一样的地方在于说它会自己学我的说话习惯然后' +
   '呃术语这块儿我们可以从那个obsidian里面导进来对就这样';
 
 async function run() {
@@ -22,7 +22,7 @@ async function run() {
       const out = await polish(RAW, {
         scene: s.scene,
         style: '说话偏口语、直接，喜欢用短句，技术圈背景，中英夹杂习惯保留英文原词',
-        terms: ['百灵', 'TypeFree', 'Obsidian', 'MiMo'],
+        terms: ['百灵', 'Obsidian', 'MiMo'],
       });
       console.log(`=== ${s.label}（${Date.now() - t0}ms） ===\n${out}\n`);
     } catch (e) {

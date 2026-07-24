@@ -1,6 +1,6 @@
 'use strict';
 // L0 冷启动词库导入：从 Obsidian 知识库 / 文本资产里挖专有名词，灌入 terms.learned.json。
-// 这是「越用越懂我」的第一铲——开机第一天术语表就有上千词，TypeFree 做不到。
+// 这是「越用越懂我」的第一铲——开机第一天术语表就有上千词，不用手动一个个加。
 //
 // 用法:
 //   node scripts/import-vocab.js "D:/path/to/ObsidianVault"  [更多目录...]
@@ -36,7 +36,7 @@ function extractTerms(text, freq) {
   for (const m of text.matchAll(/(?:^|\s)#([一-龥A-Za-z0-9_\-]{2,})/g)) bump(m[1]);
   // `内联代码` 里的专名/命令
   for (const m of text.matchAll(/`([A-Za-z][A-Za-z0-9_.\-]{1,20})`/g)) bump(m[1]);
-  // 连续大写/驼峰英文专名：Obsidian, TypeFree, API, useState
+  // 连续大写/驼峰英文专名：Obsidian, GitHub, API, useState
   for (const m of text.matchAll(/\b([A-Z][A-Za-z0-9]{2,20})\b/g)) bump(m[1]);
 }
 

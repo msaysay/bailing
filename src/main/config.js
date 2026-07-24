@@ -26,7 +26,7 @@ const config = {
   // 打包后 asar 内只读，可写数据搬 userData（main.js 启动时设 BAILING_DATA_DIR）
   dataDir: process.env.BAILING_DATA_DIR || path.join(ROOT, 'data'),
 
-  // 全局热键。默认「右 Ctrl」单键：按住说话、松开出字（仿 TypeFree）。
+  // 全局热键。默认「右 Ctrl」单键：按住说话、松开出字。
   // 也支持组合键如 'CommandOrControl+Shift+Space'，或单修饰键 RightCtrl/RightAlt/RightShift。
   hotkey: process.env.BAILING_HOTKEY || 'RightCtrl',
 

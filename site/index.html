@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>百灵 Mynah · 连着你的第二大脑，越说越懂你</title>
+<meta name="description" content="百灵 Mynah —— 给构建知识库的人做的新时代语音输入法（Windows）。接入你的 Obsidian，懂你的领域，写对你的专名；改一次，以后都对。" />
+<style>
+  :root{
+    --paper:#faf7f1; --card:#ffffff; --ink:#2a2723; --ink-dim:#8c857a;
+    --zhu:#c8402a; --zhu-soft:#f5e6e1; --hairline:rgba(42,39,35,.08);
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{ font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+        background:var(--paper); color:var(--ink); line-height:1.75; font-size:16px;
+        -webkit-font-smoothing:antialiased; }
+  .wrap{ max-width:760px; margin:0 auto; padding:0 22px; }
+  section{ padding:64px 0 8px; }
+
+  /* Hero */
+  .hero{ text-align:center; padding:88px 0 40px; }
+  .hero img.logo{ width:96px; height:96px; border-radius:24px;
+    box-shadow:0 8px 30px rgba(42,39,35,.12); }
+  .hero h1{ font-size:34px; font-weight:700; letter-spacing:.5px; margin-top:26px; line-height:1.35; }
+  .hero h1 .zhu{ color:var(--zhu); }
+  .hero .sub{ margin-top:14px; font-size:17px; color:var(--ink-dim); }
+  .cta{ margin-top:34px; display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+  .btn{ display:inline-block; padding:13px 28px; border-radius:12px; font-size:15px; font-weight:600;
+        text-decoration:none; transition:transform .15s, box-shadow .15s; }
+  .btn.primary{ background:var(--zhu); color:#faf7f1; box-shadow:0 6px 18px rgba(200,64,42,.28); }
+  .btn.primary:hover{ transform:translateY(-1px); box-shadow:0 8px 22px rgba(200,64,42,.34); }
+  .btn.ghost{ background:transparent; color:var(--ink); border:1px solid rgba(42,39,35,.18); }
+  .btn.ghost:hover{ background:rgba(42,39,35,.04); }
+  .hero .hud{ margin-top:44px; }
+  .hero .hud img{ width:340px; max-width:88%; border-radius:12px;
+    box-shadow:0 10px 36px rgba(42,39,35,.14); }
+
+  /* 章节标题 */
+  .kicker{ font-size:13px; font-weight:700; letter-spacing:2px; color:var(--zhu); }
+  h2{ font-size:26px; font-weight:700; margin-top:10px; line-height:1.4; }
+  .lead{ margin-top:14px; color:var(--ink); }
+  .dim{ color:var(--ink-dim); }
+
+  /* 故事 */
+  .story p{ margin-top:16px; }
+  .story p.em{ font-weight:600; }
+
+  /* 卡片 */
+  .cards{ margin-top:26px; display:grid; gap:14px; }
+  .card{ background:var(--card); border:1px solid var(--hairline); border-radius:16px; padding:22px 24px; }
+  .card h3{ font-size:17px; font-weight:700; }
+  .card h3 .no{ color:var(--zhu); margin-right:8px; font-variant-numeric:tabular-nums; }
+  .card p{ margin-top:8px; font-size:15px; color:var(--ink-dim); }
+  .card p b{ color:var(--ink); }
+  .grid2{ grid-template-columns:1fr 1fr; }
+  @media (max-width:640px){ .grid2{ grid-template-columns:1fr; } }
+
+  /* 表格 */
+  table{ width:100%; border-collapse:collapse; margin-top:24px; background:var(--card);
+         border-radius:16px; overflow:hidden; font-size:15px; }
+  th,td{ padding:13px 16px; text-align:left; border-bottom:1px solid var(--hairline); }
+  th{ background:var(--ink); color:#f0ebe2; font-weight:600; }
+  tr:last-child td{ border-bottom:none; }
+  td.yes{ color:var(--zhu); font-weight:700; }
+  .punch{ margin-top:18px; font-size:18px; font-weight:700; }
+  .punch .zhu{ color:var(--zhu); }
+
+  /* 截图 */
+  .shot{ margin-top:28px; text-align:center; }
+  .shot img{ width:100%; max-width:520px; border-radius:16px; box-shadow:0 10px 36px rgba(42,39,35,.12); }
+  .shot .cap{ margin-top:10px; font-size:13px; color:var(--ink-dim); }
+
+  /* 页脚 */
+  footer{ margin-top:80px; padding:48px 0 56px; text-align:center;
+          background:var(--ink); color:#f0ebe2; }
+  footer .qr{ width:180px; height:180px; border-radius:16px; background:#fff; padding:8px; }
+  footer .say{ margin-top:18px; font-size:17px; font-weight:600; }
+  footer .fine{ margin-top:22px; font-size:13px; color:#8f887b; line-height:2; }
+  footer a{ color:#e08a76; text-decoration:none; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- 1 · Hero -->
+  <div class="hero">
+    <img class="logo" src="assets/icon.png" alt="百灵 Mynah" />
+    <h1>连着你的<span class="zhu">第二大脑</span><br />越说越懂你</h1>
+    <p class="sub">百灵 Mynah —— 给构建知识库的人做的新时代语音输入法（Windows）<br />
+    按住说话，松开出字。它读你的 Obsidian，懂你的领域，写对你的专名。</p>
+    <div class="cta">
+      <a class="btn primary" href="https://github.com/msaysay/bailing/releases/latest">免费下载 Windows 版</a>
+      <a class="btn ghost" href="https://github.com/msaysay/bailing">GitHub 看源码</a>
+    </div>
+    <div class="hud">
+      <img src="assets/shot-hud.png" alt="百灵悬浮窗：按住说话" />
+    </div>
+  </div>
+
+  <!-- 2 · 为什么做 -->
+  <section class="story">
+    <div class="kicker">为什么做</div>
+    <h2>一个不懂代码的人，<br />给自己做了一个输入法</h2>
+    <p>我是一个传统行业创业者，一行代码都不懂。</p>
+    <p>在搭建了知识库之后，我发现市面上的语音输入法虽然很多，但没有一个用起来特别舒服。因为它们需要维护大量专有信息才能越来越懂我——手动加词、一条条维护，操作量太大。每次语音输入完，我还要反复修改那些写错的名字和术语，太费劲。</p>
+    <p>但答案明明就躺在我的知识库里。我这几年沉淀的笔记，客户、产品、行业、思考，全在里面。那才是我的词汇表，我的上下文，我的第二大脑。</p>
+    <p>所以我用 AI 协作，做了百灵，把它对接了我的知识库，设计了一套方法体系：让输入法自己去读我的笔记，自己学会我的词，自己记住我的每一次修改。</p>
+    <p class="em">一个不懂代码的人，做出了为自己量身定做的输入法。这件事本身，就是这个时代给普通人的机会。</p>
+  </section>
+
+  <!-- 3 · 技术逻辑 -->
+  <section>
+    <div class="kicker">它是怎么做到的</div>
+    <h2>越说越懂你，靠四层逻辑</h2>
+    <p class="lead">它不靠你手动教。它自己从你的知识库、和你的每一次修改里学。</p>
+    <div class="cards">
+      <div class="card"><h3><span class="no">01</span>冷启动：你的笔记就是它的词表</h3>
+        <p>装上后选你的 Obsidian 库（或任何装 .md 的文件夹），它在本地把笔记建成索引——<b>一个字都不上传</b>。你的行业、术语、上下文，它先通读一遍。</p></div>
+      <div class="card"><h3><span class="no">02</span>说话时：先查笔记，再下笔</h3>
+        <p>你每说一段话，它先在你的笔记里检索相关内容，让 AI <b>带着背景去理解</b>——你行业里的黑话、语境，它听得懂。</p></div>
+      <div class="card"><h3><span class="no">03</span>写对专名：自动建词库 + 拼音纠错</h3>
+        <p>它从你的笔记里自动挑出你的人名、公司名、产品名，建成专属词库。同音听错的按拼音自动纠回正字——<b>季婷→冀婷、四十九坊→肆拾玖坊、太抖酒→泰斗酒</b>，都是真实案例。</p></div>
+      <div class="card"><h3><span class="no">04</span>每次你改，它永久记住</h3>
+        <p>出字后点一下「改错」，告诉它「听成了什么→应该是什么」。这条记住以后，下次、下下次，永远都对。<b>别的输入法你改一百遍还错，百灵改一遍就够。</b></p></div>
+    </div>
+  </section>
+
+  <!-- 4 · 四个不一样 -->
+  <section>
+    <div class="kicker">四个不一样</div>
+    <h2>它和别的输入法，不一样在哪</h2>
+    <div class="cards grid2">
+      <div class="card"><h3>改一次，以后都对</h3>
+        <p>快速修正学习闭环，每一次纠正都在让它更像你。<b>这是它和所有输入法最不同的地方。</b></p></div>
+      <div class="card"><h3>如实转译，还是梳理逻辑，你说了算</h3>
+        <p>想逐字记录，它忠实转写；脑子比嘴乱的时候，打开「智能梳理」，它把颠三倒四的口述归并成分点、编号的清楚结构。<b>开关在你手里。</b></p></div>
+      <div class="card"><h3>你的 key，你的数据，跟我没关系</h3>
+        <p>识别和润色用你自己配置的服务商密钥（BYOK），录音、历史、词库、知识库索引全在本机。<b>我不经手你一个字。</b></p></div>
+      <div class="card"><h3>在哪儿说，就像哪儿的话</h3>
+        <p>它看你在哪个窗口说话：微信里口语一点，文档里书面一点，代码编辑器里保留英文和原样。<b>场景自动切换。</b></p></div>
+    </div>
+    <div class="shot">
+      <img src="assets/shot-settings.png" alt="百灵设置页" />
+      <div class="cap">设置页：热键 / 引擎 / 智能梳理 / 知识库 / 专名词库，全部自己掌控</div>
+    </div>
+  </section>
+
+  <!-- 5 · 算力账 -->
+  <section>
+    <div class="kicker">算力账</div>
+    <h2>说满两个小时，识别费一块钱</h2>
+    <p class="lead">百灵不收订阅费。你唯一要付的，是云服务商（小米 MiMo）按量计的 API 费，<a href="https://mimo.mi.com/docs/zh-CN/price/pay-as-you-go" style="color:var(--zhu)">官方定价公开可查</a>。算一笔重度使用的账——每天实打实说满 2 个小时（绝大多数人远达不到）：</p>
+    <table>
+      <tr><th>项目</th><th>用量</th><th>费用</th></tr>
+      <tr><td>语音识别（ASR）</td><td>2 小时 × ¥0.5/小时</td><td>¥1.00</td></tr>
+      <tr><td>润色（含知识库检索注入）</td><td>约 150 次口述</td><td>约 ¥0.3 ~ 0.5</td></tr>
+      <tr><td><b>一天合计</b></td><td></td><td><b>约 ¥1.3 ~ 1.5</b></td></tr>
+    </table>
+    <p class="punch">一个月重度使用 ≈ 40 块上下，<span class="zhu">一杯手冲咖啡的钱</span>。<br />
+    <span class="dim" style="font-size:15px;font-weight:400">对比订阅制同类工具 $10~30/月。百灵按量付费——说多少付多少，不说一分钱不花。</span></p>
+  </section>
+
+  <!-- 6 · 对比表 -->
+  <section>
+    <div class="kicker">横向对比</div>
+    <h2>和别的输入法比</h2>
+    <table>
+      <tr><th></th><th>通用语音输入</th><th>手动热词型</th><th>百灵</th></tr>
+      <tr><td>专名写对</td><td>靠运气</td><td>手动一个个加</td><td class="yes">知识库建词库 + 拼音纠错</td></tr>
+      <tr><td>越用越懂你</td><td>✗</td><td>✗</td><td class="yes">✓ 改一次永久记住</td></tr>
+      <tr><td>懂你的领域</td><td>✗</td><td>✗</td><td class="yes">✓ 本地检索你的笔记</td></tr>
+      <tr><td>数据归谁</td><td>云上</td><td>云上</td><td class="yes">✓ 全在本机，key 是你的</td></tr>
+      <tr><td>口述变结构</td><td>✗</td><td>部分</td><td class="yes">✓ 可开关的智能梳理</td></tr>
+      <tr><td>费用</td><td>订阅 $10~30/月</td><td>订阅</td><td class="yes">按量 ~¥40/月（重度）</td></tr>
+    </table>
+  </section>
+
+  <!-- 7 · 两种用法 -->
+  <section>
+    <div class="kicker">两种用法</div>
+    <h2>它不卖钱，它交朋友</h2>
+    <div class="cards grid2">
+      <div class="card"><h3>想自己折腾的</h3>
+        <p><b>GitHub 开源</b>，自己拉源码、自己配 key，随便改。文档齐全，Electron + Node，AI 时代没有门槛。</p></div>
+      <div class="card"><h3>想省事的</h3>
+        <p>我配好 key 的安装包，装上就用，只收一个很低的成本费——覆盖 token 开销而已。<b>这事儿对我不是生意，是认识同路人的方式。</b></p></div>
+    </div>
+  </section>
+
+</div>
+
+<!-- 8 · 下载 + 联系 -->
+<footer>
+  <div class="wrap">
+    <p class="say">做知识库的同路人，加个微信聊聊</p>
+    <p style="margin-top:18px"><img class="qr" src="assets/qr.jpg" alt="陈宁的微信二维码" /></p>
+    <p style="margin-top:26px">
+      <a class="btn primary" href="https://github.com/msaysay/bailing/releases/latest">免费下载 Windows 版</a>
+    </p>
+    <p class="fine">
+      百灵 Mynah · 神鸟家族 · 一个不懂代码的创业者，用 AI 协作开发<br />
+      源码与下载：<a href="https://github.com/msaysay/bailing">github.com/msaysay/bailing</a> · 数据全部保存在你自己的电脑上
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>

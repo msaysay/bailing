@@ -1,51 +1,96 @@
-# 百灵 Mynah · 越用越懂你的 AI 语音输入（Windows）
+# 百灵 Mynah · 连着你的第二大脑，越说越懂你
 
-神鸟家族成员。对标 [TypeFree](https://typefree.app/)，差异化在**自动学习**——不靠你手动加词，而是越用越懂你的说话习惯、词汇和场景。
+**给构建知识库的人，做的新时代语音输入法（Windows）。**
 
-## 形态
-不是传统 IME，而是「**按住/按键说话 → 光标处出干净文本**」的全局听写工具（同 superwhisper / Handy）。
+按住说话，松开出字。它读你的 Obsidian，懂你的领域，写对你的专名——你改过一次的地方，它以后都对。
 
-## 管线
+- 官网：https://49.gx.cn/bailing/
+- 下载：[Releases 最新版](https://github.com/msaysay/bailing/releases/latest)
+
+---
+
+## 为什么做
+
+我是一个传统行业创业者，一行代码都不懂。
+
+在搭建了知识库之后，我发现市面上的语音输入法虽然很多，但没有一个用起来特别舒服。因为它们需要维护大量专有信息才能越来越懂我——手动加词、一条条维护，操作量太大。每次语音输入完，我还要反复修改那些写错的名字和术语，太费劲。
+
+但答案明明就躺在我的知识库里。所以我用 AI 协作，做了百灵，把它对接了我的知识库，设计了一套方法体系：让输入法自己去读我的笔记，自己学会我的词，自己记住我的每一次修改。
+
+研究过市面上很多种语音输入工具之后，我确认了一件事：**它们都不认识我**。百灵不一样——它先读你的第二大脑，再听你说话。
+
+## 它是怎么做到的：越说越懂你，靠四层逻辑
+
+1. **冷启动：你的笔记就是它的词表**。选你的 Obsidian 库（或任何装 .md 的文件夹），本地建索引，一个字都不上传。
+2. **说话时：先查笔记，再下笔**。每段话先在你的笔记里检索相关内容，让 AI 带着背景去理解（本地 TF-IDF RAG，零嵌入 API、离线）。
+3. **写对专名：自动建词库 + 拼音纠错**。从笔记里自动挑出人名/公司名/产品名建成专属词库，同音听错按拼音纠回正字（季婷→冀婷、四十九坊→肆拾玖坊、太抖酒→泰斗酒，都是真实案例）。
+4. **每次你改，它永久记住**。出字后点「改错」，教它「听成了→应该是」，永久生效。别的输入法改一百遍还错，百灵改一遍就够。
+
+## 四个不一样
+
+- **改一次，以后都对** —— 快速修正学习闭环，每一次纠正都在让它更像你。
+- **如实转译，还是梳理逻辑，你说了算** —— 「智能梳理」可开关：开了把颠三倒四的口述归并成分点编号，关了忠实转写。
+- **你的 key，你的数据，跟我没关系** —— BYOK，识别/润色走你自己配置的服务商密钥；录音、历史、词库、索引全在本机。
+- **在哪儿说，就像哪儿的话** —— 自动识别前台窗口：微信口语、文档书面、代码保留英文原样。
+
+## 算力账：说满两个小时，识别费一块钱
+
+百灵不收订阅费。唯一要付的是云服务商（小米 MiMo）按量计的 API 费，[官方定价公开可查](https://mimo.mi.com/docs/zh-CN/price/pay-as-you-go)。重度使用（每天实打实说满 2 小时）：
+
+| 项目 | 用量 | 费用 |
+|---|---|---|
+| 语音识别（ASR） | 2 小时 × ¥0.5/小时 | ¥1.00 |
+| 润色（含知识库检索注入） | 约 150 次口述 | 约 ¥0.3 ~ 0.5 |
+| **一天合计** | | **约 ¥1.3 ~ 1.5** |
+
+一个月重度使用 ≈ 40 块上下，一杯手冲咖啡的钱。按量付费，说多少付多少，不说一分钱不花。
+
+## 两种用法
+
+- **想自己折腾的**：本仓库开源，自己拉源码、自己配 key，随便改。
+- **想省事的**：作者配好 key 的安装包，装上就用，只收一个很低的成本费——覆盖 token 开销而已。这事儿不是生意，是认识同路人的方式。
+
+## 形态与管线
+
+不是传统 IME，而是「**按住/按键说话 → 光标处出干净文本**」的全局听写工具。
+
 ```
-全局热键录音 → ASR 转写 → LLM 润色(注入 风格画像+场景+热词) → 术语纠正 → 剪贴板注入光标
+全局热键录音 → ASR 转写 → 专名同音纠错 → RAG 检索知识库 → 场景感知润色（可梳理结构） → 术语兜底 → 剪贴板注入光标
 ```
 
-## 越用越懂我（四层学习引擎）
-- **L0 冷启动**：从 Obsidian/客户库一键导入专名，开机第一天就有上千词（`scripts/import-vocab.js`）
-- **L1 词汇自学习**：ASR 原文 vs 你改后的文本 diff → 高频纠正自动进术语表（`src/main/terms.js` `learnCorrection`）
-- **L2 风格画像**：从采纳文本学你的语气/句长/用词 → 注入润色 prompt（`data/style-profile.json`）
-- **L3 场景自适应**：检测前台窗口切档（微信/邮件/文档/代码/社交）（`src/main/main.js` `detectScene`）
-- **L4 纠错闭环**：一键"这次不对" + 「语音记忆」可查看/清空（roadmap）
+- 技术栈：Electron（测试期），生产版计划迁 Tauri
+- ASR：默认 MiMo（云端），本地 faster-whisper 离线兜底，火山/讯飞可插拔
+- 润色：默认 MiMo，可换任何 OpenAI 兼容端点
 
-## 选型
-- **技术栈**：测试期 Electron（团队熟、出活快），生产版计划迁 Tauri（常驻更轻）
-- **ASR**：测试期本地 faster-whisper（零 key、离线）；生产期云端优先（火山 BigASR / 讯飞，`.env` 即插即换）
-- **润色 LLM**：测试期小米 MiMo（`.env`）。⚠️ MiMo 是推理模型，润色 13–18s 偏慢，**生产版换低延迟模型**（DeepSeek-V3/豆包-lite/通义-turbo，约 1s）
+## 跑起来（开发）
 
-## 跑起来
 ```bash
 npm install
-# 本地 ASR（测试期）
-pip install -r python/requirements.txt      # 首次会下模型 ~500MB
-# 冷启动词库（可选，指向你的 Obsidian 库）
-node scripts/import-vocab.js "D:/path/to/ObsidianVault"
-# 启动
-npm start                                    # 按 Ctrl+Shift+Space 开始/结束说话
+pip install -r python/requirements.txt      # 可选：本地 ASR 兜底，首次下模型 ~500MB
+cp .env.example .env                        # 填入你的 MiMo API Key
+node scripts/import-vocab.js "D:/path/to/ObsidianVault"   # 可选：冷启动词库
+npm start                                   # 默认热键 右 Ctrl：按住说话 / 短按开始再按停
 ```
 
-## 快速验证（无需麦克风/Electron）
 ```bash
-npm run test:polish                          # 实测 MiMo 润色 + 场景/术语注入（已通过）
-node scripts/test-pipeline.js audio.wav doc  # 给个 wav 跑全链路（需装 faster-whisper）
+npm run test:polish                         # 免麦克风验证润色链路
+npm run dist                                # 打包 Windows 安装包
 ```
 
 ## 目录
+
 ```
-src/main/       主进程：main(热键/托盘/编排) · pipeline · asr/ · polish(MiMo) · terms · inject · store · config
-src/renderer/   悬浮指示器 + 录音(WAV 16k) + preload
+src/main/       主进程：main(热键/托盘/编排) · pipeline · asr/ · polish · kb(RAG) · names(专名纠错) · terms(学习) · scene · inject
+src/renderer/   悬浮 HUD + 设置页 + 专名词库页 + 快速修正页
 python/         faster-whisper ASR sidecar
-scripts/        test-polish · test-pipeline · import-vocab(L0)
-data/           terms.default.json · terms.learned.json · style-profile · history（本地存储，隐私优先）
+scripts/        test-* · import-vocab · gen-icons · preview-*
+site/           官网静态页（49.gx.cn/bailing）
+docs/           交接文档 · 网站内容稿
+data/           词库/历史（本地存储，隐私优先，不进仓库）
 ```
 
 详见 `docs/PROJECT_HANDOFF.md`。
+
+---
+
+百灵 Mynah · 神鸟家族 · 一个不懂代码的创业者，用 AI 协作开发

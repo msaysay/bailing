@@ -17,6 +17,16 @@ app.whenReady().then(async () => {
   });
   await win.loadFile(path.join(ROOT, 'src/renderer/settings.html'));
   await new Promise((r) => setTimeout(r, 400));
+  // 注入演示状态（预览窗没有真实 IPC，数据是占位）
+  await win.webContents.executeJavaScript(`
+    document.getElementById('hotkey').value = '右 Ctrl';
+    ['polishEnabled','structureMode','autoPaste','autoScene','kbEnabled'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.classList.add('on');
+    });
+    const kb = document.getElementById('kbVaultPath'); if (kb) kb.value = 'Documents/赚钱/ChenNing-Operating-Wiki';
+    const msg = document.getElementById('kbMsg'); if (msg) { msg.textContent = '136 篇 · 716 块 · 已就绪'; msg.className = 'test-msg ok'; }
+  `);
+  await new Promise((r) => setTimeout(r, 150));
   const img = await win.webContents.capturePage();
   fs.writeFileSync(path.join(ROOT, 'build/preview-settings.png'), img.toPNG());
   console.log('生成 build/preview-settings.png');
