@@ -1,6 +1,6 @@
 'use strict';
 // 专名同音纠错：从知识库抽取专有名词 + 拼音索引，给 ASR 结果找出「同音/近音写错的专名」候选。
-// 用途：把 ASR 听错的人名/公司/产品（季婷→冀婷、四十九坊→肆拾玖坊）按知识库标准写法纠正。
+// 用途：把 ASR 听错的人名/公司/产品（沈庭→沈婷、云衫→云杉）按知识库标准写法纠正。
 const fs = require('fs');
 const path = require('path');
 const { pinyin } = require('pinyin-pro');
@@ -132,7 +132,7 @@ function suggestRaw(limit = 150) {
   arr.sort((a, b) => b.freq - a.freq);
   arr = arr.slice(0, limit * 3);
   // 去纯片段：只丢「几乎只作为某长词一部分出现」的（长词频次≥本词的90% = 本词很少单独出现）。
-  // 提高阈值避免误杀「泰斗/宗师」这类既是产品名、又常出现在长词里的高频真词。
+  // 提高阈值避免误杀「云杉/星宸」这类既是专名、又常出现在长词里的高频真词。
   const kept = arr.filter((x) => {
     return !arr.some((y) => y !== x && y.term.length > x.term.length &&
       y.term.includes(x.term) && y.freq >= x.freq * 0.9);
@@ -145,7 +145,7 @@ function status() { return { ...stats }; }
 function warmup() { setTimeout(() => { try { ensure(); } catch (_) {} }, 1800); }
 
 // ===== 对着「确定正字词库」做拼音纠错（高精度、可兑现的保证）=====
-// terms: 用户/知识库确认过的专名标准写法数组，如 ['冀婷','肆拾玖坊','陈宁','张传宗']
+// terms: 用户/知识库确认过的专名标准写法数组，如 ['沈婷','云杉资本','Obsidian']
 function buildTermIndex(terms) {
   const idx = new Map(); // 拼音 -> 标准写法（长的优先）
   for (const t of terms || []) {

@@ -11,7 +11,7 @@
 **对外渠道（2026-07-24 上线）**：
 - **GitHub**：`github.com/msaysay/bailing`（开源，main 分支；Release v0.3.0 挂**无 Key** 安装包 `BailingMynah-Setup-0.3.0.exe`）。推送用本机 git 凭据（msaysay）。
 - **官网**：`https://49.gx.cn/bailing/`（静态单页，源在 `site/`）。服务器 `root@159.75.115.84`（密钥 `D:/cd/ssjf-deploy/secrets/deploy_ed25519`），目录 `/var/www/bailing`，Nginx 在 `xiakehui.conf` 的 49.gx.cn 块加了 `location /bailing/ { alias /var/www/bailing/; }`——**别动坊主会/知更/aiops 的块**。
-- **百度网盘**：`https://pan.baidu.com/s/1Vs5IUEae33lyUsRgv_NOpA`（提取码 hisb，用户自传无 Key 包）。
+- **百度网盘**：`https://pan.baidu.com/s/1iZnJFudHp3tSO0vGOdMGzw?pwd=x5nv`（提取码 x5nv，用户自传无 Key 包）。
 - ⚠️ **打包红线**：`extraResources` 会把 `.env`（含 key）打进安装包；`data/` 只放行 `terms.default.json`（filter），history/learned 等个人数据绝不进包。**对外发包前必须临时换成 .env.example 再 dist**（首版曾误带 key+个人数据上线，已换净化版，用户已知情需重置 key）。
 - 主标语（全渠道统一）：**「连着你的第二大脑，越说越懂你」**。官网文案定稿在 `docs/website-content.md`。
 
@@ -25,10 +25,10 @@
 **已验证 ✅（node 脚本 + 打包版启动）**
 - 全链路只靠一个 MiMo key：ASR 100% 准，润色关思考 2–4s。
 - RAG 检索到相关笔记、专名不泄露进输出。
-- 专名纠错实测：季婷→冀婷、四十九坊→肆拾玖坊、太抖酒→泰斗酒，且「四十九个/经理开会」零误伤。
-- 词库覆盖：泰斗/宗师/茅台/肆拾玖坊 均能从 KB 挑出。
+- 专名纠错实测：人名/品牌同音错写按拼音纠回正字，且同音常用词零误伤。
+- 词库覆盖：人名/品牌/产品类专名均能从 KB 挑出。
 - 场景润色：doc 规范化数字、code 保留原样；梳理模式把交错口述归并成分类结构。
-- 学习闭环：教「太抖→泰斗」后「太抖酒→泰斗酒」。
+- 学习闭环：教一条「听错→正字」后，同类错写自动写对。
 - 每版打包启动无崩溃。
 
 **仅剩需人在键盘/麦克风前验的**
@@ -74,14 +74,14 @@
 
 ## 「把东西写对」= 专名纠错 + 词库 + 学习（`names.js` / `terms.js`）
 
-**核心真相**（用户戳中，务必记住）：纯扫知识库**保证不了**名字对——频次会骗人（笔记里「四十九坊」804 次 > 「肆拾玖坊」494 次，但正字是肆拾玖坊）、库里没有的（张传宗 0 篇）变不出。**可兑现机制 = 一份「确定正字」的专名词库 + 拼音纠错**，词库靠四条腿收敛到高覆盖：
+**核心真相**（用户戳中，务必记住）：纯扫知识库**保证不了**名字对——频次会骗人（笔记里错写出现次数可能多过正字）、库里没有的人名变不出。**可兑现机制 = 一份「确定正字」的专名词库 + 拼音纠错**，词库靠四条腿收敛到高覆盖：
 
-1. **自动 bootstrap**：`names.suggestRaw()` 从 KB 提候选（**虚词字过滤**：含 的/了/我/们/这 的 n-gram 不是专名 → 滤掉后专名浮上来；+ 去 n-gram 片段 + 去 frontmatter 噪声）→ `terms:suggest` IPC **分批(300/批)过 MiMo** 只留真专名。实测挖出 泰斗/宗师/茅台/肆拾玖坊 等。词库页可「全部加入」。
-2. **手动加**：低频人名（冀婷）、库里没有的（张传宗）。
+1. **自动 bootstrap**：`names.suggestRaw()` 从 KB 提候选（**虚词字过滤**：含 的/了/我/们/这 的 n-gram 不是专名 → 滤掉后专名浮上来；+ 去 n-gram 片段 + 去 frontmatter 噪声）→ `terms:suggest` IPC **分批(300/批)过 MiMo** 只留真专名。实测能挖出用户行业的人名/品牌/产品名。词库页可「全部加入」。
+2. **手动加**：低频人名、库里没有的名字。
 3. **L1 学习闭环（快速修正）**：出字后悬浮窗「改错」/托盘「修正上一句…」→ `correction.html` 填「听成了→应该是」→ `terms.learnCorrection` 存 corrections+hotwords → 下次自动对。**这是覆盖长尾、越用越准的真引擎。**
 4. **RAG 软兜底**：即使词库没收，LLM 看到相关笔记也常能写对。
 
-**纠错怎么跑**：`names.correct(text, hotwords)` 对 ASR 文本滑动重叠窗口，**同拼音+同长+不同字**才替换（季婷→冀婷、太抖→泰斗；「四十九个/经理开会」不动）。管线在 ASR 后先纠（让 RAG/润色用对的名字）+ 末尾再纠兜底 + `applyCorrections` 精确替换。IPC：`terms:library/save/suggest`、`terms:learn/removeCorrection`、`termlib:open`、`correction:open/last`。
+**纠错怎么跑**：`names.correct(text, hotwords)` 对 ASR 文本滑动重叠窗口，**同拼音+同长+不同字**才替换（沈庭→沈婷；同音常用词不动）。管线在 ASR 后先纠（让 RAG/润色用对的名字）+ 末尾再纠兜底 + `applyCorrections` 精确替换。IPC：`terms:library/save/suggest`、`terms:learn/removeCorrection`、`termlib:open`、`correction:open/last`。
 
 ## 场景感知 + 润色（`scene.js` / `polish.js`）
 - **场景感知**：录音开始时 `scene.detect()`（active-win 读前台）→ 存 `recordScene`，`detectScene()` 回落 `defaultScene`。映射：微信/钉钉/飞书→chat、VSCode/终端→code、Outlook→email、Word/Obsidian→doc、小红书→social、浏览器按标题启发式。设置有「自动识别场景」开关。
@@ -103,7 +103,7 @@
 ## 版本变更（倒序）
 - **v0.3.0**：UI 重设计「宣纸墨朱 × 苹果 HUD」——悬浮窗改 200×60 圆角卡片（roundedCorners 替代 setShape，边角干净+原生投影回归，去描边）；白描线条鸟图标（gen-icons.js 生成，**多分辨率 ICO 尺寸自适应，小图标不糊**）；青蓝渐变全废弃，四页面统一宣纸墨朱；「改错」改朱砂方章；**三窗口无边框 + 自绘 min/close 幽灵钮融进墨底 hero**（frame:false + win:control IPC，弃用 titleBarOverlay 系统色块）；主标语定稿「**连着你的第二大脑，越说越懂你**」。
 - **v0.2.1**：L1 学习闭环·快速修正（悬浮窗改错按钮/托盘「修正上一句」→ correction 页教「听错→正字」→ learnCorrection 永久记住）。
-- **v0.2.0**：词库覆盖率（虚词字过滤+大池分批过 LLM，挖出泰斗/宗师）+「全部加入」；智能梳理结构开关。
+- **v0.2.0**：词库覆盖率（虚词字过滤+大池分批过 LLM）+「全部加入」；智能梳理结构开关。
 - **v0.1.9**：真场景感知（active-win 读前台自动切档）+ 润色强化（数字/日期规范化，code 保留）。
 - **v0.1.8**：专名词库设置页（KB 自动建议→确认）+ 专名同音纠错接管线（names.js，pinyin-pro）。
 - **v0.1.7**：白胶囊加描边（白底分离）+ 胶囊缩到 236×56 + 设置头像换鸟标 + hero 改青蓝。

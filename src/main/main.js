@@ -218,7 +218,7 @@ async function llmFilterProperNouns(candidates, key) {
       enable_thinking: false, thinking: { type: 'disabled' },
       messages: [{
         role: 'user',
-        content: '下面是从用户笔记里挑出的候选词。只保留真正的专有名词——人名、公司/品牌名、产品名、项目名、地名、专业术语、行业黑话、英文技术词。规则：①去掉普通词汇、动词、形容词。②去掉残缺片段——若一个词是另一个更完整词的一部分（如「玖坊」是「肆拾玖坊」的片段、「电商经」「营方法论」是句子截断），丢弃片段只留完整专名。③每个词必须能独立成立、是人能一眼认出的名字或术语。直接返回 JSON 字符串数组，不要解释。\n候选：' + JSON.stringify(candidates),
+        content: '下面是从用户笔记里挑出的候选词。只保留真正的专有名词——人名、公司/品牌名、产品名、项目名、地名、专业术语、行业黑话、英文技术词。规则：①去掉普通词汇、动词、形容词。②去掉残缺片段——若一个词是另一个更完整词的一部分（如「宸」是「星宸」的片段、「电商经」「营方法论」是句子截断），丢弃片段只留完整专名。③每个词必须能独立成立、是人能一眼认出的名字或术语。直接返回 JSON 字符串数组，不要解释。\n候选：' + JSON.stringify(candidates),
       }],
     }),
   });
@@ -228,7 +228,7 @@ async function llmFilterProperNouns(candidates, key) {
   return m ? JSON.parse(m[0]) : [];
 }
 ipcMain.handle('terms:suggest', async () => {
-  const raw = names.suggestRaw(900); // 大池，含中低频专名（泰斗/宗师这类）
+  const raw = names.suggestRaw(900); // 大池，含中低频专名（云杉/星宸这类）
   if (!raw.length) return { terms: [], note: '知识库为空或未建索引' };
   const key = (config.polish.apiKey || '').trim();
   if (!key) return { terms: raw.slice(0, 80).map((r) => r.term), note: '未配置 key，返回词频候选（未过滤）' };
