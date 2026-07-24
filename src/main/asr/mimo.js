@@ -1,12 +1,13 @@
 'use strict';
-// 小米 MiMo ASR provider（mimo-v2.5-asr）。同一个 MiMo key 即可用，中文强、自带标点。
+// 小米 MiMo ASR provider（mimo-v2.5-asr）。中文强、自带标点。
 // 请求格式（已实测）：chat/completions + input_audio(base64) + asr_options.language
+// 凭证走 provider.endpoint()：云服务（默认）或用户自定义接入方（MiMo 格式）。
 const fs = require('fs');
 const config = require('../config');
+const provider = require('../provider');
 
 async function transcribe(wavPath) {
-  const key = config.polish.apiKey; // 复用同一个 MiMo key
-  if (!key) throw new Error('未配置 MIMO_API_KEY，无法使用 MiMo ASR');
+  const ep = provider.endpoint();
   const b64 = fs.readFileSync(wavPath).toString('base64');
 
   const body = {
@@ -21,9 +22,9 @@ async function transcribe(wavPath) {
   const timer = setTimeout(() => ctrl.abort(), 30000);
   let resp;
   try {
-    resp = await fetch(`${config.polish.baseURL}/chat/completions`, {
+    resp = await fetch(`${ep.baseURL}/chat/completions`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}` },
+      headers: { 'Content-Type': 'application/json', ...ep.headers },
       body: JSON.stringify(body),
       signal: ctrl.signal,
     });
@@ -32,7 +33,9 @@ async function transcribe(wavPath) {
   }
   if (!resp.ok) {
     const t = await resp.text().catch(() => '');
-    throw new Error(`MiMo ASR HTTP ${resp.status}: ${t.slice(0, 200)}`);
+    let msg = `ASR HTTP ${resp.status}`;
+    try { msg = JSON.parse(t)?.error?.message || msg; } catch (_) {}
+    throw new Error(msg);
   }
   const data = await resp.json();
   return (data?.choices?.[0]?.message?.content || '').trim();

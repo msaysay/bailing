@@ -12,6 +12,10 @@ const sceneEl = $('defaultScene');
 const apiKeyEl = $('apiKey');
 const kbSwitch = $('kbEnabled');
 const kbVaultEl = $('kbVaultPath');
+const providerModeEl = $('providerMode');
+const polishBaseURLEl = $('polishBaseURL');
+const asrBaseURLEl = $('asrBaseURL');
+const asrModelEl = $('asrModel');
 
 let state = {};
 
@@ -46,7 +50,55 @@ function render() {
   apiKeyEl.value = state.apiKey || '';
   kbSwitch.classList.toggle('on', state.kbEnabled !== false);
   kbVaultEl.value = state.kbVaultPath || '';
+  providerModeEl.value = state.providerMode || 'cloud';
+  polishBaseURLEl.value = state.polishBaseURL || '';
+  asrBaseURLEl.value = state.asrBaseURL || '';
+  asrModelEl.value = state.asrModel || '';
+  renderProviderMode();
 }
+
+// 云服务/自定义接入方的显隐与额度展示
+function renderProviderMode() {
+  const isCloud = providerModeEl.value !== 'byok';
+  $('byokFields').style.display = isCloud ? 'none' : 'block';
+  $('quotaRow').style.display = isCloud ? 'flex' : 'none';
+  if (isCloud) refreshQuota();
+}
+
+async function refreshQuota() {
+  const el = $('quotaText');
+  try {
+    const q = await window.bailingSettings.providerQuota();
+    if (q && typeof q.remaining === 'number') {
+      el.className = 'test-msg ' + (q.remaining > 0 ? 'ok' : 'err');
+      el.textContent = `今日剩余 ${q.remaining} / ${q.limit} 字`;
+    } else {
+      el.className = 'test-msg err';
+      el.textContent = '云服务暂不可用';
+    }
+  } catch (_) {
+    el.className = 'test-msg err';
+    el.textContent = '云服务暂不可用';
+  }
+}
+
+providerModeEl.addEventListener('change', () => {
+  state.providerMode = providerModeEl.value;
+  renderProviderMode();
+});
+
+// 预设快捷填充
+$('presetMimo').addEventListener('click', () => {
+  polishBaseURLEl.value = 'https://api.xiaomimimo.com/v1';
+  polishModelEl.value = 'mimo-v2.5-pro';
+  asrEl.value = 'mimo';
+  asrBaseURLEl.value = ''; asrModelEl.value = '';
+});
+$('presetDeepseek').addEventListener('click', () => {
+  polishBaseURLEl.value = 'https://api.deepseek.com/v1';
+  polishModelEl.value = 'deepseek-chat';
+  asrEl.value = 'openai-audio';
+});
 
 // 用物理键位 e.code 捕获（不受 NumLock/布局/Shift 影响，小键盘、方向键、标点、左右修饰键都可绑）
 const MODCODE = { ControlLeft: 'LeftCtrl', ControlRight: 'RightCtrl', AltLeft: 'LeftAlt', AltRight: 'RightAlt',
@@ -170,7 +222,7 @@ $('testBtn').addEventListener('click', async () => {
   const r = await window.bailingSettings.test({ apiKey: apiKeyEl.value.trim(), model: polishModelEl.value.trim() });
   if (r.ok) {
     msg.className = 'test-msg ok';
-    msg.textContent = `连接正常 · ${r.ms}ms`;
+    msg.textContent = r.cloud ? `云服务正常 · 今日剩余 ${r.remaining} 字` : `连接正常 · ${r.ms}ms`;
   } else {
     msg.className = 'test-msg err';
     msg.textContent = r.error || '连接失败';
@@ -183,6 +235,10 @@ $('save').addEventListener('click', async () => {
   state.defaultScene = sceneEl.value;
   state.apiKey = apiKeyEl.value.trim();
   state.kbVaultPath = kbVaultEl.value.trim();
+  state.providerMode = providerModeEl.value;
+  state.polishBaseURL = polishBaseURLEl.value.trim();
+  state.asrBaseURL = asrBaseURLEl.value.trim();
+  state.asrModel = asrModelEl.value.trim();
   await window.bailingSettings.save(state);
   const s = $('saved');
   s.classList.add('show');

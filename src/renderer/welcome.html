@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8" />
+  <title>欢迎使用百灵</title>
+  <style>
+    :root { --brand:#c8402a; --hero:#2a2723; --bg:#f5f2ec; --card:#fdfbf7; --text:#2a2723;
+      --sub:#8c857a; --line:#e9e3d8; --field:#f8f5ef; --ok:#1e9e6a; }
+    *{ box-sizing:border-box; margin:0; padding:0; -webkit-user-select:none; }
+    body{ font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+      background:var(--bg); color:var(--text); font-size:14px; height:100vh; overflow:hidden;
+      display:flex; flex-direction:column; }
+
+    .topbar{ position:relative; background:var(--hero); color:#f0ebe2; padding:18px 22px 16px;
+      -webkit-app-region:drag; }
+    .topbar h1{ font-size:16px; font-weight:700; }
+    .dots{ position:absolute; left:22px; bottom:-5px; display:flex; gap:6px; }
+    .dots i{ width:8px; height:8px; border-radius:50%; background:rgba(240,235,226,.25); transition:all .2s; }
+    .dots i.on{ background:var(--brand); width:20px; border-radius:5px; }
+    .winctrl{ position:absolute; top:0; right:0; display:flex; -webkit-app-region:no-drag; }
+    .winctrl button{ width:42px; height:32px; border:none; background:transparent; cursor:pointer;
+      display:flex; align-items:center; justify-content:center; color:rgba(240,235,226,.6); }
+    .winctrl button:hover{ background:rgba(240,235,226,.12); color:#f0ebe2; }
+    .winctrl button.close:hover{ background:var(--brand); color:#faf7f1; }
+
+    .body{ flex:1; padding:30px 30px 0; overflow:auto; }
+    .step{ display:none; animation:fadeUp .3s cubic-bezier(.2,.7,.3,1); }
+    .step.on{ display:block; }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+    .bird{ width:84px; height:84px; margin:6px auto 14px; display:block; }
+    .bird .b-bg{ fill:#2a2723; }
+    .bird .b-line{ fill:none; stroke:#f0ebe2; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+    .bird .b-eye{ fill:#c8402a; }
+
+    h2{ font-size:22px; font-weight:800; text-align:center; line-height:1.45; }
+    h2 .zhu{ color:var(--brand); }
+    .sub{ text-align:center; color:var(--sub); margin-top:10px; font-size:13.5px; }
+    .vals{ margin-top:22px; display:flex; flex-direction:column; gap:10px; }
+    .val{ background:var(--card); border:1px solid var(--line); border-radius:12px; padding:13px 16px;
+      font-size:14px; display:flex; gap:10px; align-items:flex-start; }
+    .val b{ color:var(--brand); flex:none; }
+
+    .kbbox{ margin-top:20px; background:var(--card); border:1px solid var(--line); border-radius:14px;
+      padding:18px; }
+    .kbbox p{ font-size:13px; color:var(--sub); line-height:1.7; margin-top:8px; }
+    .kbstatus{ font-size:12.5px; margin-top:10px; }
+    .kbstatus.ok{ color:var(--ok); }
+
+    .scenes{ margin-top:18px; display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
+    .scene{ background:var(--card); border:2px solid var(--line); border-radius:12px; padding:12px 10px;
+      cursor:pointer; text-align:center; transition:border-color .15s, background .15s; }
+    .scene:hover{ border-color:#d8c9bd; }
+    .scene.on{ border-color:var(--brand); background:#fdf3f1; }
+    .scene .t{ font-size:13.5px; font-weight:700; }
+    .scene .h{ font-size:11px; color:var(--sub); margin-top:4px; line-height:1.5; }
+    .try{ margin-top:16px; }
+    .try textarea{ width:100%; height:76px; resize:none; font-size:14px; padding:10px 12px;
+      border:2px solid var(--brand); border-radius:12px; background:var(--field); color:var(--text);
+      outline:none; -webkit-user-select:text; }
+    .try .hint{ font-size:12.5px; color:var(--sub); margin-top:8px; text-align:center; }
+    .try .hint b{ color:var(--brand); }
+    .result{ margin-top:10px; font-size:12.5px; color:var(--ok); text-align:center; min-height:18px; }
+
+    .tips{ margin-top:18px; display:flex; flex-direction:column; gap:10px; }
+    .tip{ display:flex; gap:10px; align-items:flex-start; font-size:13.5px; }
+    .tip .k{ flex:none; background:var(--hero); color:#f0ebe2; font-size:12px; font-weight:600;
+      border-radius:8px; padding:3px 10px; }
+
+    .foot{ padding:16px 30px 22px; display:flex; justify-content:space-between; align-items:center; }
+    .btn{ font-size:14px; font-weight:600; padding:10px 24px; border:none; border-radius:10px;
+      cursor:pointer; }
+    .btn.primary{ background:var(--brand); color:#faf7f1; }
+    .btn.primary:active{ transform:translateY(1px); }
+    .btn.ghost{ background:transparent; color:var(--sub); }
+    .btn.ghost:hover{ color:var(--text); }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <h1>欢迎使用百灵</h1>
+    <div class="dots"><i class="on"></i><i></i><i></i><i></i></div>
+    <div class="winctrl">
+      <button id="wcClose" class="close" title="稍后再看"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M2.5 2.5 L9.5 9.5 M9.5 2.5 L2.5 9.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></button>
+    </div>
+  </div>
+
+  <div class="body">
+    <!-- 第 1 步 · 欢迎 -->
+    <div class="step on" data-step="0">
+      <svg class="bird" viewBox="0 0 48 48" aria-hidden="true">
+        <circle class="b-bg" cx="24" cy="24" r="24" />
+        <path class="b-line" d="M36 28 Q38 16 27 12 Q18.5 8.8 13.8 15.5 L8.8 18.6 L13.6 20.6 Q13 30 21.5 33.5 Q29 36 36 28" />
+        <path class="b-line" d="M36 28 Q42 27 41.5 22 Q41 18.5 38 20.5" />
+        <circle class="b-eye" cx="18" cy="16.5" r="1.7" />
+      </svg>
+      <h2>连着你的<span class="zhu">第二大脑</span><br />越说越懂你</h2>
+      <p class="sub">按住说话，松开出字 · 每天 3000 字免费额度，开箱即用</p>
+      <div class="vals">
+        <div class="val"><b>①</b><span>它读你的知识库（Obsidian），懂你的领域和上下文</span></div>
+        <div class="val"><b>②</b><span>人名、公司、产品等专名，按你的词库自动写对</span></div>
+        <div class="val"><b>③</b><span>出字后点「改错」教它一次，以后永远都对</span></div>
+      </div>
+    </div>
+
+    <!-- 第 2 步 · 知识库 -->
+    <div class="step" data-step="1">
+      <h2>连上你的<span class="zhu">知识库</span></h2>
+      <p class="sub">这一步是百灵「懂你」的来源，也可以以后在设置里再选</p>
+      <div class="kbbox">
+        <button class="btn primary" id="kbPick" style="width:100%">选择我的笔记文件夹</button>
+        <p>选你的 Obsidian 库，或任何装 .md/.txt 的文件夹。<b>只在本地建索引，一个字都不上传。</b></p>
+        <div class="kbstatus" id="kbStatus"></div>
+      </div>
+    </div>
+
+    <!-- 第 3 步 · 场景试用 -->
+    <div class="step" data-step="2">
+      <h2>按住 <span class="zhu">右 Ctrl</span>，试一下</h2>
+      <p class="sub">先选一个场景，再点下面输入框，按住右 Ctrl 说话，松开出字</p>
+      <div class="scenes">
+        <div class="scene on" data-scene="chat"><div class="t">微信聊天</div><div class="h">随便聊两句<br />口语自然</div></div>
+        <div class="scene" data-scene="doc"><div class="t">写文档</div><div class="h">说一段要整理的话<br />书面规范</div></div>
+        <div class="scene" data-scene="code"><div class="t">给 AI 下指令</div><div class="h">说「帮我写…」<br />它只转录不执行</div></div>
+      </div>
+      <div class="try">
+        <textarea id="demo" placeholder="点我，然后按住 右 Ctrl 说话…"></textarea>
+        <div class="hint">说完松开，文字会落进这个框里</div>
+        <div class="result" id="result"></div>
+      </div>
+    </div>
+
+    <!-- 第 4 步 · 完成 -->
+    <div class="step" data-step="3">
+      <h2>好了，开始用吧</h2>
+      <p class="sub">三个最常用的动作</p>
+      <div class="tips">
+        <div class="tip"><span class="k">按住 右 Ctrl</span><span>说话，松开出字；短按一下=持续录音，再按停</span></div>
+        <div class="tip"><span class="k">改错</span><span>出字不对点悬浮窗上的「改错」，教一次永久记住</span></div>
+        <div class="tip"><span class="k">托盘右键</span><span>设置 / 专名词库 / 修正上一句 / 重看本引导</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <button class="btn ghost" id="back" style="visibility:hidden">上一步</button>
+    <button class="btn primary" id="next">开始</button>
+  </div>
+
+  <script src="welcome-ui.js"></script>
+</body>
+</html>

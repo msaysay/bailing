@@ -31,12 +31,17 @@ const config = {
   hotkey: process.env.BAILING_HOTKEY || 'RightCtrl',
 
   asr: {
-    // provider: 'mimo' | 'whisper-local' | 'huoshan' | 'xunfei'
-    // 默认 mimo：同一个 MiMo key 即可用，中文强、自带标点、无需本地模型
+    // provider: 'mimo' | 'openai-audio' | 'whisper-local' | 'huoshan' | 'xunfei'
+    // 默认 mimo：云服务中转或 MiMo 格式端点均可，中文强、自带标点
     provider: process.env.BAILING_ASR || 'mimo',
     language: 'zh',
     mimo: {
       model: process.env.MIMO_ASR_MODEL || 'mimo-v2.5-asr',
+    },
+    openai: {
+      // 通用 OpenAI 音频格式（Whisper API），自定义接入方时在设置页填
+      baseURL: process.env.OPENAI_ASR_URL || '',
+      model: process.env.OPENAI_ASR_MODEL || 'whisper-1',
     },
     whisper: {
       python: process.env.PYTHON_BIN || 'python',
@@ -72,6 +77,17 @@ const config = {
     model: process.env.MIMO_MODEL || 'mimo-v2.5-pro',
     // MiMo 是推理模型：reasoning_content 计入 token，max_tokens 必须给足
     maxTokens: 3000,
+  },
+
+  // 百灵云服务（默认）：服务器中转代签，每日免费额度（作者承担），用户开箱即用
+  cloud: {
+    baseURL: process.env.BAILING_CLOUD_URL || 'https://49.gx.cn/bailing-api/v1',
+    installId: '',          // settings.apply 时填入（首启生成的随机 UUID）
+    dailyLimit: 3000,
+  },
+  // 提供方模式：cloud=百灵云服务（默认） | byok=用户自定义接入方
+  provider: {
+    mode: 'cloud',
   },
 };
 

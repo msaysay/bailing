@@ -6,6 +6,8 @@ function getProvider() {
   switch (config.asr.provider) {
     case 'whisper-local':
       return require('./whisper-local');
+    case 'openai-audio':
+      return require('./openai-audio');
     case 'huoshan':
       return require('./huoshan');
     case 'xunfei':

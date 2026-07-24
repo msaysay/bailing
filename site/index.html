@@ -40,6 +40,11 @@
   .hero h1{ font-size:52px; font-weight:800; letter-spacing:1px; margin-top:30px; line-height:1.3; }
   .hero h1 .zhu{ color:var(--zhu-bright); }
   .hero .sub{ margin:18px auto 0; max-width:620px; font-size:18px; color:var(--dim-on-ink); }
+  .hero .speed{ margin-top:20px; font-size:15px; color:var(--dim-on-ink); }
+  .hero .speed b{ color:var(--zhu-bright); font-size:17px; }
+  .hero .speed s{ opacity:.7; margin-left:6px; }
+  .hero .speed span{ margin:0 8px; opacity:.5; }
+  .hero .speed em{ margin:0 12px; font-style:normal; opacity:.4; }
   .cta{ margin-top:38px; display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
   .btn{ display:inline-block; padding:15px 34px; border-radius:14px; font-size:16px; font-weight:600;
         text-decoration:none; transition:transform .18s, box-shadow .18s, background .18s; }
@@ -156,6 +161,7 @@
       <h1>连着你的<span class="zhu">第二大脑</span><br />越说越懂你</h1>
       <p class="sub">百灵 Mynah —— 给构建知识库的人做的新时代语音输入法（Windows）<br />
       按住说话，松开出字。它读你的 Obsidian，懂你的领域，写对你的专名。</p>
+      <p class="speed"><b>说话 200 字/分</b><span>vs</span><s>打字 40 字/分</s><em>·</em>每天 3000 字免费额度，开箱即用</p>
       <div class="cta">
         <a class="btn primary" href="https://github.com/msaysay/bailing/releases/latest">免费下载 Windows 版</a>
         <a class="btn ghost" href="https://github.com/msaysay/bailing">GitHub 看源码</a>
@@ -238,7 +244,7 @@
     <div class="kicker">算力账</div>
     <h2>说满两个小时，识别费一块钱</h2>
     <div class="bignum"><span class="n">¥1</span><span class="t">= 2 小时语音识别的全部费用<br /><span class="dim" style="font-size:15px;font-weight:400">小米 MiMo 官方定价 ¥0.5/小时，按秒计</span></span></div>
-    <p class="lead"><b>百灵不收订阅费，我也不经手你一分钱。</b>识别和润色的 API 费，由你自己付给<b>你选择的</b>云服务商——用谁家的、花多少，都是你自己的账号说了算。重度使用（每天实打实说满 2 小时，绝大多数人远达不到）：</p>
+    <p class="lead"><b>百灵不收订阅费。默认每天 3000 字免费额度（我承担），一分钱不花。</b>想不限量，就配自己的 key——识别和润色的 API 费由你自己付给<b>你选择的</b>云服务商，用谁家的、花多少，都是你自己的账号说了算。重度使用（每天实打实说满 2 小时，绝大多数人远达不到）：</p>
     <table>
       <tr><th>项目</th><th>用量</th><th>费用</th></tr>
       <tr><td>语音识别（ASR）</td><td>2 小时 × ¥0.5/小时</td><td>¥1.00</td></tr>
@@ -274,13 +280,14 @@
   <!-- 8 · 两种用法 -->
   <section>
     <div class="kicker">两种用法</div>
-    <h2>它不收钱，想怎么用看你自己</h2>
+    <h2>开箱即用，也可以全归你管</h2>
     <div class="cards grid2">
-      <div class="card"><h3>想自己折腾的</h3>
-        <p><b>GitHub 开源</b>，自己拉源码、自己配 key，随便改。文档齐全，Electron + Node，AI 时代没有门槛。</p></div>
-      <div class="card"><h3>想省事的</h3>
-        <p>直接下载安装包（里面<b>不含任何 key</b>），装好后在设置页填上你自己的 key，两分钟就能用。<b>我也不配 key、不收一分钱。</b></p></div>
+      <div class="card"><h3>开箱即用（默认）</h3>
+        <p>装好就能说。<b>每天 3000 字免费额度</b>，费用我承担，你不用配任何东西。请求经我的服务器中转代签——<b>只记字数，不记录任何内容</b>。</p></div>
+      <div class="card"><h3>配自己的 key（不限量）</h3>
+        <p>在「设置 → 接入方」换成你自己的服务商：MiMo、DeepSeek，或<b>任何 OpenAI 兼容算法</b>——理论上配什么都行。也可以 GitHub 拉源码随便改。</p></div>
     </div>
+    <p style="margin-top:18px"><a href="guide/" style="color:var(--zhu);font-weight:600">配置教程：接入方 / 知识库 / 词库 / 额度说明 →</a></p>
   </section>
 
 </div>
@@ -294,7 +301,7 @@
       <a class="btn primary" href="https://github.com/msaysay/bailing/releases/latest">GitHub 下载（推荐）</a>
       <a class="btn ghost" href="https://pan.baidu.com/s/1BbicfCfsBgCmAUKcXigw0Q?pwd=83vw">百度网盘下载（提取码 83vw）</a>
     </div>
-    <p class="note">Windows 10/11 · 安装包 ~82MB · 数据全部保存在你自己的电脑上</p>
+    <p class="note">Windows 10/11 · 安装包 ~82MB · 每天 3000 字免费额度，开箱即用 · <a href="guide/" style="color:#e08a76">配置教程</a></p>
   </div>
 </section>
 

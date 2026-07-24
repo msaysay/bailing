@@ -1,7 +1,9 @@
 'use strict';
 // 润色引擎：把 ASR 的口语原文整理成干净可用的文本。
 // 这是「越用越懂我」的落点：个人风格画像 + 场景档位 都在这里注入 prompt。
+// 凭证走 provider.endpoint()：云服务（默认）或用户自定义接入方。
 const config = require('./config');
+const provider = require('./provider');
 
 /**
  * @param {string} raw           ASR 原始转写
@@ -14,7 +16,7 @@ const config = require('./config');
 async function polish(raw, opts = {}) {
   const text = (raw || '').trim();
   if (!text) return '';
-  if (!config.polish.enabled || !config.polish.apiKey) return text; // 无 key 时原样返回，不阻塞
+  if (!config.polish.enabled) return text; // 润色关=ASR 原文秒出
 
   const system = buildSystemPrompt(opts);
   const body = {
@@ -30,35 +32,41 @@ async function polish(raw, opts = {}) {
     ],
   };
 
-  const data = await postWithRetry(`${config.polish.baseURL}/chat/completions`, body);
+  const data = await postWithRetry(body);
   // MiMo 是推理模型：content=最终答案，reasoning_content=思考（忽略）
   const out = data?.choices?.[0]?.message?.content?.trim();
   return out || text;
 }
 
 // MiMo 推理模型响应慢，且偶发瞬时网络错误 —— 带指数退避重试。
-async function postWithRetry(url, body, tries = 3) {
+async function postWithRetry(body, tries = 3) {
+  const ep = provider.endpoint();
   let lastErr;
   for (let i = 0; i < tries; i++) {
     try {
       const ctrl = new AbortController();
       const timer = setTimeout(() => ctrl.abort(), 60000);
-      const resp = await fetch(url, {
+      const resp = await fetch(`${ep.baseURL}/chat/completions`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${config.polish.apiKey}`,
+          ...ep.headers,
         },
         body: JSON.stringify(body),
         signal: ctrl.signal,
       }).finally(() => clearTimeout(timer));
       if (!resp.ok) {
         const t = await resp.text().catch(() => '');
-        throw new Error(`MiMo HTTP ${resp.status}: ${t.slice(0, 200)}`);
+        let msg = `HTTP ${resp.status}`;
+        try { msg = JSON.parse(t)?.error?.message || msg; } catch (_) {}
+        const err = new Error(msg);
+        err.noRetry = resp.status === 429 || resp.status === 401; // 额度/鉴权问题重试无意义
+        throw err;
       }
       return await resp.json();
     } catch (e) {
       lastErr = e;
+      if (e.noRetry) break;
       if (i < tries - 1) await new Promise((r) => setTimeout(r, 800 * (i + 1)));
     }
   }

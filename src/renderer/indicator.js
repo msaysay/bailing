@@ -131,5 +131,11 @@ window.bailing.onStatus((s) => {
   clearTimeout(hideTimer);
   if (s.phase === 'processing') { setState('proc'); setText('正在记录你的想法'); }
   else if (s.phase === 'done') { setState('done'); setText(s.text || '完成'); reveal(); scheduleHide(5000); }
-  else if (s.phase === 'error') { setState('err'); setText('未听清'); reveal(); scheduleHide(3000); }
+  else if (s.phase === 'error') {
+    setState('err');
+    // 额度/配置类错误直接透出原因，其余显示「未听清」
+    const informative = s.error && s.error.length <= 60 && /额度|配置|key|Key|端点|鉴权/.test(s.error);
+    setText(informative ? s.error : '未听清');
+    reveal(); scheduleHide(informative ? 5000 : 3000);
+  }
 });

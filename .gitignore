@@ -13,3 +13,4 @@ scripts/_boot.log
 python/.venv/
 python/__pycache__/
 models/
+.env.real-backup

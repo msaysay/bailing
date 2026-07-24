@@ -26,4 +26,8 @@ contextBridge.exposeInMainWorld('bailingSettings', {
   removeCorrection: (wrong) => ipcRenderer.invoke('terms:removeCorrection', wrong),
   onRefresh: (cb) => ipcRenderer.on('refresh', cb),
   winControl: (action) => ipcRenderer.send('win:control', action), // minimize / close（自绘标题栏按钮）
+  providerQuota: () => ipcRenderer.invoke('provider:quota'), // 云服务今日额度
+  setTrialScene: (scene) => ipcRenderer.send('welcome:trialScene', scene), // 引导页场景试用
+  finishWelcome: () => ipcRenderer.send('welcome:done'), // 完成/跳过引导
+  onWelcomeResult: (cb) => ipcRenderer.on('welcome:result', (_e, data) => cb(data)), // 试用出字结果
 });

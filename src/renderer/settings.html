@@ -123,13 +123,63 @@
       </div>
     </div>
 
+    <div class="group">接入方（语音与润色服务）</div>
+    <div class="card">
+      <div class="row">
+        <div class="l"><div class="t">语音输入服务</div>
+          <div class="h">百灵云服务：开箱即用，每天 3000 字免费。自定义：用你自己的 key，不限量、可换任何 OpenAI 兼容算法。</div></div>
+        <select id="providerMode">
+          <option value="cloud">百灵云服务（每天 3000 字免费）</option>
+          <option value="byok">自定义接入方（用我自己的 key）</option>
+        </select>
+      </div>
+      <div class="row" id="quotaRow">
+        <div class="l"><div class="t">今日云额度</div>
+          <div class="h">按装机匿名计量；中转不记录任何语音和文字内容。</div></div>
+        <span class="test-msg ok" id="quotaText">查询中…</span>
+      </div>
+      <div id="byokFields" style="display:none">
+        <div class="row keyrow">
+          <div class="top">
+            <div class="l"><div class="t">API Key</div>
+              <div class="h">识别与润色共用。仅存本机，直连你配置的服务商。</div></div>
+            <div class="keyfield">
+              <input type="password" id="apiKey" placeholder="sk-…" />
+              <div class="eye" id="toggleKey" title="显示 / 隐藏">👁</div>
+            </div>
+          </div>
+          <div class="testbar">
+            <button class="btn-ghost" id="presetMimo">填 MiMo</button>
+            <button class="btn-ghost" id="presetDeepseek">填 DeepSeek</button>
+            <button class="btn-ghost" id="testBtn">测试连接</button>
+            <span class="test-msg" id="testMsg"></span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="l"><div class="t">润色端点</div>
+            <div class="h">OpenAI 兼容的 chat/completions 地址。</div></div>
+          <input type="text" id="polishBaseURL" placeholder="https://api.xiaomimimo.com/v1" />
+        </div>
+        <div class="row">
+          <div class="l"><div class="t">ASR 端点（OpenAI 音频格式时填）</div>
+            <div class="h">Whisper API 格式，如 Groq / OpenAI / DeepInfra。</div></div>
+          <input type="text" id="asrBaseURL" placeholder="https://api.groq.com/openai/v1" />
+        </div>
+        <div class="row">
+          <div class="l"><div class="t">ASR 模型（OpenAI 音频格式时填）</div></div>
+          <input type="text" id="asrModel" placeholder="whisper-large-v3" />
+        </div>
+      </div>
+    </div>
+
     <div class="group">识别与润色</div>
     <div class="card">
       <div class="row">
         <div class="l"><div class="t">语音识别引擎</div>
-          <div class="h">MiMo：同一个 key、中文强、自带标点（推荐）。本地 Whisper：离线兜底。</div></div>
+          <div class="h">云服务和 MiMo 端点选「MiMo 格式」；其他在线 ASR 选「OpenAI 音频格式」并在接入方里填端点。</div></div>
         <select id="asrProvider">
-          <option value="mimo">MiMo ASR（云 · 推荐）</option>
+          <option value="mimo">MiMo 格式（云服务 / MiMo 端点）</option>
+          <option value="openai-audio">OpenAI 音频格式（Whisper API）</option>
           <option value="whisper-local">本地 Whisper（离线）</option>
           <option value="huoshan">火山 BigASR（待接）</option>
           <option value="xunfei">讯飞（待接）</option>
@@ -171,24 +221,6 @@
           <option value="email">邮件</option>
           <option value="social">社交（小红书）</option>
         </select>
-      </div>
-    </div>
-
-    <div class="group">密钥（BYOK · 本地存储）</div>
-    <div class="card">
-      <div class="row keyrow">
-        <div class="top">
-          <div class="l"><div class="t">MiMo API Key</div>
-            <div class="h">识别与润色共用。仅存本地，直连小米服务，不经过第三方。</div></div>
-          <div class="keyfield">
-            <input type="password" id="apiKey" placeholder="sk-…" />
-            <div class="eye" id="toggleKey" title="显示 / 隐藏">👁</div>
-          </div>
-        </div>
-        <div class="testbar">
-          <button class="btn-ghost" id="testBtn">测试连接</button>
-          <span class="test-msg" id="testMsg"></span>
-        </div>
       </div>
     </div>
 

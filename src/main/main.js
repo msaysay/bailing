@@ -31,10 +31,13 @@ const kb = require('./kb');
 const names = require('./names');
 const terms = require('./terms');
 const scene = require('./scene');
+const provider = require('./provider');
 
 let indicator = null;
 let settingsWin = null;
 let termlibWin = null;
+let welcomeWin = null;
+let trialScene = null; // 引导页场景试用：覆盖下一次录音的场景档位
 let tray = null;
 let recording = false;
 let recordMode = null; // 'ptt'(按住说话) | 'toggle'(短按持续)
@@ -107,6 +110,7 @@ ipcMain.handle('audio:submit', async (_e, arrayBuffer) => {
   indicator.webContents.send('status', { phase: 'processing' });
   try {
     const sc = detectScene(); // L3：前台窗口 -> 场景
+    trialScene = null;        // 引导试用场景只用一次
     const { raw, text, timings } = await pipeline.run(tmp, { scene: sc, mode: recordMode });
     let pasted = false;
     if (text) {
@@ -116,9 +120,11 @@ ipcMain.handle('audio:submit', async (_e, arrayBuffer) => {
     lastResult = { raw, text, ts: Date.now() }; // 供「快速修正」用
     // 结果始终在剪贴板：pasted=已自动粘贴；否则提示可 Ctrl+V。停留由渲染层控制（可点改错/悬停保留）
     indicator.webContents.send('status', { phase: 'done', text, raw, timings, pasted });
+    if (welcomeWin && !welcomeWin.isDestroyed()) welcomeWin.webContents.send('welcome:result', { text, raw });
     return { ok: true, text, timings, pasted };
   } catch (err) {
     indicator.webContents.send('status', { phase: 'error', error: err.message });
+    if (welcomeWin && !welcomeWin.isDestroyed()) welcomeWin.webContents.send('welcome:result', { error: err.message });
     setTimeout(() => indicator && indicator.hide(), 2500);
     return { ok: false, error: err.message };
   } finally {
@@ -126,10 +132,29 @@ ipcMain.handle('audio:submit', async (_e, arrayBuffer) => {
   }
 });
 
-// L3 场景：优先用录音时抓到的前台场景，未知则回落到设置里的默认场景。
+// L3 场景：优先引导试用场景 > 录音时抓到的前台场景 > 设置里的默认场景。
 function detectScene() {
-  return recordScene || settings.load().defaultScene || 'default';
+  return trialScene || recordScene || settings.load().defaultScene || 'default';
 }
+
+// 首启引导窗（onboarding）
+function createWelcomeWindow() {
+  if (welcomeWin && !welcomeWin.isDestroyed()) { welcomeWin.show(); welcomeWin.focus(); return; }
+  welcomeWin = new BrowserWindow({
+    width: 560, height: 660, title: '欢迎使用百灵',
+    resizable: false,
+    frame: false,
+    backgroundColor: nativeTheme.shouldUseDarkColors ? '#161311' : '#f5f2ec',
+    webPreferences: { preload: path.join(__dirname, '..', 'renderer', 'preload.js') },
+  });
+  welcomeWin.setMenuBarVisibility(false);
+  welcomeWin.loadFile(path.join(__dirname, '..', 'renderer', 'welcome.html'));
+}
+ipcMain.on('welcome:trialScene', (_e, sc) => { trialScene = sc; });
+ipcMain.on('welcome:done', () => {
+  settings.save({ onboarded: true });
+  if (welcomeWin && !welcomeWin.isDestroyed()) welcomeWin.close();
+});
 
 function createSettingsWindow() {
   if (settingsWin && !settingsWin.isDestroyed()) {
@@ -209,10 +234,11 @@ ipcMain.handle('termlib:open', () => createTermlibWindow());
 ipcMain.handle('terms:library', () => terms.getLibrary());
 ipcMain.handle('terms:save', (_e, patch) => terms.saveLibrary(patch));
 // 从知识库建议专名：大候选池(含中低频专名) → LLM 分批过滤成真专名，尽量高覆盖
-async function llmFilterProperNouns(candidates, key) {
-  const resp = await fetch(`${config.polish.baseURL}/chat/completions`, {
+async function llmFilterProperNouns(candidates) {
+  const ep = provider.endpoint(); // 云服务或 BYOK 均可
+  const resp = await fetch(`${ep.baseURL}/chat/completions`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}` },
+    headers: { 'Content-Type': 'application/json', ...ep.headers },
     body: JSON.stringify({
       model: config.polish.model, max_tokens: 2000, temperature: 0,
       enable_thinking: false, thinking: { type: 'disabled' },
@@ -230,14 +256,12 @@ async function llmFilterProperNouns(candidates, key) {
 ipcMain.handle('terms:suggest', async () => {
   const raw = names.suggestRaw(900); // 大池，含中低频专名（云杉/星宸这类）
   if (!raw.length) return { terms: [], note: '知识库为空或未建索引' };
-  const key = (config.polish.apiKey || '').trim();
-  if (!key) return { terms: raw.slice(0, 80).map((r) => r.term), note: '未配置 key，返回词频候选（未过滤）' };
   const cands = raw.map((r) => r.term);
   const CHUNK = 300;
   const out = new Set();
   try {
     for (let i = 0; i < cands.length; i += CHUNK) {
-      const part = await llmFilterProperNouns(cands.slice(i, i + CHUNK), key);
+      const part = await llmFilterProperNouns(cands.slice(i, i + CHUNK));
       for (const t of part) if (typeof t === 'string' && t.trim()) out.add(t.trim());
     }
     return { terms: [...out] };
@@ -275,11 +299,22 @@ ipcMain.handle('kb:pickFolder', async () => {
   const status = kb.reindex();               // 立即建索引
   return { canceled: false, vaultPath, status };
 });
-// 测试 MiMo 连接（轻量 chat 调用）
+// 云服务今日额度
+ipcMain.handle('provider:quota', () => provider.quota());
+
+// 测试连接：BYOK 测用户端点；未填 key 则测云服务（百灵云额度）
 ipcMain.handle('settings:test', async (_e, opts = {}) => {
   const key = (opts.apiKey || config.polish.apiKey || '').trim();
-  if (!key) return { ok: false, error: '未填写 API Key' };
   const t0 = Date.now();
+  if (!key) {
+    try {
+      const q = await provider.quota();
+      if (!q) return { ok: false, error: '云服务连接失败' };
+      return { ok: true, ms: Date.now() - t0, cloud: true, remaining: q.remaining };
+    } catch (err) {
+      return { ok: false, error: err.message };
+    }
+  }
   try {
     const resp = await fetch(`${config.polish.baseURL}/chat/completions`, {
       method: 'POST',
@@ -311,6 +346,7 @@ function buildTrayMenu() {
     { label: '设置…（改快捷键）', click: () => createSettingsWindow() },
     { label: '修正上一句…（教它写对）', click: () => createCorrectionWindow() },
     { label: '专名词库…（让它写对你的名字）', click: () => createTermlibWindow() },
+    { label: '新手引导', click: () => createWelcomeWindow() },
     { label: '退出', click: () => app.quit() },
   ]);
 }
@@ -338,7 +374,8 @@ app.whenReady().then(() => {
   names.warmup(); // 后台预建专名候选索引
   const mode = registerHotkey();
   const modeDesc = mode === 'dual' ? '双模式(按住说话/短按切换)' : mode === 'toggle' ? '切换式(uiohook不可用回退)' : '注册失败';
-  console.log(`百灵已就绪。热键 ${config.hotkey} · ${modeDesc}。ASR=${config.asr.provider} 润色=${config.polish.model}(润色${config.polish.enabled ? '开' : '关'})`);
+  console.log(`百灵已就绪。热键 ${config.hotkey} · ${modeDesc}。ASR=${config.asr.provider} 润色=${config.polish.model}(润色${config.polish.enabled ? '开' : '关'}) 接入方=${config.provider.mode}`);
+  if (!settings.load().onboarded) createWelcomeWindow(); // 首启引导
 });
 
 app.on('will-quit', () => {
