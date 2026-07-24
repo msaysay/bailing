@@ -39,7 +39,7 @@ app.whenReady().then(async () => {
     document.getElementById('pill').style.borderRadius='8px';
     document.getElementById('pill').style.margin='36px auto';
     document.getElementById('pill').style.boxShadow='0 12px 40px rgba(42,39,35,.18)';
-    document.body.style.background='#faf7f1';
+    // 透明底：官网 Hero 上只放语音框本体
   `);
   for (const [name, js] of STATES) {
     await win.webContents.executeJavaScript(RESET + js);
