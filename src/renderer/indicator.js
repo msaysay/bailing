@@ -33,6 +33,7 @@ function stopTimer() { clearInterval(timerId); timerId = null; }
 
 async function startRecording() {
   try {
+    clearTimeout(hideTimer); // 清掉上一次出字后的自动隐藏计时，否则新录音会被旧计时器误藏
     mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
     chunks = [];
     recorder = new MediaRecorder(mediaStream);

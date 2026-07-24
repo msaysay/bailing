@@ -15,18 +15,27 @@ try {
 
 const HOLD_MS = 250; // 超过判为「长按=按住说话」，以内判为「短按=切换」
 
-// 解析 Electron accelerator -> { ctrl, alt, shift, meta, keycode }
+// 解析 Electron accelerator -> { modCodes:Set<Set>, keycode }
+// 修饰键要求「左或右任一」：如 Alt -> {Alt, AltRight}；单修饰键（RightCtrl 等）-> 无主键，作独立触发
 function parseAccelerator(acc) {
   const parts = String(acc).split('+').map((p) => p.trim());
-  const need = { ctrl: false, alt: false, shift: false, meta: false, keycode: null };
+  const need = { mods: [], keycode: null };
+  const GROUP = {
+    ctrl: ['Ctrl', 'CtrlRight'],
+    alt: ['Alt', 'AltRight'],
+    shift: ['Shift', 'ShiftRight'],
+    meta: ['Meta', 'MetaRight'],
+  };
   for (const p of parts) {
     const low = p.toLowerCase();
-    if (['commandorcontrol', 'control', 'ctrl', 'cmdorctrl'].includes(low)) need.ctrl = true;
-    else if (low === 'alt' || low === 'option') need.alt = true;
-    else if (low === 'shift') need.shift = true;
-    else if (['super', 'meta', 'command', 'cmd', 'win'].includes(low)) need.meta = true;
+    if (['commandorcontrol', 'control', 'ctrl', 'cmdorctrl'].includes(low)) need.mods.push(GROUP.ctrl);
+    else if (low === 'alt' || low === 'option') need.mods.push(GROUP.alt);
+    else if (low === 'shift') need.mods.push(GROUP.shift);
+    else if (['super', 'meta', 'command', 'cmd', 'win'].includes(low)) need.mods.push(GROUP.meta);
     else need.keycode = keyToCode(p);
   }
+  // 展开成 uiohook keycode 集合
+  need.mods = need.mods.map((names) => new Set(names.map((n) => UiohookKey[n]).filter((c) => c != null)));
   return need;
 }
 
@@ -55,9 +64,8 @@ function keyToCode(k) {
   return UiohookKey[up] != null ? UiohookKey[up] : null;
 }
 
-function modsSatisfied(need, e) {
-  return (!need.ctrl || e.ctrlKey) && (!need.alt || e.altKey) &&
-         (!need.shift || e.shiftKey) && (!need.meta || e.metaKey);
+function modsDown(need, down) {
+  return need.mods.every((group) => [...group].some((c) => down.has(c)));
 }
 
 let state = 'idle'; // idle | ptt-recording | toggle-recording
@@ -77,20 +85,23 @@ function start(accelerator, cbs) {
   uiohook.removeAllListeners('keydown');
   uiohook.removeAllListeners('keyup');
   state = 'idle';
+  const down = new Set(); // 自己跟踪按键状态：不依赖事件瞬间的修饰键标志，按的顺序不对也能认
 
   uiohook.on('keydown', (e) => {
-    if (e.keycode !== need.keycode || !modsSatisfied(need, e)) return;
+    down.add(e.keycode);
+    if (e.keycode !== need.keycode || !modsDown(need, down)) return;
     if (state !== 'idle') return;   // 录音中，忽略
     if (holdTimer) return;          // 系统按键自动重复的 keydown，忽略
     pressedAt = Date.now();
     holdTimer = setTimeout(() => {
       holdTimer = null;
       // 到阈值仍按着 -> 长按=按住说话，开始录音
-      if (state === 'idle') { state = 'ptt-recording'; cbs.onStart('ptt'); }
+      if (state === 'idle' && down.has(need.keycode)) { state = 'ptt-recording'; cbs.onStart('ptt'); }
     }, HOLD_MS);
   });
 
   uiohook.on('keyup', (e) => {
+    down.delete(e.keycode);
     if (e.keycode !== need.keycode) return;
     if (holdTimer) { clearTimeout(holdTimer); holdTimer = null; }
     const dur = Date.now() - pressedAt;

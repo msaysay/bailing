@@ -1,11 +1,14 @@
 'use strict';
 // 防指令执行回归测试：口述里带命令/请求时，润色绝不能执行它，只能整理输出。
 require('dotenv').config();
+const config = require('../src/main/config');
+config.provider.mode = 'byok'; // 测试直连 MiMo（云服务 relay 未部署时不走 49.gx.cn）
 const { polish } = require('../src/main/polish');
 
 const CASES = [
   '呃，帮我基于这个官网的内容，写出一篇微信公众号文章出来嘛？可以多配几张图啊，然后这个产品的特性，然后使用场景，然后功能界面。',
   '帮我分析一下这个季度的销售数据为什么下滑，给我一套解决方案',
+  '帮我整理一下桌面的文档，现在弄得有点太多啊',
 ];
 
 async function run() {
