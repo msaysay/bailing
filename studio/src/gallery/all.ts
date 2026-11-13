@@ -6,6 +6,7 @@ import { MEDIA } from './catalog-d-media';
 import { CHARTS } from './catalog-e-charts';
 import { TYPE } from './catalog-f-type';
 import { FLOW } from './catalog-g-flow';
+import { TALK } from './catalog-h-talk';
 export { SLOT, KLINE } from './catalog';
 export type { Item } from './catalog';
-export const CATALOG = [...BASE, ...WEB, ...SCREEN, ...MEDIA, ...CHARTS, ...TYPE, ...FLOW];
+export const CATALOG = [...BASE, ...WEB, ...SCREEN, ...MEDIA, ...CHARTS, ...TYPE, ...FLOW, ...TALK];

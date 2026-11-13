@@ -44,7 +44,7 @@ const { seg, say } = useClock();
 - 颜色、字号从 `kit` 取（`C.accent`、`C.down`、`C.warm`、`C.muted`），不手写色值。全片只有底色、文字色、一个强调色、一个警示色，外加少量暖色点缀。
 - 动画只能由当前帧决定：不用 `Date.now()`、`Math.random()`、CSS 动画。要随机就用固定种子。
 - `Stage` 四周留边：上 150、左右 140、下 190（下方是字幕）。
-- 新做的组件放进 `studio/src/components/`，并在 `studio/src/gallery/catalog.tsx` 登记名称、适用、不适用、参数、演示。
+- 新做的组件放进 `studio/src/components/`，并在 `studio/src/gallery/` 下对应的 `catalog-*.tsx` 里登记名称、适用、不适用、参数、演示（新开一组就新建一个目录文件并加进 `all.ts`）；登记后用 `tools/gallery_check.sh <起始序号> <个数> <输出.jpg>` 只渲这几个看一眼，不用重渲整条演示片。
 
 ## 字幕与强调
 
