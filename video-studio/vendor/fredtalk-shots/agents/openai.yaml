@@ -1,0 +1,6 @@
+interface:
+  display_name: "Fredtalk Shots"
+  short_description: "Fred 的视频深度拉片：逐镜动作、人物关系、交互报告与分秒镜头反推提示词"
+  default_prompt: "请用 $fredtalk-shots 分析我给的视频，输出 Fred 拉片报告和包含分秒镜头变化的详细反推提示词。"
+policy:
+  allow_implicit_invocation: true

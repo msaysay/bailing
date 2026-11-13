@@ -1,0 +1,769 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://fredtalk.local/schemas/shots-report-input.json",
+  "title": "Fredtalk Shots report inputs",
+  "type": "object",
+  "required": [
+    "doc",
+    "analysis",
+    "prompts",
+    "camera"
+  ],
+  "properties": {
+    "doc": {
+      "type": "object",
+      "required": [
+        "title",
+        "source",
+        "meta",
+        "cast",
+        "shots",
+        "media",
+        "seedCuts",
+        "manualCuts",
+        "removedCuts"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "meta": {
+          "type": "object",
+          "required": [
+            "durationSeconds",
+            "fps",
+            "width",
+            "height",
+            "hasAudio",
+            "sourceSha256"
+          ],
+          "properties": {
+            "durationSeconds": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "fps": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "width": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "height": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "hasAudio": {
+              "type": "boolean"
+            },
+            "codec": {
+              "type": "string"
+            },
+            "sourceSha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$",
+              "description": "Measured source-file identity."
+            }
+          }
+        },
+        "cast": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "name",
+              "note",
+              "entityType",
+              "portrait",
+              "portraitTime"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "note": {
+                "type": "string",
+                "minLength": 1
+              },
+              "entityType": {
+                "enum": [
+                  "character",
+                  "group"
+                ]
+              },
+              "portrait": {
+                "type": "string",
+                "minLength": 1
+              },
+              "portraitTime": {
+                "type": "number",
+                "minimum": 0
+              },
+              "portraitNote": {
+                "type": "string"
+              },
+              "portraitSource": {
+                "type": "object",
+                "description": "Source evidence for a crop from the full-resolution original. Record video path, requested time, crop rectangle x/y/width/height, original dimensions and actual decoded PTS only if independently measured.",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "shots": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "title",
+              "start",
+              "end",
+              "seconds",
+              "size",
+              "category",
+              "camera",
+              "subjects",
+              "frame",
+              "fight",
+              "beats",
+              "cameraRead",
+              "spatial",
+              "remake",
+              "note",
+              "frames",
+              "principalSubjects",
+              "backgroundSubjects",
+              "transitionIn"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "title": {
+                "type": "string",
+                "minLength": 1
+              },
+              "size": {
+                "type": "string",
+                "minLength": 1
+              },
+              "category": {
+                "type": "string",
+                "minLength": 1
+              },
+              "camera": {
+                "type": "string",
+                "minLength": 1
+              },
+              "frame": {
+                "type": "string",
+                "minLength": 1
+              },
+              "fight": {
+                "type": "string",
+                "minLength": 1
+              },
+              "cameraRead": {
+                "type": "string",
+                "minLength": 1
+              },
+              "spatial": {
+                "type": "string",
+                "minLength": 1
+              },
+              "remake": {
+                "type": "string",
+                "minLength": 1
+              },
+              "note": {
+                "type": "string",
+                "minLength": 1
+              },
+              "start": {
+                "type": "number"
+              },
+              "end": {
+                "type": "number"
+              },
+              "seconds": {
+                "type": "number"
+              },
+              "subjects": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "principalSubjects": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "backgroundSubjects": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "castPresence": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "audio": {
+                "type": "string"
+              },
+              "rhythmNote": {
+                "type": "string"
+              },
+              "beats": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "array",
+                  "prefixItems": [
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  ],
+                  "minItems": 2,
+                  "maxItems": 2
+                }
+              },
+              "frames": {
+                "type": "object",
+                "required": [
+                  "a",
+                  "b"
+                ],
+                "properties": {
+                  "a": {
+                    "type": "object",
+                    "required": [
+                      "src",
+                      "time",
+                      "timeBasis"
+                    ],
+                    "properties": {
+                      "src": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "time": {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      "timeBasis": {
+                        "enum": [
+                          "requested-seek",
+                          "decoded-pts"
+                        ],
+                        "description": "requested-seek is the requested ffmpeg seek timestamp; decoded-pts is allowed only when verified from decoded-frame showinfo. Without time, report explicitly says unrecorded."
+                      }
+                    },
+                    "description": "Front or back sample inside a shot, not necessarily its first or last decoded frame."
+                  },
+                  "b": {
+                    "type": "object",
+                    "required": [
+                      "src",
+                      "time",
+                      "timeBasis"
+                    ],
+                    "properties": {
+                      "src": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "time": {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      "timeBasis": {
+                        "enum": [
+                          "requested-seek",
+                          "decoded-pts"
+                        ],
+                        "description": "requested-seek is the requested ffmpeg seek timestamp; decoded-pts is allowed only when verified from decoded-frame showinfo. Without time, report explicitly says unrecorded."
+                      }
+                    },
+                    "description": "Front or back sample inside a shot, not necessarily its first or last decoded frame."
+                  }
+                }
+              },
+              "transitionIn": {
+                "enum": [
+                  "fade-in",
+                  "fade-out",
+                  "cut",
+                  "dissolve",
+                  "whip",
+                  "morph",
+                  "match-cut",
+                  "wipe"
+                ]
+              }
+            }
+          }
+        },
+        "media": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "src",
+              "label"
+            ],
+            "properties": {
+              "src": {
+                "type": "string",
+                "minLength": 1
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1
+              },
+              "details": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "report": {
+          "type": "object",
+          "description": "Optional source-specific presentation text. No example-video defaults are included.",
+          "properties": {
+            "title": {
+              "type": "string",
+              "minLength": 1
+            },
+            "kicker": {
+              "type": "string",
+              "minLength": 1
+            },
+            "headline": {
+              "type": "string",
+              "minLength": 1
+            },
+            "intro": {
+              "type": "string",
+              "minLength": 1
+            },
+            "actionLabel": {
+              "type": "string",
+              "minLength": 1
+            },
+            "badge": {
+              "type": "string",
+              "minLength": 1
+            },
+            "shotHeading": {
+              "type": "string",
+              "minLength": 1
+            },
+            "peopleHeading": {
+              "type": "string",
+              "minLength": 1
+            },
+            "peopleIntro": {
+              "type": "string",
+              "minLength": 1
+            },
+            "peopleNote": {
+              "type": "string",
+              "minLength": 1
+            },
+            "analysisHeading": {
+              "type": "string",
+              "minLength": 1
+            },
+            "statsHeading": {
+              "type": "string",
+              "minLength": 1
+            },
+            "cameraIntro": {
+              "type": "string",
+              "minLength": 1
+            },
+            "promptIntro": {
+              "type": "string",
+              "minLength": 1
+            },
+            "audioFallback": {
+              "type": "string",
+              "minLength": 1
+            },
+            "revisionLabel": {
+              "type": "string",
+              "minLength": 1
+            },
+            "promptSidebar": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "label",
+                  "text"
+                ],
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "text": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            },
+            "promptGuides": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "seedCuts": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "uniqueItems": true,
+          "description": "Decoded candidate cut PTS retained from measurement."
+        },
+        "manualCuts": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "uniqueItems": true,
+          "description": "Source times added through engine recut."
+        },
+        "removedCuts": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "uniqueItems": true,
+          "description": "Measured candidates excluded through engine recut."
+        },
+        "params": {
+          "type": "object",
+          "description": "Measurement settings recorded by the Fredtalk engine, including method version and threshold."
+        }
+      }
+    },
+    "analysis": {
+      "type": "object",
+      "required": [
+        "topics",
+        "phases",
+        "limits"
+      ],
+      "properties": {
+        "topics": {
+          "type": "array",
+          "minItems": 6,
+          "items": {
+            "type": "object",
+            "required": [
+              "tag",
+              "title",
+              "observed",
+              "meaning",
+              "apply",
+              "times"
+            ],
+            "properties": {
+              "tag": {
+                "type": "string",
+                "minLength": 1
+              },
+              "title": {
+                "type": "string",
+                "minLength": 1
+              },
+              "observed": {
+                "type": "string",
+                "minLength": 1
+              },
+              "meaning": {
+                "type": "string",
+                "minLength": 1
+              },
+              "apply": {
+                "type": "string",
+                "minLength": 1
+              },
+              "times": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        },
+        "phases": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "sampleTime",
+              "rangeLabel",
+              "title",
+              "analysis"
+            ],
+            "properties": {
+              "sampleTime": {
+                "type": "number"
+              },
+              "rangeLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "title": {
+                "type": "string",
+                "minLength": 1
+              },
+              "analysis": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "overviewPhases": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "sampleTime",
+              "rangeLabel",
+              "title",
+              "analysis"
+            ],
+            "properties": {
+              "sampleTime": {
+                "type": "number"
+              },
+              "rangeLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "title": {
+                "type": "string",
+                "minLength": 1
+              },
+              "analysis": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "limits": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "method": {
+          "type": "string",
+          "minLength": 1
+        },
+        "corrections": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "basis": {
+          "type": "object",
+          "properties": {
+            "evidence": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "description": "An alternative real review method description is allowed under basis.evidence."
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "method"
+          ]
+        },
+        {
+          "required": [
+            "basis"
+          ],
+          "properties": {
+            "basis": {
+              "required": [
+                "evidence"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "prompts": {
+      "type": "array",
+      "minItems": 6,
+      "items": {
+        "type": "object",
+        "required": [
+          "kind",
+          "label",
+          "caption",
+          "text"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "minLength": 1
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "caption": {
+            "type": "string",
+            "minLength": 1
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "description": "Exactly one kind=timed, plus common setup, adaptable segment prompts and story replacement. The timed variant is displayed first."
+    },
+    "camera": {
+      "type": "object",
+      "required": [
+        "windows",
+        "timelinePrompt",
+        "designBoundary"
+      ],
+      "properties": {
+        "windows": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "start",
+              "end",
+              "shotId",
+              "transitionLabel",
+              "title",
+              "cameraPrompt",
+              "actionPrompt",
+              "endState"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "shotId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "transitionLabel": {
+                "type": "string",
+                "minLength": 1
+              },
+              "title": {
+                "type": "string",
+                "minLength": 1
+              },
+              "cameraPrompt": {
+                "type": "string",
+                "minLength": 1
+              },
+              "actionPrompt": {
+                "type": "string",
+                "minLength": 1
+              },
+              "endState": {
+                "type": "string",
+                "minLength": 1
+              },
+              "start": {
+                "type": "number"
+              },
+              "end": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "timelinePrompt": {
+          "type": "string",
+          "minLength": 1
+        },
+        "totalSeconds": {
+          "type": "number"
+        },
+        "windowCount": {
+          "type": "integer"
+        },
+        "sourceShotCount": {
+          "type": "integer"
+        },
+        "designBoundary": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "minProperties": 1
+        }
+      },
+      "description": "Continuous windows must cover 0 to measured duration, remain within associated source shots, and align with source cuts. timelinePrompt exactly matches the timed variant text."
+    }
+  }
+}

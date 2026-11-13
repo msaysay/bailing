@@ -1,0 +1,10 @@
+{
+  "name": "brainstorming",
+  "upstream": "https://github.com/obra/superpowers",
+  "commit": "bb92a77741419a4ab5f06e711a283343f1ada0c3",
+  "upstream_directory": "skills/brainstorming",
+  "upstream_license_path": "LICENSE",
+  "license": "MIT",
+  "runtime_limitations": "Requires an Agent and human design approval. Other superpowers skills mentioned by this entry are external dependencies and are not included in this standalone package.",
+  "packaging_changes": []
+}

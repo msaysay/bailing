@@ -1,0 +1,12 @@
+Fredtalk Shots 2.0.0
+Copyright (c) 2026 Fred
+
+The package contains the Fredtalk report workflow, local media measurement
+engine, validation rules, analysis references and reproduction-prompt template.
+The 2.0 engine and regression suites were newly implemented from the report
+input contract using Python standard-library facilities.
+
+Python, FFmpeg and ffprobe are separately distributed runtime tools.
+Their names describe real dependencies; this package does not claim authorship
+of those tools or of video content supplied for analysis.
+No external Skill package is required at runtime.
