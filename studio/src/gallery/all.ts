@@ -2,6 +2,10 @@
 import { CATALOG as BASE } from './catalog';
 import { WEB } from './catalog-b-web';
 import { SCREEN } from './catalog-c-screen';
+import { MEDIA } from './catalog-d-media';
+import { CHARTS } from './catalog-e-charts';
+import { TYPE } from './catalog-f-type';
+import { FLOW } from './catalog-g-flow';
 export { SLOT, KLINE } from './catalog';
 export type { Item } from './catalog';
-export const CATALOG = [...BASE, ...WEB, ...SCREEN];
+export const CATALOG = [...BASE, ...WEB, ...SCREEN, ...MEDIA, ...CHARTS, ...TYPE, ...FLOW];

@@ -1,0 +1,17 @@
+// 目录 · 视频与图片。演示素材是代码生成的示例视频和示例图片。
+import React from 'react';
+import type { Item } from './catalog';
+import { BeforeAfter, Collage, CoverCarousel, FilmStrip, FreezeLabels, GalleryWall, KenBurns, PhotoStack, TextMask, VideoCard } from '../components/media';
+const f = 'components/media.tsx', g = '视频与图片', im = (n: number) => `gallery/img${n}.jpg`;
+export const MEDIA: Item[] = [
+  { id: 'V01', name: '视频卡', export: 'VideoCard', file: f, group: g, use: '引用一段别人的视频（采访、发布会、往期片段）：有边框、有标题、写来源', avoid: '视频只当背景时（用实拍层）', props: 'src · title · credit 来源 · at · width', demo: (t) => <VideoCard src="gallery/clipA.mp4" title="发布会现场" credit="示例来源 · 日期" at={t} width={1080} /> },
+  { id: 'V02', name: '照片堆', export: 'PhotoStack', file: f, group: g, use: '几张照片、几张截图一张张落到桌面上', avoid: '需要看清每一张时（会互相压住）', props: 'items（src、caption）· ats · size', demo: (t) => <PhotoStack size={440} items={[{ src: im(1), caption: '2023' }, { src: im(2), caption: '2024' }, { src: im(3), caption: '2025' }, { src: im(4), caption: '2026' }]} ats={[t, t + 0.7, t + 1.4, t + 2.1]} /> },
+  { id: 'V03', name: '缓推图片', export: 'KenBurns', file: f, group: g, use: '只有一张静图时让它活起来：极缓推近或平移，可带说明', avoid: '有视频可用时', props: 'src · from、to 起止的 [放大, 横移%, 纵移%] · dur · caption · at', demo: (t) => <KenBurns src={im(5)} at={t} dur={4.5} width={1200} caption="示例说明：这张图在慢慢推近" /> },
+  { id: 'V04', name: '图片墙', export: 'GalleryWall', file: f, group: g, use: '一面墙的图片铺开，从中拎出一张放大来讲', avoid: '图片少于 6 张', props: 'items 图片 · cols 列数 · pick 拎第几张 · at · pickAt · cell 格宽', demo: (t) => <GalleryWall items={[im(1), im(2), im(3), im(4), im(5), im(6), im(3), im(1)]} cols={4} pick={5} at={t} pickAt={t + 1.8} cell={360} /> },
+  { id: 'V05', name: '胶片条', export: 'FilmStrip', file: f, group: g, use: '一连串画面匀速滑过：过去几年、一路走来', avoid: '需要在某一格停下来讲时', props: 'items · speed 每秒像素 · height · at', demo: (t) => <FilmStrip items={[im(1), im(2), im(3), im(4), im(5), im(6)]} at={t} /> },
+  { id: 'V06', name: '前后滑块', export: 'BeforeAfter', file: f, group: g, use: '同一个东西改之前和改之后：一条线划过去换成另一张', avoid: '两张图构图不一致', props: 'before · after · labels · at · dur', demo: (t) => <BeforeAfter before={im(2)} after={im(1)} at={t + 0.8} width={1200} /> },
+  { id: 'V07', name: '定格标注', export: 'FreezeLabels', file: f, group: g, use: '画面定住，引线拉出来标上「这是谁、那是什么」', avoid: '标的是路人；标注盖住人脸', props: 'src · labels（x、y 占画面比例、text、sub、at、side 朝左或朝右）', demo: (t) => <FreezeLabels src={im(4)} width={1200} labels={[{ x: 0.42, y: 0.6, text: '示例对象 A', sub: '说明文字', at: t + 0.6, side: 'left' }, { x: 0.66, y: 0.7, text: '示例对象 B', at: t + 1.6 }]} /> },
+  { id: 'V08', name: '字里看画面', export: 'TextMask', file: f, group: g, use: '开场或章节：巨大的标题字，画面从笔画里透出来', avoid: '标题超过 5 个字；一期超过一次', props: 'src · text · sub 副标题 · size · at', demo: (t) => <TextMask src="gallery/clipA.mp4" text="三件事" sub="辞职之后" at={t} /> },
+  { id: 'V09', name: '多格拼贴', export: 'Collage', file: f, group: g, use: '同时发生的几件事、几个现场，按大小格子拼在一起', avoid: '超过 4 格', props: 'items（src、label）· ats', demo: (t) => <Collage width={1400} items={[{ src: 'gallery/clipA.mp4', label: '总部' }, { src: im(2), label: '交易所' }, { src: im(3), label: '国会' }, { src: im(5), label: '机房' }]} ats={[t, t + 0.5, t + 1, t + 1.5]} /> },
+  { id: 'V10', name: '封面轮播', export: 'CoverCarousel', file: f, group: g, use: '往期视频、几本书、几款产品：横排，当前一张居中放大，依次轮过去', avoid: '只有两张', props: 'items（src、title）· ats 每次切到下一张的时刻', demo: (t) => <CoverCarousel items={[{ src: im(1), title: '第一期' }, { src: im(2), title: '第二期' }, { src: im(3), title: '第三期' }, { src: im(4), title: '第四期' }]} ats={[t + 1.2, t + 2.6]} /> },
+];
