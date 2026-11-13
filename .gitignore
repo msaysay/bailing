@@ -5,3 +5,7 @@ node_modules/
 episodes/*/assets/
 episodes/*/audio/
 episodes/*/out/
+episodes/*/01_输入素材/
+episodes/*/03_制作过程/remotion/public/voice.wav
+episodes/*/03_制作过程/remotion/public/fonts/*.otf
+episodes/*/03_制作过程/remotion/out/
