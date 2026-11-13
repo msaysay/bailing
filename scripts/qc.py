@@ -30,8 +30,9 @@ res["黑场"] = runs
 flash = [round((i + 1) / fps, 2) for i in range(n - 2) if d_all[i] > 18 and d_all[i + 1] > 18 and np.abs(fr[i] - fr[i + 2]).mean() < 5]
 res["闪帧"] = flash
 res["亮度突变"] = [round((i + 1) / fps, 2) for i in np.where(np.abs(np.diff(mean)) > 25)[0]]
-# 画面停滞：上方画面连续 stall 秒内累计变化都很小
-moving = chg > 0.004; stalls = []; i = 0
+# 画面停滞：隔半秒比较一次（逐帧比会漏掉交叉淡化、慢速移动这类渐变），上方画面连续 stall 秒都几乎没变才算
+h = max(1, int(round(fps / 2))); chg2 = (np.abs(top[h:] - top[:-h]) > 12).reshape(n - h, -1).mean(1)
+moving = np.concatenate([chg2 > 0.01, np.zeros(h - 1, bool)]) if h > 1 else chg2 > 0.01; stalls = []; i = 0
 while i < n - 1:
     if not moving[i]:
         j = i

@@ -155,10 +155,11 @@
   ]
  },
  {
-  "file": "p2-sign.mp4",
+  "file": "p2-walk.mp4",
   "from": "say:二·CFO:不是能帮他",
   "to": "seg:二·CFO:end",
-  "credit": "X @Reuters"
+  "credit": "X @Reuters",
+  "dim": 0.5
  },
  {
   "file": "p2-lobby.mp4",

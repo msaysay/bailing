@@ -8,7 +8,9 @@
 import argparse, json, subprocess, sys
 import numpy as np
 ap = argparse.ArgumentParser(); ap.add_argument("video"); ap.add_argument("--timing", required=True); ap.add_argument("--shots", required=True)
-ap.add_argument("--faces", required=True); ap.add_argument("--footage", required=True); ap.add_argument("--max", type=float, default=0.15); a = ap.parse_args()
+ap.add_argument("--faces", required=True); ap.add_argument("--footage", required=True); ap.add_argument("--max", type=float, default=0.15)
+ap.add_argument("--ignore", default="", help="不检查的时间段，如 4.8-6.8,70.6-72.6（章节页这类有意的整屏覆盖）"); a = ap.parse_args()
+ign = [tuple(float(v) for v in r.split("-")) for r in a.ignore.split(",") if r.strip()]
 tm = json.load(open(a.timing)); shots = json.load(open(a.shots)); faces = json.load(open(a.faces)); fps = tm["fps"]; F = 0.4; W, H = 480, 270
 seg = lambda k: next(s for s in tm["segments"] if s["name"] == k)
 def say(sn, ph):
@@ -33,6 +35,7 @@ for sh in shots:
     if x1 - x0 < 6 or y1 - y0 < 6: continue
     worst = 0.0; wt = None
     for t in np.arange(t0 + 0.6, t1 - 0.2, 1.0):
+        if any(lo <= t <= hi for lo, hi in ign): continue
         fin = frame(a.video, t); src = frame(f"{a.footage}/{sh['file']}", t - (t0 - F))
         if fin is None or src is None: continue
         ys, xs = np.mgrid[0:H, 0:W]; sx = ((xs / W - 0.5 - dx) / s + 0.5) * W; sy = ((ys / H - 0.5 - dy) / s + 0.5) * H     # 成片像素对应原片位置
