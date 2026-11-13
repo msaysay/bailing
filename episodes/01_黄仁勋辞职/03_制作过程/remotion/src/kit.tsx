@@ -46,8 +46,8 @@ export const Chrome: React.FC = () => {
       <div style={{ position: 'absolute', left: 72, top: 56, display: 'flex', alignItems: 'center', gap: 16, fontSize: 26, color: C.muted, fontWeight: 600 }}>
         <span style={{ color: C.accent }}>{String(cur).padStart(2, '0')}</span><span style={{ width: 28, height: 2, background: C.line }} /><span>{TITLES[cur]}</span>
       </div>
-      <div style={{ position: 'absolute', right: 72, top: 56, fontSize: 22, color: C.muted, border: `1px solid ${C.line}`, borderRadius: 999, padding: '8px 18px' }}>本视频由 AI 自动生成</div>
-      {l && <div style={{ position: 'absolute', left: 0, right: 0, bottom: 64, textAlign: 'center', fontSize: 46, fontWeight: 600, textShadow: '0 2px 12px #000a' }}>{l.text}</div>}
+      <div style={{ position: 'absolute', right: 72, top: 56, fontSize: 22, color: C.text, background: 'rgba(8,11,17,.7)', border: `1px solid ${C.line}`, borderRadius: 999, padding: '8px 18px' }}>本视频由 AI 自动生成</div>
+      {l && <div style={{ position: 'absolute', left: 0, right: 0, bottom: 64, display: 'flex', justifyContent: 'center' }}><span style={{ fontSize: 44, fontWeight: 600, background: 'rgba(8,11,17,.82)', borderRadius: 14, padding: '10px 28px' }}>{l.text}</span></div>}
     </AbsoluteFill>
   );
 };
@@ -58,8 +58,16 @@ export const Stage: React.FC<{ children: React.ReactNode; style?: React.CSSPrope
 export const Chip: React.FC<{ children: React.ReactNode; color?: string; style?: React.CSSProperties }> = ({ children, color = C.text, style }) => (
   <span style={{ display: 'inline-block', fontSize: 40, fontWeight: 600, color, background: C.surface, border: `1.5px solid ${color === C.text ? C.line : color}`, borderRadius: 16, padding: '16px 30px', ...style }}>{children}</span>
 );
+/** 数据来源标签：每个数字旁边都要有。 */
+export const Src: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <div style={{ fontSize: 22, color: C.muted, marginTop: 10 }}>来源 · {children}</div>
+);
+/** 半透明面板：垫在实拍上的组件底板。 */
+export const Panel: React.FC<{ children: React.ReactNode; style?: React.CSSProperties }> = ({ children, style }) => (
+  <div style={{ background: 'rgba(13,17,25,.80)', border: `1.5px solid ${C.line}`, borderRadius: 28, padding: '40px 48px', boxSizing: 'border-box', ...style }}>{children}</div>
+);
 export const Note: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <div style={{ position: 'absolute', left: 140, bottom: 150, fontSize: 22, color: C.muted }}>{children}</div>
+  <div style={{ position: 'absolute', left: 140, bottom: 150, fontSize: 22, color: C.muted, background: 'rgba(8,11,17,.7)', borderRadius: 8, padding: '4px 12px' }}>{children}</div>
 );
 /** 数字从 0 滚到目标值。 */
 export const Count: React.FC<{ to: number; at: number; dur?: number; digits?: number }> = ({ to, at, dur = 0.8, digits = 0 }) => <>{(to * prog(useT(), at, dur)).toFixed(digits)}</>;

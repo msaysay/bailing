@@ -1,7 +1,7 @@
 // S1–S4：开场、公告、时间线、接任。动作为本期自写，底层值全部来自 kit。
 import React from 'react';
 import { at, prog, mix, inOut } from '../lib';
-import { C, Chip, Count, Note, Pop, Scene, Stage, useT } from '../kit';
+import { C, Chip, Count, Note, Panel, Pop, Scene, Src, Stage, useT } from '../kit';
 
 const Big: React.FC<{ n: number; unit: string; label: string; t0: number; color: string }> = ({ n, unit, label, t0, color }) => (
   <Pop at={t0} dy={40} style={{ textAlign: 'center', width: 620 }}>
@@ -40,11 +40,11 @@ export const S2: React.FC = () => {
         ))}
         <Pop at={at(5)} dy={0} style={{ marginLeft: 24, fontSize: 56, fontWeight: 900, color: C.down, border: `4px solid ${C.down}`, borderRadius: 12, padding: '14px 28px', transform: `rotate(-4deg) scale(${mix(1.5, 1, prog(t, at(5), 0.35))})` }}>即刻生效</Pop>
       </div>
-      <div style={{ marginTop: 84, display: 'flex', flexDirection: 'column', gap: 26, borderTop: `1px solid ${C.line}`, paddingTop: 44 }}>
+      <div style={{ marginTop: 70, display: 'flex', flexDirection: 'column', gap: 26, background: 'rgba(13,17,25,.80)', border: `1.5px solid ${C.line}`, borderRadius: 24, padding: '36px 44px', width: 900, opacity: prog(t, at(6) - 0.2, 0.4) }}>
         <Row k="离职原因" v="公告未说明" t0={at(6, '没有写')} />
         <Row k="本人声明" v="无" t0={at(7, '没有')} />
       </div>
-      <Note>来源：英伟达提交美国证监会的 8-K 文件（2026-11-11）</Note>
+      <Note>来源 · 英伟达提交美国证监会的 8-K 文件 · 2026-11-11</Note>
     </Stage></Scene>
   );
 };
@@ -73,12 +73,13 @@ export const S3: React.FC = () => {
         <Node d={11} t0={at(11, '董事会')} title="董事会接受辞呈" />
         <Node d={12} t0={at(11) + 1.6} title="对外公告" color={C.text} />
       </div>
+      <Note>来源 · 英伟达 8-K（11-11、11-12）；腾讯新闻、21 财经（11-08 独立调查）</Note>
     </Stage></Scene>
   );
 };
 
 const Person: React.FC<{ t0: number; zh: string; en: string; mono: string; children: React.ReactNode }> = ({ t0, zh, en, mono, children }) => (
-  <Pop at={t0} dy={40} style={{ flex: 1, background: C.surface, border: `1.5px solid ${C.line}`, borderRadius: 28, padding: '48px 52px', minHeight: 520, boxSizing: 'border-box' }}>
+  <Pop at={t0} dy={40} style={{ flex: 1, background: 'rgba(13,17,25,.82)', border: `1.5px solid ${C.line}`, borderRadius: 28, padding: '48px 52px', minHeight: 480, boxSizing: 'border-box' }}>
     <div style={{ display: 'flex', alignItems: 'center', gap: 28 }}>
       <div style={{ width: 104, height: 104, borderRadius: 52, background: C.bg, border: `2px solid ${C.accent}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 44, fontWeight: 900, color: C.accent }}>{mono}</div>
       <div><div style={{ fontSize: 60, fontWeight: 900 }}>{zh}</div><div style={{ fontSize: 28, color: C.muted, marginTop: 6 }}>{en}</div></div>
@@ -97,5 +98,6 @@ export const S4: React.FC = () => (
       <Pop at={at(16, '第一位')}><Chip color={C.accent}>公司首任董事会主席</Chip></Pop>
       <Pop at={at(17, '九三年')}><Chip>1993 年起任董事</Chip></Pop>
     </Person>
+    <Note>来源 · 英伟达 8-K · 2026-11-11（人物照片：未取得）</Note>
   </Stage></Scene>
 );

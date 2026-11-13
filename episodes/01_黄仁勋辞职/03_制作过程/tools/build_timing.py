@@ -49,7 +49,7 @@ seglist[0]["start"] = 0.0; seglist[-1]["end"] = round(total, 3)
 json.dump({"fps": 30, "total": round(total, 3), "segments": seglist, "lines": out},
           open("remotion/src/timing.json", "w"), ensure_ascii=False, indent=1)
 parts = "".join(f"[0:a]atrim={a:.3f}:{b:.3f},asetpts=PTS-STARTPTS,afade=t=in:d=0.02,afade=t=out:st={b-a-0.02:.3f}:d=0.02[p{i}];" for i, (a, b) in enumerate(keep))
-graph = parts + "".join(f"[p{i}]" for i in range(len(keep))) + f"concat=n={len(keep)}:v=0:a=1,pan=mono|c0=0.5*c0+0.5*c1,volume=7dB,alimiter=limit=0.89:level=false[o]"
+graph = parts + "".join(f"[p{i}]" for i in range(len(keep))) + f"concat=n={len(keep)}:v=0:a=1,pan=mono|c0=0.5*c0+0.5*c1,loudnorm=I=-16:TP=-1.5:LRA=9[o]"
 subprocess.run(["ffmpeg", "-v", "fatal", "-y", "-err_detect", "ignore_err", "-i", src, "-filter_complex", graph, "-map", "[o]", "-ar", "48000", "remotion/public/voice.wav"], check=True)
 print(f"保留区间 {[(round(a,2),round(b,2)) for a,b in keep]} 总长 {total:.2f}s，{len(out)} 行字幕，{len(seglist)} 段")
 for s in seglist: print(s["id"], s["start"], s["end"])

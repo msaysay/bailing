@@ -1,7 +1,7 @@
 // S5–S9：跌幅尺、两笔账、细节、后续、说明。S5 的尺子在 S6 原位延续。
 import React from 'react';
 import { at, prog, mix, inOut, seg } from '../lib';
-import { C, Chip, Count, Note, Pop, Scene, Stage, useT } from '../kit';
+import { C, Chip, Count, Note, Pop, Scene, Src, Stage, useT } from '../kit';
 
 const LOW = 10, CLOSE = 4.34, W = 1500, X = (v: number) => (v / 12) * W;
 /** 跌幅尺：0% 在左，越往右跌得越深。不是行情图，只表示幅度。 */
@@ -29,11 +29,11 @@ export const S5: React.FC = () => {
       <Pop at={at(18)} style={{ fontSize: 76, fontWeight: 900 }}>市场怎么算这笔账</Pop>
       <Ruler {...r} top={330} opacity={prog(t, at(19) - 0.2, 0.4)} />
       <div style={{ position: 'absolute', left: 210, top: 560, width: 1500, display: 'flex', gap: 40 }}>
-        <Pop at={at(19, '跌超')} style={{ flex: 1 }}><div style={{ fontSize: 30, color: C.muted }}>消息公布后一度</div><div style={{ fontSize: 84, fontWeight: 900, color: C.down }}>跌超 10%</div></Pop>
-        <Pop at={at(20, '百分之四')} style={{ flex: 1 }}><div style={{ fontSize: 30, color: C.muted }}>当日收盘</div><div style={{ fontSize: 84, fontWeight: 900 }}>−4.34%</div></Pop>
-        <Pop at={at(21, '一千八百亿')} style={{ flex: 1.5 }}><div style={{ fontSize: 30, color: C.muted }}>一天少掉的市值</div><div style={{ fontSize: 84, fontWeight: 900, whiteSpace: 'nowrap' }}>约 <Count to={1800} at={at(21, '一千八百亿')} /> 亿美元</div></Pop>
+        <Pop at={at(19, '跌超')} style={{ flex: 1 }}><div style={{ fontSize: 30, color: C.muted }}>消息公布后一度</div><div style={{ fontSize: 84, fontWeight: 900, color: C.down }}>跌超 10%</div><Src>网易财经 · 11-12 盘前</Src><div style={{ fontSize: 22, color: C.muted }}>盘中最低点：未取得</div></Pop>
+        <Pop at={at(20, '百分之四')} style={{ flex: 1 }}><div style={{ fontSize: 30, color: C.muted }}>当日收盘</div><div style={{ fontSize: 84, fontWeight: 900 }}>−4.34%</div><Src>CNBC · 11-12 收盘</Src></Pop>
+        <Pop at={at(21, '一千八百亿')} style={{ flex: 1.5 }}><div style={{ fontSize: 30, color: C.muted }}>一天少掉的市值</div><div style={{ fontSize: 84, fontWeight: 900, whiteSpace: 'nowrap' }}>约 <Count to={1800} at={at(21, '一千八百亿')} /> 亿美元</div><Src>网易财经报道 1817 亿 · 11-12</Src></Pop>
       </div>
-      <Note>幅度示意，非行情走势图。数据来自 CNBC、网易财经对 11 月 12 日美股的报道</Note>
+      <Note>幅度示意，非行情走势图。分时走势数据：未取得</Note>
     </Stage></Scene>
   );
 };
@@ -69,8 +69,8 @@ export const S7: React.FC = () => {
   return (
     <Scene id={7}><Stage>
       <div style={{ display: 'flex', gap: 90, alignItems: 'flex-end', marginTop: 20 }}>
-        <Pop at={at(29, '四万亿')}><div style={{ fontSize: 30, color: C.muted }}>市值</div><div style={{ fontSize: 150, fontWeight: 900, lineHeight: 1.1 }}>4 万亿<span style={{ fontSize: 56 }}> 美元</span></div></Pop>
-        <Pop at={at(30)}><div style={{ fontSize: 30, color: C.muted }}>公司历史</div><div style={{ fontSize: 150, fontWeight: 900, lineHeight: 1.1 }}>33<span style={{ fontSize: 56 }}> 年</span></div></Pop>
+        <Pop at={at(29, '四万亿')}><div style={{ fontSize: 30, color: C.muted }}>市值</div><div style={{ fontSize: 150, fontWeight: 900, lineHeight: 1.1 }}>4 万亿<span style={{ fontSize: 56 }}> 美元</span></div><Src>CNBC · 11-12 收盘略高于此数</Src></Pop>
+        <Pop at={at(30)}><div style={{ fontSize: 30, color: C.muted }}>公司历史</div><div style={{ fontSize: 150, fontWeight: 900, lineHeight: 1.1 }}>33<span style={{ fontSize: 56 }}> 年</span></div><Src>1993 年创立</Src></Pop>
       </div>
       <Pop at={at(30, '董事会主席')} style={{ marginTop: 56, display: 'flex', alignItems: 'center', gap: 32, fontSize: 52 }}>
         <span style={{ color: C.muted }}>董事会主席</span>
@@ -85,7 +85,7 @@ export const S7: React.FC = () => {
 
 export const S8: React.FC = () => {
   const Item: React.FC<{ n: string; t0: number; title: string; children?: React.ReactNode }> = ({ n, t0, title, children }) => (
-    <Pop at={t0} style={{ display: 'flex', gap: 36, alignItems: 'flex-start', background: C.surface, border: `1.5px solid ${C.line}`, borderRadius: 24, padding: '40px 48px' }}>
+    <Pop at={t0} style={{ display: 'flex', gap: 36, alignItems: 'flex-start', background: 'rgba(13,17,25,.82)', border: `1.5px solid ${C.line}`, borderRadius: 24, padding: '40px 48px' }}>
       <div style={{ fontSize: 72, fontWeight: 900, color: C.accent, lineHeight: 1 }}>{n}</div>
       <div><div style={{ fontSize: 56, fontWeight: 900 }}>{title}</div><div style={{ display: 'flex', gap: 20, marginTop: 24, alignItems: 'center' }}>{children}</div></div>
     </Pop>
