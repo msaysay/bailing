@@ -3,7 +3,7 @@ import React from 'react';
 import { AbsoluteFill, Sequence } from 'remotion';
 import { ClockCtx, makeClock, Timing } from '../kit/clock';
 import { Bg, C, FONT, useFonts, useT } from '../kit/kit';
-import { CATALOG, KLINE, SLOT } from './catalog';
+import { CATALOG, KLINE, SLOT } from './all';
 
 export const GFPS = 30;
 // 给强调字幕造一份演示用的时间表：那句话在它自己的 5 秒里逐字念出。
