@@ -15,3 +15,4 @@ studio/public/*/voice.wav
 studio/public/*/bgm.mp3
 studio/public/fonts/*.otf
 studio/out/
+studio/public/*/cover/

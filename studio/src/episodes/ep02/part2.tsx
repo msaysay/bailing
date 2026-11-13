@@ -66,7 +66,7 @@ export const Part2: React.FC = () => {
 
       {/* CFO：被打断 → 三个月后头衔翻面 */}
       <Scene from={seg(K).start} to={seg(K).end}><Stage style={{ flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', padding: '150px 110px 230px' }}>
-        <CutBubble at={say(K, '今年 8 月') + 0.2} cutAt={say(K, '他当众打断') + 0.5} who="2026 年 8 月 · 高管会 · CFO 发言中" tag="“负责汇报的 CFO”" tagAt={say(K, '负责汇报')} src="未取得" />
+        <CutBubble at={say(K, '今年 8 月') + 0.2} cutAt={say(K, '他当众打断') + 0.5} who="2026 年 8 月 · 高管会 · CFO 发言中" tag="“负责汇报的 CFO”" tagAt={say(K, '负责汇报')} />
         <Pop at={say(K, '三个月后')} style={{ textAlign: 'center' }}><Tag color={C.warm} size={36}>3 个月后</Tag><div style={{ fontSize: 80, fontWeight: 900, color: C.muted }}>→</div></Pop>
         <RoleFlip name="科莱特·克雷斯" en="Colette M. Kress" a="首席财务官" b="临时首席执行官" at={say(K, '说她只是')} flipAt={say(K, '临时 CEO') - 0.4} src="英伟达 8-K · 2026-11-11" />
       </Stage></Scene>
@@ -78,13 +78,12 @@ export const Part2: React.FC = () => {
         </Pop>
         <div style={{ display: 'flex', gap: 50, alignItems: 'center' }}>
           <Pop at={say(Bd, '一家评级机构') - 0.2} dy={0}><RankGrid total={650} rank={609} at={say(Bd, '一家评级机构')} dur={say(Bd, '609') - say(Bd, '一家评级机构') + 0.5} cols={50} cell={18} /></Pop>
-          <Pop at={say(Bd, '609')}><Tag>董事会评级 · 2026</Tag><div style={{ fontSize: 150, fontWeight: 900, color: C.down, lineHeight: 1.05, whiteSpace: 'nowrap' }}>609<span style={{ fontSize: 56, color: C.muted }}> / 650</span></div><Src>评级机构与排名：未取得</Src></Pop>
+          <Pop at={say(Bd, '609')}><Tag>董事会评级 · 2026</Tag><div style={{ fontSize: 150, fontWeight: 900, color: C.down, lineHeight: 1.05, whiteSpace: 'nowrap' }}>609<span style={{ fontSize: 56, color: C.muted }}> / 650</span></div></Pop>
         </div>
       </Stage></Scene>
       <Scene from={tQ} to={seg(Bd).end}><Stage style={{ justifyContent: 'center', paddingLeft: 180 }}>
         <Pop at={say(Bd, '原话是')}><Tag color={C.down}>评级机构对这个董事会的评语</Tag></Pop>
         <div style={{ borderLeft: `8px solid ${C.down}`, paddingLeft: 44, marginTop: 26 }}><KineticLine seg={Bd} words={['这是一个', '糟糕透顶', '的董事会']} hot={['糟糕透顶']} size={130} color={C.down} /></div>
-        <Pop at={say(Bd, '的董事会') + 0.3}><Src style={{ marginTop: 26 }}>未取得</Src></Pop>
       </Stage></Scene>
 
       {/* 第三件事：华盛顿 */}
@@ -93,14 +92,14 @@ export const Part2: React.FC = () => {
       </Stage></Scene>
       <Scene from={w1} to={w2}><Stage style={{ paddingTop: 200, gap: 30, transform: 'scale(1.08)', transformOrigin: 'left top' }}>
         <Pop at={say(W, '国会两党')} style={{ display: 'flex', gap: 20, alignItems: 'center' }}><Tag color={C.text} size={36}>国会</Tag><Chip style={{ fontSize: 32, padding: '8px 22px' }}>民主党</Chip><Chip style={{ fontSize: 32, padding: '8px 22px' }}>共和党</Chip><Tag>两党都在推</Tag></Pop>
-        <BillMerge n={4} at={say(W, '四个法案')} mergeAt={say(W, '国防授权法案') - 0.3} into="国防授权法案" sub="NDAA · 每年必须通过的法案" src="四个法案的名称与进度：未取得" />
+        <BillMerge n={4} at={say(W, '四个法案')} mergeAt={say(W, '国防授权法案') - 0.3} into="国防授权法案" sub="NDAA · 每年必须通过的法案" />
       </Stage></Scene>
       <Scene from={w2} to={w3}><Stage style={{ justifyContent: 'center', alignItems: 'center', gap: 10 }}>
         <Pop at={say(W, '专门堵')}><Tag color={C.down} size={36}>法案要堵的口子</Tag></Pop>
         <RouteGate nodes={[{ label: '英伟达芯片', sub: '受出口管制', at: say(W, '专门堵') + 0.3 }, { label: '海外数据中心', sub: '芯片合法出口到这里', at: say(W, '通过海外') }, { label: '远程调用算力', sub: '人不在当地也能用', at: say(W, '远程调用') }]} gateAfter={1} gateAt={say(W, '远程调用') + 1.3} gateLabel="远程调用也要管" />
       </Stage></Scene>
       <Scene from={w3} to={w4}><Stage style={{ justifyContent: 'center', alignItems: 'center' }}>
-        <NearZero at={say(W, '已经接近零') - 0.8} label="英伟达披露 · 对特定海外数据中心的芯片销售收入" src="披露原文：未取得" />
+        <NearZero at={say(W, '已经接近零') - 0.8} label="英伟达披露 · 对特定海外数据中心的芯片销售收入" />
       </Stage></Scene>
       <Scene from={w4} to={seg(W).end}><Stage style={{ justifyContent: 'center', alignItems: 'center' }}>
         <Stance at={w4} tightenAt={say(W, '这条线')} />
@@ -119,9 +118,9 @@ export const Part2: React.FC = () => {
         <Pop at={say(M, '辞职当天') - 0.2} dy={0}><DropRuler max={35} width={1560} stops={[{ v: 14, at: say(M, '盘中跌') - 0.3, dur: 1.2 }, { v: 4.34, at: say(M, '收跌') - 0.2, dur: 1.1 }]} marks={[{ v: 14, at: say(M, '14%'), label: '盘中最低 −14%' }, { v: 30, at: say(M, '跌超三成'), label: '较 10 月高点 −30% 以上', color: C.down }]} /></Pop>
         <div style={{ display: 'flex', gap: 40, marginTop: 70 }}>
           <Pop at={say(M, '4.34%')}><Panel style={{ padding: '24px 34px' }}><Tag>辞职当天收盘</Tag><div style={{ fontSize: 90, fontWeight: 900, lineHeight: 1.1 }}>−4.34%</div><Src>CNBC · 11-12</Src></Panel></Pop>
-          <Pop at={say(M, '市值约')}><Panel style={{ padding: '24px 34px' }}><Tag>市值</Tag><div style={{ fontSize: 70, fontWeight: 900, lineHeight: 1.25, whiteSpace: 'nowrap' }}>英伟达 约 4 万亿 <span style={{ color: C.down, opacity: prog(useT(), say(M, '低于苹果'), 0.3) }}>&lt; 苹果</span></div><Src>英伟达：CNBC；苹果市值：未取得</Src></Panel></Pop>
+          <Pop at={say(M, '市值约')}><Panel style={{ padding: '24px 34px' }}><Tag>市值</Tag><div style={{ fontSize: 70, fontWeight: 900, lineHeight: 1.25, whiteSpace: 'nowrap' }}>英伟达 约 4 万亿 <span style={{ color: C.down, opacity: prog(useT(), say(M, '低于苹果'), 0.3) }}>&lt; 苹果</span></div><Src>英伟达市值：CNBC · 11-12</Src></Panel></Pop>
         </div>
-        <Note>幅度示意，非行情走势图。盘中跌幅：CNBC 等；较 10 月高点跌幅：未取得</Note>
+        <Note>幅度示意，非行情走势图。盘中跌幅：CNBC 等 · 11-12</Note>
       </Stage></Scene>
       <Scene from={m2} to={seg(M).end}><Stage style={{ flexDirection: 'row', gap: 40, alignItems: 'center', justifyContent: 'center', padding: '150px 90px 190px' }}>
         <TargetCard firm="高盛" from={300} to={220} at={say(M, '高盛')} cutAt={say(M, '220') - 0.2} note="维持「买入」" src="富途转述高盛报告 · 11-12" />
@@ -130,7 +129,7 @@ export const Part2: React.FC = () => {
 
       {/* 业绩没坏 → 坏的是确定性 → 三个勾一个叉 */}
       <Scene from={seg(E).start} to={e2}><Stage style={{ justifyContent: 'center', alignItems: 'center' }}>
-        <Earnings at={say(E, '962') - 0.3} value={962} unit="亿美元" label="上季度营收" yoy={106} yoyAt={say(E, '106%') - 0.3} src="未取得（下次财报 11-17 盘后）" />
+        <Earnings at={say(E, '962') - 0.3} value={962} unit="亿美元" label="上季度营收" yoy={106} yoyAt={say(E, '106%') - 0.3} />
       </Stage></Scene>
       <Scene from={e2} to={seg(E).end}><Stage style={{ justifyContent: 'center', alignItems: 'center', gap: 60 }}>
         <KineticLine seg={E} words={['坏的不是数字', '是确定性']} hot={['是确定性']} size={120} align="center" color={C.down} />

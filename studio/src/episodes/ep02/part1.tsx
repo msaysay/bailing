@@ -101,7 +101,6 @@ export const Part1: React.FC = () => {
       {/* 鲜花：只留画面，加新闻角标 */}
       <Scene from={seg(F).start} to={seg(F).end}>
         <LowerThird at={say(F, '圣克拉拉')} place="圣克拉拉 · 英伟达总部" meta="路透社现场画面 · 2026 年 11 月 12 日" />
-        <Stage><Note>鲜花：路透社视频；白蜡烛：未取得</Note></Stage>
       </Scene>
 
       {/* 内网：帖子评论数上涨 → 请愿 → 100 个点里亮 97 个 */}
@@ -117,11 +116,11 @@ export const Part1: React.FC = () => {
               <Chip style={{ fontSize: 32, padding: '10px 22px' }}>数百人签名</Chip>
               <Pop at={say(G, '要他回来')}><Chip color={C.accent} style={{ fontSize: 32, padding: '10px 22px' }}>诉求一：让他回来</Chip></Pop>
               <Pop at={say(G, '还要求董事会')}><Chip color={C.down} style={{ fontSize: 32, padding: '10px 22px' }}>诉求二：董事会成员辞职</Chip></Pop>
-            </div><Src>未取得</Src>
+            </div>
           </Panel></Pop>
           <Pop at={say(G, '一项员工')}><Panel style={{ padding: '26px 34px', display: 'flex', gap: 34, alignItems: 'center' }}>
             <PeopleGrid total={100} keep={97} cols={20} at={say(G, '97')} mode="light" dot={18} dur={1.1} />
-            <div><div style={{ fontSize: 110, fontWeight: 900, lineHeight: 1 }}>97<span style={{ fontSize: 50 }}>%</span></div><Tag>员工自发投票 · 要他留任</Tag><Src>未取得</Src></div>
+            <div><div style={{ fontSize: 110, fontWeight: 900, lineHeight: 1 }}>97<span style={{ fontSize: 50 }}>%</span></div><Tag>员工自发投票 · 要他留任</Tag></div>
           </Panel></Pop>
         </div>
       </Stage></Scene>
@@ -134,9 +133,9 @@ export const Part1: React.FC = () => {
         </Panel></Pop>
         <div style={{ display: 'flex', gap: 50, marginTop: 10 }}>
           <Nameplate at={say(L, 'Wachtell')} title="WACHTELL LIPTON" sub="受聘律师事务所" />
-          <Nameplate at={say(L, '前联邦检察官')} title="前联邦检察官" sub="受聘主持调查 · 姓名未取得" />
+          <Nameplate at={say(L, '前联邦检察官')} title="前联邦检察官" sub="受聘主持调查" />
         </div>
-        <Note>独立调查：董事会 11-08 声明；律所与检察官：未取得</Note>
+        <Note>独立调查：董事会 11-08 声明</Note>
       </Stage></Scene>
       <Scene from={tDuel} to={seg(L).end}><Stage style={{ justifyContent: 'center' }}>
         <PaperDuel left={{ title: '请愿信', who: '员工', at: say(L, '员工在写') }} right={{ title: '法律意见书', who: '董事会', at: say(L, '董事会在写'), stamp: '保密' }} />
