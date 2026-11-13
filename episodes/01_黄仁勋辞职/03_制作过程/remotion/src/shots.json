@@ -1,3 +1,16 @@
 [
- {"file":"huang-selfie.jpg","from":"seg:1","to":"seg:1:end","pos":"50% 30%","credit":"Anderseidesvik / CC BY-SA 4.0 · 2026-04-30 斯坦福"}
+ {"file":"closeup.mp4","from":"seg:1","to":"seg:1:end","video":true,"credit":"抖音 @央视新闻《面对面》专访黄仁勋"},
+ {"file":"logos.mp4","from":"seg:2","to":"line:6","video":true,"credit":"抖音 @央视新闻《面对面》专访黄仁勋"},
+ {"file":"dark.mp4","from":"line:6","to":"seg:2:end","video":true,"credit":"抖音 @央视新闻《面对面》专访黄仁勋"},
+ {"file":"press.mp4","from":"seg:3","to":"line:11","video":true,"credit":"抖音 @央视新闻《面对面》专访黄仁勋"},
+ {"file":"walk.mp4","from":"line:11","to":"seg:3:end","video":true,"credit":"抖音 @央视新闻《面对面》专访黄仁勋"},
+ {"file":"campus.mp4","from":"seg:4","to":"line:15","video":true,"credit":"抖音 @斯坦福机器人庞博士Leo · 硅谷航拍（Google Earth）"},
+ {"file":"stage.mp4","from":"line:15","to":"seg:4:end","video":true,"credit":"抖音 @央视新闻《面对面》专访黄仁勋"},
+ {"file":"keynote.mp4","from":"seg:5","to":"line:20","video":true,"credit":"抖音 @央视新闻《面对面》专访黄仁勋"},
+ {"file":"wide.mp4","from":"line:20","to":"seg:5:end","video":true,"credit":"抖音 @央视新闻《面对面》专访黄仁勋"},
+ {"file":"factory.mp4","from":"seg:6","to":"line:25","video":true,"credit":"抖音 @央视新闻《面对面》专访黄仁勋"},
+ {"file":"closeup2.mp4","from":"line:25","to":"seg:6:end","video":true,"credit":"抖音 @央视新闻《面对面》专访黄仁勋"},
+ {"file":"podium.mp4","from":"seg:7","to":"line:31","video":true,"credit":"抖音 @央视新闻《面对面》专访黄仁勋"},
+ {"file":"server.mp4","from":"line:31","to":"seg:7:end","video":true,"credit":"抖音 @央视新闻《面对面》专访黄仁勋"},
+ {"file":"machine.mp4","from":"seg:8","to":"seg:8:end","video":true,"credit":"抖音 @央视新闻《面对面》专访黄仁勋"}
 ]
