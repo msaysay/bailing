@@ -18,8 +18,8 @@ export const ChapterCard: React.FC<{ no: string; title: string; at: number; hold
 };
 
 /** 目录：几件事依次点亮。 */
-export const IndexList: React.FC<{ items: string[]; ats: number[] }> = ({ items, ats }) => (
-  <div style={{ display: 'flex', gap: 28 }}>
+export const IndexList: React.FC<{ items: string[]; ats: number[]; vertical?: boolean }> = ({ items, ats, vertical }) => (
+  <div style={{ display: 'flex', gap: vertical ? 18 : 28, flexDirection: vertical ? 'column' : 'row', alignItems: 'flex-start' }}>
     {items.map((x, i) => (
       <Pop key={x} at={ats[i]}><Panel style={{ padding: '28px 36px', display: 'flex', alignItems: 'baseline', gap: 20 }}>
         <span style={{ fontSize: 56, fontWeight: 900, color: C.accent }}>{i + 1}</span><span style={{ fontSize: 44, fontWeight: 600, whiteSpace: 'nowrap' }}>{x}</span>

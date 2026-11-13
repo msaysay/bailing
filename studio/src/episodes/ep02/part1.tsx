@@ -15,16 +15,16 @@ export const Part1: React.FC = () => {
   return (
     <>
       {/* 开场：日历从 12 日翻到 13 日 + 三件事目录 */}
-      <Scene from={seg(A).start} to={seg(A).end}><Stage style={{ flexDirection: 'row', alignItems: 'center', gap: 80 }}>
+      <Scene from={seg(A).start} to={seg(A).end}><Stage style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', gap: 80 }}>
         <Pop at={0.1} dy={40} style={{ transform: 'scale(1.25)', transformOrigin: 'left center', marginRight: 70 }}><CalendarFlip at={say(A, '辞职第二天')} a={{ top: '2026 年 11 月', day: '12', label: '黄仁勋辞职', color: C.down }} b={{ top: '2026 年 11 月', day: '13', label: '第二天', color: C.accent }} /></Pop>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 34 }}>
           <Pop at={say(A, '今天说说')}><Tag>辞职之后 · 三个现场</Tag></Pop>
-          <IndexList items={['公司内网', '没有二号位', '华盛顿']} ats={[say(A, '三件'), say(A, '三件') + 0.4, say(A, '三件') + 0.8]} />
+          <IndexList vertical items={['公司内网', '没有二号位', '华盛顿']} ats={[say(A, '三件'), say(A, '三件') + 0.4, say(A, '三件') + 0.8]} />
         </div>
       </Stage></Scene>
 
       {/* 2022：年份翻回去 → 各家裁员条形 vs 英伟达一个没少 → 为什么 → 再翻到 1996 */}
-      <Scene from={seg(B).start} to={tB5 - 0.1} hard><Stage style={{ alignItems: 'center', justifyContent: 'center' }}>
+      <Scene from={seg(B).start} to={tB5 - 0.1} hard><Stage style={{ alignItems: 'flex-start', justifyContent: 'center', paddingLeft: 200 }}>
         <Pop at={say(B, '要看懂它')} dy={0}><FlapYear from={2026} to={2022} at={say(B, '得退回')} size={230} /></Pop>
       </Stage></Scene>
       <Scene from={tB5 - 0.1} to={tWhy - 0.15}><Stage style={{ flexDirection: 'row', gap: 60, alignItems: 'flex-start', paddingTop: 200 }}>
@@ -86,7 +86,7 @@ export const Part1: React.FC = () => {
         <Pop at={say(D, '只有三十天') + 0.4}><Src style={{ marginTop: 30 }}>维基百科 Nvidia 条目</Src></Pop>
       </Stage></Scene>
       {/* 两个年份的他：一边裁，一边不裁 */}
-      <Scene from={tC} to={seg(D).end}><Stage style={{ flexDirection: 'row', gap: 60, alignItems: 'center', justifyContent: 'center' }}>
+      <Scene from={tC} to={seg(D).end}><Stage style={{ flexDirection: 'row', gap: 50, alignItems: 'center', justifyContent: 'flex-start' }}>
         <Pop at={say(D, '一个自己裁过')}><Panel style={{ borderTop: `6px solid ${C.down}` }}>
           <div style={{ fontSize: 96, fontWeight: 900, color: C.warm }}>1996</div><Tag>他自己裁员</Tag>
           <div style={{ marginTop: 24 }}><PeopleGrid total={50} keep={20} cols={10} at={say(D, '一个自己裁过') + 0.3} mode="drop" dot={36} color={C.text} dur={1} /></div>

@@ -19,9 +19,9 @@ p2-chipgold  successor     66.0  3.4 0.58 1:1:0:0
 p2-trays     successor     26.0  6.5 1.0  1:1:0:0
 p2-face      succession    0.2   2.6 0.45 0.9:0.9:0:0.1
 p2-hall      investigation 8.4   7.2 1.0  1:1:0:0
-p2-talk      stocks        12.6  7.2 0.85 1:1:0:0
+p2-booth     stocks        76.3  3.5 0.41 1:1:0:0
 p2-kress     stocks        43.3  2.9 0.36 1:1:0:0
-p2-expo      chips         142.1 2.3 0.38 1:1:0:0
+p2-sign      chips         30.7  3.0 0.49 1:1:0:0
 p2-lobby     close         29.4  3.7 0.41 1:1:0:0
 p2-campus    close         18.9  3.5 0.57 1:1:0:0
 # —— 第三件事 ——
@@ -37,5 +37,5 @@ p4-boards    investigation 53.0  5.7 0.83 1:1:0:0
 p4-traders   stocks        102.6 5.5 1.0  1:1:0:0
 p4-cables    close         81.6  6.2 0.87 1:1:0:0
 p4-racks2    chips         55.0  6.3 0.92 1:1:0:0
-p4-crowd     investigation 20.0  2.8 0.53 1:1:0:0
+p4-render    successor     63.6  2.1 0.39 1:1:0:0
 p4-lawn      flowers       0.3   7.4 0.93 0.48:0.48:0.52:0.44

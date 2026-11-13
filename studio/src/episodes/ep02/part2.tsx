@@ -33,7 +33,7 @@ export const Part2: React.FC = () => {
   return (
     <>
       {/* 第二件事：1996 全员会成了图腾 */}
-      <Scene from={seg(T).start} to={tT2} hard><Stage style={{ justifyContent: 'center', paddingLeft: 170 }}>
+      <Scene from={seg(T).start} to={tT2} hard><Stage style={{ justifyContent: 'flex-end', paddingLeft: 170, paddingBottom: 250 }}>
         <Pop at={say(T, '1996 年那场')} style={{ display: 'flex', alignItems: 'center', gap: 30 }}><FlapYear from={1996} to={1996} at={0} size={90} color={C.warm} /><Tag>全员会 · 后来每次内部讲话都从这句开始</Tag></Pop>
         <div style={{ border: `3px solid ${C.warm}`, borderRadius: 18, padding: '40px 50px', marginTop: 36, alignSelf: 'flex-start', background: 'rgba(13,17,25,.75)', opacity: prog(useT(), say(T, '后来成了'), 0.4) }}>
           <KineticLine seg={T} words={['我们离破产只有三十天']} size={104} color={C.warm} hot={['我们离破产只有三十天']} />
@@ -90,7 +90,7 @@ export const Part2: React.FC = () => {
       <Scene from={seg(W).start} to={w1} hard><Stage style={{ justifyContent: 'center', alignItems: 'center' }}>
         <Stance at={say(W, '黄仁勋一直是')} markAt={say(W, '放宽')} />
       </Stage></Scene>
-      <Scene from={w1} to={w2}><Stage style={{ paddingTop: 200, gap: 30, transform: 'scale(1.08)', transformOrigin: 'left top' }}>
+      <Scene from={w1} to={w2}><Stage style={{ paddingTop: 170, gap: 190 }}>
         <Pop at={say(W, '国会两党')} style={{ display: 'flex', gap: 20, alignItems: 'center' }}><Tag color={C.text} size={36}>国会</Tag><Chip style={{ fontSize: 32, padding: '8px 22px' }}>民主党</Chip><Chip style={{ fontSize: 32, padding: '8px 22px' }}>共和党</Chip><Tag>两党都在推</Tag></Pop>
         <BillMerge n={4} at={say(W, '四个法案')} mergeAt={say(W, '国防授权法案') - 0.3} into="国防授权法案" sub="NDAA · 每年必须通过的法案" />
       </Stage></Scene>
@@ -107,10 +107,10 @@ export const Part2: React.FC = () => {
       <ChapterCard no="03" title="在华盛顿" at={say(W, '第三件事') - 0.15} hold={1.6} />
 
       {/* 论点：两句强调字幕 */}
-      <Scene from={seg(P).start} to={seg(P).end}><Stage style={{ justifyContent: 'center', alignItems: 'center', gap: 30 }}>
+      <Scene from={seg(P).start} to={seg(P).end}><Stage style={{ justifyContent: 'flex-end', alignItems: 'center', gap: 30, paddingBottom: 280 }}>
         <Pop at={say(P, '这不是') - 0.1} until={say(P, '这是一家') - 0.05} dy={0}><KineticLine seg={P} words={['这不是', '一个人的丑闻']} hot={['一个人的丑闻']} size={150} align="center" color={C.muted} /></Pop>
-        <Pop at={say(P, '这是一家')} until={say(P, '从来没准备过') - 0.05} style={{ position: 'absolute', top: 400, textAlign: 'center' }}><Tag>英伟达市值</Tag><div style={{ fontSize: 200, fontWeight: 900, lineHeight: 1.05 }}>4 万亿<span style={{ fontSize: 70 }}> 美元</span></div><Src>CNBC · 11-12 收盘略高于此数</Src></Pop>
-        <Pop at={say(P, '从来没准备过') - 0.05} dy={0} style={{ position: 'absolute', top: 380 }}><KineticLine seg={P} words={['从来没准备过', '没有他']} hot={['没有他']} size={160} align="center" color={C.warm} /></Pop>
+        <Pop at={say(P, '这是一家')} until={say(P, '从来没准备过') - 0.05} style={{ position: 'absolute', top: 500, textAlign: 'center' }}><Tag>英伟达市值</Tag><div style={{ fontSize: 200, fontWeight: 900, lineHeight: 1.05 }}>4 万亿<span style={{ fontSize: 70 }}> 美元</span></div><Src>CNBC · 11-12 收盘略高于此数</Src></Pop>
+        <Pop at={say(P, '从来没准备过') - 0.05} dy={0} style={{ position: 'absolute', top: 560 }}><KineticLine seg={P} words={['从来没准备过', '没有他']} hot={['没有他']} size={160} align="center" color={C.warm} /></Pop>
       </Stage></Scene>
 
       {/* 市场：跌幅尺 → 两张目标价卡 */}
@@ -122,7 +122,7 @@ export const Part2: React.FC = () => {
         </div>
         <Note>幅度示意，非行情走势图。盘中跌幅：CNBC 等 · 11-12</Note>
       </Stage></Scene>
-      <Scene from={m2} to={seg(M).end}><Stage style={{ flexDirection: 'row', gap: 40, alignItems: 'center', justifyContent: 'center', padding: '150px 90px 190px' }}>
+      <Scene from={m2} to={seg(M).end}><Stage style={{ flexDirection: 'row', gap: 40, alignItems: 'flex-end', justifyContent: 'center', padding: '150px 90px 220px' }}>
         <TargetCard firm="高盛" from={300} to={220} at={say(M, '高盛')} cutAt={say(M, '220') - 0.2} note="维持「买入」" src="富途转述高盛报告 · 11-12" />
         <TargetCard firm="伯恩斯坦" from={400} to={200} at={say(M, '伯恩斯坦')} cutAt={say(M, '200') - 0.2} note="评级下调至「与大盘持平」" src="Newsweek 等 · 11-12" />
       </Stage></Scene>
@@ -149,7 +149,7 @@ export const Part2: React.FC = () => {
 
       {/* 片尾 */}
       <Scene from={seg(O).start} to={seg(O).end + 1}><Stage style={{ justifyContent: 'center', alignItems: 'center' }}>
-        <Outro at={say(O, '我是宁少')} name="宁少" tagline="每周用 AI 拆一条商业热点" followAt={say(O, '关注我')} note="本视频由 AI 自动生成 · 配音为本人录制 · 音乐 Lightless Dawn / Kevin MacLeod (CC BY 4.0)" />
+        <Outro at={say(O, '我是宁少')} name="宁少" tagline="每周用 AI 拆一条商业热点" followAt={say(O, '关注我')} note="本视频由 AI 自动生成 · 配音 Fish Audio · 音乐 Lightless Dawn / Kevin MacLeod (CC BY 4.0)" />
       </Stage></Scene>
     </>
   );

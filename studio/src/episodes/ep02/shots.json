@@ -3,13 +3,21 @@
   "file": "p1-open.mp4",
   "from": "seg:开场",
   "to": "seg:开场:end",
-  "credit": "X @Reuters"
+  "credit": "X @Reuters",
+  "faceTo": [
+   0.24,
+   0.3
+  ]
  },
  {
   "file": "p1-stage.mp4",
   "from": "seg:一·2022不裁",
   "to": "say:一·2022不裁:那年硅谷",
-  "credit": "X @Reuters"
+  "credit": "X @Reuters",
+  "faceTo": [
+   0.86,
+   0.2
+  ]
  },
  {
   "file": "p1-jobcuts.mp4",
@@ -42,7 +50,11 @@
   "file": "p1-press.mp4",
   "from": "say:一·1996:一个自己裁过",
   "to": "seg:一·1996:end",
-  "credit": "X @Reuters"
+  "credit": "X @Reuters",
+  "faceTo": [
+   0.84,
+   0.36
+  ]
  },
  {
   "file": "p1-flowers.mp4",
@@ -88,7 +100,11 @@
   "from": "say:二·图腾:他站在台上",
   "to": "say:二·图腾:然后他砍掉",
   "credit": "X @Reuters",
-  "old": true
+  "old": true,
+  "faceTo": [
+   0.88,
+   0.32
+  ]
  },
  {
   "file": "p2-chipglow.mp4",
@@ -123,7 +139,7 @@
   "credit": "X @Reuters"
  },
  {
-  "file": "p2-talk.mp4",
+  "file": "p2-booth.mp4",
   "from": "say:二·没有二号位:他自己说过",
   "to": "seg:二·没有二号位:end",
   "credit": "X @Reuters"
@@ -132,10 +148,14 @@
   "file": "p2-kress.mp4",
   "from": "seg:二·CFO",
   "to": "say:二·CFO:不是能帮他",
-  "credit": "X @Reuters"
+  "credit": "X @Reuters",
+  "faceTo": [
+   0.5,
+   0.27
+  ]
  },
  {
-  "file": "p2-expo.mp4",
+  "file": "p2-sign.mp4",
   "from": "say:二·CFO:不是能帮他",
   "to": "seg:二·CFO:end",
   "credit": "X @Reuters"
@@ -219,7 +239,7 @@
   "credit": "X @Reuters"
  },
  {
-  "file": "p4-crowd.mp4",
+  "file": "p4-render.mp4",
   "from": "say:业绩:它缺一个",
   "to": "seg:业绩:end",
   "credit": "X @Reuters"

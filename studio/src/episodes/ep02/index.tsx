@@ -2,10 +2,11 @@ import React from 'react';
 import { AbsoluteFill, Audio, Sequence, staticFile } from 'remotion';
 import { ClockCtx, makeClock, Timing } from '../../kit/clock';
 import { Bg, useFonts } from '../../kit/kit';
-import { Footage, Shot } from '../../kit/footage';
+import { Faces, Footage, Shot } from '../../kit/footage';
 import { Chrome } from '../../kit/chrome';
 import timing from './timing.json';
 import shots from './shots.json';
+import faces from './faces.json';
 import { Part1 } from './part1';
 import { Part2 } from './part2';
 import { Finish } from '../../components/rich';
@@ -29,7 +30,7 @@ export const EP02: React.FC = () => {
   return (
     <ClockCtx.Provider value={clock}>
       <AbsoluteFill>
-        <Bg /><Footage shots={shots as Shot[]} dir="ep02/footage" /><Part1 /><Part2 /><Chrome chapters={chapters} hideBarBefore={clock.say(B, '第一件事') + 1.6} hero={hero} hot={hot} /><Finish />
+        <Bg /><Footage shots={shots as Shot[]} dir="ep02/footage" faces={faces as unknown as Faces} /><Part1 /><Part2 /><Chrome chapters={chapters} hideBarBefore={clock.say(B, '第一件事') + 1.6} hero={hero} hot={hot} /><Finish />
         {sfx.map(([t, f, v], i) => <Sequence key={i} from={Math.round(t * clock.fps)} layout="none"><Audio src={staticFile('sfx/' + f)} volume={v} /></Sequence>)}
         <Audio src={staticFile('ep02/voice.wav')} />
         <Audio src={staticFile('ep02/bgm.mp3')} volume={(f) => 0.3 * Math.min(1, f / 45) * Math.min(1, Math.max(0, (clock.total * clock.fps - f) / 60))} />
