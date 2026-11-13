@@ -1,14 +1,233 @@
 [
- {"file":"p1-open.mp4","from":"seg:开场","to":"seg:开场:end","credit":"X @Reuters"},
- {"file":"p1-stage.mp4","from":"seg:一·2022不裁","to":"say:一·2022不裁:那年硅谷","credit":"X @Reuters"},
- {"file":"p1-jobcuts.mp4","from":"say:一·2022不裁:那年硅谷","to":"say:一·2022不裁:英伟达没裁","credit":"X @CNBC","dim":0.55},
- {"file":"p1-atrium.mp4","from":"say:一·2022不裁:英伟达没裁","to":"seg:一·2022不裁:end","credit":"X @Reuters"},
- {"file":"p1-chip.mp4","from":"seg:一·1996","to":"say:一·1996:后来他有句","credit":"X @Reuters","old":true},
- {"file":"p1-keynote.mp4","from":"say:一·1996:后来他有句","to":"say:一·1996:一个自己裁过","credit":"X @Reuters","old":true},
- {"file":"p1-press.mp4","from":"say:一·1996:一个自己裁过","to":"seg:一·1996:end","credit":"X @Reuters"},
- {"file":"p1-flowers.mp4","from":"seg:一·鲜花","to":"seg:一·鲜花:end","credit":"X @Reuters · 2026-11-12 圣克拉拉","dim":0.3},
- {"file":"p1-entrance.mp4","from":"seg:一·内网","to":"say:一·内网:还要求董事会","credit":"X @Reuters · 2026-11-12 圣克拉拉"},
- {"file":"p1-corridor.mp4","from":"say:一·内网:还要求董事会","to":"seg:一·内网:end","credit":"X @Reuters"},
- {"file":"p1-logo.mp4","from":"seg:一·律师","to":"say:一·律师:员工在写","credit":"X @Reuters","dim":0.8},
- {"file":"p1-tablet.mp4","from":"say:一·律师:员工在写","to":"seg:一·律师:end","credit":"X @Reuters"}
+ {
+  "file": "p1-open.mp4",
+  "from": "seg:开场",
+  "to": "seg:开场:end",
+  "credit": "X @Reuters"
+ },
+ {
+  "file": "p1-stage.mp4",
+  "from": "seg:一·2022不裁",
+  "to": "say:一·2022不裁:那年硅谷",
+  "credit": "X @Reuters"
+ },
+ {
+  "file": "p1-jobcuts.mp4",
+  "from": "say:一·2022不裁:那年硅谷",
+  "to": "say:一·2022不裁:英伟达没裁",
+  "credit": "X @CNBC",
+  "dim": 0.55
+ },
+ {
+  "file": "p1-atrium.mp4",
+  "from": "say:一·2022不裁:英伟达没裁",
+  "to": "seg:一·2022不裁:end",
+  "credit": "X @Reuters"
+ },
+ {
+  "file": "p1-chip.mp4",
+  "from": "seg:一·1996",
+  "to": "say:一·1996:后来他有句",
+  "credit": "X @Reuters",
+  "old": true
+ },
+ {
+  "file": "p1-keynote.mp4",
+  "from": "say:一·1996:后来他有句",
+  "to": "say:一·1996:一个自己裁过",
+  "credit": "X @Reuters",
+  "old": true
+ },
+ {
+  "file": "p1-press.mp4",
+  "from": "say:一·1996:一个自己裁过",
+  "to": "seg:一·1996:end",
+  "credit": "X @Reuters"
+ },
+ {
+  "file": "p1-flowers.mp4",
+  "from": "seg:一·鲜花",
+  "to": "seg:一·鲜花:end",
+  "credit": "X @Reuters · 2026-11-12 圣克拉拉",
+  "dim": 0.3
+ },
+ {
+  "file": "p1-entrance.mp4",
+  "from": "seg:一·内网",
+  "to": "say:一·内网:还要求董事会",
+  "credit": "X @Reuters · 2026-11-12 圣克拉拉"
+ },
+ {
+  "file": "p1-corridor.mp4",
+  "from": "say:一·内网:还要求董事会",
+  "to": "seg:一·内网:end",
+  "credit": "X @Reuters"
+ },
+ {
+  "file": "p1-logo.mp4",
+  "from": "seg:一·律师",
+  "to": "say:一·律师:员工在写",
+  "credit": "X @Reuters",
+  "dim": 0.8
+ },
+ {
+  "file": "p1-tablet.mp4",
+  "from": "say:一·律师:员工在写",
+  "to": "seg:一·律师:end",
+  "credit": "X @Reuters"
+ },
+ {
+  "file": "p2-totem.mp4",
+  "from": "seg:二·图腾",
+  "to": "say:二·图腾:他站在台上",
+  "credit": "X @Reuters",
+  "old": true
+ },
+ {
+  "file": "p2-dark.mp4",
+  "from": "say:二·图腾:他站在台上",
+  "to": "say:二·图腾:然后他砍掉",
+  "credit": "X @Reuters",
+  "old": true
+ },
+ {
+  "file": "p2-chipglow.mp4",
+  "from": "say:二·图腾:然后他砍掉",
+  "to": "say:二·图腾:第二年",
+  "credit": "X @Reuters",
+  "old": true
+ },
+ {
+  "file": "p2-chipgold.mp4",
+  "from": "say:二·图腾:第二年",
+  "to": "say:二·图腾:四个月",
+  "credit": "X @Reuters",
+  "old": true
+ },
+ {
+  "file": "p2-trays.mp4",
+  "from": "say:二·图腾:四个月",
+  "to": "seg:二·图腾:end",
+  "credit": "X @Reuters"
+ },
+ {
+  "file": "p2-face.mp4",
+  "from": "seg:二·没有二号位",
+  "to": "say:二·没有二号位:老黄领导团队",
+  "credit": "X @Reuters"
+ },
+ {
+  "file": "p2-hall.mp4",
+  "from": "say:二·没有二号位:老黄领导团队",
+  "to": "say:二·没有二号位:他自己说过",
+  "credit": "X @Reuters"
+ },
+ {
+  "file": "p2-talk.mp4",
+  "from": "say:二·没有二号位:他自己说过",
+  "to": "seg:二·没有二号位:end",
+  "credit": "X @Reuters"
+ },
+ {
+  "file": "p2-kress.mp4",
+  "from": "seg:二·CFO",
+  "to": "say:二·CFO:不是能帮他",
+  "credit": "X @Reuters"
+ },
+ {
+  "file": "p2-change.mp4",
+  "from": "say:二·CFO:不是能帮他",
+  "to": "seg:二·CFO:end",
+  "credit": "X @BloombergTV"
+ },
+ {
+  "file": "p2-lobby.mp4",
+  "from": "seg:二·董事会",
+  "to": "say:二·董事会:一共评了",
+  "credit": "X @Reuters"
+ },
+ {
+  "file": "p2-campus.mp4",
+  "from": "say:二·董事会:一共评了",
+  "to": "seg:二·董事会:end",
+  "credit": "X @Reuters"
+ },
+ {
+  "file": "p3-capitol.mp4",
+  "from": "seg:三·华盛顿",
+  "to": "say:三·华盛顿:他一走 国会",
+  "credit": "X @Reuters"
+ },
+ {
+  "file": "p3-senate.mp4",
+  "from": "say:三·华盛顿:他一走 国会",
+  "to": "say:三·华盛顿:专门堵",
+  "credit": "X @Reuters · 参议院 11-10"
+ },
+ {
+  "file": "p3-aisle.mp4",
+  "from": "say:三·华盛顿:专门堵",
+  "to": "say:三·华盛顿:英伟达自己披露",
+  "credit": "X @Reuters"
+ },
+ {
+  "file": "p3-racks.mp4",
+  "from": "say:三·华盛顿:英伟达自己披露",
+  "to": "say:三·华盛顿:他一走 这条线",
+  "credit": "X @Reuters"
+ },
+ {
+  "file": "p3-dome.mp4",
+  "from": "say:三·华盛顿:他一走 这条线",
+  "to": "seg:三·华盛顿:end",
+  "credit": "X @Reuters"
+ },
+ {
+  "file": "p4-alone.mp4",
+  "from": "seg:论点",
+  "to": "seg:论点:end",
+  "credit": "X @Reuters"
+ },
+ {
+  "file": "p4-nyse.mp4",
+  "from": "seg:市场",
+  "to": "say:市场:从 10 月",
+  "credit": "X @Reuters"
+ },
+ {
+  "file": "p4-boards.mp4",
+  "from": "say:市场:从 10 月",
+  "to": "say:市场:高盛",
+  "credit": "X @Reuters"
+ },
+ {
+  "file": "p4-traders.mp4",
+  "from": "say:市场:高盛",
+  "to": "seg:市场:end",
+  "credit": "X @Reuters"
+ },
+ {
+  "file": "p4-cables.mp4",
+  "from": "seg:业绩",
+  "to": "say:业绩:坏的不是数字",
+  "credit": "X @Reuters"
+ },
+ {
+  "file": "p4-racks2.mp4",
+  "from": "say:业绩:坏的不是数字",
+  "to": "say:业绩:它缺一个",
+  "credit": "X @Reuters"
+ },
+ {
+  "file": "p4-crowd.mp4",
+  "from": "say:业绩:它缺一个",
+  "to": "seg:业绩:end",
+  "credit": "X @Reuters"
+ },
+ {
+  "file": "p4-lawn.mp4",
+  "from": "seg:判断",
+  "to": "seg:判断:end",
+  "credit": "X @Reuters · 2026-11-12 圣克拉拉"
+ }
 ]
