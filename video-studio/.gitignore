@@ -1,6 +1,0 @@
-_private/
-node_modules/
-.env
-episodes/*/assets/
-episodes/*/audio/
-episodes/*/out/
