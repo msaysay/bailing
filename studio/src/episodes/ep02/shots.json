@@ -1,0 +1,14 @@
+[
+ {"file":"p1-open.mp4","from":"seg:开场","to":"seg:开场:end","credit":"X @Reuters"},
+ {"file":"p1-stage.mp4","from":"seg:一·2022不裁","to":"say:一·2022不裁:那年硅谷","credit":"X @Reuters"},
+ {"file":"p1-jobcuts.mp4","from":"say:一·2022不裁:那年硅谷","to":"say:一·2022不裁:英伟达没裁","credit":"X @CNBC","dim":0.55},
+ {"file":"p1-atrium.mp4","from":"say:一·2022不裁:英伟达没裁","to":"seg:一·2022不裁:end","credit":"X @Reuters"},
+ {"file":"p1-chip.mp4","from":"seg:一·1996","to":"say:一·1996:后来他有句","credit":"X @Reuters","old":true},
+ {"file":"p1-keynote.mp4","from":"say:一·1996:后来他有句","to":"say:一·1996:一个自己裁过","credit":"X @Reuters","old":true},
+ {"file":"p1-press.mp4","from":"say:一·1996:一个自己裁过","to":"seg:一·1996:end","credit":"X @Reuters"},
+ {"file":"p1-flowers.mp4","from":"seg:一·鲜花","to":"seg:一·鲜花:end","credit":"X @Reuters · 2026-11-12 圣克拉拉","dim":0.3},
+ {"file":"p1-entrance.mp4","from":"seg:一·内网","to":"say:一·内网:还要求董事会","credit":"X @Reuters · 2026-11-12 圣克拉拉"},
+ {"file":"p1-corridor.mp4","from":"say:一·内网:还要求董事会","to":"seg:一·内网:end","credit":"X @Reuters"},
+ {"file":"p1-logo.mp4","from":"seg:一·律师","to":"say:一·律师:员工在写","credit":"X @Reuters","dim":0.8},
+ {"file":"p1-tablet.mp4","from":"say:一·律师:员工在写","to":"seg:一·律师:end","credit":"X @Reuters"}
+]

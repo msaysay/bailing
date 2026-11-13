@@ -10,3 +10,8 @@ episodes/*/03_制作过程/remotion/public/voice.wav
 episodes/*/03_制作过程/remotion/public/fonts/*.otf
 episodes/*/03_制作过程/remotion/out/
 episodes/*/03_制作过程/remotion/public/footage/
+studio/public/*/footage/
+studio/public/*/voice.wav
+studio/public/*/bgm.mp3
+studio/public/fonts/*.otf
+studio/out/
