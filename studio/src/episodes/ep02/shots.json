@@ -135,10 +135,10 @@
   "credit": "X @Reuters"
  },
  {
-  "file": "p2-change.mp4",
+  "file": "p2-expo.mp4",
   "from": "say:二·CFO:不是能帮他",
   "to": "seg:二·CFO:end",
-  "credit": "X @BloombergTV"
+  "credit": "X @Reuters"
  },
  {
   "file": "p2-lobby.mp4",
@@ -189,7 +189,7 @@
   "credit": "X @Reuters"
  },
  {
-  "file": "p4-nyse.mp4",
+  "file": "p4-nasdaq.mp4",
   "from": "seg:市场",
   "to": "say:市场:从 10 月",
   "credit": "X @Reuters"

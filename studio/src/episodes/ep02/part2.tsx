@@ -65,7 +65,7 @@ export const Part2: React.FC = () => {
       </Stage></Scene>
 
       {/* CFO：被打断 → 三个月后头衔翻面 */}
-      <Scene from={seg(K).start} to={seg(K).end}><Stage style={{ flexDirection: 'row', gap: 60, alignItems: 'center', justifyContent: 'center' }}>
+      <Scene from={seg(K).start} to={seg(K).end}><Stage style={{ flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', padding: '150px 110px 230px' }}>
         <CutBubble at={say(K, '今年 8 月') + 0.2} cutAt={say(K, '他当众打断') + 0.5} who="2026 年 8 月 · 高管会 · CFO 发言中" tag="“负责汇报的 CFO”" tagAt={say(K, '负责汇报')} src="未取得" />
         <Pop at={say(K, '三个月后')} style={{ textAlign: 'center' }}><Tag color={C.warm} size={36}>3 个月后</Tag><div style={{ fontSize: 80, fontWeight: 900, color: C.muted }}>→</div></Pop>
         <RoleFlip name="科莱特·克雷斯" en="Colette M. Kress" a="首席财务官" b="临时首席执行官" at={say(K, '说她只是')} flipAt={say(K, '临时 CEO') - 0.4} src="英伟达 8-K · 2026-11-11" />
@@ -91,7 +91,7 @@ export const Part2: React.FC = () => {
       <Scene from={seg(W).start} to={w1} hard><Stage style={{ justifyContent: 'center', alignItems: 'center' }}>
         <Stance at={say(W, '黄仁勋一直是')} markAt={say(W, '放宽')} />
       </Stage></Scene>
-      <Scene from={w1} to={w2}><Stage style={{ paddingTop: 170, gap: 20 }}>
+      <Scene from={w1} to={w2}><Stage style={{ paddingTop: 200, gap: 30, transform: 'scale(1.08)', transformOrigin: 'left top' }}>
         <Pop at={say(W, '国会两党')} style={{ display: 'flex', gap: 20, alignItems: 'center' }}><Tag color={C.text} size={36}>国会</Tag><Chip style={{ fontSize: 32, padding: '8px 22px' }}>民主党</Chip><Chip style={{ fontSize: 32, padding: '8px 22px' }}>共和党</Chip><Tag>两党都在推</Tag></Pop>
         <BillMerge n={4} at={say(W, '四个法案')} mergeAt={say(W, '国防授权法案') - 0.3} into="国防授权法案" sub="NDAA · 每年必须通过的法案" src="四个法案的名称与进度：未取得" />
       </Stage></Scene>
@@ -123,7 +123,7 @@ export const Part2: React.FC = () => {
         </div>
         <Note>幅度示意，非行情走势图。盘中跌幅：CNBC 等；较 10 月高点跌幅：未取得</Note>
       </Stage></Scene>
-      <Scene from={m2} to={seg(M).end}><Stage style={{ flexDirection: 'row', gap: 50, alignItems: 'center', justifyContent: 'center' }}>
+      <Scene from={m2} to={seg(M).end}><Stage style={{ flexDirection: 'row', gap: 40, alignItems: 'center', justifyContent: 'center', padding: '150px 90px 190px' }}>
         <TargetCard firm="高盛" from={300} to={220} at={say(M, '高盛')} cutAt={say(M, '220') - 0.2} note="维持「买入」" src="富途转述高盛报告 · 11-12" />
         <TargetCard firm="伯恩斯坦" from={400} to={200} at={say(M, '伯恩斯坦')} cutAt={say(M, '200') - 0.2} note="评级下调至「与大盘持平」" src="Newsweek 等 · 11-12" />
       </Stage></Scene>

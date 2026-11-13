@@ -60,11 +60,11 @@ export const Milestones: React.FC<{ points: { year: string; title: string; note?
 
 /** 芯片铺满：小方块一格格铺开，计数器同步涨到目标值。 */
 export const ChipFill: React.FC<{ to: number; unit: string; at: number; dur?: number; label: string; src?: string }> = ({ to, unit, at, dur = 1.6, label, src }) => {
-  const t = useT(), p = prog(t, at, dur), cols = 25, rows = 6, lit = Math.floor(p * cols * rows);
+  const t = useT(), p = prog(t, at, dur), cols = 20, rows = 6, lit = Math.floor(p * cols * rows);
   return (
     <Pop at={at - 0.2}><Panel style={{ display: 'flex', gap: 40, alignItems: 'center' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: `repeat(${cols}, 20px)`, gap: 6 }}>{Array.from({ length: cols * rows }, (_, i) => <div key={i} style={{ width: 20, height: 20, borderRadius: 4, background: i < lit ? C.warm : C.line, opacity: i < lit ? 1 : 0.5 }} />)}</div>
-      <div><Label>{label}</Label><div style={{ fontSize: 96, fontWeight: 900, lineHeight: 1.1, whiteSpace: 'nowrap', fontVariantNumeric: 'tabular-nums' }}>{Math.round(to * p).toLocaleString('en-US')}<span style={{ fontSize: 44, marginLeft: 10 }}>{unit}</span></div>{src && <Src>{src}</Src>}</div>
+      <div style={{ display: 'grid', gridTemplateColumns: `repeat(${cols}, 16px)`, gap: 5 }}>{Array.from({ length: cols * rows }, (_, i) => <div key={i} style={{ width: 16, height: 16, borderRadius: 4, background: i < lit ? C.warm : C.line, opacity: i < lit ? 1 : 0.5 }} />)}</div>
+      <div><Label>{label}</Label><div style={{ fontSize: 80, fontWeight: 900, lineHeight: 1.1, whiteSpace: 'nowrap', fontVariantNumeric: 'tabular-nums' }}>{Math.round(to * p).toLocaleString('en-US')}<span style={{ fontSize: 44, marginLeft: 10 }}>{unit}</span></div>{src && <Src>{src}</Src>}</div>
     </Panel></Pop>
   );
 };
@@ -112,7 +112,7 @@ export const RankGrid: React.FC<{ total: number; rank: number; at: number; dur?:
   return (
     <div style={{ display: 'grid', gridTemplateColumns: `repeat(${cols}, ${cell}px)`, gap: 5 }}>
       {Array.from({ length: total }, (_, i) => { const me = i === rank - 1;
-        return <div key={i} style={{ width: cell, height: cell, borderRadius: 4, background: me && done ? C.down : i < cur ? '#3A465F' : C.line, opacity: i < cur || (me && done) ? 1 : 0.45, transform: me && done ? 'scale(2.1)' : undefined, boxShadow: me && done ? `0 0 0 3px ${C.bg}, 0 0 24px ${C.down}` : undefined, zIndex: me ? 2 : 0 }} />; })}
+        return <div key={i} style={{ width: cell, height: cell, borderRadius: 4, background: me && done ? C.down : i < cur ? '#7083A8' : C.line, opacity: i < cur || (me && done) ? 1 : 0.6, transform: me && done ? 'scale(2.1)' : undefined, boxShadow: me && done ? `0 0 0 3px ${C.bg}, 0 0 24px ${C.down}` : undefined, zIndex: me ? 2 : 0 }} />; })}
     </div>
   );
 };
@@ -190,12 +190,12 @@ type Bar = { name: string; v: number; text: string; at: number; color: string };
 export const TargetCard: React.FC<{ firm: string; from: number; to: number; at: number; cutAt: number; note?: string; src?: string }> = ({ firm, from, to, at, cutAt, note, src }) => {
   const t = useT(), c = prog(t, cutAt, 0.35);
   return (
-    <Pop at={at} dy={40}><Panel style={{ width: 600 }}>
+    <Pop at={at} dy={40}><Panel style={{ width: 720 }}>
       <Label>{firm} · 目标价</Label>
       <div style={{ display: 'flex', alignItems: 'baseline', gap: 26, marginTop: 10 }}>
         <div style={{ position: 'relative', fontSize: 80, fontWeight: 900, color: C.muted }}>${from}<div style={{ position: 'absolute', left: -6, top: '52%', height: 6, width: `calc(${c * 100}% + ${12 * c}px)`, background: C.down }} /></div>
         <div style={{ fontSize: 60, color: C.muted, opacity: c }}>→</div>
-        <div style={{ fontSize: 120, fontWeight: 900, color: C.down, opacity: c, transform: `translateY(${mix(20, 0, c)}px)` }}>${to}</div>
+        <div style={{ fontSize: 110, fontWeight: 900, color: C.down, opacity: c, transform: `translateY(${mix(20, 0, c)}px)` }}>${to}</div>
       </div>
       {note && <Label size={26}>{note}</Label>}{src && <Src>{src}</Src>}
     </Panel></Pop>
