@@ -56,7 +56,7 @@ episodes/<期号_选题>/
   03_制作过程/        script.txt、asr.json、规划.md、镜头表.txt、sources.json、事实核对.md
 studio/               所有期数共用的 Remotion 工程
   src/kit/            时钟、基础件、实拍层、章节条与字幕、运动函数（motion.ts）、竖屏口播版式引擎（talk.tsx）
-  src/components/     组件库（181 个，18 组；目录见 studio/src/gallery/catalog*.tsx）
+  src/components/     组件库（232 个，21 组；目录见 studio/src/gallery/catalog*.tsx）
   src/episodes/<期>/  timing.json、shots.json、faces.json、场景代码、封面
   public/<期>/        配音、音乐、镜头片段（不进 git）
 scripts/              asr.py、align.py、roughcut.py（口播粗剪）、talk_check.py（口播版式自查）、tikhub.py（搜索走 TikHub，下载走 yt-dlp 或 TikHub）、faces.py、seg_render.py、qc.py、facecheck.py、build_pack.py

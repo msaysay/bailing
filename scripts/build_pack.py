@@ -19,10 +19,10 @@ slot = int(re.search(r"export const SLOT = (\d+)", open(os.path.join(G, "catalog
 items = []
 for fn in files:
     src = open(os.path.join(G, fn), encoding="utf-8").read()
-    fv = dict(re.findall(r"\b(f\d?) = '([^']+)'", src)); gv = re.search(r"\bg = '([^']+)'", src)   # 分批目录里 file、group 写成了变量 f（或 f1、f2）、g
-    for m in re.finditer(r"\{ id: '([^']+)', name: '([^']+)', export: '([^']+)', file: ('[^']+'|f\d?), group: (?:'([^']+)'|g), use: '([^']*)', avoid: '([^']*)', props: '([^']*)', demo:", src):
+    fv = dict(re.findall(r"\b(f\d?) = '([^']+)'", src)); gv = re.search(r"\bg = '([^']+)'", src); gs = dict(re.findall(r"\b(g\d) = '([^']+)'", src))   # 分批目录里 file、group 写成了变量 f（或 f1、f2）、g
+    for m in re.finditer(r"\{ id: '([^']+)', name: '([^']+)', export: '([^']+)', file: ('[^']+'|f\d?), group: ('[^']+'|g\d?), use: '([^']*)', avoid: '([^']*)', props: '([^']*)', demo:", src):
         it = dict(zip(("id", "name", "export", "file", "group", "use", "avoid", "props"), m.groups()))
-        it["file"] = it["file"][1:-1] if it["file"].startswith("'") else fv[it["file"]]; it["group"] = it["group"] or gv.group(1); it["catalog"] = "gallery/" + fn; items.append(it)
+        it["file"] = it["file"][1:-1] if it["file"].startswith("'") else fv[it["file"]]; it["group"] = it["group"][1:-1] if it["group"].startswith("'") else (gs[it["group"]] if it["group"] in gs else gv.group(1)); it["catalog"] = "gallery/" + fn; items.append(it)
 assert len({i["id"] for i in items}) == len(items), "组件编号有重复"
 if os.path.exists(out): shutil.rmtree(out)
 for d in ("demos", "code", "src"): os.makedirs(os.path.join(out, d))

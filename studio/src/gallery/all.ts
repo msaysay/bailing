@@ -9,6 +9,7 @@ import { FLOW } from './catalog-g-flow';
 import { TALK } from './catalog-h-talk';
 import { FX } from './catalog-i-fx';
 import { EFFECTS } from './catalog-j-effects';
+import { BCAST } from './catalog-k-bc';
 export { SLOT, KLINE } from './catalog';
 export type { Item } from './catalog';
-export const CATALOG = [...BASE, ...WEB, ...SCREEN, ...MEDIA, ...CHARTS, ...TYPE, ...FLOW, ...TALK, ...FX, ...EFFECTS];
+export const CATALOG = [...BASE, ...WEB, ...SCREEN, ...MEDIA, ...CHARTS, ...TYPE, ...FLOW, ...TALK, ...FX, ...EFFECTS, ...BCAST];
