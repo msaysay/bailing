@@ -1,4 +1,4 @@
-// 第四期「自己拆自己」：数字人口播（剪映数字人 + AI 配音）拆解上一条黄仁勋视频的生产流程。
+// 第四期「自己拆自己」：用户实拍的竖屏口播，拆解上一条黄仁勋视频的生产流程。
 // 版式沿用 talk01 的五种：A 全屏 · B 全屏+组件 · C 小圆头像+素材 · E 整屏标题。素材全部是用户自己的录屏、截图和上一期成片。
 import React from 'react';
 import { Audio, Img, Sequence, staticFile } from 'remotion';
@@ -6,30 +6,30 @@ import { ClockCtx, inOut, makeClock, mix, Timing } from '../../kit/clock';
 import { C, Chip, Pop, Scene, Src, useFonts, useT } from '../../kit/kit';
 import { Beat, Lower, Plate, TalkClip, TalkStage, TalkSubs, TalkTitle, TW, UPPER } from '../../kit/talk';
 import { Cursor, TaskRun, Terminal } from '../../components/screen';
-import { FollowCTA, HookTitle, KeywordSticker } from '../../components/talk';
+import { FollowCTA, HookTitle } from '../../components/talk';
 import timing from './timing.json';
 
 export const talk2Clock = makeClock(timing as Timing);
 const { say, seg, ln } = talk2Clock;
-const FACE = { x: 540, y: 600, w: 430 };   // 量自剪好的人物视频（1080×1620）
+const FACE = { x: 530, y: 620, w: 320 };   // 量自剪好的人物视频（1080×1620）
 const F = 'talk02/footage/';
 const Tag: React.FC<{ children: React.ReactNode; color?: string; size?: number }> = ({ children, color = C.muted, size = 32 }) => <div style={{ fontSize: size, fontWeight: 600, color, whiteSpace: 'nowrap' }}>{children}</div>;
 const Big: React.FC<{ children: React.ReactNode; color?: string; size?: number }> = ({ children, color = C.text, size = 96 }) => <div style={{ fontSize: size, fontWeight: 900, color, lineHeight: 1.15, whiteSpace: 'nowrap' }}>{children}</div>;
 const chip = { fontSize: 34, padding: '10px 22px' };
 
 // 开场
-const tNoCut = say('开场', '我一帧都没剪'), tParts = say('开场', '文稿'), tCodex = say('开场', '用 Codex'), tToday = say('开场', '今天这个'), tBut = say('开场', '但是我自己'), tIf = say('开场', '如果你也感兴趣'), tCmt = say('开场', '评论区打');
+const tNoCut = say('开场', '我一帧都没剪'), tParts = say('开场', '文稿'), tCodex = say('开场', 'Codex'), tToday = say('开场', '今天呢'), tBut = say('开场', '但是我自己'), tIf = say('开场', '如果你也感兴趣'), tCmt = say('开场', '评论区可以打');
 // 写稿
-const s1 = say('写稿', '第一步'), tHot = say('写稿', '因为它能'), tExp = say('写稿', '我最近体验下来'), tByte = say('写稿', '毕竟字节'), tCheck = say('写稿', '我一查'), tSo = say('写稿', '所以不追快讯'), tDeep = say('写稿', '改讲一个'), tPick = say('写稿', '选题'), tOnly = say('写稿', '是整条链路里');
+const s1 = say('写稿', '第一步'), tHot = say('写稿', '它能直接查'), tExp = say('写稿', '我最近体验下来'), tByte = say('写稿', '毕竟啊'), tCheck = say('写稿', '我一查'), tSo = say('写稿', '所以我就不追'), tDeep = say('写稿', '改讲一个'), tPick = say('写稿', '所以选题'), tOnly = say('写稿', '是整条链路里');
 // 配音
-const s2 = say('配音', '第二步'), tFish = say('配音', '文稿丢进'), tClick = say('配音', '点一下'), tOut = say('配音', '三分半的口播'), tMM = say('配音', 'MiniMax'), tHS = say('配音', '火山引擎');
+const s2 = say('配音', '第二步'), tFish = say('配音', '把文稿丢进'), tClick = say('配音', '点一下'), tOut = say('配音', '三分半钟的口播'), tMM = say('配音', 'MiniMax'), tHS = say('配音', '火山引擎');
 // 素材
-const s3 = say('素材', '第三步'), tWM = say('素材', '抖音 视频号'), tNo = say('素材', '不能直接用'), tTik = say('素材', '我让 AI'), tFind = say('素材', '去外部平台'), tFree = say('素材', '素材下载免费'), tCost = say('素材', '但是接口');
+const s3 = say('素材', '第三步'), tWM = say('素材', '抖音 视频号'), tNo = say('素材', '咱不能直接用'), tTik = say('素材', '所以我就让'), tFind = say('素材', '去外部平台'), tFree = say('素材', '素材呢'), tCost = say('素材', '但是接口');
 // 成片
-const s4 = say('成片', '第四步'), tGive = say('成片', '把声音交给'), tSelf = say('成片', '它自己对字幕'), tPic = say('成片', '配画面'), tChart = say('成片', '做数据图表'), tFx = say('成片', '加特效'), tWait = say('成片', '我等了'), tDone = say('成片', '成片就出来了');
+const s4 = say('成片', '第四步'), tGive = say('成片', '就是把声音'), tSelf = say('成片', '它自己对字幕'), tPic = say('成片', '配画面'), tChart = say('成片', '做数据图表'), tFx = say('成片', '加特效'), tSk = say('成片', '这个部分'), tWait = say('成片', '我大概等了'), tDone = say('成片', '成片就出来了');
 // 数字人、发布、收口
-const s5 = say('数字人', '第五步'), tDub = say('数字人', '用同一条配音'), tLip = say('数字人', '对上口型'), tAny = say('数字人', '当然数字人'), tTest = say('数字人', '实测下来');
-const s6 = seg('发布').start, tAI = say('发布', '也是 AI 写的'), tName = say('收口', '我是陈宁'), tShare = say('收口', '分享 AI');
+const s5 = say('数字人', '第五步'), tDub = say('数字人', '用同一条配音'), tLip = say('数字人', '然后对上口型'), tAny = say('数字人', '当然了'), tTest = say('数字人', '实测下来');
+const s6 = seg('发布').start, tAI = say('发布', '也是 AI 写的'), tQ = say('发布', '如果还有'), tName = say('收口', '我是陈宁'), tShare = say('收口', '分享 AI');
 
 const beats: Beat[] = [
   { at: 0, mode: 'bubble' },                                          // C：上一条成片
@@ -55,15 +55,17 @@ const beats: Beat[] = [
   { at: tFree - 0.3, mode: 'full', zoom: 1 },                         // B：免费与成本
   { at: s4, mode: 'full', zoom: 1.06, dur: 0 },                       // E：04
   { at: tGive - 0.3, mode: 'bubble' },                                // C：Claude Code 录屏、成片
-  { at: tWait - 0.3, mode: 'full', zoom: 1.1 },                       // B：等了多久
+  { at: tSk - 0.3, mode: 'full', zoom: 1 },                           // B：这一步也打包成了 Skill
+  { at: tWait - 0.05, mode: 'full', zoom: 1.12, dur: 0 },                       // B：等了多久
   { at: s5, mode: 'full', zoom: 1, dur: 0 },                          // E：05
   { at: tDub - 0.3, mode: 'bubble' },                                 // C：剪映录屏
   { at: tAny - 0.3, mode: 'full', zoom: 1 },                          // A：任意平台
   { at: tTest - 0.05, mode: 'full', zoom: 1.16, dur: 0 },             // A：剪映的还不错
   { at: s6 - 0.3, mode: 'bubble' },                                   // C：发布包
-  { at: tName - 0.3, mode: 'full', zoom: 1 },                         // B：关注
+  { at: tQ - 0.3, mode: 'full', zoom: 1.12 },                         // A：评论区交流
+  { at: tName - 0.05, mode: 'full', zoom: 1, dur: 0 },                         // B：关注
 ];
-const hot = ['一帧都没剪', 'Skill', '自己拆自己', '豆包', '抖音热榜', '前五十', '深度故事', '拿主意', 'Fish Audio', '三分半', '水印', 'TikHub', '免费', '成本', 'Claude Code', '三四十分钟', '剪映', '数字人', 'AI 写的', '陈宁'];
+const hot = ['一帧都没剪', 'Skill', '自己拆自己', '豆包', '抖音热榜', '前五十', '深度故事', '拿主意', 'Fish Audio', '三分半', '水印', 'TikHub', '免费', '成本', 'Claude Code', '三四十分钟', '剪映', '数字人', 'AI 写的', '评论区', '陈宁'];
 const titles: [string, string, number, number][] = [['01', '豆包写稿', s1, tHot], ['02', '配音', s2, tFish], ['03', '找素材', s3, tWM], ['04', 'AI 成片', s4, tGive], ['05', '剪映数字人', s5, tDub]];
 const sfx: [number, string, number][] = [[tNoCut, 'thud.wav', 0.4], ...titles.map(([, , at]) => [at, 'whoosh.wav', 0.45] as [number, string, number]), [tClick + 0.35, 'tick.wav', 0.4], [tDone, 'thud.wav', 0.35]];
 
@@ -93,9 +95,9 @@ export const TALK02: React.FC = () => {
         <TalkClip src={F + 'doubao-hot-table.mp4'} at={tCheck - 0.25} until={tSo - 0.3} credit="录屏：豆包" />
         <FishPan at={tFish - 0.25} until={tMM - 0.3} />
         <TalkClip src={F + 'claude-code.mp4'} at={tGive - 0.25} until={tSelf - 0.15} credit="录屏：Claude Code" />
-        <TalkClip src={F + 'final-b.mp4'} at={tSelf - 0.1} until={tWait - 0.3} credit="上一条成片" />
+        <TalkClip src={F + 'final-b.mp4'} at={tSelf - 0.1} until={tSk - 0.3} credit="上一条成片" />
         <TalkClip src={F + 'jianying.mp4'} at={tDub - 0.25} until={tAny - 0.3} credit="录屏：剪映" />
-        <TalkClip src={F + 'doubao-titles.mp4'} at={s6 - 0.25} until={tName - 0.3} credit="录屏：豆包" />
+        <TalkClip src={F + 'doubao-titles.mp4'} at={s6 - 0.25} until={tQ - 0.3} credit="录屏：豆包" />
       </>}>
         {/* C 开场：上一条成片的规格 */}
         <Scene from={0} to={tNoCut - 0.35}><Lower style={{ top: 1100 }}><Pop at={0.3}><Plate style={{ width: 900, boxSizing: 'border-box', borderTop: `6px solid ${C.warm}` }}>
@@ -114,12 +116,6 @@ export const TALK02: React.FC = () => {
           <Tag>同一套 Skill · 任选一个 Agent 来跑</Tag>
           <div style={{ display: 'flex', gap: 14, marginTop: 18 }}><Chip color={C.accent} style={chip}>Claude Code</Chip><Pop at={tCodex}><Chip style={chip}>Codex</Chip></Pop><Pop at={say('开场', 'WorkBuddy 也能跑')}><Chip style={chip}>WorkBuddy</Chip></Pop></div>
         </Plate></Lower></Scene>
-
-        {/* A：今天这个也是数字人，贴两张贴纸在头两侧 */}
-        <Scene from={tToday} to={tBut - 0.1} hard>
-          <div style={{ position: 'absolute', left: 36, top: 400 }}><KeywordSticker text="数字人" size={54} at={tToday + 0.5} /></div>
-          <div style={{ position: 'absolute', left: 800, top: 300 }}><KeywordSticker text="AI 配音" size={46} rotate={5} color="#F3F1EA" at={say('开场', '加 AI 配音')} /></div>
-        </Scene>
 
         {/* B：片名 */}
         <div style={{ position: 'absolute', left: 150, top: 1290 }}><HookTitle size={120} lines={['自己拆自己']} at={tBut + 0.1} until={tIf - 0.15} /></div>
@@ -198,10 +194,17 @@ export const TALK02: React.FC = () => {
           <div style={{ display: 'flex', gap: 14, marginTop: 16 }}><Chip style={{ ...chip, fontSize: 44 }}>配音文件</Chip><Chip style={{ ...chip, fontSize: 44 }}>逐字稿</Chip></div>
         </Plate></Pop></Lower></Scene>
         {/* C：它自己跑的四步 */}
-        <Scene from={tSelf - 0.05} to={tWait - 0.35}><Lower style={{ top: 1090 }}><div style={{ transform: 'scale(.94)', transformOrigin: 'center top' }}><TaskRun title="自动剪辑流程" width={900} tasks={[{ text: '按录音逐字对齐字幕', at: tSelf, doneAt: tPic }, { text: '搜真实镜头垫底', at: tPic, doneAt: tChart }, { text: '从组件库里挑图表', at: tChart, doneAt: tFx }, { text: '音效和质感层', at: tFx, doneAt: tFx + 0.6 }]} /></div></Lower></Scene>
+        <Scene from={tSelf - 0.05} to={tSk - 0.35}><Lower style={{ top: 1090 }}><div style={{ transform: 'scale(.94)', transformOrigin: 'center top' }}><TaskRun title="自动剪辑流程" width={900} tasks={[{ text: '按录音逐字对齐字幕', at: tSelf, doneAt: tPic }, { text: '搜真实镜头垫底', at: tPic, doneAt: tChart }, { text: '从组件库里挑图表', at: tChart, doneAt: tFx }, { text: '音效和质感层', at: tFx, doneAt: tFx + 0.6 }]} /></div></Lower></Scene>
+
+        {/* B：这一步也打包成了 Skill */}
+        <Scene from={tSk - 0.05} to={tWait - 0.1}><Lower style={{ top: 1150 }}><Pop at={tSk}><Plate style={{ width: 900, boxSizing: 'border-box', borderTop: `6px solid ${C.warm}` }}>
+          <Tag>这套 Skill 里有什么</Tag>
+          <div style={{ display: 'flex', gap: 14, marginTop: 16 }}><Chip style={{ ...chip, fontSize: 42 }}>12 个步骤说明</Chip><Pop at={say('成片', '也可以教给你')}><Chip style={{ ...chip, fontSize: 42 }}>181 个画面组件</Chip></Pop></div>
+          <Pop at={say('成片', '用你想用的')}><Tag size={28}>交给哪个 Agent，它都照着步骤一步步做</Tag></Pop>
+        </Plate></Pop></Lower></Scene>
 
         {/* B：等了多久，得到什么 */}
-        <Scene from={tWait - 0.05} to={s5 - 0.15}><Lower style={{ top: 1150 }}><Plate style={{ width: 920, boxSizing: 'border-box', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Scene from={tWait - 0.05} to={s5 - 0.15} hard><Lower style={{ top: 1150 }}><Plate style={{ width: 920, boxSizing: 'border-box', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Pop at={tWait}><div><Tag>我只做一件事</Tag><Big size={84}>等</Big></div></Pop>
           <Pop at={tDone} dy={0}><div style={{ textAlign: 'right' }}><Tag>拿到</Tag><Big size={84} color={C.warm}>3 分 38 秒成片</Big></div></Pop>
         </Plate></Lower></Scene>
@@ -213,7 +216,7 @@ export const TALK02: React.FC = () => {
         </Plate></Lower></Scene>
 
         {/* C：豆包给的发布包 */}
-        <Scene from={s6 - 0.1} to={tName - 0.35}><Lower style={{ top: 1100 }}><Pop at={s6}><Plate style={{ width: 900, boxSizing: 'border-box', borderTop: `6px solid ${C.warm}` }}>
+        <Scene from={s6 - 0.1} to={tQ - 0.35}><Lower style={{ top: 1100 }}><Pop at={s6}><Plate style={{ width: 900, boxSizing: 'border-box', borderTop: `6px solid ${C.warm}` }}>
           <Tag>发布包里有什么</Tag>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, marginTop: 16 }}><Chip style={chip}>标题 3 选 1</Chip><Chip style={chip}>描述</Chip><Pop at={tAI}><Chip style={chip}>5 个话题</Chip></Pop><Pop at={tAI + 0.25}><Chip style={chip}>置顶评论</Chip></Pop></div>
         </Plate></Pop></Lower></Scene>
@@ -222,11 +225,11 @@ export const TALK02: React.FC = () => {
         <Scene from={tName - 0.05} to={talk2Clock.total + 1}><Lower style={{ top: 1180 }}><FollowCTA name="陈宁" sub="评论区打 skill，拿这套流程" at={tName} clickAt={tShare + 1.2} width={920} /></Lower></Scene>
 
         {/* 左上角常驻说明 */}
-        <div style={{ position: 'absolute', left: 40, top: 150, fontSize: 24, fontWeight: 600, color: 'rgba(255,255,255,.85)', background: 'rgba(8,11,17,.55)', borderRadius: 10, padding: '6px 14px' }}>数字人出镜 · AI 配音 · AI 剪辑</div>
+        <div style={{ position: 'absolute', left: 40, top: 150, fontSize: 24, fontWeight: 600, color: 'rgba(255,255,255,.85)', background: 'rgba(8,11,17,.55)', borderRadius: 10, padding: '6px 14px' }}>真人出镜 · AI 剪辑</div>
 
         {/* E：章节标题页 */}
         {titles.map(([no, title, at, next]) => <TalkTitle key={no} no={no} title={title} at={at - 0.05} hold={next - at - 0.3} />)}
-        <TalkSubs hot={hot} hide={[ln('写稿', '第一步'), ln('配音', '第二步'), ln('素材', '第三步'), ln('成片', '第四步'), ln('数字人', '第五步')]} />
+        <TalkSubs hot={hot} hide={[ln('写稿', '第一步'), ln('写稿', '写稿'), ln('写稿', '我用的是豆包'), ln('配音', '第二步'), ln('素材', '第三步'), ln('成片', '第四步'), ln('数字人', '第五步')]} />
       </TalkStage>
       <Audio src={staticFile('talk02/voice.wav')} />
       {sfx.map(([t, f, v], i) => <Sequence key={i} from={Math.round(t * talk2Clock.fps)} layout="none"><Audio src={staticFile('sfx/' + f)} volume={v} /></Sequence>)}

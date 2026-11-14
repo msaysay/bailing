@@ -11,7 +11,7 @@ export const Cover2: React.FC = () => {
   const chips: [string, string][] = [['5', '步流程'], ['1', '处要人拿主意'], ['3:38', '成片时长']];
   return (
     <AbsoluteFill style={{ background: C.bg, fontFamily: FONT, color: C.text }}>
-      <Img src={staticFile('talk02/cover/face.png')} style={{ position: 'absolute', left: 40, top: -160 * k, width: W - 80, filter: 'contrast(1.08) saturate(0.95)' }} />
+      <Img src={staticFile('talk02/cover/face.png')} style={{ position: 'absolute', left: -W * 0.075, top: -300 * k, width: W * 1.15, maxWidth: 'none', filter: 'contrast(1.08) saturate(0.95)' }} />
       <AbsoluteFill style={{ background: `linear-gradient(180deg, rgba(8,11,17,.35) 0%, rgba(8,11,17,0) 22%, rgba(8,11,17,0) 36%, rgba(8,11,17,.9) 52%, ${C.bg} 58%)` }} />
       <AbsoluteFill style={{ boxShadow: 'inset 0 0 220px 40px rgba(0,0,0,.55)' }} />
       <div style={{ position: 'absolute', left: 0, right: 0, top: 0, height: 70, background: 'linear-gradient(180deg, #080B11 35%, rgba(8,11,17,0))' }} />
