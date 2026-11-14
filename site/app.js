@@ -6,7 +6,9 @@
   const demo = (id) => `assets/demos/${id}.mp4`, thumb = (id) => `assets/thumbs/${id}.jpg`;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  $$('[data-repo]').forEach((a) => (a.href = CFG.repo));
+  // 数量一律从数据里取，组件库更新后不用改页面
+  const N = { comp: D.components.length, group: D.groups.length, skill: D.skills.length };
+  Object.entries(N).forEach(([k, v]) => $$('.n-' + k).forEach((e) => (e.textContent = v)));
   addEventListener('scroll', () => $('#nav').classList.toggle('solid', scrollY > 40), { passive: true });
 
   // 滚动进入时淡入
@@ -27,7 +29,7 @@
   const stats = $('#stats');
   new IntersectionObserver((es, o) => es.forEach((e) => {
     if (!e.isIntersecting) return; o.disconnect();
-    $$('[data-count]', stats).forEach((b) => { const to = +b.dataset.count, t0 = performance.now(); const tick = (t) => { const p = Math.min(1, (t - t0) / 1100), q = 1 - Math.pow(1 - p, 3); b.textContent = Math.round(to * q); p < 1 && requestAnimationFrame(tick); }; reduce ? (b.textContent = to) : requestAnimationFrame(tick); });
+    $$('[data-count]', stats).forEach((b) => { const to = N[b.dataset.count], t0 = performance.now(); const tick = (t) => { const p = Math.min(1, (t - t0) / 1100), q = 1 - Math.pow(1 - p, 3); b.textContent = Math.round(to * q); p < 1 && requestAnimationFrame(tick); }; reduce ? (b.textContent = to) : requestAnimationFrame(tick); });
   })).observe(stats);
 
   // Skill：两条线。口播线中间借用事为主的三步。
@@ -59,7 +61,7 @@
 
   // 组件库：分组、搜索、分批加载
   // 展示顺序：先放最出效果的几组，其余按目录原顺序
-  const FIRST = ['炫技动效', '数据图表', '文字与强调', '口播叠加', '录屏与设备', '网页与文档', '关系与流程', '视频与图片', '画面效果', '运动手感'];
+  const FIRST = ['炫技动效', '广播风 · 系统与文字', '广播风 · 粒子与终端', '广播风 · 人物与图解', '数据图表', '文字与强调', '口播叠加', '录屏与设备', '网页与文档', '关系与流程', '视频与图片', '画面效果', '运动手感'];
   const rank = (g) => { const k = FIRST.indexOf(g); return k < 0 ? FIRST.length + D.groups.indexOf(g) : k; };
   D.groups.sort((a, b) => rank(a) - rank(b)); D.components.sort((a, b) => rank(a.group) - rank(b.group) || a.i - b.i);
   const chips = $('#chips'), grid = $('#grid'), PAGE = 24; let group = '', query = '', shown = PAGE;

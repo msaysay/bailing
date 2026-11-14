@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>宁少的 Skill 和 Agent 开源合集</title>
-<meta name="description" content="12 个 Skill、181 个画面组件。把仓库交给你的 AI，它把口播剪成片。">
+<meta name="description" content="12 个 Skill、两百多个画面组件。把仓库交给你的 AI，它把口播剪成片。">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -17,7 +17,7 @@
     <a href="#start">怎么用</a>
     <a href="#license">开源说明</a>
   </nav>
-  <a class="btn small" data-repo target="_blank" rel="noopener">GitHub</a>
+  <a class="btn small" href="#start">怎么拿</a>
 </header>
 
 <main id="top">
@@ -30,13 +30,13 @@
       <h1>宁少的 <em>Skill</em> 和 <em>Agent</em><br>开源合集</h1>
       <p class="lead">拍完口播不想剪？把这个仓库和一条原片交给你的 AI，<br class="wide">它自己转写、剪口误、对字幕、配画面、出成片。</p>
       <div class="cta">
-        <a class="btn primary" data-repo target="_blank" rel="noopener">去 GitHub 拿仓库</a>
-        <a class="btn" href="#components">先看 181 个组件</a>
+        <a class="btn primary" href="#start">看怎么拿、怎么用</a>
+        <a class="btn" href="#components">先看 <span class="n-comp"></span> 个组件</a>
       </div>
       <div class="stats" id="stats">
-        <div><b data-count="181">0</b><span>个画面组件</span></div>
-        <div><b data-count="18">0</b><span>个分组</span></div>
-        <div><b data-count="12">0</b><span>个 Skill</span></div>
+        <div><b data-count="comp">0</b><span>个画面组件</span></div>
+        <div><b data-count="group">0</b><span>个分组</span></div>
+        <div><b data-count="skill">0</b><span>个 Skill</span></div>
         <div><b class="free">¥0</b><span>不收费</span></div>
       </div>
       <p class="hint">背景里滚动的每一格，都是组件库里的真实组件。</p>
@@ -47,11 +47,11 @@
   <section class="what reveal">
     <div class="what-card">
       <div class="tag">01</div><h3>组件库</h3>
-      <p>181 个画面组件，分成 18 组。你说到数字，它出图表；说到「你看」，它切素材；说到重点，它砸大字。</p>
+      <p><span class="n-comp"></span> 个画面组件，分成 <span class="n-group"></span> 组。你说到数字，它出图表；说到「你看」，它切素材；说到重点，它砸大字。</p>
     </div>
     <div class="what-card">
       <div class="tag">02</div><h3>Skill</h3>
-      <p>12 份步骤说明。每一步拿到什么才能开工、做什么、怎么自查、做到什么程度才算过，都写清楚了。</p>
+      <p><span class="n-skill"></span> 份步骤说明。每一步拿到什么才能开工、做什么、怎么自查、做到什么程度才算过，都写清楚了。</p>
     </div>
     <div class="what-card">
       <div class="tag">03</div><h3>Agent</h3>
@@ -62,7 +62,7 @@
   <!-- Skill -->
   <section id="skills" class="block">
     <div class="head reveal">
-      <h2>12 个 Skill，两条线</h2>
+      <h2><span class="n-skill"></span> 个 Skill，两条线</h2>
       <p>每个 Skill 是一步。上一步没放行，不进下一步。点一步看它的输入、输出和放行条件。</p>
     </div>
     <div class="tabs reveal" id="lineTabs">
@@ -76,7 +76,7 @@
   <!-- 组件库 -->
   <section id="components" class="block">
     <div class="head reveal">
-      <h2>181 个画面组件</h2>
+      <h2><span class="n-comp"></span> 个画面组件</h2>
       <p>鼠标移上去看动效，点开看适用场景、不适用场景和参数。手机上点一下播放。</p>
     </div>
     <div class="filters reveal">
@@ -103,7 +103,7 @@
       <p>三步。不用写代码，但电脑上要能跑 Node.js、ffmpeg 和 Python。</p>
     </div>
     <div class="steps reveal">
-      <div class="step"><i>1</i><h4>拿仓库</h4><p>把仓库下载到本地，或者直接把地址发给你的 AI 助手。</p></div>
+      <div class="step"><i>1</i><h4>拿仓库</h4><p>在视频评论区打「组件」，拿到仓库后下载到本地，交给你的 AI 助手。</p></div>
       <div class="step"><i>2</i><h4>给原片</h4><p>一条你自己拍的口播。竖屏、固定机位、上半身居中最好剪。</p></div>
       <div class="step"><i>3</i><h4>说一句话</h4><p>让它先读操作说明，再按口播那条线做。它会在定稿、版式表、成片这几处问你。</p></div>
     </div>
@@ -132,8 +132,8 @@
       <div class="lic-own">
         <h4>这套流程自己的</h4>
         <ul>
-          <li><b>12 个 Skill</b>：<code>skills/</code></li>
-          <li><b>181 个组件</b>和版式引擎：<code>studio/src/</code></li>
+          <li><b><span class="n-skill"></span> 个 Skill</b>：<code>skills/</code></li>
+          <li><b><span class="n-comp"></span> 个组件</b>和版式引擎：<code>studio/src/</code></li>
           <li><b>脚本</b>：转写、对齐、粗剪、找素材、自查，<code>scripts/</code></li>
         </ul>
         <p class="muted" id="ownLicense"></p>
@@ -141,7 +141,7 @@
       <div class="lic-third">
         <h4>收录的第三方代码（各按各的许可）</h4>
         <table id="thirdTable"></table>
-        <p class="muted">这些代码原样放在 <code>vendor/</code> 里，不算在上面的 181 和 12 之内。标红的一项仅限非商用。</p>
+        <p class="muted">这些代码原样放在 <code>vendor/</code> 里，不算在上面的组件和 Skill 数量之内。标红的一项仅限非商用。</p>
       </div>
     </div>
   </section>
@@ -149,9 +149,9 @@
 
 <footer>
   <div class="foot-cta">
-    <h2>想要的，现在就拿</h2>
-    <a class="btn primary" data-repo target="_blank" rel="noopener">去 GitHub</a>
-    <p>或者在视频评论区打「组件」。</p>
+    <h2>想要的，评论区打「组件」</h2>
+    <a class="btn primary" href="#start">看怎么用</a>
+    <p>在宁少的视频评论区留言，拿仓库地址。</p>
   </div>
   <div class="foot-line">宁少 · 分享 AI 时代的内容创作认知<span>本页所有组件动效由仓库里的代码直接渲染</span></div>
 </footer>

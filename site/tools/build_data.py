@@ -5,10 +5,10 @@ import json, os, re
 root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))); G = os.path.join(root, "studio/src/gallery")
 files = ["catalog.tsx"] + sorted(f for f in os.listdir(G) if re.fullmatch(r"catalog-.+\.tsx", f)); comps = []
 for fn in files:
-    src = open(os.path.join(G, fn), encoding="utf-8").read(); fv = dict(re.findall(r"\b(f\d?) = '([^']+)'", src)); gv = re.search(r"\bg = '([^']+)'", src)
-    for m in re.finditer(r"\{ id: '([^']+)', name: '([^']+)', export: '([^']+)', file: ('[^']+'|f\d?), group: (?:'([^']+)'|g), use: '([^']*)', avoid: '([^']*)', props: '([^']*)', demo:", src):
+    src = open(os.path.join(G, fn), encoding="utf-8").read(); fv = dict(re.findall(r"\b(f\d?) = '([^']+)'", src)); gv = re.search(r"\bg = '([^']+)'", src); gs = dict(re.findall(r"\b(g\d) = '([^']+)'", src))
+    for m in re.finditer(r"\{ id: '([^']+)', name: '([^']+)', export: '([^']+)', file: ('[^']+'|f\d?), group: ('[^']+'|g\d?), use: '([^']*)', avoid: '([^']*)', props: '([^']*)', demo:", src):
         it = dict(zip(("id", "name", "export", "file", "group", "use", "avoid", "props"), m.groups()))
-        it["file"] = it["file"][1:-1] if it["file"].startswith("'") else fv[it["file"]]; it["group"] = it["group"] or gv.group(1); it["i"] = len(comps); comps.append(it)
+        it["file"] = it["file"][1:-1] if it["file"].startswith("'") else fv[it["file"]]; it["group"] = it["group"][1:-1] if it["group"].startswith("'") else (gs[it["group"]] if it["group"] in gs else gv.group(1)); it["i"] = len(comps); comps.append(it)
 readme = open(os.path.join(root, "skills/README.md"), encoding="utf-8").read(); rows = {}
 for line in readme.split("\n"):
     c = [x.strip() for x in line.strip().strip("|").split("|")]
