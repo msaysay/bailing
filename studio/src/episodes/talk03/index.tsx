@@ -193,6 +193,8 @@ export const TALK03: React.FC = () => {
         <TalkSubs hot={hot} hide={[ln('组件库', '第一个部分'), ln('步骤', '第二个部分')]} />
       </TalkStage>
       <Audio src={staticFile('talk03/voice.wav')} />
+      {/* 背景音乐：Electrodoodle / Kevin MacLeod（CC BY 4.0）。开场炫技片时稍响，人声段压到约 -17dB，片尾 1.5 秒淡出。 */}
+      <Audio src={staticFile('talk03/bgm.mp3')} volume={(f) => { const x = f / talk3Clock.fps; return (x < tAll - 0.5 ? 0.24 : x < tAll + 0.5 ? 0.24 - 0.1 * (x - tAll + 0.5) : 0.14) * Math.min(1, x / 0.6) * Math.min(1, Math.max(0, (END - x) / 1.5)); }} />
       {sfx.map(([at, f, v], i) => <Sequence key={i} from={Math.round(at * talk3Clock.fps)} layout="none"><Audio src={staticFile('sfx/' + f)} volume={v} /></Sequence>)}
     </ClockCtx.Provider>
   );
