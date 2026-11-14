@@ -10,6 +10,8 @@ description: 人为主的竖屏口播，第 3 步：逐行决定人在画面里�
 ## 输入
 `timing.json`（每行字幕的起止）、`cuts.json`、`script.txt`、人脸位置、组件目录（`组件说明.md` 或 `studio/src/gallery/catalog*.tsx`）。
 
+另有 108 张 talkcraft 口播动效卡可选，索引在 `docs/参考-talkcraft动效索引.md`。**那批卡仅限非商用**：这一期要是商单或给客户做的，只用我们自己的组件。选了哪张，在版式表的备注里写上文件名。
+
 ## 五种版式
 
 | 代号 | 版式 | 人 | 画面上还有什么 |

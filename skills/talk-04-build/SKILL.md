@@ -24,8 +24,9 @@ description: 人为主的竖屏口播，第 4 步：按版式表写代码、先�
 2. **所有时刻用 `say(段名, 词)` 取**，剪口用 `cuts.json` 里的数。不手写秒数。
 3. 每个内容块包在 `<Scene from to>` 里，起止比对应的版式切换晚 0.1 秒、早 0.3 秒，避免和人物过渡打架。
 4. 组件库里的组件多数是按横屏做的：放进 `Plate` 里，用参数调小（`size`、`width`、`dot`），不够再套 `transform: scale()`。
-5. 素材复用事为主那条线的做法：`scripts/tikhub.py` 搜和下，`tools/prep_footage.sh` 截片段，来源登记进 `sources.json`。
-6. 音频用 `voice.wav`（已做响度归一），人物视频静音。
+5. 用 talkcraft 的卡：把 `studio/src/talkcraft/cards/<文件名>.tsx` 复制到这一期的目录，改顶部 `CONFIG`，放进 `<Sequence from={Math.round(时刻 * fps)}>`，外面套 `transform: scale()`。它是 960×540、30 帧做的，我们的竖屏是 24 或 30 帧：帧率不同时在 `Sequence` 外再包一层按比例换算，或者直接把这一期的帧率定为 30。保留文件头的来源和许可说明。
+6. 素材复用事为主那条线的做法：`scripts/tikhub.py` 搜和下，`tools/prep_footage.sh` 截片段，来源登记进 `sources.json`。
+7. 音频用 `voice.wav`（已做响度归一），人物视频静音。
 
 ## 先看图，再整片渲染
 ```bash
