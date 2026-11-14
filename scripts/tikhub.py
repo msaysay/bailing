@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
-"""通过 TikHub 搜索并下载视频素材，登记来源。首选 X（推特）上新闻机构和官方账号的视频：
-文件可直接下载、没有平台水印、横屏原片；抖音素材可能带暗水印，只作备选。
+"""搜索并下载视频素材，登记来源。搜索走 TikHub；下载有两条通道：yt-dlp（免费、支持的站点多）和 TikHub 给的直链。
+首选 X（推特）上新闻机构和官方账号的视频：没有平台水印、横屏原片；抖音素材可能带暗水印，只作备选。
   X 搜索：scripts/tikhub.py xsearch "tech layoffs 2022" [--from CNBC,Reuters,business] [--min 20] [--landscape]
-  X 下载：scripts/tikhub.py xget <推文ID> --out <目录> --name <别名>
+  X 下载：scripts/tikhub.py xget <推文ID> --out <目录> --name <别名>      先用 yt-dlp 下，失败再用 TikHub 直链
+  任意链接：scripts/tikhub.py url <视频页面链接> --out <目录> --name <别名> [--section 60-90]
+        只走 yt-dlp（pip install yt-dlp）。--section 只留其中一段（秒）：整条下完后在本地截。
+        不传登录 cookie：平台要求登录或验证时直接报失败，由人在自己电脑上用 yt-dlp 下好放进素材目录。
+        云端实测（2026-11）：X 能下；YouTube 能读信息但下载被要求登录；B 站、Vimeo 失败。
 以下为抖音：
   搜索：scripts/tikhub.py search "黄仁勋 演讲" [--sort 1] [--days 0] [--dur 0] [--landscape] [--pages 2]
         sort：0 综合 1 最多点赞 2 最新；days：0 不限 1 一天 7 一周 180 半年；dur：0 / 0-1 / 1-5 / 5-10000
@@ -10,7 +14,7 @@
 搜索结果缓存在 ~/.cache/tikhub-search.json，下载时从缓存取播放地址（地址几小时内有效）。
 API Token 由云端环境的网络代理注入；本地运行时设置环境变量 TIKHUB_TOKEN。
 登记到 <目录>/sources.json 的许可一栏写「平台公开内容，未取得授权」——能不能用进成片由人判断。"""
-import argparse, json, os, sys, urllib.request
+import argparse, json, os, shutil, subprocess, sys, urllib.request
 API = "https://api.tikhub.io/api/v1/douyin/search/fetch_video_search_v2"
 CACHE = os.path.expanduser("~/.cache/tikhub-search.json")
 def post(body):
@@ -36,16 +40,43 @@ def xsearch(a, cache):
             cache[rec["id"]] = rec
             print(f"{rec['id']} | {dur:>4}s | {ar[0]}:{ar[1]} | @{rec['author']} | {rec['time'][4:16]} | {rec['desc'][:70]}")
     json.dump(cache, open(CACHE, "w"), ensure_ascii=False)
+def register(out, fn, title, author, date, page):
+    sp = os.path.join(out, "sources.json"); src = json.load(open(sp)) if os.path.exists(sp) else []
+    src = [x for x in src if x["file"] != fn] + [dict(file=fn, title=title, author=author, license="平台公开内容，未取得授权", date=str(date), page=page)]
+    json.dump(src, open(sp, "w"), ensure_ascii=False, indent=1)
+def ytdlp(page, out, name, section=None):
+    """用 yt-dlp 下一条视频到 <out>/<name>.mp4，成功返回它的信息，失败返回 None（原因打印出来）。不带 cookie。"""
+    exe = [shutil.which("yt-dlp")] if shutil.which("yt-dlp") else [sys.executable, "-m", "yt_dlp"]
+    cmd = exe + ["--no-warnings", "--no-playlist", "-q", "--print-json", "-f", "bv*[height<=1080]+ba/b[height<=1080]/b", "--merge-output-format", "mp4", "--force-overwrites", "-o", os.path.join(out, name + ".%(ext)s")]
+    try: r = subprocess.run(cmd + [page], capture_output=True, text=True, timeout=1800)
+    except Exception as e: print("  yt-dlp 没跑起来：", str(e)[:120]); return None
+    fn = os.path.join(out, name + ".mp4")
+    if r.returncode or not os.path.exists(fn) or os.path.getsize(fn) < 50_000:
+        print("  yt-dlp 失败：", (r.stderr.strip().splitlines() or ["没有输出文件"])[-1][:200]); return None
+    if section:   # 整条下完再在本地截：让 yt-dlp 边下边截要 ffmpeg 自己联网，云端代理下会失败
+        a, b = (float(x) for x in section.split("-")); tmp = fn + ".cut.mp4"
+        c = subprocess.run(["ffmpeg", "-nostdin", "-v", "error", "-y", "-ss", str(a), "-i", fn, "-t", str(b - a), "-c:v", "libx264", "-crf", "17", "-c:a", "aac", "-movflags", "+faststart", tmp])
+        if c.returncode: print("  截取失败"); return None
+        os.replace(tmp, fn)
+    try: return json.loads(r.stdout.strip().splitlines()[-1])
+    except Exception: return {}
 def main():
     ap = argparse.ArgumentParser(); sub = ap.add_subparsers(dest="cmd", required=True)
     s = sub.add_parser("search"); s.add_argument("q"); s.add_argument("--sort", default="0"); s.add_argument("--days", default="0"); s.add_argument("--dur", default="0")
     s.add_argument("--landscape", action="store_true"); s.add_argument("--pages", type=int, default=1)
     xs = sub.add_parser("xsearch"); xs.add_argument("q"); xs.add_argument("--from", dest="frm", default=""); xs.add_argument("--min", type=int, default=15); xs.add_argument("--landscape", action="store_true")
     xg = sub.add_parser("xget"); xg.add_argument("id"); xg.add_argument("--out", required=True); xg.add_argument("--name", required=True)
+    ug = sub.add_parser("url"); ug.add_argument("page"); ug.add_argument("--out", required=True); ug.add_argument("--name", required=True); ug.add_argument("--section", default="")
     g = sub.add_parser("get"); g.add_argument("id"); g.add_argument("--out", required=True); g.add_argument("--name", required=True)
     a = ap.parse_args(); os.makedirs(os.path.dirname(CACHE), exist_ok=True)
     cache = json.load(open(CACHE)) if os.path.exists(CACHE) else {}
     if a.cmd == "xsearch": return xsearch(a, cache)
+    if a.cmd == "url":
+        os.makedirs(a.out, exist_ok=True); m = ytdlp(a.page, a.out, a.name, a.section or None)
+        if m is None: sys.exit("下载失败。平台要求登录或验证时，请在自己电脑上用 yt-dlp 下好，放进素材目录后手工登记来源。")
+        d = m.get("upload_date") or ""; fn = a.name + ".mp4"
+        register(a.out, fn, (m.get("title") or m.get("description") or "")[:160], f"{m.get('extractor_key') or ''} @{m.get('uploader_id') or m.get('uploader') or m.get('channel') or ''}".strip(), f"{d[:4]}-{d[4:6]}-{d[6:]}" if len(d) == 8 else d, m.get("webpage_url") or a.page)
+        return print(fn, f"{os.path.getsize(os.path.join(a.out, fn))/1e6:.1f}MB", f"{m.get('width')}x{m.get('height')}", "yt-dlp" + (f" 第 {a.section} 秒" if a.section else ""))
     if a.cmd == "xget": a.id = a.id if a.id.startswith("x") else "x" + a.id
     if a.cmd == "search":
         cur, sid, bt = 0, "", ""
@@ -66,15 +97,16 @@ def main():
         json.dump(cache, open(CACHE, "w"), ensure_ascii=False)
     else:
         rec = cache.get(a.id) or sys.exit("缓存里没有这个作品，先 search")
-        os.makedirs(a.out, exist_ok=True); fn = a.name + ".mp4"; data = None
-        for u in rec["urls"]:
+        os.makedirs(a.out, exist_ok=True); fn = a.name + ".mp4"; data = None; via = "TikHub 直链"
+        if a.cmd == "xget" and rec.get("page") and ytdlp(rec["page"], a.out, a.name) is not None:   # X 的帖子先走 yt-dlp
+            data = open(os.path.join(a.out, fn), "rb").read(); via = "yt-dlp"
+        for u in ([] if data else rec["urls"]):
             try:
                 with urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent": "Mozilla/5.0"}), timeout=300) as r: data = r.read()
                 if len(data) > 50_000: break
             except Exception as e: print("  换下一个地址：", str(e)[:60])
         if not data or len(data) < 50_000: sys.exit("下载失败")
-        open(os.path.join(a.out, fn), "wb").write(data)
-        sp = os.path.join(a.out, "sources.json"); src = json.load(open(sp)) if os.path.exists(sp) else []
-        src = [x for x in src if x["file"] != fn] + [dict(file=fn, title=rec["desc"], author=(rec.get("platform") or "抖音") + " @" + rec["author"], license="平台公开内容，未取得授权", date=str(rec["time"]), page=rec.get("page") or f"https://www.douyin.com/video/{rec['id']}")]
-        json.dump(src, open(sp, "w"), ensure_ascii=False, indent=1); print(fn, f"{len(data)/1e6:.1f}MB", rec["author"])
+        if via != "yt-dlp": open(os.path.join(a.out, fn), "wb").write(data)
+        register(a.out, fn, rec["desc"], (rec.get("platform") or "抖音") + " @" + rec["author"], rec["time"], rec.get("page") or f"https://www.douyin.com/video/{rec['id']}")
+        print(fn, f"{len(data)/1e6:.1f}MB", rec["author"], via)
 if __name__ == "__main__": main()

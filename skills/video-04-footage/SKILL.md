@@ -17,17 +17,21 @@ description: 为一期视频搜索并下载真实画面，拆成镜头，写镜�
 
 ## 搜索与下载
 
-首选 X（推特）上新闻机构和官方账号发的视频：文件能直接下、没有平台水印、多为 1080p 横屏。
+搜索走 TikHub；下载有两条通道：yt-dlp（免费，`pip install yt-dlp`）和 TikHub 直链。首选 X（推特）上新闻机构和官方账号发的视频：没有平台水印、多为 1080p 横屏。
 
 ```bash
 scripts/tikhub.py xsearch "Nvidia headquarters" --landscape            # 默认只搜新闻机构和官方账号
 scripts/tikhub.py xsearch "关键词" --from CNBC,Reuters --min 20
-scripts/tikhub.py xget <推文ID> --out "episodes/<期>/01_输入素材/x" --name <别名>
+scripts/tikhub.py xget <推文ID> --out "episodes/<期>/01_输入素材/x" --name <别名>     # 先 yt-dlp，失败自动退回 TikHub 直链
+scripts/tikhub.py url <视频页面链接> --out "episodes/<期>/01_输入素材/x" --name <别名> [--section 60-90]   # 已有链接时，只走 yt-dlp
 ```
+
+- `url` 适合用户直接给了链接，或素材在 X 以外的站点。`--section 起-止`（秒）只留要用的那段（整条下完后在本地截，所以很长的视频仍然要下完整条）。
+- **不给 yt-dlp 传登录 cookie，不伪装浏览器绕过验证。** 平台要求登录或验证时就停，告诉用户：请在自己电脑上用 yt-dlp 下好，放进 `01_输入素材/`，再在 `sources.json` 里补一条来源。
+- 云端实测（2026-11）：X 能下；YouTube 能读到标题和清晰度，但下载被要求登录；B 站、Vimeo 失败。这些站点的素材交给用户在本地下，不要反复重试。
 
 - 关键词用英文，写「看得见的东西」（headquarters、trading floor、data center、Senate），不写抽象概念。
 - 抖音素材可能带暗水印，只在别处找不到时用（`scripts/tikhub.py search / get`）。
-- B 站、YouTube 从云端机器下不了，不要在上面花时间。
 - **素材是平台公开内容，没有取得授权**。如实登记，并在交付时提醒用户由他判断能不能发布。
 
 ## 拆镜头

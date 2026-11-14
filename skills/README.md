@@ -30,7 +30,7 @@ studio/               所有期数共用的 Remotion 工程
   src/components/     组件库（135 个，15 组；目录见 studio/src/gallery/catalog*.tsx）
   src/episodes/<期>/  timing.json、shots.json、faces.json、场景代码、封面
   public/<期>/        配音、音乐、镜头片段（不进 git）
-scripts/              asr.py、align.py、tikhub.py、faces.py、seg_render.py、qc.py、facecheck.py、build_pack.py
+scripts/              asr.py、align.py、tikhub.py（搜索走 TikHub，下载走 yt-dlp 或 TikHub）、faces.py、seg_render.py、qc.py、facecheck.py、build_pack.py
 docs/aesthetic-rules.md  制作规则（审美手册），所有步骤都受它约束
 ```
 
