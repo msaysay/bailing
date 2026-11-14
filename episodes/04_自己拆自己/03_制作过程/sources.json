@@ -1,0 +1,7 @@
+[
+ {"file": "final-a.mp4 / final-b.mp4", "from": "用户提供的上一条成片片段（第二期，带数字人）", "license": "用户自有"},
+ {"file": "doubao-*.mp4", "from": "用户录屏：豆包（写稿、查抖音热榜）", "license": "用户自有录屏"},
+ {"file": "claude-code.mp4", "from": "用户录屏：Claude Code 会话（录的是另一条视频的制作过程）", "license": "用户自有录屏"},
+ {"file": "jianying.mp4", "from": "用户录屏：剪映数字人", "license": "用户自有录屏"},
+ {"file": "fish.png", "from": "用户截图：Fish Audio 语音合成页面", "license": "用户自有截图"}
+]
