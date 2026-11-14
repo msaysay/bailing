@@ -5,6 +5,8 @@ import { Cover } from './episodes/ep02/cover';
 import { TALK01, talkClock } from './episodes/talk01';
 import { TALK02, talk2Clock } from './episodes/talk02';
 import { Cover2 } from './episodes/talk02/cover';
+import { TALK03, talk3Clock } from './episodes/talk03';
+import { Cover3 } from './episodes/talk03/cover';
 import { Talkcraft, TC_BAR, TC_FPS, TC_H, TC_TOTAL, TC_W } from './talkcraft';
 import { Gallery, GFPS } from './gallery';
 import { CATALOG, SLOT } from './gallery/all';
@@ -17,6 +19,7 @@ registerRoot(() => (
     <Composition id="EP02-P1" component={EP02} width={1920} height={1080} fps={clock.fps} durationInFrames={Math.ceil(clock.seg('一·律师').end * clock.fps)} />
     <Composition id="TALK01" component={TALK01} width={1080} height={1920} fps={talkClock.fps} durationInFrames={Math.ceil(talkClock.total * talkClock.fps)} />
     <Composition id="TALK02" component={TALK02} width={1080} height={1920} fps={talk2Clock.fps} durationInFrames={Math.ceil(talk2Clock.total * talk2Clock.fps)} />
+    <Composition id="TALK03" component={TALK03} width={1080} height={1920} fps={talk3Clock.fps} durationInFrames={Math.ceil(talk3Clock.total * talk3Clock.fps)} />
     <Composition id="TALKCRAFT" component={Talkcraft} width={TC_W} height={TC_H + TC_BAR} fps={TC_FPS} durationInFrames={TC_TOTAL} />
     <Composition id="GALLERY" component={Gallery} width={1920} height={1080} fps={GFPS} durationInFrames={CATALOG.length * SLOT * GFPS} />
     <Composition id="SHOWREEL" component={Showreel} width={1080} height={1920} fps={SR_FPS} durationInFrames={SR_TOTAL} />
@@ -25,6 +28,8 @@ registerRoot(() => (
     <Still id="EP02-COVER-DOUYIN" component={Cover} width={1080} height={1440} />
     <Still id="TALK02-COVER-DOUYIN" component={Cover2} width={1080} height={1440} />
     <Still id="TALK02-COVER-SHIPINHAO" component={Cover2} width={1080} height={1260} />
+    <Still id="TALK03-COVER-DOUYIN" component={Cover3} width={1080} height={1440} />
+    <Still id="TALK03-COVER-SHIPINHAO" component={Cover3} width={1080} height={1260} />
     <Still id="EP02-COVER-SHIPINHAO" component={Cover} width={1080} height={1260} />
   </>
 ));
