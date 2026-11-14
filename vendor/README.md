@@ -40,4 +40,5 @@ remocn、snapcn 只带了组件源码和说明，没带它们的文档站和演�
 |---|---|---|
 | **video-talkcraft**（https://github.com/Vincentwei1021/video-talkcraft ） | **PolyForm Noncommercial**：商用要作者事先授权 | 只在本地克隆参考；方法要点见 `../docs/PLAN.md` |
 | Fred 分享包里的 `fred-broll-generation`、`fred-poster-cover`、`fredtalk-account-data-pipeline`、`fred-deck-generation`、`fred-illustration-generation`、`xyq-skill` | 脱敏分享版，包内无开源许可；两个带 Fred 本人形象图 | 解到 `../_private/fred-share/`（已忽略）本地用 |
+| MotionHarness 的宣传片和「动效案例与源码」包（用户提供，2026-11-14） | 包内许可写明保留所有权利、未授予开源许可 | 不入库、不抄代码；只参考了它的动效手法和「15 种效果 + 6 种运动函数」这份清单，实现都是自己写的（`studio/src/components/fx*.tsx`、`effects.tsx`、`kit/motion.ts`） |
 | 对标成片、抖音文案清单、官网梳理稿 | 他人作品与账号数据 | 放 `../_private/` |
