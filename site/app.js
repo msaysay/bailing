@@ -7,7 +7,7 @@
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // 数量一律从数据里取，组件库更新后不用改页面
-  const N = { comp: D.components.length, group: D.groups.length, skill: D.skills.length };
+  const N = { comp: D.components.length, group: D.groups.length, skill: D.skills.length, line: 2 };
   Object.entries(N).forEach(([k, v]) => $$('.n-' + k).forEach((e) => (e.textContent = v)));
   addEventListener('scroll', () => $('#nav').classList.toggle('solid', scrollY > 40), { passive: true });
 
@@ -58,6 +58,8 @@
   };
   $$('#lineTabs button').forEach((b) => (b.onclick = () => { line = b.dataset.line; $$('#lineTabs button').forEach((x) => x.classList.toggle('on', x === b)); drawPipe(); }));
   drawPipe();
+  // 分流卡片：点「口播」「解说」时先切到对应那条线
+  $$('[data-go]').forEach((a) => a.addEventListener('click', () => { line = a.dataset.go; $$('#lineTabs button').forEach((x) => x.classList.toggle('on', x.dataset.line === line)); drawPipe(); }));
 
   // 组件库：分组、搜索、分批加载
   // 展示顺序：先放最出效果的几组，其余按目录原顺序

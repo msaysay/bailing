@@ -15,7 +15,7 @@
     <a href="#components">组件库</a>
     <a href="#works">作品</a>
     <a href="#start">怎么用</a>
-    <a href="#license">开源说明</a>
+    <a href="#faq">常见问题</a>
   </nav>
   <a class="btn small" href="#start">怎么拿</a>
 </header>
@@ -26,44 +26,73 @@
     <div class="wall" id="wall" aria-hidden="true"></div>
     <div class="hero-shade"></div>
     <div class="hero-inner">
-      <div class="eyebrow">免费 · 开源 · 交给任意 AI 助手就能跑</div>
-      <h1>宁少的 <em>Skill</em> 和 <em>Agent</em><br>开源合集</h1>
-      <p class="lead">拍完口播不想剪？把这个仓库和一条原片交给你的 AI，<br class="wide">它自己转写、剪口误、对字幕、配画面、出成片。</p>
+      <div class="eyebrow">宁少的 Skill 和 Agent 开源合集</div>
+      <h1>一条口播原片进去<br><em>一条成片出来</em></h1>
+      <p class="lead">你只管拍和审片。转写、剪口误、对字幕、配画面、出封面，<br class="wide">交给你手上的 AI 助手，它照着 Skill 一步步做完。</p>
       <div class="cta">
-        <a class="btn primary" href="#start">看怎么拿、怎么用</a>
-        <a class="btn" href="#components">先看 <span class="n-comp"></span> 个组件</a>
+        <a class="btn primary" href="#start">三步开始用</a>
+        <a class="btn" href="#works">先看成片</a>
       </div>
       <div class="stats" id="stats">
         <div><b data-count="comp">0</b><span>个画面组件</span></div>
-        <div><b data-count="group">0</b><span>个分组</span></div>
         <div><b data-count="skill">0</b><span>个 Skill</span></div>
+        <div><b data-count="line">0</b><span>条生产线</span></div>
         <div><b class="free">¥0</b><span>不收费</span></div>
       </div>
       <p class="hint">背景里滚动的每一格，都是组件库里的真实组件。</p>
     </div>
   </section>
 
-  <!-- 一句话讲清它是什么 -->
-  <section class="what reveal">
-    <div class="what-card">
-      <div class="tag">01</div><h3>组件库</h3>
-      <p><span class="n-comp"></span> 个画面组件，分成 <span class="n-group"></span> 组。你说到数字，它出图表；说到「你看」，它切素材；说到重点，它砸大字。</p>
+  <!-- 分流：你想用它做什么 -->
+  <section class="block intent">
+    <div class="head reveal"><h2>你想用它做什么？</h2></div>
+    <div class="intents reveal">
+      <a href="#skills" data-go="talk"><i>01</i><h3>把我的口播剪成片</h3><p>你出镜，它剪。人和画面交替，竖屏。</p><span>看口播线 4 步 →</span></a>
+      <a href="#skills" data-go="video"><i>02</i><h3>做不出镜的解说</h3><p>真实画面垫底，图表和大字压上面，横屏。</p><span>看解说线 8 步 →</span></a>
+      <a href="#components"><i>03</i><h3>只拿组件自己用</h3><p>图表、字幕、时间线、转场，挑着拿。</p><span>逛组件库 →</span></a>
+      <a href="#works"><i>04</i><h3>先看看效果</h3><p>最近的成片，点开就看。</p><span>看成片 →</span></a>
     </div>
-    <div class="what-card">
-      <div class="tag">02</div><h3>Skill</h3>
-      <p><span class="n-skill"></span> 份步骤说明。每一步拿到什么才能开工、做什么、怎么自查、做到什么程度才算过，都写清楚了。</p>
+  </section>
+
+  <!-- 分工：你做什么，AI 做什么 -->
+  <section class="block">
+    <div class="head reveal">
+      <h2>一个人，一整条生产线</h2>
+      <p>你只在几个关键点出面，其余的它连续往下做。</p>
     </div>
-    <div class="what-card">
-      <div class="tag">03</div><h3>Agent</h3>
-      <p>Skill 是写给 AI 助手看的。它读完说明，一步步往下做，只在几个关键点停下来问你一句。</p>
+    <div class="split reveal">
+      <div class="you">
+        <h4>你做的</h4>
+        <ul>
+          <li><b>拍</b>一条口播，或者给一个想法</li>
+          <li><b>点头</b>：稿子、版式表、成片，各看一眼</li>
+          <li><b>发布</b></li>
+        </ul>
+      </div>
+      <div class="ai">
+        <h4>AI 做的</h4>
+        <ul>
+          <li>转写录音，剪掉口误和长停顿</li>
+          <li>逐字对齐字幕，核对稿子里的数字和日期</li>
+          <li>找真实画面，登记来源，避开人脸</li>
+          <li>从 <span class="n-comp"></span> 个组件里挑画面，写场景代码</li>
+          <li>渲染，自查黑场、闪帧、压脸、响度，返修</li>
+          <li>出封面，写标题、简介和话题</li>
+        </ul>
+      </div>
+    </div>
+    <div class="facts reveal">
+      <div><b>约 1 小时</b><span>排版式加写代码（77 秒口播样片）</span></div>
+      <div><b>约 6 分钟</b><span>整片渲染（同一条样片，4 核）</span></div>
+      <div><b>约 1 分钟</b><span>改一段重渲，不用整片重来</span></div>
     </div>
   </section>
 
   <!-- Skill -->
   <section id="skills" class="block">
     <div class="head reveal">
-      <h2><span class="n-skill"></span> 个 Skill，两条线</h2>
-      <p>每个 Skill 是一步。上一步没放行，不进下一步。点一步看它的输入、输出和放行条件。</p>
+      <h2><span class="n-skill"></span> 个 Skill，每一步都有放行条件</h2>
+      <p>Skill 是写给 AI 看的步骤说明。上一步没放行，不进下一步。点一步，看它拿什么开工、交出什么、做到什么程度才算过。</p>
     </div>
     <div class="tabs reveal" id="lineTabs">
       <button data-line="talk" class="on">人为主 · 竖屏口播<small>真人出镜，人和画面交替</small></button>
@@ -76,8 +105,8 @@
   <!-- 组件库 -->
   <section id="components" class="block">
     <div class="head reveal">
-      <h2><span class="n-comp"></span> 个画面组件</h2>
-      <p>鼠标移上去看动效，点开看适用场景、不适用场景和参数。手机上点一下播放。</p>
+      <h2><span class="n-comp"></span> 个画面组件，说到什么出什么</h2>
+      <p>说到数字出图表，说到「你看」切素材，说到重点砸大字。鼠标移上去看动效，点开看什么时候该用、什么时候别用。</p>
     </div>
     <div class="filters reveal">
       <input id="q" type="search" placeholder="搜组件：图表、字幕、时间线…" aria-label="搜索组件">
@@ -90,8 +119,8 @@
   <!-- 作品 -->
   <section id="works" class="block">
     <div class="head reveal">
-      <h2>用这套流程剪出来的片子</h2>
-      <p>下面两条都是一条口播原片进去，成片出来，中间没有手剪。</p>
+      <h2>最近的成片，点开就看</h2>
+      <p>前两条都是一条口播原片进去，成片出来，中间没有手剪。</p>
     </div>
     <div class="works" id="worksList"></div>
   </section>
@@ -99,8 +128,8 @@
   <!-- 怎么用 -->
   <section id="start" class="block">
     <div class="head reveal">
-      <h2>怎么用</h2>
-      <p>三步。不用写代码，但电脑上要能跑 Node.js、ffmpeg 和 Python。</p>
+      <h2>三步开始用</h2>
+      <p>不用写代码。电脑上要能跑 Node.js、ffmpeg 和 Python，这些也可以让 AI 帮你装。</p>
     </div>
     <div class="steps reveal">
       <div class="step"><i>1</i><h4>拿仓库</h4><p>在视频评论区打「组件」，拿到仓库后下载到本地，交给你的 AI 助手。</p></div>
@@ -120,6 +149,19 @@
       <span>WorkBuddy<small>按同一套说明</small></span>
     </div>
     <p class="note reveal">工具本身不收费。AI 助手的额度、搜索素材用的 TikHub 接口，是你自己的成本。</p>
+  </section>
+
+  <!-- 常见问题 -->
+  <section id="faq" class="block">
+    <div class="head reveal"><h2>你可能想问</h2></div>
+    <div class="faq reveal">
+      <details open><summary>我不会写代码，能用吗？</summary><p>能。代码是 AI 写的，你要做的是把仓库和原片交给它，然后在稿子、版式表、成片这几处看一眼。环境装不上的时候，把报错贴给它。</p></details>
+      <details><summary>要花多少钱？</summary><p>Skill 和组件库不收费。AI 助手的额度、搜索素材用的 TikHub 接口，是你自己的成本；素材下载走 yt-dlp，不花钱。</p></details>
+      <details><summary>哪些 AI 助手能跑？</summary><p>Claude Code 已经跑通，本页的两条成片就是它做的。Codex、WorkBuddy 读的是同一套说明，这边没有逐个验证。</p></details>
+      <details><summary>口播要怎么拍才好剪？</summary><p>竖屏、固定机位、上半身居中，脸上光要够。相机水印记得关。原始文件不要经过微信压缩，否则推近画面会糊。</p></details>
+      <details><summary>不出镜可以吗？</summary><p>可以，走「事为主」那条线：录一段配音，或者用合成语音，画面由真实素材和组件来撑。</p></details>
+      <details><summary>成片里的数字靠得住吗？</summary><p>流程里有一步专门核对事实：稿子里的数字、日期、人名、引语逐条查来源，查不到的不标来源，也不编。</p></details>
+    </div>
   </section>
 
   <!-- 开源说明 -->

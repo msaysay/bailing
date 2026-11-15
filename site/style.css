@@ -191,3 +191,43 @@ footer { margin-top: 130px; border-top: 1px solid var(--line); background: radia
 }
 .lic > div { min-width: 0; overflow-x: auto; }
 @media (max-width: 860px) { .lic td:first-child { white-space: normal; } .lic td { font-size: 13px; } }
+
+/* 分流、分工、常见问题 */
+.block.intent { padding-top: 40px; }
+.intents { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.intents a { display: block; background: linear-gradient(160deg, var(--surface2), var(--surface)); border: 1.5px solid var(--line); border-radius: 22px; padding: 24px 22px 20px; position: relative; overflow: hidden; transition: transform .18s, border-color .18s; }
+.intents a:hover { transform: translateY(-5px); border-color: var(--warm); }
+.intents i { font-style: normal; font-size: 44px; font-weight: 900; line-height: 1; color: transparent; -webkit-text-stroke: 2px var(--accent); }
+.intents h3 { font-size: 23px; margin: 12px 0 8px; }
+.intents p { color: #c2c8d6; font-size: 15px; min-height: 3.2em; }
+.intents span { display: inline-block; margin-top: 14px; color: var(--warm); font-weight: 700; font-size: 15px; }
+.split { display: grid; grid-template-columns: 1fr 1.6fr; gap: 16px; }
+.split > div { border-radius: 22px; padding: 28px; border: 1.5px solid var(--line); background: var(--surface); }
+.split .you { border-color: rgba(255, 212, 121, .55); background: rgba(255, 212, 121, .06); }
+.split h4 { font-size: 15px; color: var(--muted); font-weight: 700; margin-bottom: 14px; letter-spacing: .04em; }
+.split ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; font-size: 18px; }
+.split .you li { font-size: 21px; }
+.split .you b { color: var(--warm); }
+.split .ai ul { grid-template-columns: 1fr 1fr; gap: 12px 24px; font-size: 16.5px; }
+.split .ai li { padding-left: 26px; position: relative; color: #dfe3ec; }
+.split .ai li::before { content: "✓"; position: absolute; left: 0; color: var(--ok); font-weight: 900; }
+.facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 16px; }
+.facts div { border: 1.5px solid var(--line); border-radius: 18px; padding: 20px 22px; background: var(--surface); }
+.facts b { display: block; font-size: 34px; font-weight: 900; line-height: 1.1; }
+.facts span { color: var(--muted); font-size: 14px; }
+.faq { display: grid; gap: 10px; max-width: 860px; }
+.faq details { background: var(--surface); border: 1.5px solid var(--line); border-radius: 16px; padding: 0 22px; }
+.faq details[open] { border-color: var(--accent); }
+.faq summary { cursor: pointer; font-size: 19px; font-weight: 900; padding: 18px 0; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+.faq summary::after { content: "+"; color: var(--accent); font-size: 24px; line-height: 1; }
+.faq details[open] summary::after { content: "−"; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq p { color: #c2c8d6; padding: 0 0 20px; font-size: 16px; }
+.hero h1 { font-size: clamp(40px, 7vw, 86px); }
+.eyebrow { font-size: 16px; }
+@media (max-width: 860px) {
+  .intents { grid-template-columns: 1fr 1fr; }
+  .intents p { min-height: 0; font-size: 14px; }
+  .intents h3 { font-size: 19px; }
+  .split, .facts, .split .ai ul { grid-template-columns: 1fr; }
+}
