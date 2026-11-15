@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>宁少的 Skill 和 Agent 开源合集</title>
+<title>宁少 AI 进化论 · Skill 和 Agent 合集</title>
 <meta name="description" content="12 个 Skill、两百多个画面组件。把仓库交给你的 AI，它把口播剪成片。">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header class="nav" id="nav">
-  <a class="brand" href="#top"><span class="dot"></span>宁少 · 开源合集</a>
+  <a class="brand" href="#top"><span class="dot"></span>宁少 AI 进化论</a>
   <nav>
     <a href="#skills">Skill</a>
     <a href="#components">组件库</a>
@@ -26,7 +26,6 @@
     <div class="wall" id="wall" aria-hidden="true"></div>
     <div class="hero-shade"></div>
     <div class="hero-inner">
-      <div class="eyebrow">宁少的 Skill 和 Agent 开源合集</div>
       <h1>一条口播原片进去<br><em>一条成片出来</em></h1>
       <p class="lead">你只管拍和审片。转写、剪口误、对字幕、配画面、出封面，<br class="wide">交给你手上的 AI 助手，它照着 Skill 一步步做完。</p>
       <div class="cta">
@@ -37,7 +36,7 @@
         <div><b data-count="comp">0</b><span>个画面组件</span></div>
         <div><b data-count="skill">0</b><span>个 Skill</span></div>
         <div><b data-count="line">0</b><span>条生产线</span></div>
-        <div><b class="free">¥0</b><span>不收费</span></div>
+        <div><b data-count="agent">0</b><span>个助手已跑通</span></div>
       </div>
       <p class="hint">背景里滚动的每一格，都是组件库里的真实组件。</p>
     </div>
@@ -145,10 +144,10 @@
     </div>
     <div class="agents reveal">
       <span class="ok">Claude Code<small>已跑通</small></span>
-      <span>Codex<small>按同一套说明</small></span>
-      <span>WorkBuddy<small>按同一套说明</small></span>
+      <span class="ok">Codex<small>已跑通</small></span>
+      <span class="ok">WorkBuddy<small>已跑通</small></span>
     </div>
-    <p class="note reveal">工具本身不收费。AI 助手的额度、搜索素材用的 TikHub 接口，是你自己的成本。</p>
+    <p class="note reveal">AI 助手的额度、搜索素材用的 TikHub 接口，是你自己的成本。</p>
   </section>
 
   <!-- 常见问题 -->
@@ -156,37 +155,14 @@
     <div class="head reveal"><h2>你可能想问</h2></div>
     <div class="faq reveal">
       <details open><summary>我不会写代码，能用吗？</summary><p>能。代码是 AI 写的，你要做的是把仓库和原片交给它，然后在稿子、版式表、成片这几处看一眼。环境装不上的时候，把报错贴给它。</p></details>
-      <details><summary>要花多少钱？</summary><p>Skill 和组件库不收费。AI 助手的额度、搜索素材用的 TikHub 接口，是你自己的成本；素材下载走 yt-dlp，不花钱。</p></details>
-      <details><summary>哪些 AI 助手能跑？</summary><p>Claude Code 已经跑通，本页的两条成片就是它做的。Codex、WorkBuddy 读的是同一套说明，这边没有逐个验证。</p></details>
+      <details><summary>要花多少钱？</summary><p>要花的是两样：AI 助手的额度，和搜索素材用的 TikHub 接口。素材下载走 yt-dlp，不花钱。</p></details>
+      <details><summary>哪些 AI 助手能跑？</summary><p>Claude Code、Codex、WorkBuddy 都已经跑通，读的是同一套说明。本页的两条成片是 Claude Code 做的。</p></details>
       <details><summary>口播要怎么拍才好剪？</summary><p>竖屏、固定机位、上半身居中，脸上光要够。相机水印记得关。原始文件不要经过微信压缩，否则推近画面会糊。</p></details>
       <details><summary>不出镜可以吗？</summary><p>可以，走「事为主」那条线：录一段配音，或者用合成语音，画面由真实素材和组件来撑。</p></details>
       <details><summary>成片里的数字靠得住吗？</summary><p>流程里有一步专门核对事实：稿子里的数字、日期、人名、引语逐条查来源，查不到的不标来源，也不编。</p></details>
     </div>
   </section>
 
-  <!-- 开源说明 -->
-  <section id="license" class="block">
-    <div class="head reveal">
-      <h2>开源说明</h2>
-      <p>哪些是这套流程自己的，哪些是收录的第三方代码，分开说清楚。</p>
-    </div>
-    <div class="lic reveal">
-      <div class="lic-own">
-        <h4>这套流程自己的</h4>
-        <ul>
-          <li><b><span class="n-skill"></span> 个 Skill</b>：<code>skills/</code></li>
-          <li><b><span class="n-comp"></span> 个组件</b>和版式引擎：<code>studio/src/</code></li>
-          <li><b>脚本</b>：转写、对齐、粗剪、找素材、自查，<code>scripts/</code></li>
-        </ul>
-        <p class="muted" id="ownLicense"></p>
-      </div>
-      <div class="lic-third">
-        <h4>收录的第三方代码（各按各的许可）</h4>
-        <table id="thirdTable"></table>
-        <p class="muted">这些代码原样放在 <code>vendor/</code> 里，不算在上面的组件和 Skill 数量之内。标红的一项仅限非商用。</p>
-      </div>
-    </div>
-  </section>
 </main>
 
 <footer>

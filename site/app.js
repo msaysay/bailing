@@ -7,7 +7,7 @@
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // 数量一律从数据里取，组件库更新后不用改页面
-  const N = { comp: D.components.length, group: D.groups.length, skill: D.skills.length, line: 2 };
+  const N = { comp: D.components.length, group: D.groups.length, skill: D.skills.length, line: 2, agent: 3 };
   Object.entries(N).forEach(([k, v]) => $$('.n-' + k).forEach((e) => (e.textContent = v)));
   addEventListener('scroll', () => $('#nav').classList.toggle('solid', scrollY > 40), { passive: true });
 
@@ -96,10 +96,6 @@
 
   // 作品
   CFG.works.forEach((w) => $('#worksList').append(el('div', { class: 'work reveal' }, `<div class="phone"><video src="${w.src}" ${w.poster ? `poster="${w.poster}"` : 'muted loop autoplay'} controls playsinline preload="${w.poster ? 'none' : 'metadata'}"></video></div><h4>${esc(w.title)}</h4><p>${esc(w.note)}</p>`)));
-
-  // 开源说明
-  $('#ownLicense').textContent = CFG.ownLicense;
-  $('#thirdTable').innerHTML = CFG.third.map(([n, src, lic, use, nc]) => `<tr class="${nc ? 'nc' : ''}"><td>${esc(n)}<small>${esc(src)}</small></td><td>${esc(lic)}</td><td>${esc(use)}</td></tr>`).join('');
 
   // 复制提示词
   $('#copy').onclick = async (e) => { try { await navigator.clipboard.writeText($('#prompt').textContent); e.target.textContent = '已复制'; } catch { e.target.textContent = '请手动选中复制'; } setTimeout(() => (e.target.textContent = '复制'), 1600); };
