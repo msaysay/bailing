@@ -7,10 +7,12 @@ import { TALK02, talk2Clock } from './episodes/talk02';
 import { Cover2 } from './episodes/talk02/cover';
 import { TALK03, talk3Clock } from './episodes/talk03';
 import { Cover3 } from './episodes/talk03/cover';
+import { TALK03B, talk3bClock } from './episodes/talk03/v2';
 import { Talkcraft, TC_BAR, TC_FPS, TC_H, TC_TOTAL, TC_W } from './talkcraft';
 import { Gallery, GFPS } from './gallery';
 import { CATALOG, SLOT } from './gallery/all';
 import { Showreel, SR_FPS, SR_TOTAL } from './gallery/showreel';
+import { Showreel2, SR2_FPS, SR2_TOTAL } from './gallery/showreel2';
 import { DemoClip } from './gallery/demoClip';
 // 每期一个 Composition；-P1 是只到第一件事结束的预览。
 registerRoot(() => (
@@ -20,9 +22,11 @@ registerRoot(() => (
     <Composition id="TALK01" component={TALK01} width={1080} height={1920} fps={talkClock.fps} durationInFrames={Math.ceil(talkClock.total * talkClock.fps)} />
     <Composition id="TALK02" component={TALK02} width={1080} height={1920} fps={talk2Clock.fps} durationInFrames={Math.ceil(talk2Clock.total * talk2Clock.fps)} />
     <Composition id="TALK03" component={TALK03} width={1080} height={1920} fps={talk3Clock.fps} durationInFrames={Math.ceil(talk3Clock.total * talk3Clock.fps)} />
+    <Composition id="TALK03B" component={TALK03B} width={1080} height={1920} fps={talk3bClock.fps} durationInFrames={Math.ceil(talk3bClock.total * talk3bClock.fps)} />
     <Composition id="TALKCRAFT" component={Talkcraft} width={TC_W} height={TC_H + TC_BAR} fps={TC_FPS} durationInFrames={TC_TOTAL} />
     <Composition id="GALLERY" component={Gallery} width={1920} height={1080} fps={GFPS} durationInFrames={CATALOG.length * SLOT * GFPS} />
     <Composition id="SHOWREEL" component={Showreel} width={1080} height={1920} fps={SR_FPS} durationInFrames={SR_TOTAL} />
+    <Composition id="SHOWREEL2" component={Showreel2} width={1080} height={1824} fps={SR2_FPS} durationInFrames={SR2_TOTAL} />
     <Composition id="DEMO-CLIP" component={DemoClip} width={1920} height={1080} fps={30} durationInFrames={240} />
     <Composition id="DEMO-CLIP-V" component={DemoClip} width={1080} height={1920} fps={30} durationInFrames={240} />
     <Still id="EP02-COVER-DOUYIN" component={Cover} width={1080} height={1440} />
