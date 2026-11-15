@@ -1,6 +1,6 @@
 // 第五期「开源组件库」第二版：同一条口播，画面换成广播风组件（bc*.tsx），前 3 秒的钩子重做。
-// 钩子：人脸横条居中，上下两条组件快切片每半秒硬切一次；说到「没有一帧是我手剪的」硬切回全屏，砸出「0 刀手剪」。
-// 口播里说的是 181 个、18 组（拍摄时的数字），画面上同时给出现在的 232 个、21 组。
+// 钩子：人全屏，头顶上方和下巴以下各一条组件快切片，每半秒硬切一次；说到「没有一帧是我手剪的」硬切推近，砸出「0 刀手剪」。
+// 数字按口播里说的来：181 个、18 组。
 import React from 'react';
 import { AbsoluteFill, Audio, OffthreadVideo, Sequence, staticFile, useVideoConfig } from 'remotion';
 import { ClockCtx, makeClock, Timing } from '../../kit/clock';
@@ -9,7 +9,7 @@ import { Beat, Lower, Plate, TalkClip, TalkStage, TalkSubs, TW, UPPER } from '..
 import { ChatThread, PhoneFrame, TaskRun, Terminal } from '../../components/screen';
 import { FollowCTA } from '../../components/talk';
 import { SlamWords } from '../../components/type';
-import { BC, ChapterSplash, HalftoneBg, NotEqual, PriceBoard, ScrambleText, SlabBanner, SplitWords, Thin } from '../../components/bc';
+import { BC, ChapterSplash, HalftoneBg, NotEqual, ScrambleText, SlabBanner, SplitWords } from '../../components/bc';
 import { ParticleBars } from '../../components/bc-data';
 import { HubToBoxes } from '../../components/bc-diagram';
 import timing from './timing.json';
@@ -38,10 +38,10 @@ const words: [string, string, string][] = [['图表', 'hook-chart', 'B21 粒子�
 const wAt = (i: number) => (i < words.length ? say('钩子', words[i][0]) - 0.05 : say('钩子', '全是组件') + 0.55);
 
 const beats: Beat[] = [
-  { at: 0, mode: 'card', box: [0, 300, 1080, 640] },                 // 钩子：人脸横条，上下是组件快切
+  { at: 0, mode: 'full', zoom: 1 },                                   // 钩子：人全屏，上下贴组件快切
   { at: tNoHand - 0.04, mode: 'full', zoom: 1.22, dur: 0 },           // 硬切全屏：0 刀手剪
   { at: tList - 0.25, mode: 'bubble', dur: 0.35 },                    // C：念一个词切一个组件
-  { at: tAll - 0.3, mode: 'full', zoom: 1 },                          // B：181 翻到 232
+  { at: tAll - 0.3, mode: 'full', zoom: 1 },                          // B：181
   { at: tOpen - 0.05, mode: 'full', zoom: 1.15, dur: 0 },             // B：全部开源
   { at: tPain - 0.05, mode: 'full', zoom: 1, dur: 0 },                // A
   { at: tChore - 0.3, mode: 'bubble' },                               // C：手剪的时间线
@@ -66,7 +66,7 @@ const beats: Beat[] = [
   { at: tName - 0.05, mode: 'full', zoom: 1, dur: 0 },                // B
 ];
 const hot = ['没有一帧', '全是组件', '181', '全部开源', '不收费', '半天', 'AI 替我剪', '组件库', '18 组', '图表', '切素材', '砸大字', 'Skill', '12 个', '写清楚了', 'Claude Code', 'Codex', 'WorkBuddy', '口播原片', '问你一句', '成本', '代码', '陈宁', '组件'];
-const sfx: [number, string, number][] = [[tNoHand, 'thud.wav', 0.5], ...words.map((_, i) => [wAt(i) + 0.05, 'tick.wav', 0.3] as [number, string, number]), [tAll + 0.7, 'thud.wav', 0.4], [t1, 'whoosh.wav', 0.45], [tSlam, 'thud.wav', 0.45], [t2, 'whoosh.wav', 0.45], [tCode, 'tick.wav', 0.35]];
+const sfx: [number, string, number][] = [[tNoHand, 'thud.wav', 0.5], ...words.map((_, i) => [wAt(i) + 0.05, 'tick.wav', 0.3] as [number, string, number]), [tAll + 0.6, 'thud.wav', 0.4], [t1, 'whoosh.wav', 0.45], [tSlam, 'thud.wav', 0.45], [t2, 'whoosh.wav', 0.45], [tCode, 'tick.wav', 0.35]];
 const groups: [string, number][] = [['炫技动效', 25], ['广播风 · 图解', 21], ['广播风 · 文字', 20], ['文字与强调', 16]];
 const steps: [string, string][] = [['定稿', 'talk-01-shoot'], ['对字幕', 'talk-02-roughcut'], ['找素材', 'video-04-footage'], ['排版式', 'talk-03-layout'], ['出片', 'talk-04-build'], ['做封面', 'video-08-cover']];
 
@@ -98,15 +98,15 @@ export const TALK03B: React.FC = () => {
   return (
     <ClockCtx.Provider value={talk3bClock}>
       <TalkStage src="talk03/person.mp4" face={FACE} beats={beats} under={<>
-        <Reel row={0} top={0} height={290} at={0} until={tNoHand - 0.04} />
-        <Reel row={1} top={1090} at={0} until={tNoHand - 0.04} startFrom={0.4} />
         {words.map(([, src], i) => <Cut key={src} src={src} at={wAt(i)} until={wAt(i + 1)} />)}
         <TalkClip src="talk02/footage/jianying.mp4" at={tChore - 0.25} until={tNo - 0.3} credit="录屏：剪映时间线" />
-        <Reel row={2} top={UPPER.top} at={tN - 0.05} until={tNum - 0.3} startFrom={1.2} />
+        <Reel row={2} top={UPPER.top} at={tN - 0.05} until={tNum - 0.3} startFrom={4.85} />
         <TalkClip src="talk02/footage/doubao-hot-table.mp4" at={tSee - 0.25} until={tKey - 0.3} credit="录屏素材" />
       </>}>
-        {/* 钩子：人脸横条的上下沿各一道亮线 */}
-        {t < tNoHand - 0.04 && <><div style={{ position: 'absolute', left: 0, top: 290, width: TW, height: 10, background: BC.lime }} /><div style={{ position: 'absolute', left: 0, top: 940, width: TW, height: 10, background: BC.lime }} /></>}
+        {/* 钩子：头顶上方一条、下巴以下一块，都是组件快切片，各镶一道亮线 */}
+        <Reel row={0} top={0} height={300} at={0} until={tNoHand - 0.04} />
+        <Reel row={1} top={1090} at={0} until={tNoHand - 0.04} startFrom={0.4} />
+        {t < tNoHand - 0.04 && <><div style={{ position: 'absolute', left: 0, top: 300, width: TW, height: 8, background: BC.lime }} /><div style={{ position: 'absolute', left: 0, top: 1082, width: TW, height: 8, background: BC.lime }} /><div style={{ position: 'absolute', left: 0, top: 1698, width: TW, height: 8, background: BC.lime }} /></>}
         {/* 硬切那一下闪一帧 */}
         {t >= tNoHand - 0.04 && t < tNoHand + 0.05 && <AbsoluteFill style={{ background: BC.lime, opacity: 0.5 - (t - tNoHand + 0.04) * 5.5 }} />}
         {/* B：0 刀手剪 */}
@@ -120,8 +120,8 @@ export const TALK03B: React.FC = () => {
           {words.map(([, , label], i) => <Pop key={label} at={wAt(i) + 0.05} dy={10} dur={0.2}><div style={{ fontSize: 40, fontWeight: 900, color: BC.ink, background: i % 2 ? BC.white : BC.lime, padding: '8px 26px', transform: `rotate(${i % 2 ? 1.5 : -1.5}deg)`, whiteSpace: 'nowrap' }}>{label}</div></Pop>)}
         </Lower></Scene>
 
-        {/* B：拍的时候 181，现在 232 */}
-        <Scene from={tAll - 0.05} to={say('钩子', '全部开源') - 0.3}><Lower style={{ top: 1110 }}><div style={{ transform: 'scale(.78)', transformOrigin: 'center top' }}><Paper theme="red" w={1300} h={520}><PriceBoard head="COMPONENTS · 画面组件" rows={[{ name: '组件', zh: '拍这条时 → 现在', from: '181', to: '232', hi: 0 }]} tag="拍完又加了 51 个" at={tAll - 0.05} flipAt={tAll + 0.7} width={1100} /></Paper></div></Lower></Scene>
+        {/* B：181 个 */}
+        <Scene from={tAll - 0.05} to={say('钩子', '全部开源') - 0.3}><Lower style={{ top: 1120 }}><div style={{ display: 'flex', alignItems: 'center', gap: 30 }}><ScrambleText text="181" at={tAll} dur={0.6}>{(x) => <div style={{ fontSize: 290, fontWeight: 900, lineHeight: 0.9, color: BC.lime, textShadow: '0 10px 40px rgba(0,0,0,.6)' }}>{x}</div>}</ScrambleText><SlabBanner text="个画面组件" at={tAll + 0.5} size={46} rotate={-2} bg={BC.white} /></div></Lower></Scene>
         {/* B：全部开源 */}
         <Scene from={say('钩子', '全部开源') - 0.15} to={tPain - 0.15} hard><Lower style={{ top: 1180, gap: 34 }}><SlabBanner text="全部开源" at={say('钩子', '全部开源') - 0.1} size={150} rotate={-3} bg={BC.lime} /><SlabBanner text="不收费" at={say('钩子', '不收费') - 0.05} size={110} rotate={2} /></Lower></Scene>
 
@@ -134,11 +134,11 @@ export const TALK03B: React.FC = () => {
         {/* B：两个部分，黑白对开 */}
         <Scene from={tTwo} to={t1 - 0.15} hard><Lower style={{ top: 1130 }}><div style={{ borderRadius: 26, overflow: 'hidden', boxShadow: '0 24px 60px rgba(0,0,0,.55)' }}><SplitWords width={1000} height={400} left={{ text: '组件库', sub: '01' }} right={{ text: 'SKILL', sub: '02' }} at={tTwo} /></div></Lower></Scene>
 
-        {/* C：口播说 181 个、18 组，这里给出现在的数字 */}
-        <Scene from={tN - 0.1} to={tNum - 0.35}><Lower style={{ top: 1100 }}><Plate style={{ width: 920, boxSizing: 'border-box', background: 'rgba(10,10,10,.9)', borderRadius: 0, borderLeft: `10px solid ${BC.lime}` }}>
-          <Tag>拍这条的时候</Tag><Big size={60} color={C.muted}>181 个 · 18 组</Big>
-          <Pop at={say('组件库', '分成 18 组')}><div style={{ marginTop: 14 }}><Tag color={BC.lime}>现在</Tag><Big size={96} color={BC.lime}>232 个 · 21 组</Big></div></Pop>
-        </Plate></Lower></Scene>
+        {/* C：181 个，18 组 */}
+        <Scene from={tN - 0.1} to={tNum - 0.35}><Lower style={{ top: 1110, height: 260, flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-end', gap: 50 }}>
+          <Pop at={tN} dy={0}><div style={{ display: 'flex', alignItems: 'baseline', gap: 12 }}><div style={{ fontSize: 220, fontWeight: 900, lineHeight: 1, color: BC.lime }}>181</div><div style={{ fontSize: 60, fontWeight: 900, color: BC.white }}>个</div></div></Pop>
+          <Pop at={say('组件库', '分成 18 组')} dy={0}><div style={{ display: 'flex', alignItems: 'baseline', gap: 12 }}><div style={{ fontSize: 220, fontWeight: 900, lineHeight: 1, color: BC.white }}>18</div><div style={{ fontSize: 60, fontWeight: 900, color: BC.white }}>组</div></div></Pop>
+        </Lower></Scene>
 
         {/* B：说到数字，出图表（画的是组件库里最多的四组） */}
         <Scene from={tNum - 0.05} to={tSee - 0.35}><Lower style={{ top: 1100 }}><Paper theme="black" w={1000} h={560}><ParticleBars at={say('组件库', '它就能出图表') - 0.5} width={860} height={420} bars={groups.map(([label, v], i) => ({ label, v, text: v + ' 个', tone: i === 2 ? 'white' : 'lime' as const }))} tag={{ i: 0, text: '最多的一组' }} /></Paper></Lower></Scene>
