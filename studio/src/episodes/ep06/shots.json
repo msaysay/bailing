@@ -1,0 +1,5 @@
+[
+  { "file": "site-hero.mp4", "from": "seg:开场", "to": "seg:开场:end", "credit": "宁少 AI 进化论官网录屏", "dim": 0.88 },
+  { "file": "site-grid.mp4", "from": "say:观点:不露脸的人", "to": "seg:观点:end", "credit": "宁少 AI 进化论官网 · 组件库录屏", "dim": 0.6 },
+  { "file": "site-line.mp4", "from": "say:收口:下一期", "to": "seg:收口:end", "credit": "宁少 AI 进化论官网录屏", "dim": 0.88 }
+]

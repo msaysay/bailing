@@ -1,0 +1,28 @@
+{
+ "components": 14,
+ "shots": 5,
+ "renderSec": 214,
+ "segRender": {
+  "seg": "开场",
+  "sec": 30,
+  "out": "渲染第 1 段「开场」 帧 0–135（4.5 秒）"
+ },
+ "diff": [
+  {
+   "kind": " ",
+   "text": "{/* 开场：数字雨显影成真实画面 */}"
+  },
+  {
+   "kind": "-",
+   "text": "<MatrixReveal revealAt={say('开场', '一行行写代码') + 0.2} dur={1.4}>"
+  },
+  {
+   "kind": "+",
+   "text": "<MatrixReveal revealAt={0.1} dur={1.8}>"
+  },
+  {
+   "kind": " ",
+   "text": "// 原因：自查报开头 3 秒黑场，显影改成一开口就开始"
+  }
+ ]
+}
