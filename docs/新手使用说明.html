@@ -45,7 +45,7 @@ table{width:100%;border-collapse:collapse;font-size:15.5px}th,td{text-align:left
 <div class="card"><ol>
 <li>电脑上装好 <b>Node.js 22</b>、<b>ffmpeg</b>、<b>Python 3.10 以上</b>。不会装就把这句话发给助手：「帮我检查并装好 Node.js 22、ffmpeg 和 Python。」</li>
 <li>解压这个文件夹，在里面打开 AI 助手（Claude Code 或 Codex）。</li>
-<li>对助手说：<code>先读「先读我.md」和 skills/README.md，按里面的说明把环境装好，装完告诉我还缺什么。</code></li>
+<li>对助手说：<code>先读「先读我.md」和 .claude/skills/README.md，按里面的说明把环境装好，装完告诉我还缺什么。</code></li>
 </ol><p>助手会自己装依赖、下载语音识别模型。它会告诉你还缺两样要你自己弄的：<b>MiSans 字体</b>（小米官网免费下载，三个字重放进 <code>studio/public/fonts/</code>）和<b>搜素材用的 TikHub 密钥</b>（只有路线一、或者口播里要插新闻画面时才用得上）。</p></div>
 
 <h2>路线一：从一个想法开始</h2>
@@ -145,7 +145,7 @@ table{width:100%;border-collapse:collapse;font-size:15.5px}th,td{text-align:left
 
 <h2>一页速查：直接复制这些话</h2>
 <table><tr><th>场景</th><th>发给助手的话</th></tr>
-<tr><td>第一次用</td><td><code>先读「先读我.md」和 skills/README.md，把环境装好，告诉我还缺什么。</code></td></tr>
+<tr><td>第一次用</td><td><code>先读「先读我.md」和 .claude/skills/README.md，把环境装好，告诉我还缺什么。</code></td></tr>
 <tr><td>路线一开工</td><td><code>我想做一条关于【话题】的横屏视频，大约【几】分钟，给【谁】看。按事为主的流程走，从第 1 步开始。</code></td></tr>
 <tr><td>路线二开工</td><td><code>这是我拍的口播（附视频）。按人为主的口播流程走，从粗剪开始，先告诉我你打算剪掉哪几句。</code></td></tr>
 <tr><td>想先看方向</td><td><code>先别铺全片，做前 30 秒给我看。</code></td></tr>

@@ -1,11 +1,22 @@
 # 视频生产工作流 · 操作说明
 
-这套工作流有两条线，共用同一个组件库和同一套脚本：
+## 最快的用法
+
+把整个文件夹交给 Claude Code（或 Codex），直接说「**我想做一条视频**」。入口技能 `video-start` 会：
+1. 问你两个问题（你出不出镜、手上有什么），判断走哪条线；
+2. 查环境，能自动装的直接装，装不了的一项项告诉你怎么弄；
+3. 建好这一期的目录和进度表；
+4. 每一步只问你要那一样东西，需要你确认的地方停下来问「可以吗」。
+
+中途关掉也没关系，下次说「**继续**」就接着做。下面是给想了解细节的人看的。
+
+这套工作流有三条线，共用同一个组件库和同一套脚本：
 
 | 线 | 成片 | 画面的底 | 什么时候用 | 步骤 |
 |---|---|---|---|---|
 | **事为主** | 横屏 1920×1080 | 真实画面垫底，组件压上面，人不出镜 | 内容靠「发生了什么」立住：新闻、财报、事件复盘 | `video-01` 到 `video-08` |
 | **人为主** | 竖屏 1080×1920 | 真人口播垫底，人和画面交替 | 内容靠「谁在说」立住：观点、讲解、个人账号 | `talk-01` 到 `talk-04`，中间借用 `video-02`、`video-04`，最后接 `video-08` |
+| **频道宠物** | 叠加在上面两条线的成片上 | 右下角一只会长大的海豹 | 每发一期更新一次：结算成长、叠进成片 | `pet-01` 到 `pet-02` |
 
 拿到需求先判断走哪条线，拿不准就问用户一句：这条片子，人出不出镜？
 
@@ -59,7 +70,7 @@ studio/               所有期数共用的 Remotion 工程
   src/components/     组件库（254 个，22 组；目录见 studio/src/gallery/catalog*.tsx）
   src/episodes/<期>/  timing.json、shots.json、faces.json、场景代码、封面
   public/<期>/        配音、音乐、镜头片段（不进 git）
-scripts/              asr.py、align.py、roughcut.py（口播粗剪）、talk_check.py（口播版式自查）、tikhub.py（搜索走 TikHub，下载走 yt-dlp 或 TikHub）、faces.py、seg_render.py、qc.py、facecheck.py、build_pack.py
+scripts/              doctor.py（环境自检）、episode.py（每期进度）、pet.py（宠物成长）、asr.py、align.py、roughcut.py（口播粗剪）、talk_check.py（口播版式自查）、tikhub.py（搜索走 TikHub，下载走 yt-dlp 或 TikHub）、faces.py、seg_render.py、qc.py、facecheck.py、build_pack.py
 docs/aesthetic-rules.md  制作规则（审美手册），所有步骤都受它约束
 docs/对标拆解-小Lin口播.md  人为主那条线的版式依据
 ```
