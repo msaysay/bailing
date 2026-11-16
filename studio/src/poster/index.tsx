@@ -1,7 +1,7 @@
 // 私域承接海报：视频号公域来的人看到这张图，知道三件事——工具免费拿、980 的社群买的是什么、19800 的企业服务做什么。
 // 1080×2560，出图时 --scale=2。数字只用核对过的：232 个组件、12 个 Skill、2 条生产线、34 条做片规则。
 import React from 'react';
-import { AbsoluteFill } from 'remotion';
+import { AbsoluteFill, Img, staticFile } from 'remotion';
 import { C, FONT, useFonts } from '../kit/kit';
 
 const W = 1080, PAD = 64;
@@ -66,7 +66,7 @@ const PlanCard: React.FC<Plan> = ({ price, unit, name, mode, color, hot, who, it
   </div>
 );
 
-export const POSTER_W = W, POSTER_H = 4040;
+export const POSTER_W = W, POSTER_H = 4370;
 export const Poster: React.FC = () => {
   useFonts();
   const stats: [string, string][] = [['232', '个画面组件'], ['12', '个 Skill'], ['2', '条生产线'], ['34', '条做片规则']];
@@ -137,7 +137,17 @@ export const Poster: React.FC = () => {
           </div>
         </div>
 
-        <div style={{ textAlign: 'center', fontSize: 24, color: C.muted, marginTop: 56 }}>陈宁 · 宁少 AI 进化论 · 分享 AI 时代的内容创作认知</div>
+        {/* 底部：官网二维码（指向 https://49.gx.cn） */}
+        <div style={{ marginTop: 64, display: 'flex', alignItems: 'center', gap: 40, background: C.surface, border: `2px solid ${C.line}`, borderRadius: 28, padding: '34px 40px' }}>
+          <div style={{ width: 220, height: 220, flex: 'none', borderRadius: 18, background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+            <Img src={staticFile('poster-qr.png')} style={{ width: 212, height: 212 }} />
+          </div>
+          <div>
+            <div style={{ fontSize: 46, fontWeight: 900 }}>扫码看官网</div>
+            <div style={{ fontSize: 30, color: C.muted, marginTop: 10, lineHeight: 1.5 }}>Skill、组件库、成片都在这里<br /><span style={{ color: C.warm, fontWeight: 900 }}>49.gx.cn</span></div>
+          </div>
+        </div>
+        <div style={{ textAlign: 'center', fontSize: 24, color: C.muted, marginTop: 30 }}>陈宁 · 宁少 AI 进化论 · 分享 AI 时代的内容创作认知</div>
       </div>
     </AbsoluteFill>
   );
