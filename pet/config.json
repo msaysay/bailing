@@ -1,0 +1,14 @@
+{
+  "weights": { "likes": 1, "saves": 3, "comments": 5, "shares": 8, "follows": 10, "feeds": 5 },
+  "level_base": 100,
+  "level_power": 1.5,
+  "stages": [
+    { "from": 0, "id": "egg", "name": "蛋" },
+    { "from": 5, "id": "hatch", "name": "破壳" },
+    { "from": 10, "id": "young", "name": "幼体" },
+    { "from": 20, "id": "adult", "name": "成体" }
+  ],
+  "routes": { "tech": "机芯", "gold": "金羽", "flame": "焰心", "star": "星语" },
+  "vote_cap": 0.3,
+  "hidden_route_gap": 0.1
+}
