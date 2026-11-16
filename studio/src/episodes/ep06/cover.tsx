@@ -35,5 +35,5 @@ export const NoFaceCover: React.FC<CoverProps> = ({ img, tag, l1, l2, chips }) =
     </AbsoluteFill>
   );
 };
-export const Cover06: React.FC = () => <NoFaceCover img="ep06/cover/f.png" tag="不出镜系列" l1="不露脸" l2="也不吃亏了" chips={[['0', '个出镜镜头'], ['0', '次手剪'], ['1 段', '录音']]} />;
+export const Cover06: React.FC = () => <NoFaceCover img="ep06/cover/f.png" tag="不出镜系列" l1="不露脸" l2="也不吃亏了" chips={[['0', '个出镜镜头'], ['0', '次手剪'], ['0', '句真人配音']]} />;
 export const Cover07: React.FC = () => <NoFaceCover img="ep07/cover/f.png" tag="0 个剪辑软件" l1="每一帧" l2="都是代码画的" chips={[['232', '个画面组件'], ['14', '本片用到'], ['3 分 34 秒', '整片渲染']]} />;

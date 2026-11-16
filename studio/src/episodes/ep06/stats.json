@@ -1,6 +1,6 @@
 {
-  "rawSec": 73.1,
-  "cutSec": 71.4,
-  "cuts": ["吃亏在哪", "怎么做的"],
+  "humanSec": 73.1,
+  "aiSec": 72.5,
+  "voice": "Fish Audio 合成",
   "qc": { "黑场": true, "闪帧": true, "画面停滞超过 6 秒": true, "响度": true }
 }

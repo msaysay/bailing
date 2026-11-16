@@ -16,6 +16,7 @@ import { CommentPop, FollowCTA } from '../../components/talk';
 import timing from './timing.json';
 import shots from './shots.json';
 import stats from './stats.json';
+import { Hook } from './hook';
 
 export const clock06 = makeClock(timing as Timing);
 const chapters = [{ no: '01', title: '为什么吃亏', from: '痛点' }, { no: '02', title: '这条片子怎么来的', from: '证据' }, { no: '03', title: '接下来拼什么', from: '观点' }];
@@ -32,14 +33,14 @@ const Wave: React.FC<{ at: number }> = ({ at }) => {
   return (
     <Pop at={at}><Panel style={{ padding: '30px 40px', width: 1640 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-        <Tag color={C.text} size={34}>06.wav</Tag><Tag>{`单声道人声 · ${stats.cutSec} 秒 · 手机录音`}</Tag>
+        <Tag color={C.text} size={34}>voice.wav</Tag><Tag>{`${stats.voice} · ${stats.aiSec} 秒 · 由稿子生成`}</Tag>
       </div>
       <div style={{ position: 'relative', marginTop: 24, height: 240 }}>
         <Img src={staticFile('ep06/footage/wave.png')} style={{ width: 1560, height: 240, opacity: 0.9 }} />
         <div style={{ position: 'absolute', left: `${(t / total) * 100}%`, top: -10, bottom: -10, width: 4, background: C.warm, boxShadow: `0 0 18px ${C.warm}` }} />
         <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: `${(t / total) * 100}%`, background: 'rgba(255,212,121,.10)' }} />
       </div>
-      <Src style={{ marginTop: 16 }}>这条视频唯一的输入：一段录音，没有一个镜头是拍的</Src>
+      <Src style={{ marginTop: 16 }}>这条视频的声音：稿子交给 Fish Audio 合成，没有录一句</Src>
     </Panel></Pop>
   );
 };
@@ -47,17 +48,14 @@ const Wave: React.FC<{ at: number }> = ({ at }) => {
 const Scenes: React.FC = () => {
   const { seg, say } = useClock();
   const tWhy = say('吃亏在哪', '因为人不出镜'), tGrind = say('吃亏在哪', '找素材'), tTeam = say('吃亏在哪', '专业团队');
-  const tWave = say('证据', '就是录了'), tAI = say('证据', '剩下的');
+  const tWave = say('证据', '声音也是'), tReview = say('证据', '我只做了'), tAI = say('证据', '剩下的');
   const tCode = say('怎么做到', '然后一段一段'), tNum = say('怎么做到', '说到数字'), tVs = say('怎么做到', '说到对比'), tBig = say('怎么做到', '说到重点'), tQc = say('怎么做到', '最后它');
   const tLine = say('观点', '不露脸的人'), tMe = seg('收口').start, tAsk = say('收口', '你是不是'), tNext = say('收口', '下一期');
   const segRows = clock06.segments.map((s, i) => ({ name: s.name, value: s.end - s.start, text: `${(s.end - s.start).toFixed(1)} 秒`, at: tNum + 0.1 + i * 0.12 }));
   return (
     <>
-      {/* 开场：一个等号被改写。底下垫官网首屏录屏 */}
-      <Scene from={0} to={seg('开场').end}><Stage style={{ alignItems: 'center', justifyContent: 'center' }}>
-        <StrikeReplace before="不露脸 ＝ " wrong="吃亏" right="不吃亏" at={0.15} fixAt={say('开场', '不一样了')} size={150} />
-        <Pop at={say('开场', '从这条视频开始')} style={{ marginTop: 60 }}><Chip color={C.warm} style={{ fontSize: 34, padding: '12px 28px' }}>本片：0 个出镜镜头 · 0 次手剪</Chip></Pop>
-      </Stage></Scene>
+      {/* 开场：跟着词点硬切四镜（见 hook.tsx） */}
+      <Hook />
 
       {/* 痛点①：东西都有，就差对着镜头 */}
       <Scene from={seg('痛点').start} to={say('痛点', '有人怕尴尬') - 0.1}><Stage style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 120 }}>
@@ -107,13 +105,20 @@ const Scenes: React.FC = () => {
       {/* 证据①：出镜、手剪都是 0 */}
       <Scene from={seg('证据').start} to={tWave - 0.15}><Stage style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 70 }}>
         <Pop at={seg('证据').start} style={{ position: 'absolute', top: 230 }}><Tag size={40} color={C.text}>这条视频</Tag></Pop>
-        {[['出镜镜头', '我没出镜'], ['手剪的刀', '也没剪']].map(([k, w]) => (
-          <Pop key={k} at={say('证据', w)}><Panel style={{ padding: '36px 70px', textAlign: 'center' }}>
+        {[['出镜镜头', '这条视频'], ['手剪的刀', '也没剪']].map(([k, w]) => (
+          <Pop key={k} at={say('证据', w) + (w === '这条视频' ? 0.3 : 0)}><Panel style={{ padding: '36px 70px', textAlign: 'center' }}>
             <div style={{ fontSize: 200, fontWeight: 900, lineHeight: 1, color: C.accent }}>0</div><Tag size={36}>{k}</Tag>
           </Panel></Pop>))}
       </Stage></Scene>
-      {/* 证据②：唯一的输入，就是你正在听的这段录音（真实波形） */}
-      <Scene from={tWave - 0.15} to={tAI - 0.1}><Stage style={{ alignItems: 'center', justifyContent: 'center' }}><Wave at={tWave - 0.1} /></Stage></Scene>
+      {/* 证据②：声音也是 AI 生成的（这期配音的真实波形） */}
+      <Scene from={tWave - 0.15} to={tReview - 0.1}><Stage style={{ alignItems: 'center', justifyContent: 'center' }}><Wave at={tWave - 0.1} /></Stage></Scene>
+      {/* 证据③：我只做一件事——审稿（本期 script.txt 原文） */}
+      <Scene from={tReview - 0.1} to={tAI - 0.1}><Stage style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 60 }}>
+        <div style={{ transform: 'scale(1.25)' }}><CodeDiff file="episodes/06_不露脸也不吃亏/03_制作过程/script.txt" width={1180} at={tReview - 0.35} lines={[
+          { kind: ' ', text: '## 开场' }, { kind: ' ', text: '以前做自媒体，不露脸，基本就等于吃亏。' },
+          { kind: '-', text: '我只做了一件事，就是录了你现在听到的这段声音。' }, { kind: '+', text: '声音也是 AI 自动生成的。我只做了一件事，就是审稿。' }]} /></div>
+        <Pop at={say('证据', '就是审稿')}><Stamp text="已审" color={C.accent} at={say('证据', '就是审稿')} size={120} rotate={-8} /></Pop>
+      </Stage></Scene>
       {/* 证据③：交给 AI 的步骤清单 */}
       <Scene from={tAI - 0.1} to={seg('证据').end}><Stage style={{ alignItems: 'center', justifyContent: 'center' }}>
         <Big k={1.45}><TaskRun title="交给 AI 之后" width={980} tasks={[
@@ -124,11 +129,11 @@ const Scenes: React.FC = () => {
       {/* 怎么做到①：真实的识别和对齐输出（本期录音跑出来的原样结果） */}
       <Scene from={seg('怎么做到').start} to={tCode - 0.1}><Stage style={{ alignItems: 'center', justifyContent: 'center' }}>
         <Terminal width={1500} title="本期 · 第 3 步 录音对时" at={seg('怎么做到').start} lines={[
-          { cmd: 'python3 scripts/asr.py 06.wav asr.json', at: seg('怎么做到').start + 0.2 },
+          { cmd: 'python3 scripts/asr.py 06-v2-FishAudio.mp3 asr.json', at: seg('怎么做到').start + 0.2 },
           { out: '以前做自媒体不露脸基本就等于吃亏从这条视频开始不一样了…', at: say('怎么做到', '它先把') + 0.4 },
           { cmd: 'python3 scripts/align.py --script script.txt --asr asr.json', at: say('怎么做到', '逐字时间') },
-          { out: '总长 71.4s，34 行字幕，7 段', at: say('怎么做到', '每个字落在') , ok: true },
-          { out: '   5 怎么做到   33.6–51.6   9 行   对齐率 0.96', at: say('怎么做到', '都有数') }]} />
+          { out: '总长 72.5s，34 行字幕，7 段', at: say('怎么做到', '每个字落在') , ok: true },
+          { out: '   5 怎么做到   34.8–52.8   9 行   对齐率 0.96', at: say('怎么做到', '都有数') }]} />
       </Stage></Scene>
       {/* 怎么做到②：本期场景代码，画面挂在录音里的字上 */}
       <Scene from={tCode - 0.1} to={tNum - 0.1}><Stage style={{ alignItems: 'center', justifyContent: 'center' }}>
@@ -147,7 +152,7 @@ const Scenes: React.FC = () => {
       </Stage></Scene>
       {/* 怎么做到④：说到对比 → 左右两栏（数据：录音剪前剪后） */}
       <Scene from={tVs - 0.1} to={tBig - 0.1}><Stage style={{ alignItems: 'center', justifyContent: 'center' }}>
-        <Big k={1.25}><Versus width={1300} left={{ label: '原始录音', value: `${stats.rawSec} 秒`, at: tVs }} right={{ label: '剪掉 2 处念出来的段名', value: `${stats.cutSec} 秒`, at: tVs + 0.4, color: C.accent }} /></Big>
+        <Big k={1.25}><Versus width={1300} left={{ label: '上一版 · 真人录音', value: `${stats.humanSec} 秒`, at: tVs }} right={{ label: '这一版 · AI 配音', value: `${stats.aiSec} 秒`, at: tVs + 0.4, color: C.accent }} /></Big>
       </Stage></Scene>
       {/* 怎么做到⑤：说到重点 → 字幕放大（这一句本身就是示范） */}
       <Scene from={tBig - 0.1} to={tQc - 0.1}><Stage style={{ alignItems: 'center', justifyContent: 'center' }}>
@@ -191,7 +196,7 @@ export const EP06: React.FC = () => {
   useFonts();
   const c = clock06;
   const sfx: [number, string, number][] = [
-    [c.say('开场', '不一样了'), 'tick.wav', 0.4], [c.seg('吃亏在哪').start, 'whoosh.wav', 0.45], [c.say('证据', '我没出镜'), 'tick.wav', 0.35],
+    [c.say('开场', '不露脸'), 'whoosh.wav', 0.45], [c.say('开场', '吃亏'), 'thud.wav', 0.6], [c.say('开场', '从这条视频开始'), 'whoosh.wav', 0.4], [c.say('开场', '不一样了'), 'tick.wav', 0.45], [c.seg('吃亏在哪').start, 'whoosh.wav', 0.45], [c.say('证据', '我没出镜'), 'tick.wav', 0.35],
     [c.say('怎么做到', '过了才给我看'), 'thud.wav', 0.45], [c.say('观点', '谁脑子里'), 'tick.wav', 0.35], [c.seg('收口').start - 0.2, 'whoosh.wav', 0.4]];
   return (
     <ClockCtx.Provider value={c}>
