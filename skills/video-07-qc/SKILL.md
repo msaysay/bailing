@@ -60,3 +60,7 @@ python3 ../scripts/facecheck.py out/<文件>.mp4 --timing src/episodes/<期>/tim
 
 ## 放行条件
 两个检查都通过；联系表看过；已知瑕疵如实列给用户。
+
+## 配乐（来自 `docs/对标拆解-AI员工上岗.md`）
+- 先按稿子画一条情绪曲线（哪里得意、哪里被打回、哪里该笑），再挑节奏和起伏对得上的音乐。助手听不见音乐好不好听，**最终选曲交给人**。
+- 人一开口音乐要自动压低（侧链压缩）：`ffmpeg -i voice.wav -i bgm.mp3 -filter_complex "[1:a][0:a]sidechaincompress=threshold=0.03:ratio=8:attack=20:release=400[b];[0:a][b]amix=inputs=2:duration=first" out.wav`
