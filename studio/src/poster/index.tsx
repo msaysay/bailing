@@ -1,7 +1,7 @@
 // 私域承接海报：视频号公域来的人看到这张图，知道三件事——工具免费拿、980 的社群买的是什么、19800 的企业服务做什么。
 // 1080×2560，出图时 --scale=2。数字只用核对过的：232 个组件、12 个 Skill、2 条生产线、34 条做片规则。
 import React from 'react';
-import { AbsoluteFill, Img, staticFile } from 'remotion';
+import { AbsoluteFill } from 'remotion';
 import { C, FONT, useFonts } from '../kit/kit';
 
 const W = 1080, PAD = 64;
@@ -38,8 +38,8 @@ const PlanCard: React.FC<Plan> = ({ price, unit, name, mode, color, hot, who, it
   </div>
 );
 
-export const POSTER_W = W, POSTER_H = 3990;
-export const Poster: React.FC<{ qr?: string }> = ({ qr }) => {
+export const POSTER_W = W, POSTER_H = 3650;
+export const Poster: React.FC = () => {
   useFonts();
   const stats: [string, string][] = [['232', '个画面组件'], ['12', '个 Skill'], ['2', '条生产线'], ['34', '条做片规则']];
   const pillars: [string, string, string][] = [
@@ -108,17 +108,7 @@ export const Poster: React.FC<{ qr?: string }> = ({ qr }) => {
           </div>
         </div>
 
-        {/* 底部 */}
-        <div style={{ marginTop: 70, display: 'flex', alignItems: 'center', gap: 40, background: C.surface, border: `2px solid ${C.line}`, borderRadius: 28, padding: '34px 40px' }}>
-          <div style={{ width: 220, height: 220, flex: 'none', borderRadius: 18, background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-            {qr ? <Img src={staticFile(qr)} style={{ width: 200, height: 200 }} /> : <div style={{ color: '#14171D', fontSize: 26, fontWeight: 900, textAlign: 'center', lineHeight: 1.5 }}>微信<br />二维码</div>}
-          </div>
-          <div>
-            <div style={{ fontSize: 46, fontWeight: 900 }}>扫码加我</div>
-            <div style={{ fontSize: 30, color: C.muted, marginTop: 10, lineHeight: 1.5 }}>备注「<span style={{ color: C.warm, fontWeight: 900 }}>AI 实践</span>」<br />免费工具包、社群、企业服务都从这里开始</div>
-          </div>
-        </div>
-        <div style={{ textAlign: 'center', fontSize: 24, color: C.muted, marginTop: 30 }}>陈宁 · 宁少 AI 进化论 · 分享 AI 时代的内容创作认知</div>
+        <div style={{ textAlign: 'center', fontSize: 24, color: C.muted, marginTop: 56 }}>陈宁 · 宁少 AI 进化论 · 分享 AI 时代的内容创作认知</div>
       </div>
     </AbsoluteFill>
   );
