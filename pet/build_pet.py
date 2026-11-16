@@ -8,16 +8,17 @@ from mathutils import Vector
 argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
 ap = argparse.ArgumentParser(); ap.add_argument("--stage", type=int, default=2); ap.add_argument("--branch", default="none"); ap.add_argument("--crack", type=float, default=.3)
 ap.add_argument("--out", default="/tmp/pet/"); ap.add_argument("--frames", type=int, default=48); ap.add_argument("--res", type=int, default=512); ap.add_argument("--samples", type=int, default=24)
-ap.add_argument("--still", action="store_true"); ap.add_argument("--frame", type=int, default=10); ap.add_argument("--angle", type=float, default=-24); ap.add_argument("--silhouette", action="store_true")
+ap.add_argument("--still", action="store_true"); ap.add_argument("--frame", type=int, default=10); ap.add_argument("--angle", type=float, default=-24); ap.add_argument("--silhouette", action="store_true"); ap.add_argument("--expr", default="calm")
 A = ap.parse_args(argv)
 bpy.ops.wm.read_factory_settings(use_empty=True)
 S = bpy.context.scene; F = A.frames; TAU = math.tau; ST = min(A.stage, 3); BR = A.branch if ST >= 3 else "none"
-# 主色、脸罩色、点缀色、发光色、眼睛虹膜色
-PAL = {"none": ((1.0, .50, .26), (1.0, .80, .58), (.98, .42, .22), (1.0, .78, .35), (.25, .16, .12)),
-       "tech": ((.12, .30, .78), (.62, .84, 1.0), (.05, .12, .32), (.10, .95, 1.0), (.02, .35, .55)),
-       "gold": ((.98, .62, .10), (1.0, .84, .50), (.70, .36, .04), (1.0, .82, .30), (.35, .20, .04)),
-       "flame": ((.90, .16, .12), (1.0, .72, .52), (.35, .05, .06), (1.0, .50, .08), (.45, .06, .04)),
-       "star": ((.30, .20, .78), (.74, .66, 1.0), (.12, .06, .38), (.85, .70, 1.0), (.20, .10, .45))}
+# v3：参考成年人喜欢的 IP（卡皮巴拉的「情绪稳定」、吉伊卡哇的糯米团子、Loopy 的小表情）——低饱和奶油色、绒面、豆豆眼、表情是记号。
+# 主色、肚皮色、点缀色、发光色、（保留位）
+PAL = {"none": ((.90, .64, .40), (1.0, .93, .82), (.55, .78, .40), (.70, .95, .45), (0, 0, 0)),
+       "tech": ((.45, .62, .88), (.92, .96, 1.0), (.14, .18, .28), (.35, .90, 1.0), (0, 0, 0)),
+       "gold": ((.95, .72, .30), (1.0, .94, .78), (.80, .55, .15), (1.0, .82, .35), (0, 0, 0)),
+       "flame": ((.92, .45, .32), (1.0, .88, .78), (.85, .30, .20), (1.0, .52, .15), (0, 0, 0)),
+       "star": ((.58, .50, .86), (.95, .92, 1.0), (.30, .22, .60), (.90, .80, 1.0), (0, 0, 0))}
 MAIN, FACE, ACC, GLOW, IRIS = PAL[BR]
 
 def nodes_mat(name):
@@ -31,24 +32,24 @@ def silh(m):
     if A.silhouette:
         m.use_nodes = True; nt = m.node_tree; [nt.nodes.remove(n) for n in list(nt.nodes) if n.type != "OUTPUT_MATERIAL"]; e = nt.nodes.new("ShaderNodeEmission"); e.inputs[0].default_value = (0, 0, 0, 1); nt.links.new(e.outputs[0], nt.nodes["Material Output"].inputs[0])
     return m
-def body_mat():
-    """软胶身体：主色，前脸一块椭圆的浅色脸罩，边缘柔和。"""
-    m, nt, b = nodes_mat("body"); b.inputs["Roughness"].default_value = .55; b.inputs["Subsurface Weight"].default_value = .12; b.inputs["Subsurface Radius"].default_value = (.5, .25, .15); b.inputs["Coat Weight"].default_value = .15; b.inputs["Coat Roughness"].default_value = .35
+def body_mat(col=None, belly=True):
+    """绒面身体：主色，前下方一块柔边的浅色肚皮；细小的凹凸和边缘光做出毛绒感。"""
+    m, nt, b = nodes_mat("body"); b.inputs["Roughness"].default_value = .85; b.inputs["Sheen Weight"].default_value = .6; b.inputs["Sheen Roughness"].default_value = .35; b.inputs["Sheen Tint"].default_value = (1, 1, 1, 1)
+    b.inputs["Subsurface Weight"].default_value = .25; b.inputs["Subsurface Radius"].default_value = (.6, .35, .25)
     tc = nt.nodes.new("ShaderNodeTexCoord"); sp = nt.nodes.new("ShaderNodeSeparateXYZ"); nt.links.new(tc.outputs["Object"], sp.inputs[0])
-    def M(op, a, bb=None, v=None):
-        n = nt.nodes.new("ShaderNodeMath"); n.operation = op
-        (nt.links.new(a, n.inputs[0]) if not isinstance(a, (int, float)) else n.inputs[0].__setattr__("default_value", a))
-        if bb is not None: (nt.links.new(bb, n.inputs[1]) if not isinstance(bb, (int, float)) else n.inputs[1].__setattr__("default_value", bb))
-        return n.outputs[0]
-    ex = M("POWER", M("DIVIDE", sp.outputs["X"], .50), 2); ez = M("POWER", M("DIVIDE", M("SUBTRACT", sp.outputs["Z"], -.22), .46), 2); d = M("ADD", ex, ez)
-    mr = nt.nodes.new("ShaderNodeMapRange"); mr.inputs[1].default_value = .82; mr.inputs[2].default_value = 1.0; mr.inputs[3].default_value = 1; mr.inputs[4].default_value = 0; nt.links.new(d, mr.inputs[0])
-    fr = nt.nodes.new("ShaderNodeMapRange"); fr.inputs[1].default_value = -.15; fr.inputs[2].default_value = -.45; fr.inputs[3].default_value = 0; fr.inputs[4].default_value = 1; nt.links.new(sp.outputs["Y"], fr.inputs[0])
-    k = M("MULTIPLY", mr.outputs[0], fr.outputs[0])
-    mix = nt.nodes.new("ShaderNodeMix"); mix.data_type = "RGBA"; mix.inputs[6].default_value = (*MAIN, 1); mix.inputs[7].default_value = (*FACE, 1); nt.links.new(k, mix.inputs[0]); nt.links.new(mix.outputs[2], b.inputs["Base Color"])
-    if BR == "star":   # 星语：身上撒细碎的星点
-        vo = nt.nodes.new("ShaderNodeTexVoronoi"); vo.inputs["Scale"].default_value = 18; nt.links.new(tc.outputs["Object"], vo.inputs["Vector"])
-        st = nt.nodes.new("ShaderNodeMapRange"); st.inputs[1].default_value = .06; st.inputs[2].default_value = .02; st.inputs[3].default_value = 0; st.inputs[4].default_value = 8; nt.links.new(vo.outputs["Distance"], st.inputs[0])
-        b.inputs["Emission Color"].default_value = (*GLOW, 1); nt.links.new(M("MULTIPLY", st.outputs[0], M("SUBTRACT", 1, k)), b.inputs["Emission Strength"])
+    nz = nt.nodes.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 260; nz.inputs["Detail"].default_value = 4; nt.links.new(tc.outputs["Object"], nz.inputs["Vector"])
+    bm = nt.nodes.new("ShaderNodeBump"); bm.inputs["Strength"].default_value = .18; bm.inputs["Distance"].default_value = .002; nt.links.new(nz.outputs["Fac"], bm.inputs["Height"]); nt.links.new(bm.outputs["Normal"], b.inputs["Normal"])
+    base = col or MAIN
+    if not belly: b.inputs["Base Color"].default_value = (*base, 1); return silh(m)
+    ex = nt.nodes.new("ShaderNodeMath"); ex.operation = "DIVIDE"; ex.inputs[1].default_value = .55; nt.links.new(sp.outputs["X"], ex.inputs[0])
+    zz = nt.nodes.new("ShaderNodeMath"); zz.operation = "SUBTRACT"; zz.inputs[1].default_value = -.45; nt.links.new(sp.outputs["Z"], zz.inputs[0])
+    ez = nt.nodes.new("ShaderNodeMath"); ez.operation = "DIVIDE"; ez.inputs[1].default_value = .5; nt.links.new(zz.outputs[0], ez.inputs[0])
+    vl = nt.nodes.new("ShaderNodeCombineXYZ"); nt.links.new(ex.outputs[0], vl.inputs[0]); nt.links.new(ez.outputs[0], vl.inputs[1])
+    ln = nt.nodes.new("ShaderNodeVectorMath"); ln.operation = "LENGTH"; nt.links.new(vl.outputs[0], ln.inputs[0])
+    mr = nt.nodes.new("ShaderNodeMapRange"); mr.inputs[1].default_value = .85; mr.inputs[2].default_value = 1.0; mr.inputs[3].default_value = 1; mr.inputs[4].default_value = 0; nt.links.new(ln.outputs["Value"], mr.inputs[0])
+    fr = nt.nodes.new("ShaderNodeMapRange"); fr.inputs[1].default_value = -.1; fr.inputs[2].default_value = -.4; nt.links.new(sp.outputs["Y"], fr.inputs[0])
+    k = nt.nodes.new("ShaderNodeMath"); k.operation = "MULTIPLY"; nt.links.new(mr.outputs[0], k.inputs[0]); nt.links.new(fr.outputs[0], k.inputs[1])
+    mix = nt.nodes.new("ShaderNodeMix"); mix.data_type = "RGBA"; mix.inputs[6].default_value = (*base, 1); mix.inputs[7].default_value = (*FACE, 1); nt.links.new(k.outputs[0], mix.inputs[0]); nt.links.new(mix.outputs[2], b.inputs["Base Color"])
     return silh(m)
 def obj_sphere(name, loc, scale, m, seg=48, parent=None, rot=None):
     bpy.ops.mesh.primitive_uv_sphere_add(segments=seg, ring_count=seg // 2, location=loc); o = bpy.context.object; o.name = name; o.scale = scale; bpy.ops.object.shade_smooth(); o.data.materials.append(m)
@@ -79,113 +80,103 @@ S.view_settings.view_transform = "AgX"; S.view_settings.look = "AgX - Punchy"; S
 w = bpy.data.worlds.new("w"); S.world = w; w.use_nodes = True; w.node_tree.nodes["Background"].inputs[0].default_value = (.6, .65, .75, 1); w.node_tree.nodes["Background"].inputs[1].default_value = .3
 def light(loc, energy, size, col):
     bpy.ops.object.light_add(type="AREA", location=loc); l = bpy.context.object; l.data.energy = energy; l.data.size = size; l.data.color = col; l.rotation_euler = (Vector((0, 0, .7)) - Vector(loc)).to_track_quat("-Z", "Y").to_euler()
-light((2.2, -3.4, 2.6), 340, 3.5, (1, .95, .88)); light((-3.4, -2.0, 1.4), 90, 3.5, (.82, .9, 1)); light((-1.5, 3.4, 2.4), 420, 1.8, (1, .9, 1)); light((2.6, 2.6, 1.0), 200, 1.5, (*GLOW,))
-bpy.ops.object.camera_add(location=(0, -6.4, 1.7)); cam = bpy.context.object; S.camera = cam; cam.data.lens = 58; cam.rotation_euler = (Vector((0, 0, .9)) - cam.location).to_track_quat("-Z", "Y").to_euler()
+light((2.6, -3.0, 3.2), 420, 3.0, (1, .95, .86)); light((-3.4, -2.0, 1.4), 45, 3.5, (.8, .88, 1)); light((-1.5, 3.4, 2.4), 520, 2.0, (1, .96, .9)); light((1.8, 3.0, 1.6), 300, 1.6, (1, .9, .8))
+bpy.ops.object.camera_add(location=(0, -6.4, 1.7)); cam = bpy.context.object; S.camera = cam; cam.data.lens = 62; cam.rotation_euler = (Vector((0, 0, .9)) - cam.location).to_track_quat("-Z", "Y").to_euler()
 bpy.ops.object.empty_add(); root = bpy.context.object; root.rotation_euler[2] = math.radians(A.angle)
 bpy.ops.object.empty_add(); rig = bpy.context.object; rig.parent = root
 
-M_body = body_mat(); M_acc = silh(mat("acc", ACC, .5, coat=.3)); M_glow = silh(mat("glow", GLOW, .3, emit=GLOW, estr=4.5))
-M_eye = silh(mat("eye", (.015, .012, .02), .05, coat=1)); M_iris = silh(mat("iris", IRIS, .2, coat=1, emit=IRIS, estr=.6)); M_hi = silh(mat("hi", (1, 1, 1), .2, emit=(1, 1, 1), estr=8))
-M_mouth = silh(mat("mouth", (.22, .04, .06), .5)); M_tongue = silh(mat("tongue", (1, .38, .42), .5)); M_fang = silh(mat("fang", (1, 1, .98), .25, coat=.5)); M_cheek = silh(mat("cheek", (1, .42, .5), .7, emit=(1, .35, .45), estr=.4))
+M_body = body_mat(); M_acc = silh(mat("acc", ACC, .5, coat=.3)); M_glow = silh(mat("glow", GLOW, .4, emit=GLOW, estr=3))
+M_eye = silh(mat("eye", (.03, .025, .03), .25, coat=.6)); M_iris = silh(mat("iris", IRIS, .2, coat=1, emit=IRIS, estr=.6)); M_hi = silh(mat("hi", (1, 1, 1), .2, emit=(1, 1, 1), estr=8))
+M_mouth = silh(mat("mouth", (.12, .06, .05), .6)); M_tongue = silh(mat("tongue", (1, .38, .42), .5)); M_fang = silh(mat("fang", (1, 1, .98), .25, coat=.5)); M_cheek = silh(mat("cheek", (1, .55, .55), .9))
 M_shell = silh(mat("shell", (1, .92, .80), .45, sss=.15, coat=.4))
 blink = int(F * .62)
 
-def creature(sc, ear, tail, tuft):
-    rx, ry, rz = .96 * sc, .88 * sc, .90 * sc; cz = rz + .05
-    bpy.ops.mesh.primitive_uv_sphere_add(segments=64, ring_count=32, location=(0, 0, cz)); b = bpy.context.object; b.name = "body"; bpy.ops.object.shade_smooth(); b.data.materials.append(M_body); b.parent = rig
-    for v in b.data.vertices:   # 下半身略宽，像一只坐着的团子
-        k = 1 + .10 * max(0, -v.co.z); v.co.x *= k; v.co.y *= k
+def creature(sc, kit):
+    """糯米团子：宽过高、底部压扁坐着；豆豆眼分得开、靠下；表情由 --expr 决定。kit 是这一形态的配件。"""
+    rx, ry, rz = 1.0 * sc, .92 * sc, .88 * sc; cz = rz * .92
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=64, ring_count=32, location=(0, 0, cz)); b = bpy.context.object; bpy.ops.object.shade_smooth(); b.data.materials.append(M_body); b.parent = rig
+    for v in b.data.vertices:
+        if v.co.z < -.55: v.co.z = -.55 + (v.co.z + .55) * .25   # 底部压平，像坐在桌上的年糕
+        k = 1 + .08 * max(0, -v.co.z); v.co.x *= k; v.co.y *= k
     b.scale = (rx, ry, rz)
-    # 眼睛：大、靠下、分得开；黑底 + 彩色虹膜 + 两个高光
-    eyes = []
-    for sx in (-1, 1):
-        ex, ez = sx * .34 * sc, cz - .02 * sc; ey = surf(ex, ez, rx * 1.03, ry, rz, cz) + .02 * sc
-        bpy.ops.object.empty_add(location=(ex, ey, ez)); e = bpy.context.object; e.parent = rig; e.rotation_euler = (0, 0, sx * math.radians(-14)); eyes.append(e)
-        obj_sphere("eye", (0, 0, 0), (.17 * sc, .07 * sc, .21 * sc), M_eye, parent=e)
-        obj_sphere("iris", (0, -.045 * sc, -.05 * sc), (.12 * sc, .04 * sc, .12 * sc), M_iris, parent=e)
-        obj_sphere("hi1", (-.05 * sc, -.075 * sc, .07 * sc), (.06 * sc, .02 * sc, .07 * sc), M_hi, seg=16, parent=e)
-        obj_sphere("hi2", (.06 * sc, -.07 * sc, -.09 * sc), (.025 * sc, .015 * sc, .025 * sc), M_hi, seg=12, parent=e)
-        cx, czz = sx * .58 * sc, cz - .20 * sc; obj_sphere("cheek", (cx, surf(cx, czz, rx * 1.02, ry, rz, cz), czz), (.12 * sc, .03 * sc, .075 * sc), M_cheek, seg=24, parent=rig, rot=(0, 0, sx * math.radians(-35)))
-    # 嘴：小小张开的笑，一颗虎牙
-    mz = cz - .30 * sc; my = surf(0, mz, rx, ry, rz, cz)
-    m = obj_sphere("mouth", (0, my + .01 * sc, mz), (.15 * sc, .05 * sc, .10 * sc), M_mouth, parent=rig); m.rotation_euler[0] = math.radians(-12)
-    obj_sphere("tongue", (0, my - .02 * sc, mz - .045 * sc), (.09 * sc, .035 * sc, .045 * sc), M_tongue, seg=24, parent=rig)
-    obj_cone("fang", (.06 * sc, my - .03 * sc, mz + .045 * sc), .035 * sc, 0, .085 * sc, M_fang, rot=(math.radians(180), 0, 0), parent=rig, verts=16)
-    # 小手小脚
-    for sx in (-1, 1):
-        obj_sphere("hand", (sx * .84 * sc, -.28 * sc, cz - .38 * sc), (.13 * sc, .13 * sc, .16 * sc), M_body, seg=24, parent=rig)
-        obj_sphere("foot", (sx * .38 * sc, -.40 * sc, .08 * sc), (.20 * sc, .24 * sc, .10 * sc), M_body, seg=24, parent=rig)
-    # 耳朵：随路线换轮廓
-    for sx in (-1, 1):
-        base = (sx * .58 * sc, .1 * sc, cz + .80 * sc); tilt = (0, sx * math.radians(-28 if ear != "fin" else -40), 0)
-        if ear == "nub": obj_cone("ear", base, .20 * sc, .06 * sc, .34 * sc, M_body, rot=tilt, parent=rig, sub=2)
-        elif ear == "fin": obj_cone("ear", base, .20 * sc, .0, .62 * sc, M_acc, rot=tilt, parent=rig, verts=4, sub=0)
-        elif ear == "feather": obj_cone("ear", base, .16 * sc, .03 * sc, .78 * sc, M_acc, rot=(math.radians(-12), sx * math.radians(-38), 0), parent=rig, sub=2)
-        elif ear == "flame": obj_cone("ear", base, .2 * sc, 0, .66 * sc, M_glow, rot=tilt, parent=rig, sub=2)
-        elif ear == "moon": tube("ear", [(sx * .4 * sc, .05 * sc, cz + .62 * sc), (sx * .72 * sc, .05 * sc, cz + .9 * sc), (sx * .62 * sc, .05 * sc, cz + 1.18 * sc)], [1, .7, .05], M_acc, parent=rig, bev=.12 * sc)
-    # 灵芽：头顶的记号
-    tz = cz + rz
-    if tuft == "sprout": tube("tuft", [(0, 0, tz - .05 * sc), (.02 * sc, 0, tz + .2 * sc), (.16 * sc, 0, tz + .34 * sc), (.24 * sc, 0, tz + .28 * sc)], [1, .8, .5, .05], M_glow, parent=rig, bev=.09 * sc)
-    elif tuft == "antenna": tube("tuft", [(0, 0, tz - .05 * sc), (0, 0, tz + .3 * sc), (.04 * sc, 0, tz + .5 * sc)], [.5, .4, .3], M_acc, parent=rig, bev=.05 * sc); obj_sphere("tufttip", (.04 * sc, 0, tz + .58 * sc), (.12 * sc,) * 3, M_glow, parent=rig)
-    elif tuft == "crown":
-        for i in (-1, 0, 1): obj_cone("leaf", (i * .14 * sc, 0, tz + .12 * sc), .09 * sc, 0, (.42 if i == 0 else .3) * sc, silh(mat("gold", (1, .76, .25), .22, metal=1)), rot=(0, i * math.radians(22), 0), parent=rig, sub=1)
-    elif tuft == "flame": tube("tuft", [(0, 0, tz - .1 * sc), (.05 * sc, 0, tz + .25 * sc), (-.1 * sc, 0, tz + .5 * sc), (.12 * sc, 0, tz + .78 * sc)], [1.6, 1.2, .7, .02], M_glow, parent=rig, bev=.14 * sc)
-    elif tuft == "star":
-        bpy.ops.mesh.primitive_cone_add(vertices=5, radius1=.24 * sc, radius2=0, depth=.1 * sc, location=(0, 0, tz + .3 * sc), rotation=(math.radians(90), 0, 0)); o = bpy.context.object; o.data.materials.append(M_glow); o.parent = rig
-        tube("stem", [(0, 0, tz - .05 * sc), (0, 0, tz + .2 * sc)], [.4, .3], M_acc, parent=rig, bev=.05 * sc)
-    # 尾巴：从屁股后面卷上去，比身子还高——这是剪影里最好认的部分
-    if tail:
-        L = {"small": .45, "mid": .8, "big": 1.0}[tail[0]]; kind = tail[1]
-        P = [(.35 * sc, .55 * sc, .35 * sc), (.85 * sc, .85 * sc, .55 * sc), (1.25 * sc * L + .1, .7 * sc, 1.1 * sc * L + .3), (1.15 * sc * L + .1, .55 * sc, 1.65 * sc * L + .35), (.82 * sc * L + .1, .5 * sc, 1.78 * sc * L + .35), (.7 * sc * L + .1, .48 * sc, 1.55 * sc * L + .35)]
-        R = [1.0, 1.25, 1.1, .85, .6, .35]
-        if kind == "fluff": tube("tail", P, R, M_body, parent=rig, bev=.22 * sc)
-        elif kind == "cable":
-            tube("tail", P, [.45] * 6, M_acc, parent=rig, bev=.12 * sc)
-            for i in range(1, 6): obj_sphere("seg", P[i], (.13 * sc,) * 3, M_glow if i == 5 else M_body, seg=24, parent=rig)
-        elif kind == "fan":
-            tube("tail", P[:3], R[:3], M_body, parent=rig, bev=.2 * sc)
-            for i in range(5): a = math.radians(-50 + i * 25); obj_cone("plume", (P[2][0] + math.sin(a) * .35 * sc, P[2][1], P[2][2] + math.cos(a) * .45 * sc), .15 * sc, .02 * sc, .8 * sc, silh(mat("gold2", (1, .7, .18), .25, metal=.9)), rot=(0, a, 0), parent=rig, sub=2)
-        elif kind == "flame": tube("tail", P, [1.0, 1.4, 1.6, 1.2, .6, .02], M_glow, parent=rig, bev=.2 * sc)
-        elif kind == "galaxy":
-            tube("tail", P, R, silh(mat("gal", MAIN, .2, emit=GLOW, estr=1.5, trans=.5)), parent=rig, bev=.22 * sc)
-            bpy.ops.mesh.primitive_cone_add(vertices=5, radius1=.2 * sc, radius2=0, depth=.08 * sc, location=P[-1], rotation=(math.radians(90), 0, 0)); o = bpy.context.object; o.data.materials.append(M_glow); o.parent = rig
-    # 眨眼
-    for e in eyes:
-        for fr, zs in ((1, 1), (blink - 2, 1), (blink, .1), (blink + 2, 1), (F + 1, 1)): e.scale[2] = zs; e.keyframe_insert("scale", index=2, frame=fr)
+    fy = lambda x, z: surf(x, z, rx * 1.02, ry, rz, cz)
+    E = A.expr; ez = cz + .02 * sc
+    for sx in (-1, 1):   # 豆豆眼
+        ex = sx * .38 * sc; ey = fy(ex, ez) + .01
+        if E in ("calm", "smug", "idle"):   # 豆豆眼：黑色竖椭圆，一个小高光；smug 是半眯
+            h = .055 if E == "smug" else .10
+            obj_sphere("eye", (ex, ey, ez - (.02 * sc if E == "smug" else 0)), (.085 * sc, .035 * sc, h * sc), M_eye, seg=24, parent=rig, rot=(0, sx * math.radians(8 if E == "smug" else 0), 0))
+            obj_sphere("hi", (ex - .025 * sc, ey - .032 * sc, ez + (.0 if E == "smug" else .04) * sc), (.025 * sc, .01 * sc, .028 * sc), M_hi, seg=12, parent=rig)
+        elif E == "happy":   # ^ ^
+            tube("eye", [(ex - .07 * sc, ey - .01, ez - .02 * sc), (ex, ey - .02, ez + .05 * sc), (ex + .07 * sc, ey - .01, ez - .02 * sc)], [1, 1, 1], M_eye, parent=rig, bev=.026 * sc)
+        elif E == "shock":
+            obj_sphere("eye", (ex, ey, ez), (.075 * sc, .03 * sc, .095 * sc), M_eye, seg=24, parent=rig); obj_sphere("hi", (ex - .02 * sc, ey - .03 * sc, ez + .035 * sc), (.022 * sc, .01 * sc, .025 * sc), M_hi, seg=12, parent=rig)
+        else:
+            obj_sphere("eye", (ex, ey, ez), (.07 * sc, .03 * sc, .085 * sc), M_eye, seg=24, parent=rig); obj_sphere("hi", (ex - .02 * sc, ey - .03 * sc, ez + .03 * sc), (.02 * sc, .01 * sc, .022 * sc), M_hi, seg=12, parent=rig)
+        cx, czz = sx * .60 * sc, cz - .12 * sc; obj_sphere("cheek", (cx, fy(cx, czz) - .005, czz), (.11 * sc, .035 * sc, .065 * sc), M_cheek, seg=32, parent=rig, rot=(0, 0, sx * math.radians(-36)))
+    mz = cz - .10 * sc; my = fy(0, mz) - .005
+    if E == "shock": obj_sphere("mouth", (0, my + .01, mz - .02 * sc), (.04 * sc, .02 * sc, .05 * sc), M_mouth, seg=24, parent=rig)
+    elif E == "smug": tube("mouth", [(-.05 * sc, my, mz), (.02 * sc, my - .005, mz - .015 * sc), (.08 * sc, my, mz + .02 * sc)], [1, 1, 1], M_mouth, parent=rig, bev=.018 * sc)
+    else: tube("mouth", [(-.06 * sc, my, mz + .01 * sc), (-.03 * sc, my - .01, mz - .02 * sc), (0, my - .005, mz), (.03 * sc, my - .01, mz - .02 * sc), (.06 * sc, my, mz + .01 * sc)], [1] * 5, M_mouth, parent=rig, bev=.018 * sc)   # ω
+    for sx in (-1, 1):   # 小圆耳、短短的手
+        obj_sphere("ear", (sx * .56 * sc, .1 * sc, cz + .60 * sc), (.17 * sc, .12 * sc, .14 * sc), M_body, seg=32, parent=rig, rot=(0, sx * math.radians(-30), 0))
+        obj_sphere("hand", (sx * .78 * sc, -.42 * sc, cz - .30 * sc), (.13 * sc, .12 * sc, .10 * sc), M_body, seg=24, parent=rig, rot=(0, sx * math.radians(30), 0))
+    tz = cz + rz * .98
+    kit(sc, cz, tz, fy)
     return cz
-
+def sprout(sc, tz, leaf_mat, size=1.0, n=2):
+    """头顶一株小芽：一根细茎、两片叶子。成长线的记号。"""
+    tube("stem", [(0, 0, tz - .05 * sc), (0, 0, tz + .14 * sc * size), (.02 * sc, 0, tz + .22 * sc * size)], [1, .9, .8], leaf_mat, parent=rig, bev=.025 * sc)
+    for i in range(n):
+        a = (i - (n - 1) / 2) * 2.2
+        o = obj_sphere("leaf", (math.sin(a) * .11 * sc * size, 0, tz + .26 * sc * size), (.12 * sc * size, .03 * sc, .065 * sc * size), leaf_mat, seg=24, parent=rig, rot=(0, -a * .6, 0))
 def egg(crack):
     cz = 1.0
     bpy.ops.mesh.primitive_uv_sphere_add(segments=64, ring_count=32, location=(0, 0, cz)); e = bpy.context.object; bpy.ops.object.shade_smooth(); e.parent = rig
     for v in e.data.vertices: k = 1 - .15 * max(0, v.co.z); v.co.x *= k; v.co.y *= k
     e.scale = (.8, .8, 1.0)
-    m, nt, b = nodes_mat("egg"); b.inputs["Roughness"].default_value = .45; b.inputs["Coat Weight"].default_value = .4; b.inputs["Subsurface Weight"].default_value = .15
+    m, nt, b = nodes_mat("egg"); b.inputs["Roughness"].default_value = .7; b.inputs["Sheen Weight"].default_value = .5; b.inputs["Coat Weight"].default_value = .1; b.inputs["Subsurface Weight"].default_value = .2
     tc = nt.nodes.new("ShaderNodeTexCoord"); sp = nt.nodes.new("ShaderNodeSeparateXYZ"); nt.links.new(tc.outputs["Object"], sp.inputs[0])
     # 两色蛋：下半主色、上半浅色，中间一道波浪分界
     wv = nt.nodes.new("ShaderNodeTexVoronoi"); wv.inputs["Scale"].default_value = 3.5; nt.links.new(tc.outputs["Object"], wv.inputs["Vector"])
     add = nt.nodes.new("ShaderNodeMath"); add.operation = "ADD"; add.operation = "MULTIPLY"; add.inputs[1].default_value = 1.0; nt.links.new(wv.outputs["Distance"], add.inputs[0])
     band = nt.nodes.new("ShaderNodeMapRange"); band.inputs[1].default_value = .16; band.inputs[2].default_value = .22; nt.links.new(add.outputs[0], band.inputs[0])
-    mix = nt.nodes.new("ShaderNodeMix"); mix.data_type = "RGBA"; mix.inputs[6].default_value = (*PAL["none"][0], 1); mix.inputs[7].default_value = (1, .93, .84, 1); nt.links.new(band.outputs[0], mix.inputs[0]); nt.links.new(mix.outputs[2], b.inputs["Base Color"])
+    mix = nt.nodes.new("ShaderNodeMix"); mix.data_type = "RGBA"; mix.inputs[6].default_value = (*PAL["none"][0], 1); mix.inputs[6].default_value = (.82, .55, .32, 1); mix.inputs[7].default_value = (.97, .86, .70, 1); nt.links.new(band.outputs[0], mix.inputs[0]); nt.links.new(mix.outputs[2], b.inputs["Base Color"])
     vo = nt.nodes.new("ShaderNodeTexVoronoi"); vo.feature = "DISTANCE_TO_EDGE"; vo.inputs["Scale"].default_value = 3.0; nt.links.new(tc.outputs["Object"], vo.inputs["Vector"])
     mr = nt.nodes.new("ShaderNodeMapRange"); mr.inputs[1].default_value = 0; mr.inputs[2].default_value = .015 + .05 * crack; mr.inputs[3].default_value = 1; mr.inputs[4].default_value = 0; nt.links.new(vo.outputs["Distance"], mr.inputs[0])
     h = nt.nodes.new("ShaderNodeMapRange"); h.inputs[1].default_value = 1.0 - 2.0 * crack; h.inputs[2].default_value = 1.25 - 2.0 * crack; nt.links.new(sp.outputs["Z"], h.inputs[0])
     m1 = nt.nodes.new("ShaderNodeMath"); m1.operation = "MULTIPLY"; nt.links.new(mr.outputs[0], m1.inputs[0]); nt.links.new(h.outputs[0], m1.inputs[1])
-    m2 = nt.nodes.new("ShaderNodeMath"); m2.operation = "MULTIPLY"; m2.inputs[1].default_value = 14 * crack; nt.links.new(m1.outputs[0], m2.inputs[0])
+    m2 = nt.nodes.new("ShaderNodeMath"); m2.operation = "MULTIPLY"; m2.inputs[1].default_value = 6 * crack; nt.links.new(m1.outputs[0], m2.inputs[0])
     b.inputs["Emission Color"].default_value = (*PAL["none"][3], 1); nt.links.new(m2.outputs[0], b.inputs["Emission Strength"]); e.data.materials.append(silh(m))
     # 灵芽从蛋顶冒出来
-    tz = cz + 1.0
-    tube("tuft", [(0, 0, tz - .12), (.02, 0, tz + .08), (.14, 0, tz + .2), (.22, 0, tz + .14)], [1, .8, .5, .05], silh(mat("g0", PAL["none"][3], .3, emit=PAL["none"][3], estr=3 + 5 * crack)), parent=rig, bev=.08)
+    sprout(.75, cz + .98, silh(mat("leafe", (.45, .72, .32), .7, sss=.2, emit=(.5, .9, .3), estr=1.5 * crack)), size=.6 + .5 * crack)
     amp = math.radians(4 + 10 * crack)
     for fr in range(1, F + 2):
         p = (fr - 1) / F; rig.rotation_euler[1] = amp * math.sin(p * TAU * 3) * math.sin(p * math.pi) ** 2; rig.keyframe_insert("rotation_euler", index=1, frame=fr)
 
 if ST == 0: egg(A.crack)
 else:
-    form = {1: (.78, "nub", ("small", "fluff"), "sprout"), 2: (.92, "nub", ("mid", "fluff"), "sprout")}
-    form3 = {"tech": ("fin", ("big", "cable"), "antenna"), "gold": ("feather", ("big", "fan"), "crown"), "flame": ("flame", ("big", "flame"), "flame"), "star": ("moon", ("big", "galaxy"), "star"), "none": ("nub", ("big", "fluff"), "sprout")}
-    if ST < 3: sc, ear, tail, tuft = form[ST]
-    else: sc = 1.0; ear, tail, tuft = form3[BR]
-    cz = creature(sc, ear, tail, tuft)
+    M_leaf = silh(mat("leaf", (.45, .72, .32), .7, sss=.2))
+    def k_base(sc, cz, tz, fy): sprout(sc, tz, M_leaf, size={1: .8, 2: 1.1}.get(ST, 1.2))
+    def k_tech(sc, cz, tz, fy):   # 机芯：头戴耳机，芽变成一根小天线
+        bpy.ops.mesh.primitive_torus_add(location=(0, .05 * sc, cz + .25 * sc), major_radius=1.04 * sc, minor_radius=.06 * sc, rotation=(math.radians(90), 0, 0)); o = bpy.context.object; o.scale = (1, .55, 1); o.data.materials.append(M_acc); o.parent = rig
+        for sx in (-1, 1): obj_sphere("cup", (sx * 1.0 * sc, 0, cz + .02 * sc), (.14 * sc, .28 * sc, .28 * sc), M_acc, parent=rig); obj_sphere("cupglow", (sx * 1.12 * sc, 0, cz + .02 * sc), (.03 * sc, .16 * sc, .16 * sc), M_glow, parent=rig)
+        tube("ant", [(0, 0, tz - .05 * sc), (0, 0, tz + .22 * sc)], [.6, .5], M_acc, parent=rig, bev=.03 * sc); obj_sphere("antball", (0, 0, tz + .28 * sc), (.07 * sc,) * 3, M_glow, parent=rig)
+    def k_gold(sc, cz, tz, fy):   # 金羽：抱着一枚大金币，头顶的芽变成小金叶
+        bpy.ops.mesh.primitive_cylinder_add(vertices=48, radius=.30 * sc, depth=.06 * sc, location=(.05 * sc, -.94 * sc, cz - .30 * sc), rotation=(math.radians(90), 0, math.radians(8))); o = bpy.context.object; o.data.materials.append(silh(mat("coin", (1, .74, .22), .3, metal=1))); o.parent = rig
+        bv = o.modifiers.new("b", "BEVEL"); bv.width = .02; bv.segments = 3
+        bpy.ops.mesh.primitive_torus_add(location=(.05 * sc, -.975 * sc, cz - .30 * sc), major_radius=.22 * sc, minor_radius=.015 * sc, rotation=(math.radians(90), 0, 0)); r = bpy.context.object; r.data.materials.append(silh(mat("coin2", (.9, .6, .15), .3, metal=1))); r.parent = rig
+        sprout(sc, tz, silh(mat("gleaf", (1, .76, .25), .25, metal=1)), size=1.3, n=3)
+    def k_flame(sc, cz, tz, fy):   # 焰心：芽变成一小簇火苗，两颊更红
+        for i, (x, h) in enumerate(((-.16, .40), (0, .62), (.16, .44))): obj_cone("flame", (x * sc, 0, tz + h * .45 * sc), .14 * sc, 0, h * sc, M_glow, parent=rig, sub=2)
+    def k_star(sc, cz, tz, fy):   # 星语：芽顶结出一颗星星，身边绕着两颗小星
+        tube("stem", [(0, 0, tz - .05 * sc), (0, 0, tz + .2 * sc)], [.5, .4], M_leaf, parent=rig, bev=.025 * sc)
+        bpy.ops.mesh.primitive_cone_add(vertices=5, radius1=.26 * sc, radius2=0, depth=.08 * sc, location=(0, 0, tz + .38 * sc), rotation=(math.radians(90), 0, 0)); o = bpy.context.object; o.data.materials.append(M_glow); o.parent = rig
+        for i in range(2):
+            bpy.ops.object.empty_add(location=(0, 0, cz)); orb = bpy.context.object; orb.parent = rig; obj_sphere("spark", (1.15 * sc, 0, .2 * sc * (1 if i else -1)), (.05 * sc,) * 3, M_glow, parent=orb)
+            for fr in (1, F + 1): orb.rotation_euler[2] = (fr - 1) / F * TAU + i * math.pi; orb.keyframe_insert("rotation_euler", index=2, frame=fr)
+    kit = {"tech": k_tech, "gold": k_gold, "flame": k_flame, "star": k_star}.get(BR, k_base) if ST >= 3 else k_base
+    cz = creature({1: .80, 2: .92, 3: 1.0}[ST], kit)
     if ST == 1:   # 破壳：坐在下半个蛋壳里
         bpy.ops.mesh.primitive_uv_sphere_add(segments=48, ring_count=24, location=(0, 0, .55)); sh = bpy.context.object; sh.scale = (1.0, 1.0, .75); bpy.ops.object.shade_smooth()
         bpy.ops.object.mode_set(mode="EDIT"); bpy.ops.mesh.select_all(action="DESELECT"); bpy.ops.object.mode_set(mode="OBJECT")
