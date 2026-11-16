@@ -17,8 +17,35 @@ const Bullet: React.FC<{ children: React.ReactNode; color?: string }> = ({ child
   </div>
 );
 
-type Plan = { price: string; unit?: string; name: string; mode: string; color: string; hot?: boolean; who: string; items: React.ReactNode[]; note?: React.ReactNode };
-const PlanCard: React.FC<Plan> = ({ price, unit, name, mode, color, hot, who, items, note }) => (
+type Plan = { price: string; unit?: string; name: string; mode: string; color: string; hot?: boolean; who: string; items: React.ReactNode[]; note?: React.ReactNode; extra?: React.ReactNode };
+/** 19800 的算账块：左边一支三人团队每月的人力成本，右边一套工作流。不提裁员，用「人会走，工作流留在公司」。 */
+const TeamMath: React.FC = () => {
+  const roles: [string, string][] = [['剪辑', '8000'], ['内容', '8000'], ['摄影', '8000']];
+  return (
+    <div style={{ marginBottom: 28 }}>
+      <div style={{ display: 'flex', alignItems: 'stretch', gap: 18 }}>
+        <div style={{ flex: 1.15, background: 'rgba(255,93,93,.07)', border: `2px solid rgba(255,93,93,.35)`, borderRadius: 20, padding: '22px 24px' }}>
+          <div style={{ fontSize: 26, fontWeight: 600, color: C.muted }}>过去：组一支内容团队</div>
+          <div style={{ display: 'flex', gap: 10, marginTop: 14 }}>{roles.map(([r, m]) => (
+            <div key={r} style={{ flex: 1, background: 'rgba(8,11,17,.6)', borderRadius: 12, padding: '10px 0', textAlign: 'center' }}>
+              <div style={{ fontSize: 26, fontWeight: 900 }}>{r}</div><div style={{ fontSize: 22, color: C.muted }}>月薪 {m}</div></div>))}</div>
+          <div style={{ marginTop: 16, fontSize: 26, color: C.muted }}>加上五险一金，每月</div>
+          <div style={{ fontSize: 66, fontWeight: 900, color: C.down, lineHeight: 1.1 }}>3 万+</div>
+          <div style={{ fontSize: 22, color: C.muted, marginTop: 4 }}>还没算场地和设备</div>
+        </div>
+        <div style={{ flex: 1, background: 'rgba(91,155,255,.08)', border: `2px solid ${C.accent}`, borderRadius: 20, padding: '22px 24px', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ fontSize: 26, fontWeight: 600, color: C.muted }}>现在：一套 AI 工作流</div>
+          <div style={{ fontSize: 66, fontWeight: 900, color: C.accent, lineHeight: 1.1, marginTop: 14 }}>¥19800</div>
+          <div style={{ fontSize: 28, fontWeight: 900, marginTop: 8, lineHeight: 1.45 }}>不到这支团队<br />一个月的成本</div>
+          <div style={{ flex: 1 }} />
+          <div style={{ fontSize: 24, color: C.muted, lineHeight: 1.5, marginTop: 12 }}>不用扩编<br />一个人就能把流程跑起来</div>
+        </div>
+      </div>
+      <div style={{ marginTop: 18, textAlign: 'center', fontSize: 34, fontWeight: 900 }}>人会走，<span style={{ color: C.warm }}>工作流留在公司</span>。</div>
+    </div>
+  );
+};
+const PlanCard: React.FC<Plan> = ({ price, unit, name, mode, color, hot, who, items, note, extra }) => (
   <div style={{ position: 'relative', background: hot ? 'linear-gradient(160deg, #1B2333 0%, #131925 100%)' : C.surface, border: `${hot ? 3 : 2}px solid ${hot ? color : C.line}`, borderRadius: 28, padding: '38px 44px 40px', boxShadow: hot ? `0 30px 80px rgba(255,212,121,.10)` : 'none' }}>
     {hot && <div style={{ position: 'absolute', right: 40, top: -22, background: color, color: '#14171D', fontSize: 26, fontWeight: 900, padding: '6px 22px', borderRadius: 999 }}>私域主推</div>}
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
@@ -32,13 +59,14 @@ const PlanCard: React.FC<Plan> = ({ price, unit, name, mode, color, hot, who, it
       </div>
     </div>
     <div style={{ height: 2, background: C.line, margin: '26px 0 24px' }} />
+    {extra}
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>{items.map((x, i) => <Bullet key={i} color={color}>{x}</Bullet>)}</div>
     <div style={{ marginTop: 22, fontSize: 26, color: C.muted, lineHeight: 1.5 }}><span style={{ color: C.text, fontWeight: 600 }}>适合：</span>{who}</div>
     {note && <div style={{ marginTop: 22, background: 'rgba(255,212,121,.08)', borderLeft: `6px solid ${color}`, borderRadius: 10, padding: '18px 24px', fontSize: 28, lineHeight: 1.6, color: C.text }}>{note}</div>}
   </div>
 );
 
-export const POSTER_W = W, POSTER_H = 3650;
+export const POSTER_W = W, POSTER_H = 4040;
 export const Poster: React.FC = () => {
   useFonts();
   const stats: [string, string][] = [['232', '个画面组件'], ['12', '个 Skill'], ['2', '条生产线'], ['34', '条做片规则']];
@@ -103,7 +131,8 @@ export const Poster: React.FC = () => {
               who="想跟上 AI 内容创作、愿意自学的创作者"
               note={<>AI 一个月就换一代，一个人追不过来。<br />我在前面趟路，你们在后面盯着我、给我压力——<br /><span style={{ color: C.warm, fontWeight: 900 }}>这 980，买的是一起进化的一年。</span></>} />
             <PlanCard price="19800" name="企业内容创作工作流" mode="一对一服务" color={C.accent}
-              items={['打造创始人 IP 或品牌 IP', <>把过去靠人工的标准流程 <span style={{ color: C.warm, fontWeight: 900 }}>AI 化</span>：一整个内容和剪辑团队的活，变成一套工作流</>, '一个人能管更多的号，产出更多的内容', '一对一：按你的业务和风格定制，带你跑通']}
+              extra={<TeamMath />}
+              items={['打造创始人 IP 或品牌 IP', <>把过去靠人工的标准流程 <span style={{ color: C.warm, fontWeight: 900 }}>AI 化</span>，沉淀成你公司自己的工作流</>, '一个人能管更多的号，产出更多的内容', '一对一：按你的业务和风格定制，带你跑通']}
               who="企业、企业老板、个人创业者" />
           </div>
         </div>
