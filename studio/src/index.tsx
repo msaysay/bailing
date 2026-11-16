@@ -17,6 +17,7 @@ import { DemoClip } from './gallery/demoClip';
 import { EP06, clock06 } from './episodes/ep06';
 import { EP07, clock07 } from './episodes/ep07';
 import { Cover06, Cover07 } from './episodes/ep06/cover';
+import { Poster, POSTER_W, POSTER_H } from './poster';
 // 每期一个 Composition；-P1 是只到第一件事结束的预览。
 registerRoot(() => (
   <>
@@ -34,6 +35,7 @@ registerRoot(() => (
     <Composition id="SHOWREEL2" component={Showreel2} width={1080} height={1824} fps={SR2_FPS} durationInFrames={SR2_TOTAL} />
     <Composition id="DEMO-CLIP" component={DemoClip} width={1920} height={1080} fps={30} durationInFrames={240} />
     <Composition id="DEMO-CLIP-V" component={DemoClip} width={1080} height={1920} fps={30} durationInFrames={240} />
+    <Still id="POSTER" component={Poster} width={POSTER_W} height={POSTER_H} />
     <Still id="EP06-COVER-DOUYIN" component={Cover06} width={1080} height={1440} />
     <Still id="EP06-COVER-SHIPINHAO" component={Cover06} width={1080} height={1260} />
     <Still id="EP07-COVER-DOUYIN" component={Cover07} width={1080} height={1440} />
