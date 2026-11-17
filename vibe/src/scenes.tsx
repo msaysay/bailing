@@ -165,10 +165,13 @@ const Compare: React.FC<P<'compare'>> = ({ s, c }) => {
 const Flow: React.FC<P<'flow'>> = ({ s, c }) => {
   const n = s.nodes.length, loop = !!s.loop;
   const pos = (i: number) => {
-    if (loop) { const ang = -Math.PI / 2 + (i / n) * Math.PI * 2; return { x: SW / 2 + Math.cos(ang) * 470, y: SH / 2 + Math.sin(ang) * 255 }; }
+    if (loop) { const ang = -Math.PI / 2 + (i / n) * Math.PI * 2, ry = s.sub ? 205 : 235; return { x: SW / 2 + Math.cos(ang) * 470, y: SH / 2 - (s.sub ? 18 : 0) + Math.sin(ang) * ry }; }
     const span = Math.min(1600, n * 300); return { x: SW / 2 - span / 2 + (i + 0.5) * (span / n), y: SH / 2 - 10 };
   };
-  const sweep = clamp((c.t - 0.6) / Math.max(1, c.len - 1.4)) * (loop ? n : n - 0.001);
+  // 高亮跟着拍子走：拍子数够就一拍一个节点，不够就按拍子进度等比扫过
+  const stepLen = (k: number) => (k + 1 < c.n ? c.at(k + 1) : c.len) - c.at(k);
+  const beatProg = c.n > 1 ? (c.step + clamp(c.st / Math.max(0.5, stepLen(c.step)))) / c.n : clamp((c.t - 0.6) / Math.max(1, c.len - 1.4));
+  const sweep = c.n >= n && !loop ? Math.min(n - 0.001, c.step + clamp(c.st / Math.max(0.5, stepLen(c.step)))) : beatProg * (loop ? n : n - 0.001);
   const active = Math.floor(sweep) % n, frac = sweep - Math.floor(sweep);
   const R = loop ? 88 : 96;
   return (
@@ -331,7 +334,7 @@ const List: React.FC<P<'list'>> = ({ s, c }) => {
   return (
     <Stage style={{ flexDirection: 'column' }}>
       {s.head && <Fade p={prog(c.t, 0, 0.5)} style={{ marginBottom: 40 }}><Tag color={a(C.hot, 0.9)} style={{ fontSize: 30, letterSpacing: 8 }}>{s.head}</Tag></Fade>}
-      <div style={{ display: 'grid', gridTemplateColumns: two ? '1fr 1fr' : '1fr', columnGap: 80, rowGap: two ? 26 : 30, width: two ? 1640 : 1240 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: two ? 'minmax(0, 1fr) minmax(0, 1fr)' : 'minmax(0, 1fr)', columnGap: 80, rowGap: two ? 26 : 30, width: two ? 1640 : 1240 }}>
         {s.items.map((it, k) => {
           const p = prog(c.t, times[k], 0.5), on = k === cur;
           return (

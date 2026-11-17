@@ -31,6 +31,6 @@ export const v02: Episode = {
     ] }, zh: '第一 建一个自己的素材库', en: 'One: build your own material library' },
     { zh: '第二 写稿前先喂素材 再提要求', en: 'Two: feed the material first then give the brief' },
     { zh: '第三 每句话都问 同行能不能照搬', en: 'Three: ask if a competitor could copy each line' },
-    { s: { k: 'quote', lines: ['AI 都一样', '**你的素材**不一样'], next: '提示词就是工作说明书' }, zh: 'AI都一样 你的素材不一样', en: 'Every AI is the same. Your material is not.', d: 5 },
+    { s: { k: 'quote', lines: ['AI 都一样', '**你的素材**不一样'], next: '流程比人长久' }, zh: 'AI都一样 你的素材不一样', en: 'Every AI is the same. Your material is not.', d: 5 },
   ],
 };

@@ -60,7 +60,7 @@ export const Video: React.FC<{ ep: Episode }> = ({ ep }) => {
           const c: Clock = { t: st, step: stepIdx, st: t - sc.steps[stepIdx], at: (k) => sc.steps[Math.min(k, sc.steps.length - 1)] - sc.start, len: sc.end - sc.start, n: sc.steps.length };
           // 镜头：整场缓慢推近，并且每进一拍再轻推一下，保证画面每一拍都有可见变化
           const push = sc.steps.slice(1).reduce((m, x) => m + inOut((t - x) / 0.9), 0);
-          const zoom = 1 + 0.02 * clamp(st / Math.max(1, sc.end - sc.start)) + 0.035 * Math.min(push, 3);
+          const zoom = 1 + 0.02 * clamp(st / Math.max(1, sc.end - sc.start)) + 0.022 * Math.min(push, 2.5);
           return (
             <AbsoluteFill key={sc.i} style={{ opacity: fin * fout, transform: `scale(${zoom * mix(0.97, 1, fin)})`, filter: fin < 1 ? `blur(${mix(8, 0, fin)}px)` : undefined }}>
               <SceneView s={sc.scene} c={c} ep={ep} en={sc.scene.k === 'quote' ? enFix(tl.beats.filter((b) => b.scene === sc.i).map((b) => b.en).join(' ')) : undefined} />
