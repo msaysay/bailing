@@ -19,7 +19,10 @@ const Stage: React.FC<{ children: React.ReactNode; style?: React.CSSProperties }
   <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', ...style }}>{children}</div>
 );
 
-const Hot: React.FC<{ s: string; hot?: string }> = ({ s, hot = C.hot }) => <>{parseHot(s).map((x, i) => <span key={i} style={{ color: x.hot ? hot : undefined }}>{x.t}</span>)}</>;
+const Hot: React.FC<{ s: string; hot?: string; n?: number }> = ({ s, hot = C.hot, n = Infinity }) => {
+  let left = n; // n = 只显示前 n 个字（打字效果用），** 标记不算字
+  return <>{parseHot(s).map((x, i) => { const t = x.t.slice(0, Math.max(0, left)); left -= x.t.length; return <span key={i} style={{ color: x.hot ? hot : undefined }}>{t}</span>; })}</>;
+};
 
 // ───────── 片名
 const Title: React.FC<P<'title'>> = ({ c, ep }) => {
@@ -109,7 +112,7 @@ const Bars: React.FC<P<'bars'>> = ({ s, c }) => {
               <div style={{ position: 'absolute', inset: 0, background: a(C.ink, 0.06), borderRadius: 6 }} />
               <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: `${(it.v / max) * 100 * g}%`, background: on ? C.hot : a(C.ink, 0.55), borderRadius: 6, boxShadow: on ? `0 0 30px ${a(C.hot, 0.45)}` : 'none' }} />
               <div style={{ position: 'absolute', left: `calc(${(it.v / max) * 100 * g}% + 18px)`, top: '50%', transform: 'translateY(-50%)', fontFamily: SERIF, fontWeight: 700, fontSize: 36, color: on ? C.hot : C.ink, whiteSpace: 'nowrap', opacity: g }}>
-                {fmt(it.v, it.v % 1 ? 1 : 0)}{s.unit}{it.tag && <span style={{ fontFamily: SANS, fontWeight: 400, fontSize: 24, color: a(C.ink, 0.55), marginLeft: 16 }}>{it.tag}</span>}
+                {fmt(it.v, s.dec ?? (it.v % 1 ? 1 : 0))}{s.unit}{it.tag && <span style={{ fontFamily: SANS, fontWeight: 400, fontSize: 24, color: a(C.ink, 0.55), marginLeft: 16 }}>{it.tag}</span>}
               </div>
             </div>
           </div>
@@ -249,8 +252,8 @@ const Curve: React.FC<P<'curve'>> = ({ s, c }) => {
         })}
         {(s.xl ?? []).map((l, i, arr) => <text key={i} x={ox + (i / (arr.length - 1)) * w} y={oy + h + 44} textAnchor="middle" fontFamily={SANS} fontSize={24} fill={a(C.ink, 0.5)}>{l}</text>)}
         {s.yl && <text x={ox} y={oy - 30} fontFamily={SANS} fontSize={24} fill={a(C.ink, 0.5)} letterSpacing={3}>{s.yl}</text>}
-        {s.label && <text x={ox + w} y={oy - 30} textAnchor="end" fontFamily={SANS} fontSize={26} fill={C.hot} opacity={draw}>— {s.label}</text>}
-        {s.refLabel && <text x={ox + w} y={oy + 4} textAnchor="end" fontFamily={SANS} fontSize={26} fill={C.cool} opacity={rp}>- - {s.refLabel}</text>}
+        {s.label && <text x={s.refLabel ? ox + w / 2 - 30 : ox + w / 2} y={oy - 30} textAnchor={s.refLabel ? 'end' : 'middle'} fontFamily={SANS} fontSize={28} fill={C.hot} opacity={draw}>━ {s.label}</text>}
+        {s.refLabel && <text x={ox + w / 2 + 30} y={oy - 30} textAnchor="start" fontFamily={SANS} fontSize={28} fill={C.cool} opacity={rp}>┅ {s.refLabel}</text>}
       </svg>
       {s.note && <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, textAlign: 'center', opacity: prog(c.t, 1.5, 0.6) }}><Tag>{s.note}</Tag></div>}
     </Stage>
@@ -304,7 +307,7 @@ const Ring: React.FC<P<'ring'>> = ({ s, c }) => {
         })}
       </svg>
       {s.center && <div style={{ position: 'absolute', left: cx - 160, top: cy - 50, width: 320, height: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: SERIF, fontWeight: 700, fontSize: 46, color: C.ink, opacity: draw }}>{s.center}</div>}
-      <div style={{ position: 'absolute', left: SW / 2 + 120, top: 0, bottom: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 30 }}>
+      <div style={{ position: 'absolute', left: SW / 2 + 120, top: 0, bottom: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: s.parts.length > 4 ? 14 : 30, paddingBottom: s.note ? 50 : 0 }}>
         {s.parts.map((pt, k) => {
           const p = prog(c.t, 0.6 + k * 0.25, 0.5), on = hl && pt.hot;
           return (
@@ -358,14 +361,14 @@ const Chat: React.FC<P<'chat'>> = ({ s, c }) => {
         </div>
         <div style={{ padding: '30px 40px', display: 'flex', flexDirection: 'column', gap: 20, minHeight: 360 }}>
           {s.msgs.map((m, k) => {
-            const at = revealAt(c, k, n), p = prog(c.t, at, 0.4), chars = Math.floor(clamp((c.t - at) / 1.2) * m.t.length);
+            const at = revealAt(c, k, n), p = prog(c.t, at, 0.4), len = m.t.replace(/\*\*/g, '').length, chars = Math.floor(clamp((c.t - at) / 1.2) * len);
             if (c.t < at) return null;
             return (
               <div key={k} style={{ alignSelf: m.me ? 'flex-end' : 'flex-start', maxWidth: 1180, opacity: p, transform: `translateY(${mix(16, 0, p)}px)` }}>
                 <div style={{ fontFamily: SANS, fontSize: 24, color: a(C.ink, 0.45), marginBottom: 8, textAlign: m.me ? 'right' : 'left' }}>{m.who ?? (m.me ? '你' : 'AI')}</div>
                 <div style={{ fontFamily: SANS, fontSize: 40, lineHeight: 1.45, padding: '16px 28px', borderRadius: 18, color: C.ink, whiteSpace: 'pre-wrap',
                   background: m.me ? a(C.cool, 0.16) : 'transparent', border: `2px solid ${m.me ? a(C.cool, 0.5) : a(C.ink, 0.25)}` }}>
-                  <Hot s={m.t.slice(0, chars)} />{chars < m.t.length && <span style={{ color: C.hot }}>▍</span>}
+                  <Hot s={m.t} n={chars} />{chars < len && <span style={{ color: C.hot }}>▍</span>}
                 </div>
               </div>
             );

@@ -10,7 +10,7 @@ export const v30: Episode = {
     { s: { k: 'hub', center: '公开AI', spokes: ['客户名单', '报价单', '合同', '财务数据', '内部会议', '员工信息'] }, zh: '很多人随手就把这些贴进去', en: 'People paste all of this in without thinking' },
     { zh: '图的是方便 风险却看不见', en: 'It\'s convenient, and the risk is invisible' },
     { zh: '资料一旦发出去 就**收不回来**', en: 'Once it\'s sent, you can\'t take it back' },
-    { s: { k: 'ring', parts: [{ label: '公开资料 随便用', v: 50 }, { label: '内部资料 脱敏再用', v: 35 }, { label: '核心机密 不出公司', v: 15, hot: true }], center: '公司资料', note: '示意图' }, zh: '先把资料分三级', en: 'First, sort data into three tiers' },
+    { s: { k: 'funnel', layers: [{ label: '公开资料', tip: '随便用' }, { label: '内部资料', tip: '脱敏再用' }, { label: '核心机密', tip: '一个字都不出公司' }], weak: 2 }, zh: '先把资料分三级', en: 'First, sort data into three tiers' },
     { zh: '公开的随便用 内部的脱敏再用', en: 'Public data is fine. Internal data gets anonymized.' },
     { zh: '核心的 一个字都**不出公司**', en: 'Core secrets never leave the company' },
     { s: { k: 'compare', left: '随手贴', right: '企业的用法', rows: [['客户名单原件', '**脱敏**后再用'], ['合同全文', '只给**需要的段落**'], ['个人账号', '**企业账号**统一管']] }, zh: '同样是用AI', en: 'Both are using AI' },

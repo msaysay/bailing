@@ -17,7 +17,7 @@ export const v29: Episode = {
     ] }, zh: '先说版权 音乐有授权才用', en: 'Copyright first: only licensed music' },
     { zh: '图片视频 每一个都登记来源', en: 'Log the source of every image and clip' },
     { zh: '别人的视频 剪一段也算搬运', en: 'Cutting from someone else\'s video still counts as copying' },
-    { s: { k: 'chat', head: '某次写稿', msgs: [
+    { s: { k: 'chat', head: '示意 · 某次写稿', msgs: [
       { me: true, t: '帮我找一个行业增长的数据' },
       { t: '据统计 该行业年增长率高达37%……' },
     ] }, zh: '再说数据 你让AI给个数字', en: 'Then data: you ask AI for a number' },

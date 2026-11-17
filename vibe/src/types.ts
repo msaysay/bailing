@@ -6,7 +6,7 @@ export type Scene =
   | { k: 'title' }
   | { k: 'number'; items: { v: number; pre?: string; suf?: string; label: string; dec?: number; hot?: boolean }[]; note?: string }
   | { k: 'dots'; cols: number; rows: number; steps: { a?: number; b?: number; label?: string }[]; legend?: [string, string] }
-  | { k: 'bars'; items: { label: string; v: number; hot?: boolean; tag?: string }[]; unit?: string; max?: number; note?: string }
+  | { k: 'bars'; items: { label: string; v: number; hot?: boolean; tag?: string }[]; unit?: string; max?: number; note?: string; dec?: number }
   | { k: 'compare'; left: string; right: string; rows: [string, string][]; win?: 'left' | 'right' }
   | { k: 'flow'; nodes: string[]; loop?: boolean; sub?: string[] }
   | { k: 'funnel'; layers: { label: string; tip?: string }[]; weak?: number }

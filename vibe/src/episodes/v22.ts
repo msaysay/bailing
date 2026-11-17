@@ -15,7 +15,7 @@ export const v22: Episode = {
     { s: { k: 'compare', left: '看故事的人', right: '看拆解的人', rows: [['图个热闹', '图个**方法**'], ['看完就走', '想看**下一条**'], ['记住了故事', '记住了**你**']] }, zh: '看故事的人 图个热闹', en: 'Story viewers come for the spectacle' },
     { zh: '看拆解的人 图的是方法', en: 'Breakdown viewers come for the method' },
     { zh: '方法只在你这儿 他就得关注你', en: 'The method lives with you, so they follow you' },
-    { s: { k: 'flow', loop: true, nodes: ['发爆款', '看数据', '做拆解', '收关注'], sub: ['拉来流量', '找出原因', '讲清方法', '留住人'] }, zh: '这就成了一个循环', en: 'And it becomes a loop' },
+    { s: { k: 'flow', loop: true, nodes: ['发爆款', '看数据', '做拆解', '收关注'] }, zh: '这就成了一个循环', en: 'And it becomes a loop' },
     { zh: '爆款负责拉人 拆解负责留人', en: 'The hit brings people in. The breakdown keeps them.' },
     { s: { k: 'split', a: '藏着', b: '拆开', aSub: '怕被学走', bSub: '越讲越值钱' }, zh: '很多老板怕把方法讲出来', en: 'Many owners fear giving their method away' },
     { zh: '其实拆开讲 你才**更值钱**', en: 'In fact, explaining it is what makes you valuable' },

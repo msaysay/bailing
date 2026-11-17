@@ -13,8 +13,8 @@ export const v21: Episode = {
     { s: { k: 'compare', left: '一次改五处', right: '一次改一处', rows: [['爆了 说不清原因', '爆了 知道是**它**'], ['扑了 不知道怪谁', '扑了 也是**结论**'], ['经验 归零', '经验 **入库**']] }, zh: '一次改五处 爆了也学不到东西', en: 'Change five things, and even a hit teaches you nothing' },
     { zh: '一次改一处 扑了也是一条结论', en: 'Change one thing, and even a flop is a finding' },
     { zh: '经验才会一点点**存下来**', en: 'That is how experience actually accumulates' },
-    { s: { k: 'curve', pts: [10, 12, 12, 19, 19, 26, 26, 34, 34, 43, 43, 54], ref: [10, 31, 8, 27, 12, 36, 9, 29, 15, 24, 11, 27], label: '每次只改一处', refLabel: '每次乱改', yl: '数据表现', note: '示意图' }, zh: '乱改的人 数据像心电图', en: 'Random changes give you a heart-monitor chart' },
-    { zh: '单变量的人 是一级一级往上走', en: 'One-variable testers climb step by step' },
+    { s: { k: 'curve', pts: [10, 12, 12, 19, 19, 26, 26, 34, 34, 43, 43, 54], ref: [10, 34, 8, 30, 12, 64, 9, 40, 15, 28, 11, 30], label: '每次只改一处', refLabel: '每次乱改', yl: '数据表现', note: '示意图' }, zh: '只改一处的人 是一级一级往上走', en: 'One-variable testers climb step by step' },
+    { zh: '乱改的人 数据像心电图', en: 'Random changes give you a heart-monitor chart' },
     { s: { k: 'hub', center: '打法库', spokes: ['钩子写法', '封面模板', '最佳时长', '发布时间', '选题方向', '结尾口令'] }, zh: '赢下来的打法 一条条写进**打法库**', en: 'Every winning move goes into a playbook' },
     { zh: '员工会换 打法库留在公司', en: 'People leave. The playbook stays with the company' },
     { s: { k: 'list', head: '从下一条开始', items: [
