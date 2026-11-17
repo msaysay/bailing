@@ -209,14 +209,25 @@ const Flow: React.FC<P<'flow'>> = ({ s, c }) => {
 const Funnel: React.FC<P<'funnel'>> = ({ s, c }) => {
   const n = s.layers.length, h = Math.min(108, 600 / n), w0 = 1000, w1 = 380;
   const weakOn = s.weak !== undefined && (c.n > 1 ? c.step >= c.n - 1 || c.step >= 1 && c.t > c.at(1) : c.t > 2);
+  const totalH = n * (h + 8), top0 = (SH - totalH) / 2;
   return (
     <Stage style={{ flexDirection: 'column' }}>
+      <svg width={SW} height={SH} style={{ position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none' }}>
+        {Array.from({ length: 36 }, (_, i) => {
+          // 往下漏的光点：每过一层，有一部分留下不再往下走
+          const ph = ((c.t * 0.32 + rnd(i, 11)) % 1), y = ph * totalH, layer = Math.floor(y / (h + 8));
+          const survive = rnd(i, 12) < Math.pow(0.62, layer);
+          if (!survive || c.t < 0.8) return null;
+          const wHere = mix(w0, w1, y / totalH) * 0.8, x = SW / 2 + (rnd(i, 13) - 0.5) * wHere;
+          return <circle key={i} cx={x} cy={top0 + y} r={5} fill={C.hot} opacity={0.75 * Math.sin(Math.PI * Math.min(1, ph * 6)) } />;
+        })}
+      </svg>
       {s.layers.map((L, k) => {
         const wt = mix(w0, w1, k / n), wb = mix(w0, w1, (k + 1) / n), p = prog(c.t, 0.2 + k * 0.22, 0.5), isW = weakOn && k === s.weak, dim = weakOn && k !== s.weak;
         return (
           <div key={k} style={{ position: 'relative', width: w0, height: h, marginBottom: 8, opacity: p * (dim ? 0.45 : 1), transform: `translateY(${mix(20, 0, p)}px)` }}>
             <svg width={w0} height={h} style={{ position: 'absolute', inset: 0 }}>
-              <polygon points={`${(w0 - wt) / 2},0 ${(w0 + wt) / 2},0 ${(w0 + wb) / 2},${h} ${(w0 - wb) / 2},${h}`} fill={isW ? a(C.hot, 0.85) : a(C.ink, 0.1 + 0.05 * k)} stroke={isW ? C.hot : a(C.ink, 0.3)} strokeWidth={2} />
+              <polygon points={`${(w0 - wt) / 2},0 ${(w0 + wt) / 2},0 ${(w0 + wb) / 2},${h} ${(w0 - wb) / 2},${h}`} fill={isW ? a(C.hot, 0.7 + 0.2 * Math.sin(c.t * 3)) : a(C.ink, 0.1 + 0.05 * k)} stroke={isW ? C.hot : a(C.ink, 0.3)} strokeWidth={2} />
             </svg>
             <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: SANS, fontWeight: 700, fontSize: 36, color: isW ? C.bg : C.ink }}>{L.label}</div>
             {L.tip && <div style={{ position: 'absolute', left: (w0 + wt) / 2 + 40, top: 0, height: h, display: 'flex', alignItems: 'center', fontFamily: SANS, fontSize: 26, color: isW ? C.hot : a(C.ink, 0.5), whiteSpace: 'nowrap' }}>{L.tip}</div>}
@@ -436,6 +447,11 @@ const Hub: React.FC<P<'hub'>> = ({ s, c }) => {
   return (
     <Stage>
       <svg width={SW} height={SH} style={{ position: 'absolute', inset: 0 }}>
+        {[0, 1].map((k) => {
+          // 从中心向外扩的波纹：表示「连着」
+          const ph = ((c.t + k * 1.25) / 2.5) % 1;
+          return <ellipse key={`r${k}`} cx={cx} cy={cy} rx={mix(130, rx + 60, ph)} ry={mix(130, ry + 60, ph)} fill="none" stroke={a(C.hot, 0.4 * (1 - ph) * pc)} strokeWidth={3} />;
+        })}
         {pts.map((P0, i) => {
           const at = 0.4 + i * Math.max(0.35, (c.len - 2.5) / n), p = inOut((c.t - at) / 0.6), ph = ((c.t * 0.6 + i * 0.37) % 1);
           return (
@@ -448,7 +464,7 @@ const Hub: React.FC<P<'hub'>> = ({ s, c }) => {
       </svg>
       {pts.map((P0, i) => {
         const p = prog(c.t, 0.4 + i * Math.max(0.35, (c.len - 2.5) / n), 0.5);
-        return <div key={i} style={{ position: 'absolute', left: P0.x - 160, top: P0.y - 38, width: 320, height: 76, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 38, border: `2px solid ${a(C.ink, 0.3)}`, background: C.bg, fontFamily: SANS, fontSize: 34, color: C.ink, opacity: p, transform: `scale(${mix(0.7, 1, p)})` }}>{s.spokes[i]}</div>;
+        return <div key={i} style={{ position: 'absolute', left: P0.x - 160, top: P0.y - 38, width: 320, height: 76, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 38, border: `2px solid ${a(C.ink, 0.35)}`, background: '#1A1E29', fontFamily: SANS, fontSize: 34, color: C.ink, opacity: p, transform: `scale(${mix(0.7, 1, p)})` }}>{s.spokes[i]}</div>;
       })}
       <div style={{ position: 'absolute', left: cx - 130, top: cy - 130, width: 260, height: 260, borderRadius: 130, display: 'flex', alignItems: 'center', justifyContent: 'center', background: a(C.hot, 0.15), border: `3px solid ${C.hot}`,
         boxShadow: `0 0 ${60 + 20 * Math.sin(c.t * 2)}px ${a(C.hot, 0.4)}`, fontFamily: SERIF, fontWeight: 700, fontSize: s.center.length > 4 ? 40 : 52, color: C.ink, textAlign: 'center', opacity: pc, transform: `scale(${mix(0.6, 1, pc)})` }}>{s.center}</div>
