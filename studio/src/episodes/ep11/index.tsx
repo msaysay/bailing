@@ -13,7 +13,7 @@ export const clock11 = makeClock(timing as Timing);
 const c = clock11;
 const hero = [c.ln('开场', '不会'), c.ln('一·为什么关门', '董事会拒绝的'), c.ln('一·为什么关门', '是一个还没结案'), c.ln('二·成绩单', '是当年一整年')];
 const hot = ['1158 亿', '103%', '28 倍', '1300 亿', '24 亿', '41 亿', '80 亿', '200 亿', '是零', '不会', '小鹿', '工作流'];
-const ticker = ['英伟达 FY2027 第三季度营收 1158 亿美元', '同比 +103%', '下季营收指引 1300 亿美元 ±3%', '盘后股价 +2%～3%', '数据来自公司财报与公开报道', '不构成投资建议'];
+const ticker = ['英伟达 FY2027 第三季度营收 1158 亿美元', '同比 +103%', '下季营收指引 1300 亿美元 ±3%', '数据来自公司财报与公开报道', '不构成投资建议'];
 const NoAdvice: React.FC = () => <div style={{ position: 'absolute', right: 60, top: 1300, fontSize: 24, fontWeight: 600, color: B.mute }}>数据来自公司财报与公开报道 · 不构成投资建议</div>;
 
 const Scenes: React.FC = () => {
@@ -66,18 +66,11 @@ const Scenes: React.FC = () => {
               <BUp at={at as number}><div style={{ background: B.panel, border: `2px solid ${B.line}`, borderRadius: 22, padding: '26px 34px', textAlign: 'center' }}><div style={{ fontSize: 110, fontWeight: 900, color: i ? B.gold : B.text }}>{d}</div><div style={{ fontSize: 50, fontWeight: 900, color: B.mute }}>{w}</div></div></BUp></React.Fragment>))}
         </div>
       </BStage></BShot>
-      <BShot from={s('一·他想回来', '如果董事会') - 0.1} to={s('一·他想回来', '支持他的人') - 0.1}><BStage style={{ justifyContent: 'flex-end', paddingBottom: 20 }}>
+      <BShot from={s('一·他想回来', '如果董事会') - 0.1} to={seg('一·他想回来').end}><BStage style={{ justifyContent: 'flex-end', paddingBottom: 20 }}>
         <QuoteCard at={s('一·他想回来', '如果董事会') - 0.1} who="黄仁勋 · 11 月 17 日声明" when="原文为英文，意译" parts={[
           { text: '如果董事会认为，我回来对', at: s('一·他想回来', '如果董事会') }, { text: '股东、', at: s('一·他想回来', '对股东'), hot: true }, { text: '员工、', at: s('一·他想回来', '对员工'), hot: true },
           { text: '公司、', at: s('一·他想回来', '对公司'), hot: true }, { text: '美国', at: s('一·他想回来', '对美国'), hot: true }, { text: '最好，', at: s('一·他想回来', '最好') },
           { text: '我很荣幸回来当 CEO。', at: s('一·他想回来', '我很荣幸') }]} size={72} />
-      </BStage></BShot>
-      <BShot from={s('一·他想回来', '支持他的人') - 0.1} to={seg('一·他想回来').end}><BStage style={{ justifyContent: 'flex-end', paddingBottom: 20 }}>
-        <MegaLine text="场外的声音" at={s('一·他想回来', '支持他的人')} size={120} />
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 22, marginTop: 40 }}>
-          <BUp at={s('一·他想回来', '公开说')}><div style={{ background: B.panel, borderRadius: 18, padding: '24px 30px', fontSize: 54, fontWeight: 900 }}><span style={{ color: B.gold }}>公开表态：</span>他可以回来</div></BUp>
-          <BUp at={s('一·他想回来', '请愿')}><div style={{ background: B.panel, borderRadius: 18, padding: '24px 30px', fontSize: 54, fontWeight: 900 }}><span style={{ color: B.gold }}>网上请愿：</span>挺他回来</div></BUp>
-        </div>
       </BStage></BShot>
 
       {/* ───────── 一·门关上了 ───────── */}
@@ -109,8 +102,7 @@ const Scenes: React.FC = () => {
           { no: '01', title: '董事会独立调查', status: '进行中', at: s('一·为什么关门', '董事会自己') },
           { no: '02', title: '证监会调查', note: '据报道', status: '进行中', at: s('一·为什么关门', '据报道') },
           { no: '03', title: '国会三个委员会', note: '12 月 1 日 闭门问话', status: '待问话', at: s('一·为什么关门', '国会三个') },
-          { no: '04', title: '问一家新加坡公司', note: 'Megaspeed · 对方否认被指的行为', status: '调查中', at: s('一·为什么关门', '问的是'), color: B.gold },
-          { no: '05', title: '新设合规委员会', note: '英伟达董事会新设', status: '已成立', at: s('一·为什么关门', '英伟达还专门'), color: B.cyan }]} />
+          { no: '04', title: '问一家新加坡公司', note: 'Megaspeed', status: '调查中', at: s('一·为什么关门', '问的是'), color: B.gold }]} />
       </BStage></BShot>
       <BShot from={s('一·为什么关门', '董事会拒绝的') - 0.1} to={seg('一·为什么关门').end}><BStage>
         <div style={{ fontSize: 70, fontWeight: 900, color: B.mute }}>董事会拒绝的</div>
@@ -135,7 +127,7 @@ const Scenes: React.FC = () => {
           <div style={{ fontSize: 46, fontWeight: 900, color: B.mute, marginTop: 20, opacity: prog(t, s('二·车灯前的小鹿', '帮不了'), 0.3) }}>帮不了他定战略</div>
         </Headlights></div>
       </BStage></BShot>
-      <BShot from={s('二·车灯前的小鹿', '那次会') - 0.1} to={s('二·车灯前的小鹿', '这个说法') - 0.1}><BStage>
+      <BShot from={s('二·车灯前的小鹿', '那次会') - 0.1} to={seg('二·车灯前的小鹿').end}><BStage>
         <BUp at={s('二·车灯前的小鹿', '那次会')}><Kicker ghost color={B.gold}>那次会在讨论什么</Kicker></BUp>
         <div style={{ marginTop: 40, display: 'flex', alignItems: 'flex-end', gap: 26, height: 360 }}>
           {[0.3, 0.45, 0.62, 0.8, 1].map((h, i) => { const p = inOut((t - s('二·车灯前的小鹿', '越来越大') - i * 0.18) / 0.4); return <div key={i} style={{ flex: 1, height: 360 * h * p, background: `linear-gradient(0deg, ${B.red}, ${B.gold})`, borderRadius: 12 }} />; })}
@@ -143,13 +135,6 @@ const Scenes: React.FC = () => {
         <BUp at={s('二·车灯前的小鹿', '越来越大')} style={{ marginTop: 20 }}><div style={{ fontSize: 58, fontWeight: 900 }}>越来越大的融资承诺</div></BUp>
         <BUp at={s('二·车灯前的小鹿', '替买不起')} style={{ marginTop: 12 }}><div style={{ fontSize: 50, fontWeight: 900, color: B.mute }}>替买不起芯片的客户 <span style={{ color: B.gold }}>兜底</span></div></BUp>
         <BUp at={s('二·车灯前的小鹿', '质疑这些')} style={{ marginTop: 40 }}><div style={{ display: 'inline-block', fontSize: 70, fontWeight: 900, background: B.red, padding: '10px 30px', borderRadius: 14 }}>质疑这些交易的：她</div></BUp>
-      </BStage></BShot>
-      <BShot from={s('二·车灯前的小鹿', '这个说法') - 0.1} to={seg('二·车灯前的小鹿').end}><BStage>
-        <MegaLine text="但要说清楚" at={s('二·车灯前的小鹿', '这个说法')} size={120} color={B.mute} />
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 22, marginTop: 40 }}>
-          <BUp at={s('二·车灯前的小鹿', '匿名知情人')}><div style={{ background: B.panel, borderLeft: `10px solid ${B.gold}`, borderRadius: 16, padding: '24px 30px', fontSize: 58, fontWeight: 900 }}>来源：<span style={{ color: B.gold }}>一位匿名知情人</span></div></BUp>
-          <BUp at={s('二·车灯前的小鹿', '两个人都')}><div style={{ background: B.panel, borderLeft: `10px solid ${B.gold}`, borderRadius: 16, padding: '24px 30px', fontSize: 58, fontWeight: 900 }}>当事双方：<span style={{ color: B.gold }}>都没有回应</span></div></BUp>
-        </div>
       </BStage></BShot>
 
       {/* ───────── 二·十三年 ───────── */}
@@ -177,8 +162,7 @@ const Scenes: React.FC = () => {
           { label: '同比增长', to: 103, post: '%', at: s('二·成绩单', '同比'), color: B.red },
           { label: '比自己的预期多出', to: 80, pre: '≈', post: '亿', at: s('二·成绩单', '多出') },
           { label: '新芯片 Vera Rubin 首季', to: 200, pre: '≈', post: '亿', at: s('二·成绩单', '就卖了'), color: B.cyan },
-          { label: '下一季预期', to: 1300, post: '亿', at: s('二·成绩单', '她给的预期') },
-          { label: '盘后股价', to: 3, pre: '+2～', post: '%', at: s('二·成绩单', '盘后'), color: B.red }]} />
+          { label: '下一季预期', to: 1300, post: '亿', at: s('二·成绩单', '她给的预期') }]} />
         <NoAdvice />
       </BStage></BShot>
 
@@ -231,13 +215,12 @@ const footShots = [
   { file: 't3.mp4', from: 0, to: W('开场', '几个小时后'), dim: 0.45, credit: '彭博社' },
   { file: 'f2.mp4', from: W('开场', '几个小时后'), to: W('开场', '不会') - 0.05, dim: 0.55, credit: '路透社 · 英伟达总部' },
   { file: 'f4.mp4', from: W('一·他想回来'), to: W('一·他想回来', '如果董事会') - 0.1, dim: 0.5, credit: '路透社 · 英伟达总部' },
-  { file: 't4.mp4', from: W('一·他想回来', '如果董事会') - 0.1, to: W('一·他想回来', '支持他的人') - 0.1, dim: 0.5, credit: '彭博社', shift: -380 },
-  { file: 't2.mp4', from: W('一·他想回来', '支持他的人') - 0.1, to: c.seg('一·他想回来').end, dim: 0.55, credit: '彭博社' },
+  { file: 't4.mp4', from: W('一·他想回来', '如果董事会') - 0.1, to: c.seg('一·他想回来').end, dim: 0.5, credit: '彭博社', shift: -380 },
   { file: 'f3.mp4', from: W('一·门关上了', '董事会一致') - 0.1, to: W('一·门关上了', '今天') - 0.1, dim: 0.5, credit: '路透社 · 英伟达总部' },
   { file: 't1.mp4', from: W('一·为什么关门'), to: W('一·为什么关门', '董事会自己') - 0.1, dim: 0.5, credit: '彭博社', shift: -340 },
   { file: 'c3.mp4', from: W('一·为什么关门', '董事会自己') - 0.1, to: W('一·为什么关门', '问的是') - 0.1, dim: 0.72, credit: '路透社 · 数据中心' },
-  { file: 'c4.mp4', from: W('一·为什么关门', '问的是') - 0.1, to: W('一·为什么关门', '英伟达还专门') - 0.1, dim: 0.72, credit: '路透社 · 芯片' },
-  { file: 'c5.mp4', from: W('一·为什么关门', '英伟达还专门') - 0.1, to: W('一·为什么关门', '董事会拒绝的') - 0.1, dim: 0.72, credit: '路透社 · 芯片工厂' },
+  { file: 'c4.mp4', from: W('一·为什么关门', '问的是') - 0.1, to: W('一·为什么关门', '董事会拒绝的') - 0.1, dim: 0.72, credit: '路透社 · 芯片' },
+  { file: 'c5.mp4', from: W('二·车灯前的小鹿', '那次会') - 0.1, to: c.seg('二·车灯前的小鹿').end, dim: 0.75, credit: '路透社 · 芯片工厂' },
   { file: 'f1.mp4', from: W('一·为什么关门', '董事会拒绝的') - 0.1, to: c.seg('一·为什么关门').end, dim: 0.6, credit: '路透社 · 总部门前的鲜花' },
   { file: 'k3.mp4', from: W('二·车灯前的小鹿', '黄仁勋打断') - 0.1, to: W('二·车灯前的小鹿', '那次会') - 0.1, dim: 0.62, credit: '彭博社' },
   { file: 'b1.mp4', from: W('二·成绩单'), to: W('二·成绩单', '同比') - 0.1, dim: 0.62, credit: '彭博社 · 英伟达总部' },
