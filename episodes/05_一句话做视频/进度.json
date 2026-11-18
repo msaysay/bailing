@@ -10,7 +10,9 @@
    "skill": "make-news",
    "ask": "讲什么、给谁看、大概多长",
    "confirm": "稿子，和查到的跟传闻不一样的地方",
-   "done": false
+   "done": true,
+   "note": "稿子讲工具本身，无外部事实",
+   "at": "2026-11-18 17:12"
   },
   {
    "no": "2",
@@ -18,7 +20,9 @@
    "skill": "make-news",
    "ask": "一条录音；或者说「用 AI 配音」",
    "confirm": "",
-   "done": false
+   "done": true,
+   "note": "AI 配音，声音 65",
+   "at": "2026-11-18 17:12"
   },
   {
    "no": "3",
@@ -26,7 +30,9 @@
    "skill": "make-news",
    "ask": "（可选）你想用的视频链接或文件",
    "confirm": "",
-   "done": false
+   "done": true,
+   "note": "用组件截图和前两期画面",
+   "at": "2026-11-18 17:12"
   },
   {
    "no": "4",
@@ -34,7 +40,9 @@
    "skill": "make-news",
    "ask": "",
    "confirm": "前 20 秒小样，然后是成片",
-   "done": false
+   "done": true,
+   "note": "75 秒成片；自查只报场景切换处的亮度跳变",
+   "at": "2026-11-18 17:12"
   },
   {
    "no": "5",
