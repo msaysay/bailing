@@ -3,10 +3,10 @@
 // 抖音规避：不用任何人物照片和国旗、地图、建筑；画面不出现「走私」「国家安全」这类大字（只留在口播和字幕里）；
 // 出现股价、营收的镜头都挂「不构成投资建议」；开头 2.5 秒醒目 AI 声明，全程挂 AI 生成角标；不出现其他平台的名字。
 import React from 'react';
-import { AbsoluteFill, Audio, Sequence, staticFile } from 'remotion';
+import { AbsoluteFill, Audio, OffthreadVideo, Sequence, staticFile } from 'remotion';
 import { ClockCtx, makeClock, Timing, useClock, prog, mix, inOut } from '../../kit/clock';
 import { useFonts, useT } from '../../kit/kit';
-import { BBackdrop, BFrame, BL as B, BShot, BStage, BUp, CaseStack, DateCard, DropToZero, EmptySeat, FollowPill, Headlights, IndexTriad, KeyTyper, Kicker, MegaLine, PipeChips, QuoteCard, RoleCard, RollNumber, ScaleCompare, ShutterStamp, StatTiles, VerdictRows, bspr } from '../../components/bulletin';
+import { FootLayer, NewsBand, BBackdrop, BFrame, BL as B, BShot, BStage, BUp, CaseStack, DateCard, DropToZero, EmptySeat, FollowPill, Headlights, IndexTriad, KeyTyper, Kicker, MegaLine, PipeChips, QuoteCard, RoleCard, RollNumber, ScaleCompare, ShutterStamp, StatTiles, VerdictRows, bspr } from '../../components/bulletin';
 import timing from './timing.json';
 
 export const clock11 = makeClock(timing as Timing);
@@ -22,7 +22,7 @@ const Scenes: React.FC = () => {
   return (
     <>
       {/* ───────── 开场：同一天，上午 → 几小时后 → 不会 → 她 ───────── */}
-      <BShot from={0} to={s('开场', '几个小时后')} wipe={false}><BStage>
+      <BShot from={0} to={s('开场', '几个小时后')} wipe={false}><BStage style={{ justifyContent: 'flex-end', paddingBottom: 20 }}>
         <BUp at={0.05}><Kicker at={0.05}>11 月 17 日 · 上午</Kicker></BUp>
         <div style={{ marginTop: 40 }}><MegaLine text="黄仁勋：" at={0.4} size={120} color={B.mute} /></div>
         <MegaLine text="我愿意回来" at={s('开场', '他愿意回归')} size={170} />
@@ -41,8 +41,10 @@ const Scenes: React.FC = () => {
       <BShot from={s('开场', '而交出') - 0.05} to={seg('开场').end}><BStage>
         <BUp at={s('开场', '而交出')}><span style={{ fontSize: 64, fontWeight: 900 }}>交出成绩单的</span></BUp>
         <div style={{ marginTop: 26 }}><Headlights at={s('开场', '正是三个月前')}>
-          <div style={{ fontSize: 46, fontWeight: 900, color: B.mute }}>三个月前，他说她像</div>
-          <div style={{ fontSize: 120, fontWeight: 900, color: B.gold, marginTop: 20, opacity: prog(t, s('开场', '车灯前'), 0.3), whiteSpace: 'nowrap' }}>车灯前<br />发呆的小鹿</div>
+          <div style={{ width: 360, height: 420, borderRadius: 20, overflow: 'hidden', border: `4px solid ${B.gold}`, boxShadow: '0 0 60px rgba(255,240,200,.35)' }}><Sequence from={Math.round((s('开场', '而交出') - 0.05) * 30)} layout="none"><OffthreadVideo src={staticFile('ep11/footage/k2.mp4')} muted style={{ width: 360, height: 420, objectFit: 'cover' }} /></Sequence></div>
+          <div style={{ fontSize: 22, color: 'rgba(255,255,255,.7)', marginTop: 6 }}>画面：彭博社</div>
+          <div style={{ fontSize: 40, fontWeight: 900, color: B.mute, marginTop: 14 }}>三个月前，他说她像</div>
+          <div style={{ fontSize: 96, fontWeight: 900, color: B.gold, marginTop: 6, opacity: prog(t, s('开场', '车灯前'), 0.3), whiteSpace: 'nowrap', lineHeight: 1.1 }}>车灯前发呆的小鹿</div>
         </Headlights></div>
       </BStage></BShot>
 
@@ -64,13 +66,13 @@ const Scenes: React.FC = () => {
               <BUp at={at as number}><div style={{ background: B.panel, border: `2px solid ${B.line}`, borderRadius: 22, padding: '26px 34px', textAlign: 'center' }}><div style={{ fontSize: 110, fontWeight: 900, color: i ? B.gold : B.text }}>{d}</div><div style={{ fontSize: 50, fontWeight: 900, color: B.mute }}>{w}</div></div></BUp></React.Fragment>))}
         </div>
       </BStage></BShot>
-      <BShot from={s('一·他想回来', '如果董事会') - 0.1} to={s('一·他想回来', '支持他的人') - 0.1}><BStage>
+      <BShot from={s('一·他想回来', '如果董事会') - 0.1} to={s('一·他想回来', '支持他的人') - 0.1}><BStage style={{ justifyContent: 'flex-end', paddingBottom: 20 }}>
         <QuoteCard at={s('一·他想回来', '如果董事会') - 0.1} who="黄仁勋 · 11 月 17 日声明" when="原文为英文，意译" parts={[
           { text: '如果董事会认为，我回来对', at: s('一·他想回来', '如果董事会') }, { text: '股东、', at: s('一·他想回来', '对股东'), hot: true }, { text: '员工、', at: s('一·他想回来', '对员工'), hot: true },
           { text: '公司、', at: s('一·他想回来', '对公司'), hot: true }, { text: '美国', at: s('一·他想回来', '对美国'), hot: true }, { text: '最好，', at: s('一·他想回来', '最好') },
           { text: '我很荣幸回来当 CEO。', at: s('一·他想回来', '我很荣幸') }]} size={72} />
       </BStage></BShot>
-      <BShot from={s('一·他想回来', '支持他的人') - 0.1} to={seg('一·他想回来').end}><BStage>
+      <BShot from={s('一·他想回来', '支持他的人') - 0.1} to={seg('一·他想回来').end}><BStage style={{ justifyContent: 'flex-end', paddingBottom: 20 }}>
         <MegaLine text="场外的声音" at={s('一·他想回来', '支持他的人')} size={120} />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 22, marginTop: 40 }}>
           <BUp at={s('一·他想回来', '公开说')}><div style={{ background: B.panel, borderRadius: 18, padding: '24px 30px', fontSize: 54, fontWeight: 900 }}><span style={{ color: B.gold }}>公开表态：</span>他可以回来</div></BUp>
@@ -80,9 +82,10 @@ const Scenes: React.FC = () => {
 
       {/* ───────── 一·门关上了 ───────── */}
       <BShot from={seg('一·门关上了').start} to={s('一·门关上了', '董事会一致') - 0.1}><BStage>
-        <BUp at={s('一·门关上了', '电话会')}><Kicker>财报电话会 · 开场</Kicker></BUp>
-        <div style={{ marginTop: 40, display: 'flex', alignItems: 'flex-end', gap: 10, height: 200 }}>{Array.from({ length: 36 }).map((_, i) => <div key={i} style={{ width: 16, borderRadius: 8, background: i % 5 ? B.text : B.red, height: 30 + 150 * Math.abs(Math.sin(t * 6 + i * 0.7) * Math.sin(t * 2.3 + i)) * prog(t, s('一·门关上了', '电话会'), 0.4) }} />)}</div>
-        <BUp at={s('一·门关上了', '董事长')} style={{ marginTop: 50 }}><div style={{ fontSize: 50, fontWeight: 900, color: B.mute }}>先开口的是</div><div style={{ fontSize: 110, fontWeight: 900 }}>董事长</div><div style={{ fontSize: 60, fontWeight: 900, color: B.gold }}>Harvey Jones</div></BUp>
+        <NewsBand src="ep11/footage/y1.mp4" at={seg('一·门关上了').start} h={608} credit="雅虎财经直播电话会" label="财报电话会 · 开场" />
+        <div style={{ marginTop: 20, display: 'flex', alignItems: 'flex-end', gap: 10, height: 90 }}>{Array.from({ length: 36 }).map((_, i) => <div key={i} style={{ width: 16, borderRadius: 8, background: i % 5 ? B.text : B.red, height: 14 + 70 * Math.abs(Math.sin(t * 6 + i * 0.7) * Math.sin(t * 2.3 + i)) * prog(t, s('一·门关上了', '电话会'), 0.4) }} />)}</div>
+        <BUp at={s('一·门关上了', '董事长')} style={{ marginTop: 24, display: 'flex', alignItems: 'baseline', gap: 24 }}><div style={{ fontSize: 50, fontWeight: 900, color: B.mute }}>先开口的是</div><div style={{ fontSize: 90, fontWeight: 900 }}>董事长</div></BUp>
+        <BUp at={s('一·门关上了', '董事长') + 0.3}><div style={{ fontSize: 64, fontWeight: 900, color: B.gold }}>Harvey Jones</div></BUp>
       </BStage></BShot>
       <BShot from={s('一·门关上了', '董事会一致') - 0.1} to={s('一·门关上了', '今天') - 0.1}><BStage>
         <ShutterStamp at={s('一·门关上了', '没有让他回来')} stamp="不回归" sub="董事会一致决定">
@@ -96,7 +99,7 @@ const Scenes: React.FC = () => {
       </BStage></BShot>
 
       {/* ───────── 一·为什么关门 ───────── */}
-      <BShot from={seg('一·为什么关门').start} to={s('一·为什么关门', '董事会自己') - 0.1}><BStage>
+      <BShot from={seg('一·为什么关门').start} to={s('一·为什么关门', '董事会自己') - 0.1}><BStage style={{ justifyContent: 'flex-end', paddingBottom: 20 }}>
         <MegaLine text="为什么" at={s('一·为什么关门', '为什么')} size={230} color={B.red} />
         <MegaLine text="这么坚决？" at={s('一·为什么关门', '这么坚决')} size={150} />
         <BUp at={s('一·为什么关门', '一件都还没')} style={{ marginTop: 40 }}><span style={{ fontSize: 66, fontWeight: 900, color: B.gold }}>他身上的事，一件都没结束</span></BUp>
@@ -119,11 +122,10 @@ const Scenes: React.FC = () => {
 
       {/* ───────── 二·车灯前的小鹿 ───────── */}
       <BShot from={seg('二·车灯前的小鹿').start} to={s('二·车灯前的小鹿', '黄仁勋打断') - 0.1}><BStage>
-        <RoleCard name="Colette Kress" en="科莱特·克雷斯" role="首席财务官 CFO" to="临时 CEO（兼 CFO）" at={s('二·车灯前的小鹿', '再说她')} flipAt={s('二·车灯前的小鹿', 'Colette') + 0.6} />
-        <BUp at={s('二·车灯前的小鹿', '华尔街日报')} style={{ marginTop: 60 }}><div style={{ background: B.panel, borderRadius: 20, padding: '26px 32px' }}>
-          <div style={{ fontSize: 36, fontWeight: 900, color: B.gold }}>华尔街日报 报道</div>
-          <div style={{ fontSize: 60, fontWeight: 900, marginTop: 8 }}>今年 8 月 · 一次财务会议</div>
-          <div style={{ fontSize: 46, fontWeight: 600, color: B.mute, marginTop: 6, opacity: prog(t, s('二·车灯前的小鹿', '她正在汇报'), 0.3) }}>她正在汇报……</div></div></BUp>
+        <NewsBand src="ep11/footage/k1.mp4" at={seg('二·车灯前的小鹿').start} h={532} credit="CNBC 专访（财报后）" />
+        <BUp at={s('二·车灯前的小鹿', 'Colette')} style={{ marginTop: 22 }}><div style={{ display: 'flex', alignItems: 'baseline', gap: 20 }}><span style={{ fontSize: 76, fontWeight: 900 }}>Colette Kress</span><span style={{ fontSize: 36, fontWeight: 900, color: B.mute }}>科莱特·克雷斯</span></div>
+          <div style={{ fontSize: 44, fontWeight: 900, color: B.red, marginTop: 4 }}>CFO → 临时 CEO（兼 CFO）</div></BUp>
+        <BUp at={s('二·车灯前的小鹿', '华尔街日报')} style={{ marginTop: 18 }}><div style={{ background: 'rgba(20,20,25,.9)', borderLeft: `8px solid ${B.gold}`, borderRadius: 14, padding: '14px 22px', fontSize: 44, fontWeight: 900 }}><span style={{ color: B.gold }}>华尔街日报：</span>8 月一次财务会议，<span style={{ opacity: prog(t, s('二·车灯前的小鹿', '她正在汇报'), 0.3) }}>她正在汇报……</span></div></BUp>
       </BStage></BShot>
       <BShot from={s('二·车灯前的小鹿', '黄仁勋打断') - 0.1} to={s('二·车灯前的小鹿', '那次会') - 0.1}><BStage>
         <BUp at={s('二·车灯前的小鹿', '黄仁勋打断')}><Kicker>他打断了她</Kicker></BUp>
@@ -189,7 +191,8 @@ const Scenes: React.FC = () => {
 
       {/* ───────── 三·没说的 ───────── */}
       <BShot from={seg('三·没说的').start} to={s('三·没说的', '可是') - 0.1}><BStage>
-        <QuoteCard at={s('三·没说的', '电话会上')} who="Colette Kress · 电话会" when="原文：business as usual" color={B.cyan} parts={[{ text: '从生意上看，', at: s('三·没说的', '从生意上') }, { text: '一切照常。', at: s('三·没说的', '一切照常'), hot: true }]} size={100} />
+        <NewsBand src="ep11/footage/k1b.mp4" at={seg('三·没说的').start} h={532} credit="CNBC 专访（财报后）" />
+        <div style={{ marginTop: 24 }}><QuoteCard at={s('三·没说的', '电话会上')} who="Colette Kress · 电话会" when="原文：business as usual" color={B.cyan} parts={[{ text: '从生意上看，', at: s('三·没说的', '从生意上') }, { text: '一切照常。', at: s('三·没说的', '一切照常'), hot: true }]} size={84} /></div>
       </BStage></BShot>
       <BShot from={s('三·没说的', '可是') - 0.1} to={seg('三·没说的').end}><BStage style={{ alignItems: 'center' }}>
         <EmptySeat at={s('三·没说的', '可是')} title="正式 CEO：空缺" tags={[{ text: '猎头 · 已聘请', at: s('三·没说的', '猎头') }, { text: '时间表 · 无', at: s('三·没说的', '时间表') }]} />
@@ -223,6 +226,23 @@ const Scenes: React.FC = () => {
   );
 };
 
+const W = (seg: string, w?: string) => (w ? c.say(seg, w) : c.seg(seg).start);
+const footShots = [
+  { file: 't3.mp4', from: 0, to: W('开场', '几个小时后'), dim: 0.45, credit: '彭博社' },
+  { file: 'f2.mp4', from: W('开场', '几个小时后'), to: W('开场', '不会') - 0.05, dim: 0.55, credit: '路透社 · 英伟达总部' },
+  { file: 'f4.mp4', from: W('一·他想回来'), to: W('一·他想回来', '如果董事会') - 0.1, dim: 0.5, credit: '路透社 · 英伟达总部' },
+  { file: 't4.mp4', from: W('一·他想回来', '如果董事会') - 0.1, to: W('一·他想回来', '支持他的人') - 0.1, dim: 0.5, credit: '彭博社', shift: -380 },
+  { file: 't2.mp4', from: W('一·他想回来', '支持他的人') - 0.1, to: c.seg('一·他想回来').end, dim: 0.55, credit: '彭博社' },
+  { file: 'f3.mp4', from: W('一·门关上了', '董事会一致') - 0.1, to: W('一·门关上了', '今天') - 0.1, dim: 0.5, credit: '路透社 · 英伟达总部' },
+  { file: 't1.mp4', from: W('一·为什么关门'), to: W('一·为什么关门', '董事会自己') - 0.1, dim: 0.5, credit: '彭博社', shift: -340 },
+  { file: 'c3.mp4', from: W('一·为什么关门', '董事会自己') - 0.1, to: W('一·为什么关门', '问的是') - 0.1, dim: 0.72, credit: '路透社 · 数据中心' },
+  { file: 'c4.mp4', from: W('一·为什么关门', '问的是') - 0.1, to: W('一·为什么关门', '英伟达还专门') - 0.1, dim: 0.72, credit: '路透社 · 芯片' },
+  { file: 'c5.mp4', from: W('一·为什么关门', '英伟达还专门') - 0.1, to: W('一·为什么关门', '董事会拒绝的') - 0.1, dim: 0.72, credit: '路透社 · 芯片工厂' },
+  { file: 'f1.mp4', from: W('一·为什么关门', '董事会拒绝的') - 0.1, to: c.seg('一·为什么关门').end, dim: 0.6, credit: '路透社 · 总部门前的鲜花' },
+  { file: 'k3.mp4', from: W('二·车灯前的小鹿', '黄仁勋打断') - 0.1, to: W('二·车灯前的小鹿', '那次会') - 0.1, dim: 0.62, credit: '彭博社' },
+  { file: 'b1.mp4', from: W('二·成绩单'), to: W('二·成绩单', '同比') - 0.1, dim: 0.62, credit: '彭博社 · 英伟达总部' },
+  { file: 'c2.mp4', from: W('二·中国'), to: c.seg('二·中国').end, dim: 0.62, credit: '路透社 · 港口' },
+];
 export const EP11: React.FC = () => {
   useFonts();
   const sfx: [number, string, number][] = [
@@ -233,7 +253,7 @@ export const EP11: React.FC = () => {
   return (
     <ClockCtx.Provider value={c}>
       <AbsoluteFill>
-        <BBackdrop /><Scenes />
+        <BBackdrop /><FootLayer dir="ep11/footage" shots={footShots} /><Scenes />
         <BFrame show="宁少 · AI 快报" date="11.17 美东" ticker={ticker} hero={hero} hot={hot}
           chapters={[{ from: c.seg('一·他想回来').start, label: '第一件事 · 他想回来' }, { from: c.seg('二·车灯前的小鹿').start, label: '第二件事 · 她交成绩单' }, { from: c.seg('三·没说的').start, label: '第三件事 · 没说的答案' }, { from: c.seg('结论').start, label: '结论' }, { from: c.seg('下一步').start, label: '接下来' }]} />
         {[...sfx].map(([at, f, v], i) => <Sequence key={i} from={Math.max(0, Math.round(at * c.fps))} layout="none"><Audio src={staticFile('sfx/' + f)} volume={v} /></Sequence>)}

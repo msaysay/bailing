@@ -3,7 +3,7 @@
 // 所以：顶栏放 120–200，滚动条 212–262，章节标 300，主舞台 380–1330，字幕 1350–1470、宽度不超过 840。
 // 第一次用在第十一期（黄仁勋想回来的那一天）。时间参数都是全片时刻（秒）。
 import React from 'react';
-import { AbsoluteFill } from 'remotion';
+import { AbsoluteFill, OffthreadVideo, Sequence, staticFile } from 'remotion';
 import { useClock, prog, mix, inOut } from '../kit/clock';
 import { useT } from '../kit/kit';
 
@@ -291,5 +291,38 @@ export const BFrame: React.FC<{ show: string; date: string; ticker: string[]; ch
       {/* 字幕 */}
       {l && <div style={{ position: 'absolute', left: 60, width: 860, top: 1350, display: 'flex' }}><span style={{ fontSize: 62, fontWeight: 900, lineHeight: 1.25, background: 'rgba(0,0,0,.72)', borderLeft: `8px solid ${B.red}`, padding: '10px 24px', borderRadius: 10 }}>{re ? l.text.split(re).map((x, i) => hot.includes(x) ? <span key={i} style={{ color: B.gold }}>{x}</span> : x) : l.text}</span></div>}
     </AbsoluteFill>
+  );
+};
+
+/** 实拍垫底层：真实画面铺满竖屏，压暗，上下各一道渐变（让顶栏和字幕看得清），右下角标出画面来源。shift 把画面上移（像素，负数）给脸让位，同时放大补满。
+ *  shots 里每个镜头在 [from, to] 显示，前后 0.25 秒交叉淡化；文件是已经裁成 1080×1920 的片段。 */
+export const FootLayer: React.FC<{ dir: string; shots: { file: string; from: number; to: number; dim?: number; credit: string; shift?: number }[] }> = ({ dir, shots }) => {
+  const t = useT(), { fps } = useClock(), F = 0.25;
+  return (
+    <AbsoluteFill>
+      {shots.map((s) => {
+        if (t < s.from - F || t > s.to + F) return null;
+        const o = Math.min(1, (t - s.from + F) / F, (s.to + F - t) / F), d = s.dim ?? 0.5;
+        return (
+          <AbsoluteFill key={s.file + s.from} style={{ opacity: o }}>
+            <Sequence from={Math.round((s.from - F) * fps)} layout="none"><OffthreadVideo src={staticFile(`${dir}/${s.file}`)} muted style={{ width: 1080, height: 1920, objectFit: 'cover', transform: s.shift ? `translateY(${s.shift}px) scale(${1 + Math.abs(s.shift) / 960})` : undefined, transformOrigin: 'center top' }} /></Sequence>
+            <AbsoluteFill style={{ background: `rgba(9,9,12,${d})` }} />
+            <AbsoluteFill style={{ background: 'linear-gradient(180deg, rgba(9,9,12,.92) 0%, rgba(9,9,12,0) 22%, rgba(9,9,12,0) 62%, rgba(9,9,12,.9) 80%, rgba(9,9,12,.96) 100%)' }} />
+            <div style={{ position: 'absolute', right: 60, top: 1306, fontFamily: BFONT, fontSize: 22, fontWeight: 600, color: 'rgba(245,243,238,.7)' }}>画面：{s.credit}</div>
+          </AbsoluteFill>
+        );
+      })}
+    </AbsoluteFill>
+  );
+};
+/** 横幅实拍：一段 16:9 的新闻画面放在舞台顶部，下方一条来源小字。 */
+export const NewsBand: React.FC<{ src: string; at: number; h: number; credit: string; label?: string }> = ({ src, at, h, credit, label }) => {
+  const t = useT(), { fps } = useClock(), p = inOut((t - at) / 0.4);
+  return (
+    <div style={{ position: 'relative', width: 1080, marginLeft: -60, height: h, overflow: 'hidden', clipPath: `inset(0 ${100 - p * 100}% 0 0)` }}>
+      <Sequence from={Math.round(at * fps)} layout="none"><OffthreadVideo src={staticFile(src)} muted style={{ width: 1080, height: h, display: 'block' }} /></Sequence>
+      {label && <div style={{ position: 'absolute', left: 60, top: 20, background: B.red, color: '#fff', fontSize: 30, fontWeight: 900, padding: '4px 16px', borderRadius: 6 }}>{label}</div>}
+      <div style={{ position: 'absolute', right: 60, bottom: 12, fontSize: 22, fontWeight: 600, color: 'rgba(255,255,255,.85)', background: 'rgba(0,0,0,.55)', padding: '2px 10px', borderRadius: 4 }}>画面：{credit}</div>
+    </div>
   );
 };
