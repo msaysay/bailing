@@ -11,6 +11,7 @@ import { FX } from './catalog-i-fx';
 import { EFFECTS } from './catalog-j-effects';
 import { BCAST } from './catalog-k-bc';
 import { PAPER } from './catalog-l-paper';
+import { BULLETIN } from './catalog-m-bulletin';
 export { SLOT, KLINE } from './catalog';
 export type { Item } from './catalog';
-export const CATALOG = [...BASE, ...WEB, ...SCREEN, ...MEDIA, ...CHARTS, ...TYPE, ...FLOW, ...TALK, ...FX, ...EFFECTS, ...BCAST, ...PAPER];
+export const CATALOG = [...BASE, ...WEB, ...SCREEN, ...MEDIA, ...CHARTS, ...TYPE, ...FLOW, ...TALK, ...FX, ...EFFECTS, ...BCAST, ...PAPER, ...BULLETIN];

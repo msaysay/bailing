@@ -21,6 +21,8 @@ import { Poster, POSTER_W, POSTER_H } from './poster';
 import { EP13, clock13 } from './episodes/ep13';
 import { EP13B, clock13b } from './episodes/ep13/v2';
 import { Cover13B } from './episodes/ep13/cover';
+import { EP11, clock11 } from './episodes/ep11';
+import { Cover11 } from './episodes/ep11/cover';
 // 每期一个 Composition；-P1 是只到第一件事结束的预览。
 registerRoot(() => (
   <>
@@ -30,6 +32,7 @@ registerRoot(() => (
     <Composition id="EP07" component={EP07} width={1920} height={1080} fps={clock07.fps} durationInFrames={Math.ceil(clock07.total * clock07.fps)} />
     <Composition id="EP13" component={EP13} width={1920} height={1080} fps={clock13.fps} durationInFrames={Math.ceil(clock13.total * clock13.fps)} />
     <Composition id="EP13B" component={EP13B} width={1920} height={1080} fps={clock13b.fps} durationInFrames={Math.ceil(clock13b.total * clock13b.fps)} />
+    <Composition id="EP11" component={EP11} width={1080} height={1920} fps={clock11.fps} durationInFrames={Math.ceil(clock11.total * clock11.fps)} />
     <Composition id="TALK01" component={TALK01} width={1080} height={1920} fps={talkClock.fps} durationInFrames={Math.ceil(talkClock.total * talkClock.fps)} />
     <Composition id="TALK02" component={TALK02} width={1080} height={1920} fps={talk2Clock.fps} durationInFrames={Math.ceil(talk2Clock.total * talk2Clock.fps)} />
     <Composition id="TALK03" component={TALK03} width={1080} height={1920} fps={talk3Clock.fps} durationInFrames={Math.ceil(talk3Clock.total * talk3Clock.fps)} />
@@ -42,6 +45,9 @@ registerRoot(() => (
     <Composition id="DEMO-CLIP-V" component={DemoClip} width={1080} height={1920} fps={30} durationInFrames={240} />
     <Still id="EP13-COVER-DOUYIN" component={Cover13B} width={1080} height={1440} />
     <Still id="EP13-COVER-SHIPINHAO" component={Cover13B} width={1080} height={1260} />
+    <Still id="EP11-COVER-DOUYIN" component={Cover11} width={1080} height={1440} />
+    <Still id="EP11-COVER-SHIPINHAO" component={Cover11} width={1080} height={1260} />
+    <Still id="EP11-COVER-FULL" component={Cover11} width={1080} height={1920} />
     <Still id="POSTER" component={Poster} width={POSTER_W} height={POSTER_H} />
     <Still id="EP06-COVER-DOUYIN" component={Cover06} width={1080} height={1440} />
     <Still id="EP06-COVER-SHIPINHAO" component={Cover06} width={1080} height={1260} />
