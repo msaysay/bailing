@@ -8,17 +8,19 @@
 每条线的步骤、每步要人提供什么、对应哪个技能，都在下面的 LINES 里，改流程只改这里。"""
 import argparse, json, os, sys, time
 R = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); E = os.path.join(R, "episodes")
-# 每步：编号、名字、对应技能、要人给什么（空 = 助手自己做）、人要不要确认
+# 每步：编号、名字、对应技能、要人给什么（空 = 助手自己做）、人要确认什么（空 = 不用停）
 LINES = {
- "news": [("1", "定稿", "video-01-script", "一个想法：讲什么事、给谁看、大概几分钟", "稿子"), ("2", "核对事实", "video-02-factcheck", "", "有出入的地方"),
-          ("3", "配音对齐", "video-03-audio", "一条录音（自己念或 AI 配音都行）", ""), ("4", "找画面", "video-04-footage", "", "素材能不能用"),
-          ("5", "定画面方案", "video-05-storyboard", "", "整体方向"), ("6", "先做一段", "video-06-build", "", "第一段小样"),
-          ("7", "出片自查", "video-07-qc", "", "成片"), ("8", "封面发布", "video-08-cover", "", "发不发")],
- "talk": [("1", "定稿与拍摄", "talk-01-shoot", "一个想法；或者一条已经拍好的竖屏口播视频", "稿子"), ("2", "核对事实", "video-02-factcheck", "", "有出入的地方"),
-          ("3", "粗剪对齐", "talk-02-roughcut", "（拍好的口播视频，第 1 步已经给了就不用再给）", "剪掉了哪几句"), ("4", "找证据画面", "video-04-footage", "", "素材能不能用"),
-          ("5", "排版式", "talk-03-layout", "", "版式表"), ("6", "出片自查", "talk-04-build", "", "成片"), ("7", "封面发布", "video-08-cover", "", "发不发")],
- "pet":  [("1", "本期数据", "pet-01-growth", "上期视频的点赞、评论、转发、收藏、新关注数（后台截图也行）", ""), ("2", "读评论判路线", "pet-01-growth", "上期的评论（后台导出，或给链接让助手拉）", "AI 的判断和证据"),
-          ("3", "本期宠物镜头", "pet-02-shots", "", "宠物在片中出现的位置和动作"), ("4", "叠进成片", "pet-02-shots", "这一期的成片工程（新闻线或口播线做好的）", "成片")],
+ "news": [("1", "稿子", "make-news", "讲什么、给谁看、大概多长", "稿子，和查到的跟传闻不一样的地方"),
+          ("2", "声音", "make-news", "一条录音；或者说「用 AI 配音」", ""),
+          ("3", "画面素材", "make-news", "（可选）你想用的视频链接或文件", ""),
+          ("4", "做片", "make-news", "", "前 20 秒小样，然后是成片"),
+          ("5", "封面发布", "make-news", "", "封面和标题")],
+ "talk": [("1", "稿子与拍摄", "make-talk", "一条拍好的竖屏口播视频；还没拍就说讲什么", "稿子（已经拍好就跳过）"),
+          ("2", "粗剪", "make-talk", "", "剪掉了哪几句"),
+          ("3", "排版出片", "make-talk", "", "关键帧，然后是成片"),
+          ("4", "封面发布", "make-talk", "", "封面和标题")],
+ "pet":  [("1", "成长结算", "pet", "上期的点赞、评论、转发、收藏、新关注，和上期评论", "涨了多少、AI 的判断和证据"),
+          ("2", "叠进成片", "pet", "这一期做好的片子", "宠物出场、升级、片尾三处关键帧")],
 }
 def path(ep): return os.path.join(E, ep, "进度.json")
 def load(ep):
@@ -46,11 +48,24 @@ s = sub.add_parser("status"); s.add_argument("name", nargs="?")
 d = sub.add_parser("done"); d.add_argument("name"); d.add_argument("step"); d.add_argument("--note", default="")
 sub.add_parser("list"); a = a.parse_args()
 if a.cmd == "new":
+    import re, shutil
     base = os.path.join(E, a.name)
     if os.path.exists(path(a.name)): sys.exit("这一期已经有了：" + a.name)
     for sd in ("01_输入素材", "03_制作过程"): os.makedirs(os.path.join(base, sd), exist_ok=True)
-    st = {"name": a.name, "line": a.line, "created": time.strftime("%Y-%m-%d %H:%M"), "steps": [{"no": no, "name": nm, "skill": sk, "ask": ask, "confirm": cf, "done": False} for no, nm, sk, ask, cf in LINES[a.line]]}
-    json.dump(st, open(path(a.name), "w", encoding="utf-8"), ensure_ascii=False, indent=1); print("已建好：episodes/" + a.name); show(st)
+    m = re.match(r"(\d+)", a.name); slug = "ep" + (m.group(1).zfill(2) if m else time.strftime("%m%d%H%M"))
+    st = {"name": a.name, "line": a.line, "slug": slug, "created": time.strftime("%Y-%m-%d %H:%M"), "steps": [{"no": no, "name": nm, "skill": sk, "ask": ask, "confirm": cf, "done": False} for no, nm, sk, ask, cf in LINES[a.line]]}
+    if a.line in ("news", "talk"):   # 代码骨架 + 注册合成，助手直接往里加画面
+        S = os.path.join(R, "studio"); code = os.path.join(S, "src", "episodes", slug); os.makedirs(code, exist_ok=True); os.makedirs(os.path.join(S, "public", slug), exist_ok=True)
+        tpl = open(os.path.join(S, "templates", a.line + ".tsx"), encoding="utf-8").read().replace("__SLUG__", slug).replace("__SHOW__", "").replace("__TITLE__", a.name.split("_", 1)[-1])
+        if not os.path.exists(os.path.join(code, "index.tsx")): open(os.path.join(code, "index.tsx"), "w", encoding="utf-8").write(tpl)
+        if not os.path.exists(os.path.join(code, "timing.json")): json.dump({"fps": 30, "total": 10, "segments": [{"id": 1, "name": "开场", "start": 0, "end": 10, "lines": []}], "lines": []}, open(os.path.join(code, "timing.json"), "w"), ensure_ascii=False)
+        reg = os.path.join(S, "src", "episodes", "_registry.tsx"); r = open(reg, encoding="utf-8").read(); V = slug.upper()
+        if f"'./{slug}'" not in r:
+            w, h = (1920, 1080) if a.line == "news" else (1080, 1920)
+            r = r.replace("import { Composition } from 'remotion';", f"import {{ Composition }} from 'remotion';\nimport {{ Episode as {V}, clock as {V}_C }} from './{slug}';")
+            r = r.replace("  <>\n", f"  <>\n    <Composition id=\"{slug}\" component={{{V}}} width={{{w}}} height={{{h}}} fps={{{V}_C.fps}} durationInFrames={{Math.max(1, Math.ceil({V}_C.total * {V}_C.fps))}} />\n", 1)
+            open(reg, "w", encoding="utf-8").write(r)
+    json.dump(st, open(path(a.name), "w", encoding="utf-8"), ensure_ascii=False, indent=1); print(f"已建好：episodes/{a.name}（代号 {slug}）"); show(st)
 elif a.cmd == "status":
     nm = a.name or latest()
     if not nm: sys.exit("还没有任何一期。")

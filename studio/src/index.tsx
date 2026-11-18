@@ -8,9 +8,11 @@ import { Talkcraft, TC_BAR, TC_FPS, TC_H, TC_TOTAL, TC_W } from './talkcraft';
 import { Gallery, GFPS } from './gallery';
 import { CATALOG, SLOT } from './gallery/all';
 import { DemoClip } from './gallery/demoClip';
+import { Registered } from './episodes/_registry';
 // 每期一个 Composition；-P1 是只到第一件事结束的预览。
 registerRoot(() => (
   <>
+    <Registered />
     <Composition id="EP02" component={EP02} width={1920} height={1080} fps={clock.fps} durationInFrames={Math.ceil(clock.total * clock.fps)} />
     <Composition id="EP02-P1" component={EP02} width={1920} height={1080} fps={clock.fps} durationInFrames={Math.ceil(clock.seg('一·律师').end * clock.fps)} />
     <Composition id="TALK01" component={TALK01} width={1080} height={1920} fps={talkClock.fps} durationInFrames={Math.ceil(talkClock.total * talkClock.fps)} />

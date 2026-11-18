@@ -33,6 +33,7 @@ table{width:100%;border-collapse:collapse;font-size:15.5px}th,td{text-align:left
 <li><b>怎么用：</b>把文件夹交给 Claude Code 或 Codex 这类能读文件、跑命令的 AI 助手，然后像聊天一样告诉它你要做什么。</li>
 <li><b>你的角色：</b>导演和把关人。助手每做完一个关键步骤会停下来等你确认，你不点头它不往下走。</li></ul></div>
 
+<div class="card" style="border-top:6px solid var(--acc)"><h3>最短的用法：一句话</h3><p>把文件夹交给 Claude Code 或 Codex，说 <code>我想做一条视频</code>。它只会先问你一个问题：<b>你出不出镜？</b>然后一步步带你做，每次只要一样东西，要你点头的只有四处：稿子、小样、成片、封面。没有录音也行，它可以用本机的 AI 配音。下面的内容是给想知道背后发生了什么的人看的。</p></div>
 <h2>第一步：选一条路线</h2>
 <p>只问自己一个问题：<b>这条视频里，人出不出镜？</b></p>
 <div class="two">
@@ -45,7 +46,7 @@ table{width:100%;border-collapse:collapse;font-size:15.5px}th,td{text-align:left
 <div class="card"><ol>
 <li>电脑上装好 <b>Node.js 22</b>、<b>ffmpeg</b>、<b>Python 3.10 以上</b>。不会装就把这句话发给助手：「帮我检查并装好 Node.js 22、ffmpeg 和 Python。」</li>
 <li>解压这个文件夹，在里面打开 AI 助手（Claude Code 或 Codex）。</li>
-<li>对助手说：<code>先读「先读我.md」和 .claude/skills/README.md，按里面的说明把环境装好，装完告诉我还缺什么。</code></li>
+<li>对助手说：<code>我想做一条视频</code>。它会自己查环境、能装的自动装，装不了的一项项告诉你怎么弄。</li>
 </ol><p>助手会自己装依赖、下载语音识别模型。它会告诉你还缺两样要你自己弄的：<b>MiSans 字体</b>（小米官网免费下载，三个字重放进 <code>studio/public/fonts/</code>）和<b>搜素材用的 TikHub 密钥</b>（只有路线一、或者口播里要插新闻画面时才用得上）。</p></div>
 
 <h2>路线一：从一个想法开始</h2>
@@ -145,12 +146,12 @@ table{width:100%;border-collapse:collapse;font-size:15.5px}th,td{text-align:left
 
 <h2>一页速查：直接复制这些话</h2>
 <table><tr><th>场景</th><th>发给助手的话</th></tr>
-<tr><td>第一次用</td><td><code>先读「先读我.md」和 .claude/skills/README.md，把环境装好，告诉我还缺什么。</code></td></tr>
+<tr><td>第一次用 / 任何时候</td><td><code>我想做一条视频</code></td></tr><tr><td>上次没做完</td><td><code>继续</code></td></tr>
 <tr><td>路线一开工</td><td><code>我想做一条关于【话题】的横屏视频，大约【几】分钟，给【谁】看。按事为主的流程走，从第 1 步开始。</code></td></tr>
 <tr><td>路线二开工</td><td><code>这是我拍的口播（附视频）。按人为主的口播流程走，从粗剪开始，先告诉我你打算剪掉哪几句。</code></td></tr>
 <tr><td>想先看方向</td><td><code>先别铺全片，做前 30 秒给我看。</code></td></tr>
 <tr><td>挑组件</td><td><code>把组件总览图和组件说明发我，我挑几个想用的。</code></td></tr>
 <tr><td>改片</td><td><code>【时间点】那里【哪里不对】，改成【想要的样子】。只重做这一段。</code></td></tr>
 <tr><td>出片前</td><td><code>跑一遍自查，告诉我哪些你验证过、哪些需要我自己看。</code></td></tr></table>
-<p class="lg" style="margin-top:30px">文件夹对照：<code>skills/</code> 步骤说明　<code>scripts/</code> 小工具　<code>studio/</code> 做视频的工程　<code>组件包/</code> 组件演示和说明　<code>docs/</code> 制作规则和拆解　<code>episodes/</code> 每一期的稿子和过程文件</p>
+<p class="lg" style="margin-top:30px">文件夹对照：<code>.claude/skills/</code> 四个技能（入口、横屏、口播、宠物）　<code>docs/steps/</code> 每步细节　<code>scripts/</code> 小工具　<code>studio/</code> 做视频的工程　<code>组件包/</code> 组件演示和说明　<code>docs/</code> 制作规则和拆解　<code>episodes/</code> 每一期的稿子和过程文件</p>
 </main></body></html>

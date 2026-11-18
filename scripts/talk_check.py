@@ -2,7 +2,7 @@
 """竖屏口播成片的版式自查：每半秒测一次人脸，判断这一刻是「人全屏 / 小圆头像 / 人物卡片 / 人不在」，统计占比并对照硬指标。
 用法：scripts/talk_check.py <成片.mp4> [--full-w 0.40]
   --full-w  全屏且景别为 1 时，人脸宽占画面宽的比例（小 Lin 约 0.20；脸大的素材按实际量的填）
-硬指标见 .claude/skills/talk-03-layout/SKILL.md。测不出「全屏时有没有叠加组件」，所以 A、B 合并成「人全屏」。
+硬指标见 docs/steps/talk-03-layout.md。测不出「全屏时有没有叠加组件」，所以 A、B 合并成「人全屏」。
 依赖：opencv-python-headless、ffmpeg；人脸模型同 scripts/faces.py（~/.cache/video-studio/yunet.onnx）。"""
 import argparse, glob, os, subprocess, sys, tempfile
 import cv2

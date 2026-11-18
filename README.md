@@ -6,7 +6,7 @@
 
 | 看什么 | 在哪 |
 |---|---|
-| 工作流操作说明（先读这个） | [.claude/skills/README.md](.claude/skills/README.md) |
+| 怎么用（先读这个） | 把文件夹交给 Claude Code 或 Codex，说「我想做一条视频」。流程总览：[docs/流程总览.md](docs/流程总览.md) |
 | 项目完整规划 | [docs/PLAN.md](docs/PLAN.md) |
 | 第三方开源代码、来源与许可 | [vendor/README.md](vendor/README.md) |
 | 按需取 FredTalk 组件源码（约 570MB，不入库） | `scripts/fetch-fredtalk-components.sh` |
