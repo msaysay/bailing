@@ -2125,5 +2125,9 @@
   "missing": 11,
   "scenes": 7,
   "overlays": 10
+ },
+ "render": {
+  "out": "/home/user/bailing/episodes/00_样式小样/out/成片.mp4",
+  "missing": 11
  }
 }

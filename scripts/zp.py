@@ -298,7 +298,7 @@ def remotion(args):
     if r.returncode != 0: die("渲染失败：\n" + (r.stderr or r.stdout)[-1500:] + "\n没有显示器的 Linux 上要设环境变量 ZP_BROWSER 指向 chrome-headless-shell。")
 
 def cmd_stills(a):
-    p = paths(a.ep); st = state(p); props = cmd_board(a, quiet=True); cutouts(p, st, props)
+    p = paths(a.ep); props = cmd_board(a, quiet=True); st = state(p); cutouts(p, st, props)
     marks = [(0.6, "开场")]
     for sc in props["scenes"]:
         marks.append((sc["start"] + 0.35, sc["id"] + " 转场")); marks.append((sc["start"] + min(1.6, (sc["end"] - sc["start"]) * 0.6), sc["id"]))
@@ -318,7 +318,7 @@ def cmd_stills(a):
     print("✓ 关键帧：" + d + "\n✓ 联系表：" + "、".join(sheets) + "\n逐张看：头像有没有挡住插画主体、花字有没有压脸或出框、字幕和花字有没有打架。")
 
 def cmd_render(a):
-    p = paths(a.ep); st = state(p); props = cmd_board(a, quiet=True); cutouts(p, st, props)
+    p = paths(a.ep); props = cmd_board(a, quiet=True); st = state(p); cutouts(p, st, props)   # board 会改进度文件，要在它之后再读
     out = os.path.join(p["out"], "小样.mp4" if a.preview else "成片.mp4"); args = ["render", "src/index.tsx", "ZP", out, f"--props={p['props']}", "--crf=" + ("26" if a.preview else "18")]
     if a.preview: args.append("--scale=0.5")
     if a.frm is not None or a.to is not None:
