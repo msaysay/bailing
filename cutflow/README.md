@@ -1,5 +1,8 @@
 # cutflow · 口播短视频 AI 剪辑工作流
 
+> 这是蛋解创业版式和花字的**原型**（HTML 舞台 + ffmpeg），写的时候还没接上仓库里的 `studio/` 和 `skills/`。
+> 重录检测和调光已经移到 `scripts/retakes.py`、`scripts/grade.py`，接在 `talk-02-roughcut` 里；版式和花字待并进 `studio/`，见 `brands/danjie/README.md`。
+
 对标「蛋解创业」成片做的一条流水线：**原片 + 素材进，成片出**。人和 AI 只需要改一份 `timeline.json`，
 版式、字体、花字动效、调光全部由模板保证一致。设计依据见 [docs/STYLE_SPEC.md](docs/STYLE_SPEC.md)，
 AI 排片规则见 [docs/PLAYBOOK.md](docs/PLAYBOOK.md)。

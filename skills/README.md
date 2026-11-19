@@ -77,7 +77,7 @@ studio/               所有期数共用的 Remotion 工程
   src/components/     组件库（266 个，23 组；目录见 studio/src/gallery/catalog*.tsx）
   src/episodes/<期>/  timing.json、shots.json、faces.json、场景代码、封面
   public/<期>/        配音、音乐、镜头片段（不进 git）
-scripts/              asr.py、align.py、roughcut.py（口播粗剪）、talk_check.py（口播版式自查）、tikhub.py（搜索走 TikHub，下载走 yt-dlp 或 TikHub）、faces.py、seg_render.py、qc.py、facecheck.py、build_pack.py
+scripts/              asr.py、align.py、retakes.py（重录检测，留最后一遍）、grade.py（自动调光）、roughcut.py（口播粗剪）、talk_check.py（口播版式自查）、tikhub.py（搜索走 TikHub，下载走 yt-dlp 或 TikHub）、faces.py、seg_render.py、qc.py、facecheck.py、build_pack.py
 docs/aesthetic-rules.md  制作规则（审美手册），所有步骤都受它约束
 docs/对标拆解-小Lin口播.md  人为主那条线的版式依据
 ```
