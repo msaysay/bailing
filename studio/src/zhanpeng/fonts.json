@@ -1,0 +1,169 @@
+{
+ "_说明": "字体包。每包三个角色：sub 字幕和小字，strong 钩子、黄字、标签、问题条，big 白色大字。stroke 是用描边加粗的量（占字号的比例），对标片的楷体比开源楷体粗，靠它补。换包：scripts/zp.py fonts --use <包名>；全片只换某一期：分镜.json 里写 \"fontPack\": \"包名\"。",
+ "packs": {
+  "chill": {
+   "name": "寒蝉正楷（默认，最接近对标片）",
+   "note": "传统正楷笔形，全片一套字，和对标片一致。",
+   "sub": {
+    "file": "ChillKai.ttf",
+    "stroke": 0.011
+   },
+   "strong": {
+    "file": "ChillKai.ttf",
+    "stroke": 0.018
+   },
+   "big": {
+    "file": "ChillKai.ttf",
+    "stroke": 0.016
+   }
+  },
+  "chill-brush": {
+   "name": "寒蝉正楷 + 毛笔大字",
+   "note": "同上，白色大字换成马善政毛笔楷书，更有手写的劲。",
+   "sub": {
+    "file": "ChillKai.ttf",
+    "stroke": 0.011
+   },
+   "strong": {
+    "file": "ChillKai.ttf",
+    "stroke": 0.018
+   },
+   "big": {
+    "file": "MaShanZheng-Regular.ttf",
+    "stroke": 0.004
+   }
+  },
+  "wenkai": {
+   "name": "霞鹜文楷",
+   "note": "偏现代、圆润、亲和，适合轻松一点的选题。",
+   "sub": {
+    "file": "LXGWWenKaiGB-Regular.ttf",
+    "stroke": 0.008
+   },
+   "strong": {
+    "file": "LXGWWenKaiTC-Bold.ttf",
+    "stroke": 0.006
+   },
+   "big": {
+    "file": "LXGWWenKaiTC-Bold.ttf",
+    "stroke": 0.012
+   }
+  },
+  "song": {
+   "name": "思源宋体",
+   "note": "书卷气、偏严肃，适合文献多、讲历史的选题。和对标片不是一个路子。",
+   "sub": {
+    "file": "NotoSerifSC-SemiBold.ttf",
+    "stroke": 0
+   },
+   "strong": {
+    "file": "NotoSerifSC-Black.ttf",
+    "stroke": 0
+   },
+   "big": {
+    "file": "NotoSerifSC-Black.ttf",
+    "stroke": 0.004
+   }
+  },
+  "song-kai": {
+   "name": "宋体字幕 + 楷体花字",
+   "note": "字幕用宋体更清楚，花字用正楷保留对标片的味道。",
+   "sub": {
+    "file": "NotoSerifSC-SemiBold.ttf",
+    "stroke": 0
+   },
+   "strong": {
+    "file": "ChillKai.ttf",
+    "stroke": 0.018
+   },
+   "big": {
+    "file": "ChillKai.ttf",
+    "stroke": 0.016
+   }
+  },
+  "xiaowei": {
+   "name": "站酷小薇",
+   "note": "细瘦文艺的标题字，适合情感、生活方式类选题。",
+   "sub": {
+    "file": "ZCOOLXiaoWei-Regular.ttf",
+    "stroke": 0.006
+   },
+   "strong": {
+    "file": "ZCOOLXiaoWei-Regular.ttf",
+    "stroke": 0.014
+   },
+   "big": {
+    "file": "ZCOOLXiaoWei-Regular.ttf",
+    "stroke": 0.016
+   }
+  },
+  "custom": {
+   "name": "自备字体",
+   "note": "有授权的商业字体（方正楷体、方正粗楷、汉仪楷体等）放进 studio/public/fonts/，命名为 custom-sub.ttf、custom-strong.ttf、custom-big.ttf（后两个没有就用第一个）。粗体字不需要描边时把 stroke 改成 0。",
+   "sub": {
+    "file": "custom-sub.ttf",
+    "stroke": 0.006
+   },
+   "strong": {
+    "file": "custom-strong.ttf",
+    "stroke": 0.008
+   },
+   "big": {
+    "file": "custom-big.ttf",
+    "stroke": 0.01
+   }
+  }
+ },
+ "files": {
+  "ChillKai.ttf": {
+   "license": "SIL OFL 1.1",
+   "from": "github.com/Warren2060/ChillKai",
+   "urls": [
+    "https://github.com/Warren2060/ChillKai/releases/download/v2.000/ChillKai.zip"
+   ],
+   "unzip": "ChillKai/ChillKai.ttf"
+  },
+  "MaShanZheng-Regular.ttf": {
+   "license": "SIL OFL 1.1",
+   "from": "Google Fonts",
+   "urls": [
+    "https://raw.githubusercontent.com/google/fonts/main/ofl/mashanzheng/MaShanZheng-Regular.ttf"
+   ]
+  },
+  "LXGWWenKaiGB-Regular.ttf": {
+   "license": "SIL OFL 1.1",
+   "from": "github.com/lxgw/LxgwWenkaiGB",
+   "urls": [
+    "https://github.com/lxgw/LxgwWenkaiGB/releases/download/v1.530/LXGWWenKaiGB-Regular.ttf"
+   ]
+  },
+  "LXGWWenKaiTC-Bold.ttf": {
+   "license": "SIL OFL 1.1",
+   "from": "Google Fonts",
+   "urls": [
+    "https://raw.githubusercontent.com/google/fonts/main/ofl/lxgwwenkaitc/LXGWWenKaiTC-Bold.ttf"
+   ]
+  },
+  "NotoSerifSC-SemiBold.ttf": {
+   "license": "SIL OFL 1.1",
+   "from": "Fontsource",
+   "urls": [
+    "https://cdn.jsdelivr.net/fontsource/fonts/noto-serif-sc@5.2.8/chinese-simplified-600-normal.ttf"
+   ]
+  },
+  "NotoSerifSC-Black.ttf": {
+   "license": "SIL OFL 1.1",
+   "from": "Fontsource",
+   "urls": [
+    "https://cdn.jsdelivr.net/fontsource/fonts/noto-serif-sc@5.2.8/chinese-simplified-900-normal.ttf"
+   ]
+  },
+  "ZCOOLXiaoWei-Regular.ttf": {
+   "license": "SIL OFL 1.1",
+   "from": "Google Fonts",
+   "urls": [
+    "https://raw.githubusercontent.com/google/fonts/main/ofl/zcoolxiaowei/ZCOOLXiaoWei-Regular.ttf"
+   ]
+  }
+ }
+}

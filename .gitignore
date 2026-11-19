@@ -19,6 +19,7 @@ studio/public/*/cover/
 studio/public/*/person.mp4
 # 张展鹏口播线：字体、每期的素材副本和抠像都是生成物
 studio/public/fonts/*.ttf
+studio/out/
 studio/public/*/assets/
 studio/public/*/cutout-*.webm
 __pycache__/

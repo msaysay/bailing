@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """张展鹏科普口播线：原片 + 文案 → 成片。风格固定在模板里，每期只变数据（分镜.json），不写场景代码。
   scripts/zp.py setup                                   装字体、下模型、查环境（第一次用先跑）
+  scripts/zp.py fonts [--preview] [--use 包名] [--install 包名|all]
+                                                        字体库：列出字体包、出样张对比、换默认字体
   scripts/zp.py new   <期名> --video 原片 [--script 文案.txt] [--slug zp01]
                                                         建一期：转写原片；有文案就接着对齐
   scripts/zp.py align <期名> [--script 文案.txt]         文案对到声音上，决定留哪几段（同一句说了几遍留最后一遍）
@@ -17,12 +19,42 @@ os.environ.setdefault("OPENCV_LOG_LEVEL", "ERROR")
 R = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); sys.path.insert(0, os.path.join(R, "scripts"))
 STUDIO = os.path.join(R, "studio"); FONTS = os.path.join(STUDIO, "public", "fonts"); THEME = os.path.join(STUDIO, "src", "zhanpeng", "theme.json")
 W, H, FPS = 1080, 1920, 30
-# 宋体做字幕，黑宋做红色钩子，楷体做黄色关键词。都是 OFL，可商用。自己有更像的字体就按同名文件放进 studio/public/fonts/。
-FONT_URLS = {
-    "zp-song.ttf": ["https://cdn.jsdelivr.net/fontsource/fonts/noto-serif-sc@5.2.8/chinese-simplified-600-normal.ttf"],
-    "zp-song-black.ttf": ["https://cdn.jsdelivr.net/fontsource/fonts/noto-serif-sc@5.2.8/chinese-simplified-900-normal.ttf"],
-    "zp-kai.ttf": ["https://github.com/lxgw/LxgwWenKai/releases/download/v1.520/LXGWWenKai-Medium.ttf", "https://raw.githubusercontent.com/google/fonts/main/ofl/lxgwwenkaitc/LXGWWenKaiTC-Bold.ttf"],
-}
+FONTLIB = os.path.join(STUDIO, "src", "zhanpeng", "fonts.json")
+def fontlib(): return json.load(open(FONTLIB, encoding="utf-8"))
+def pack_of(name=None):
+    """字体包 → {sub, strong, big}。包里某个文件不在时：自备包退回 sub，其余退回默认包。"""
+    lib = fontlib(); name = name or json.load(open(THEME, encoding="utf-8")).get("fontPack", "chill")
+    if name not in lib["packs"]: die(f"没有字体包「{name}」。可选：{'、'.join(lib['packs'])}")
+    pk = {r: dict(lib["packs"][name][r]) for r in ("sub", "strong", "big")}; has = lambda f: os.path.exists(os.path.join(FONTS, f))
+    if not has(pk["sub"]["file"]):
+        if name == "chill": die("字体没装：先运行 zp.py setup")
+        print(f"⚠ 字体包「{name}」的文件不在（{pk['sub']['file']}），这次用默认的寒蝉正楷。装它：zp.py fonts --install {name}"); return pack_of("chill")
+    for r in ("strong", "big"):
+        if not has(pk[r]["file"]): pk[r] = dict(pk["sub"], stroke=max(pk[r]["stroke"], pk["sub"]["stroke"] + 0.008))
+    return pk
+def install_fonts(names):
+    """下载这些字体包用到的文件。返回没装上的文件名。"""
+    lib = fontlib(); os.makedirs(FONTS, exist_ok=True); bad = []
+    need = sorted({lib["packs"][n][r]["file"] for n in names for r in ("sub", "strong", "big") if n != "custom"})
+    for f in need:
+        dest = os.path.join(FONTS, f)
+        if not (os.path.exists(dest) and os.path.getsize(dest) > 100_000):
+            spec = lib["files"][f]; print(f"下载字体 {f}（{spec['license']}）…")
+            for u in spec["urls"]:
+                try:
+                    tmp = dest + ".part"; req = urllib.request.Request(u, headers={"User-Agent": "video-studio"})
+                    with urllib.request.urlopen(req, timeout=600) as r, open(tmp, "wb") as fh: shutil.copyfileobj(r, fh)
+                    if spec.get("unzip"):
+                        import zipfile
+                        with zipfile.ZipFile(tmp) as z, z.open(spec["unzip"]) as src, open(dest, "wb") as out: shutil.copyfileobj(src, out)
+                        os.remove(tmp)
+                    else: os.replace(tmp, dest)
+                    if os.path.getsize(dest) > 100_000: break
+                except Exception as e: print("  没下到：", e)
+        good = os.path.exists(dest) and os.path.getsize(dest) > 100_000
+        print(("✓ " if good else "✗ 字体没装上：") + f)
+        if not good: bad.append(f)
+    return bad
 SV_URL = "https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-sense-voice-zh-en-ja-ko-yue-int8-2024-07-17.tar.bz2"
 NPX = shutil.which("npx") or "npx"   # Windows 上是 npx.cmd，要用全路径才起得来
 def die(msg): sys.exit("✗ " + msg)
@@ -32,7 +64,7 @@ def paths(ep):
     p = {"E": E, "in": os.path.join(E, "01_输入素材"), "assets": os.path.join(E, "01_输入素材", "素材"), "work": work, "out": os.path.join(E, "out"),
          "state": os.path.join(work, "zp.json"), "script": os.path.join(work, "script.txt"), "asr": os.path.join(work, "asr-原片.json"),
          "timing": os.path.join(work, "timing.json"), "cuts": os.path.join(work, "cuts.json"), "board": os.path.join(work, "分镜.json"),
-         "list": os.path.join(work, "素材清单.md"), "props": os.path.join(work, "props.json")}
+         "list": os.path.join(work, "素材清单.md"), "track": os.path.join(work, "face-track.json"), "props": os.path.join(work, "props.json")}
     return p
 def state(p):
     if not os.path.exists(p["state"]): die("没有这一期，先运行 zp.py new。")
@@ -68,18 +100,8 @@ def cmd_setup(a):
     from zplib import vision
     try: vision.fetch(vision.YUNET, vision.YUNET_URL); print("✓ 人脸模型")
     except Exception as e: print("✗ 人脸模型下载失败：", e); ok = False
-    os.makedirs(FONTS, exist_ok=True)
-    for name, urls in FONT_URLS.items():
-        dest = os.path.join(FONTS, name)
-        if not (os.path.exists(dest) and os.path.getsize(dest) > 100_000):
-            for u in urls:
-                try:
-                    req = urllib.request.Request(u, headers={"User-Agent": "video-studio"})
-                    with urllib.request.urlopen(req, timeout=300) as r, open(dest, "wb") as f: shutil.copyfileobj(r, f)
-                    if os.path.getsize(dest) > 100_000: break
-                except Exception: pass
-        good = os.path.exists(dest) and os.path.getsize(dest) > 100_000
-        print(("✓ " if good else "✗ 字体没下到：") + name); ok = ok and good
+    active = json.load(open(THEME, encoding="utf-8")).get("fontPack", "chill")
+    if install_fonts(sorted({"chill", active} - {"custom"})): ok = False
     if not os.path.isdir(os.path.join(STUDIO, "node_modules", "remotion")) and shutil.which("npm"):
         print("安装渲染依赖（npm install）…"); subprocess.run([shutil.which("npm"), "install", "--no-audit", "--no-fund"], cwd=STUDIO, capture_output=True)
     if os.path.isdir(os.path.join(STUDIO, "node_modules", "remotion")): print("✓ 渲染依赖")
@@ -87,6 +109,31 @@ def cmd_setup(a):
     for f in ("thud.wav", "tick.wav", "whoosh.wav"):
         if not os.path.exists(os.path.join(STUDIO, "public", "sfx", f)): print(f"· 没有音效 studio/public/sfx/{f}，分镜表里写 \"sfx\": false，或补上这个文件")
     print("环境就绪。" if ok else "上面打 ✗ 的补齐后再跑一次 setup。"); sys.exit(0 if ok else 1)
+
+def cmd_fonts(a):
+    lib = fontlib(); cur = json.load(open(THEME, encoding="utf-8")).get("fontPack", "chill")
+    if a.install: install_fonts(list(lib["packs"]) if a.install == "all" else [a.install])
+    if a.use:
+        if a.use not in lib["packs"]: die(f"没有字体包「{a.use}」")
+        if a.use != "custom": install_fonts([a.use])
+        th = json.load(open(THEME, encoding="utf-8")); th["fontPack"] = a.use; open(THEME, "w", encoding="utf-8").write(json.dumps(th, ensure_ascii=False, indent=1) + "\n"); cur = a.use
+        print(f"✓ 以后每期默认用「{lib['packs'][a.use]['name']}」。只换某一期：在它的 分镜.json 里写 \"fontPack\": \"包名\"。")
+    has = lambda n: all(os.path.exists(os.path.join(FONTS, lib["packs"][n][r]["file"])) for r in ("sub",))
+    print("字体包（* 是当前默认）：")
+    for n, pk in lib["packs"].items(): print(f" {'*' if n == cur else ' '} {n:<12} {'已装' if has(n) else '未装'}  {pk['name']} —— {pk['note']}")
+    if a.preview is not None:
+        from PIL import Image, ImageDraw, ImageFont
+        text = a.preview or "为什么一群女生在一起"; hook = a.hook or "生理期会传染"; packs = [n for n in lib["packs"] if has(n)]
+        im = Image.new("RGB", (1500, 400 * len(packs) + 10), (46, 40, 36)); d = ImageDraw.Draw(im); lab = ImageFont.truetype(os.path.join(FONTS, lib["packs"]["chill"]["sub"]["file"]), 26)
+        def put(xy, t, f, size, col, stroke): d.text(xy, t, font=ImageFont.truetype(os.path.join(FONTS, f), size), fill=col, stroke_width=int(round(size * stroke)), stroke_fill=col)
+        for k, n in enumerate(packs):
+            pk = {r: dict(lib["packs"][n][r]) for r in ("sub", "strong", "big")}; y = 10 + k * 400
+            for r in ("strong", "big"):
+                if not os.path.exists(os.path.join(FONTS, pk[r]["file"])): pk[r] = pk["sub"]
+            d.text((14, y), f"{n}  {lib['packs'][n]['name']}", font=lab, fill=(170, 165, 155))
+            put((30, y + 44), text, pk["sub"]["file"], 64, (255, 255, 255), pk["sub"]["stroke"]); put((30, y + 128), hook, pk["strong"]["file"], 120, (212, 22, 28), pk["strong"]["stroke"])
+            put((30, y + 276), "「安全稳定」 ·内分泌 ·情绪", pk["strong"]["file"], 84, (247, 227, 107), pk["strong"]["stroke"]); put((1130, y + 40), "圈", pk["big"]["file"], 300, (255, 255, 255), pk["big"]["stroke"])
+        out = os.path.join(R, "studio", "out", "字体包样张.jpg"); os.makedirs(os.path.dirname(out), exist_ok=True); im.save(out, quality=90); print("✓ 样张：" + out)
 
 def cmd_new(a):
     p = paths(a.ep)
@@ -162,7 +209,9 @@ def cmd_cut(a):
     timing = {"fps": FPS, "total": round(dur, 3), "segments": [{"id": 1, "name": "全片", "start": 0.0, "end": round(dur, 3), "lines": [l["n"] for l in lines]}], "lines": lines}
     json.dump(timing, open(p["timing"], "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     json.dump({"dur": round(dur, 3), "cuts": st["plan"]["cuts"], "kept": kept}, open(p["cuts"], "w"), indent=1)
-    face = vision.face_box(dest); st["face"] = face; st["cut"] = {"person": dest, "dur": round(dur, 3)}; save(p, st)
+    face = vision.face_box(dest); st["face"] = face
+    track = vision.face_track(dest); json.dump(track, open(p["track"], "w"))
+    print(f"人脸轨迹：{len(track['cx'])} 个采样，检测到 {track['hit']:.0%}" if track else "⚠ 人脸轨迹没测出来（检测率太低），头像会固定在全片的平均位置，人晃得多时会偏。"); st["cut"] = {"person": dest, "dur": round(dur, 3)}; save(p, st)
     if not os.path.exists(p["board"]):
         json.dump({"title": "", "music": None, "camera": "auto", "scenes": [], "overlays": []}, open(p["board"], "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print(f"✓ {dest}（{dur:.1f} 秒，剪口 {len(st['plan']['cuts'])} 个）\n✓ {p['timing']}\n✓ {p['cuts']}")
@@ -177,7 +226,7 @@ def placeholder(dest, title, note):
     from PIL import Image, ImageDraw, ImageFont
     im = Image.new("RGB", (W, H), (58, 44, 34)); d = ImageDraw.Draw(im)
     for y in range(0, H, 6): d.line([(0, y), (W, y)], fill=(58 + y * 30 // H, 44 + y * 22 // H, 34 + y * 14 // H), width=6)
-    fp = os.path.join(FONTS, "zp-song.ttf")
+    fp = os.path.join(FONTS, pack_of()["sub"]["file"])
     big = ImageFont.truetype(fp, 64) if os.path.exists(fp) else ImageFont.load_default(); small = ImageFont.truetype(fp, 40) if os.path.exists(fp) else big
     d.text((W / 2, 760), "素材占位", font=big, fill=(240, 220, 180), anchor="mm"); d.text((W / 2, 850), title, font=small, fill=(240, 220, 180), anchor="mm")
     y = 960
@@ -214,7 +263,8 @@ def cmd_board(a, quiet=False):
         m = os.path.join(p["assets"], board["music"])
         if os.path.isfile(m): shutil.copyfile(m, os.path.join(adir, board["music"])); music = f"{st['slug']}/assets/{board['music']}"
         else: warns.append(f"配乐「{board['music']}」不在素材目录里，这次不加配乐。")
-    props.update({"fps": FPS, "width": W, "height": H, "durationInFrames": int(round(timing["total"] * FPS)), "videoFile": f"{st['slug']}/person.mp4", "musicFile": music, "musicVolume": float(board.get("musicVolume", 0.07))})
+    track = json.load(open(p["track"])) if os.path.exists(p["track"]) else None
+    props.update({"fonts": pack_of(board.get("fontPack")), "faceTrack": track and {k: track[k] for k in ("fps", "cx", "cy", "w")}, "fps": FPS, "width": W, "height": H, "durationInFrames": int(round(timing["total"] * FPS)), "videoFile": f"{st['slug']}/person.mp4", "musicFile": music, "musicVolume": float(board.get("musicVolume", 0.07))})
     json.dump(props, open(p["props"], "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     rows = ["# 素材清单", "", f"把文件放进 `{os.path.relpath(p['assets'], R)}/`，文件名照第一列（扩展名可以不同，图片或视频都行）。竖屏 9:16，1080×1920 以上。", "",
             "| 文件名 | 状态 | 用途 | 时长 | 这时在说 | 画面要求 / 提示词 |", "|---|---|---|---|---|---|"]
@@ -285,6 +335,7 @@ def cmd_check(a):
 
 ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter); sub = ap.add_subparsers(dest="cmd", required=True)
 sub.add_parser("setup")
+x = sub.add_parser("fonts"); x.add_argument("--use"); x.add_argument("--install"); x.add_argument("--preview", nargs="?", const=""); x.add_argument("--hook")
 x = sub.add_parser("new"); x.add_argument("ep"); x.add_argument("--video", required=True); x.add_argument("--script"); x.add_argument("--slug")
 x = sub.add_parser("align"); x.add_argument("ep"); x.add_argument("--script")
 for name in ("cut", "board", "stills", "check"): sub.add_parser(name).add_argument("ep")

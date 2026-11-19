@@ -1,15 +1,15 @@
 import React from "react";
 import {useCurrentFrame, useVideoConfig} from "remotion";
 import type {Overlay, StoryProps} from "./types";
-import {KAI, SONG, SONG_BLACK, pop, ramp, rand} from "./util";
+import {BIG, STRONG, SUB, bold, pop, ramp, rand} from "./util";
 
 type P = {o: Overlay; props: StoryProps; t: number; u: number; w: number; h: number};
 
-const yellowText = (u: number, color: string): React.CSSProperties => ({
-  fontFamily: KAI,
-  fontWeight: 700,
+const yellowText = (props: StoryProps, size: number, u: number, color: string): React.CSSProperties => ({
+  fontFamily: STRONG,
+  fontWeight: 400,
   color,
-  WebkitTextStroke: `${1.4 * u}px ${color}`,
+  ...bold(size, props.fonts.strong.stroke, color),
   textShadow: `0 ${3 * u}px ${8 * u}px rgba(0,0,0,0.55), 0 0 ${4 * u}px rgba(0,0,0,0.45)`,
 });
 
@@ -26,8 +26,9 @@ const Hook: React.FC<P> = ({o, props, t, u, h}) => {
         right: 0,
         top: props.theme.hook.y * h - size * 0.62,
         textAlign: "center",
-        fontFamily: SONG_BLACK,
-        fontWeight: 900,
+        fontFamily: STRONG,
+        fontWeight: 400,
+        ...bold(size, props.fonts.strong.stroke, props.theme.colors.red),
         fontSize: size,
         letterSpacing: "0.03em",
         whiteSpace: "nowrap",
@@ -70,7 +71,7 @@ const Question: React.FC<P> = ({o, props, t, u, h}) => {
         boxShadow: `0 ${2 * u}px ${8 * u}px rgba(0,0,0,0.12)`,
       }}
     >
-      <span style={{fontFamily: KAI, fontWeight: 700, fontSize: size, letterSpacing: "0.06em", color: props.theme.colors.ink, WebkitTextStroke: `${1.1 * u}px ${props.theme.colors.ink}`, whiteSpace: "nowrap"}}>
+      <span style={{fontFamily: STRONG, fontWeight: 400, fontSize: size, letterSpacing: "0.06em", color: props.theme.colors.ink, ...bold(size, props.fonts.strong.stroke, props.theme.colors.ink), whiteSpace: "nowrap"}}>
         {shown}
       </span>
       {typing ? <span style={{display: "inline-block", width: 16 * u, height: 50 * u, marginLeft: 4 * u, background: "#fff"}} /> : null}
@@ -102,7 +103,7 @@ const Float: React.FC<P> = ({o, props, t, u, w, h}) => {
               left: x,
               top: y,
               fontSize: size,
-              ...yellowText(u, props.theme.colors.yellow),
+              ...yellowText(props, size, u, props.theme.colors.yellow),
               transform: `scale(${pop(local)}) rotate(${(left ? -1 : 1) * (8 - index * 14)}deg)`,
               opacity: out,
             }}
@@ -143,7 +144,7 @@ const Scatter: React.FC<P> = ({o, props, t, u, w, h}) => (
             fontSize: size,
             letterSpacing: "0.04em",
             whiteSpace: "nowrap",
-            ...yellowText(u, props.theme.colors.yellow),
+            ...yellowText(props, size, u, props.theme.colors.yellow),
             opacity: 1 - ramp(t, o.end - 0.12, o.end),
           }}
         >
@@ -196,8 +197,9 @@ const Flow: React.FC<P> = ({o, props, t, u, h}) => {
             ) : null}
             <div
               style={{
-                fontFamily: SONG,
-                fontWeight: 600,
+                fontFamily: SUB,
+                fontWeight: 400,
+                ...bold(size, props.fonts.sub.stroke + 0.008, "#fff"),
                 fontSize: size,
                 letterSpacing: "0.1em",
                 color: "#fff",
@@ -244,7 +246,7 @@ const Label: React.FC<P> = ({o, props, t, u, w, h}) => {
         opacity: 1 - ramp(t, o.end - 0.1, o.end),
       }}
     >
-      <span style={{fontFamily: KAI, fontWeight: 700, fontSize: size, letterSpacing: "0.09em", color: props.theme.colors.ink, WebkitTextStroke: `${1.5 * u}px ${props.theme.colors.ink}`, whiteSpace: "nowrap"}}>{text}</span>
+      <span style={{fontFamily: STRONG, fontWeight: 400, fontSize: size, letterSpacing: "0.09em", color: props.theme.colors.ink, ...bold(size, props.fonts.strong.stroke, props.theme.colors.ink), whiteSpace: "nowrap"}}>{text}</span>
     </div>
   );
 };
@@ -275,7 +277,7 @@ const Bullets: React.FC<P> = ({o, props, t, u, w, h}) => {
             key={index}
             style={{
               fontSize: size,
-              ...yellowText(u, props.theme.colors.yellow),
+              ...yellowText(props, size, u, props.theme.colors.yellow),
               letterSpacing: `${0.08 + (1 - land) * 0.5}em`,
               opacity: ramp(local, 0, 0.1),
               transform: `scale(${0.55 + 0.45 * land})`,
@@ -302,12 +304,12 @@ const BigWord: React.FC<P> = ({o, props, t, u, w, h}) => {
   const subAt = o.items?.[0]?.at ?? o.start + 0.5;
   const glyph = (size: number): React.CSSProperties => ({
     position: "absolute",
-    fontFamily: KAI,
-    fontWeight: 700,
+    fontFamily: BIG,
+    fontWeight: 400,
     fontSize: size,
     lineHeight: 1,
     color: "#fff",
-    WebkitTextStroke: `${size * 0.022}px #fff`,
+    ...bold(size, props.fonts.big.stroke, "#fff"),
     textShadow: `0 ${4 * u}px ${14 * u}px rgba(0,0,0,0.5)`,
     opacity: out,
   });
@@ -337,8 +339,9 @@ const BigWord: React.FC<P> = ({o, props, t, u, w, h}) => {
             right: 0,
             top: top + first * 1.22,
             textAlign: "center",
-            fontFamily: SONG,
-            fontWeight: 600,
+            fontFamily: SUB,
+            fontWeight: 400,
+            ...bold(props.theme.caption.size * u, props.fonts.sub.stroke, "#fff"),
             fontSize: props.theme.caption.size * u,
             letterSpacing: `${props.theme.caption.spacing}em`,
             color: "#fff",
@@ -364,8 +367,8 @@ const Ask: React.FC<P> = ({o, props, t, u, w, h}) => {
           left: 0.62 * w,
           top: props.theme.caption.y * h,
           transform: `translate(-50%, -50%) scale(${pop(local, 0.4)}) rotate(4deg)`,
-          fontFamily: KAI,
-          fontWeight: 700,
+          fontFamily: STRONG,
+          fontWeight: 400,
           fontSize: 330 * u,
           color: "rgba(205,205,205,0.72)",
           textShadow: `0 ${4 * u}px ${12 * u}px rgba(0,0,0,0.25)`,
@@ -381,8 +384,8 @@ const Ask: React.FC<P> = ({o, props, t, u, w, h}) => {
           right: 0,
           top: props.theme.caption.y * h - 64 * u * 0.62,
           textAlign: "center",
-          fontFamily: SONG,
-          fontWeight: 900,
+          fontFamily: STRONG,
+          fontWeight: 400,
           fontSize: 64 * u * Math.min(1, 14 / Math.max(1, (o.text ?? "").length)),
           letterSpacing: "0.08em",
           whiteSpace: "nowrap",
@@ -415,8 +418,8 @@ const Alert: React.FC<P> = ({o, props, t, u, w, h}) => (
             left: x * w + shake,
             top: props.theme.caption.y * h - 30 * u,
             transform: `translate(-50%, 0) scale(${pop(local, 0.22)})`,
-            fontFamily: SONG_BLACK,
-            fontWeight: 900,
+            fontFamily: STRONG,
+            fontWeight: 400,
             fontSize: 120 * u,
             lineHeight: 1,
             color: props.theme.colors.red,

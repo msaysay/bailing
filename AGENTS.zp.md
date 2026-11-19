@@ -18,6 +18,7 @@
 pip install -r requirements.txt
 python3 scripts/zp.py setup
 python3 scripts/zplib/selftest.py
+python3 scripts/zp.py fonts --preview   # 字体包样张，默认的寒蝉正楷最接近对标片
 ```
 
 ## 然后

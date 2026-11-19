@@ -20,7 +20,7 @@ README = """# 张展鹏科普口播 · 自动剪辑包
 把整个文件夹交给它，让它先读 `AGENTS.md`。人只需要在三个节点确认：剪掉了哪些话、分镜和素材、成片。
 
 需要：Python 3.10+、Node.js 20+、ffmpeg。第一次运行 `python3 scripts/zp.py setup`。
-字体：思源宋体、霞鹜文楷（SIL OFL 1.1，可商用）。渲染用 Remotion：个人和三人以下团队免费，更大的公司需要它的公司许可。
+字体：寒蝉正楷、霞鹜文楷、思源宋体、马善政、站酷小薇（均为 SIL OFL 1.1，可商用），`python3 scripts/zp.py fonts --preview` 出样张挑。渲染用 Remotion：个人和三人以下团队免费，更大的公司需要它的公司许可。
 """
 files = {"AGENTS.md": os.path.join(R, "AGENTS.zp.md"), "requirements.txt": os.path.join(R, "requirements.txt")}
 def tree(src, dst, skip=()):
@@ -31,9 +31,11 @@ def tree(src, dst, skip=()):
             if not any(n.endswith(x) for x in skip): files[rel] = full
 tree(".claude/skills/zhanpeng-talk", ".claude/skills/zhanpeng-talk"); tree("scripts/zplib", "scripts/zplib"); tree("studio/src/zhanpeng", "studio/src/zhanpeng"); tree("studio/public/sfx", "studio/public/sfx")
 for f in ("scripts/zp.py", "scripts/asr.py", "scripts/qc.py", "studio/package.json", "studio/package-lock.json", "studio/tsconfig.json"): files[f] = os.path.join(R, f)
-fonts = [f for f in ("zp-song.ttf", "zp-song-black.ttf", "zp-kai.ttf") if os.path.exists(os.path.join(R, "studio/public/fonts", f))]
+import json
+lib = json.load(open(os.path.join(R, "studio/src/zhanpeng/fonts.json"), encoding="utf-8"))
+fonts = [f for f in lib["files"] if os.path.exists(os.path.join(R, "studio/public/fonts", f))]   # 都是 OFL 字体，可以随包分发；自备的商业字体不带
 for f in fonts: files["studio/public/fonts/" + f] = os.path.join(R, "studio/public/fonts", f)
-if len(fonts) < 3: print("· 字体没带全（先跑 zp.py setup 再打包可以带上）；对方 setup 时会自己下。")
+print(f"· 带上了 {len(fonts)}/{len(lib['files'])} 个字体文件（先跑 zp.py fonts --install all 可以带全）；没带的对方用到时会自己下。")
 if a.reference:
     for n in sorted(os.listdir(a.reference)):
         if n.lower().endswith((".jpg", ".png", ".md")): files["reference/" + n] = os.path.join(a.reference, n)

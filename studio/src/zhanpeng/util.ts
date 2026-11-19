@@ -1,3 +1,4 @@
+import type React from "react";
 import {Easing, interpolate} from "remotion";
 
 export const clamp = {extrapolateLeft: "clamp", extrapolateRight: "clamp"} as const;
@@ -12,10 +13,13 @@ export const pop = (seconds: number, length = 0.28) => {
   return interpolate(p, [0, 0.6, 1], [0.2, 1.12, 1], {...clamp, easing: Easing.out(Easing.quad)});
 };
 
-// 三种字：宋体（字幕）、黑宋（红色钩子）、楷体（黄色关键词）。文件由 scripts/zp.py setup 放进 public/fonts/。
-export const SONG = '"ZP Song", "Songti SC", "Noto Serif CJK SC", serif';
-export const SONG_BLACK = '"ZP SongBlack", "ZP Song", serif';
-export const KAI = '"ZP Kai", "Kaiti SC", "STKaiti", "KaiTi", "ZP Song", serif';
+// 三个字体角色，文件由字体包决定（fonts.json），index.tsx 负责加载。
+export const SUB = '"ZP Sub", "Kaiti SC", "STKaiti", "KaiTi", serif';
+export const STRONG = '"ZP Strong", "ZP Sub", "Kaiti SC", "STKaiti", "KaiTi", serif';
+export const BIG = '"ZP Big", "ZP Strong", "ZP Sub", serif';
+/** 用同色描边把字加粗：开源楷体只有一个字重，对标片的粗楷靠这个补。amount 是占字号的比例。 */
+export const bold = (size: number, amount: number, color: string): React.CSSProperties =>
+  amount > 0 ? {WebkitTextStroke: `${(size * amount * 2).toFixed(2)}px ${color}`} : {};
 
 /** 固定的伪随机数，0 到 1。 */
 export const rand = (seed: number) => {

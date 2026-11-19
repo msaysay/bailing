@@ -1,6 +1,6 @@
 ---
 name: zhanpeng-talk
-description: 张展鹏的竖屏科普口播自动剪辑：他给口播原片和文案，按他那条对标片的风格（宋体白字幕、红色钩子、插画加羽化头像、黄色楷体关键词、论文卡、黑底金句）出 1080×1920 成片。用户说「帮展鹏剪」「按展鹏的风格出片」「原片和文案给你了」时使用；也用于他自己一步步跟着做。
+description: 张展鹏的竖屏科普口播自动剪辑：他给口播原片和文案，按他那条对标片的风格（全片一套正楷：白字幕、红色钩子、黄色关键词；插画加跟着头走的羽化头像、论文卡、黑底金句）出 1080×1920 成片。用户说「帮展鹏剪」「按展鹏的风格出片」「原片和文案给你了」时使用；也用于他自己一步步跟着做。
 ---
 
 # 张展鹏 · 科普口播成片
@@ -64,7 +64,7 @@ python3 scripts/zp.py align <期名>          # 改过 script.txt 就重跑
 python3 scripts/zp.py cut <期名>
 ```
 
-产出 `studio/public/<代号>/person.mp4`（剪好的人物视频）、`timing.json`、`cuts.json`、人脸位置。它报的 ⚠ 要转告他。
+产出 `studio/public/<代号>/person.mp4`（剪好的人物视频）、`timing.json`、`cuts.json`、人脸位置和逐帧人脸轨迹（头像靠它追着头走）。它报的 ⚠ 要转告他。
 
 ## 第 3 步 · 排分镜（确认点二）
 
@@ -137,5 +137,6 @@ python3 scripts/zp.py check <期名>                         # 黑场、闪帧�
 - `references/board.md` 断句规则、分镜表字段、每句话选什么处理
 - `examples/` 对标片的文案和分镜表
 - `scripts/zp.py` 总入口；`scripts/zplib/` 对齐、分镜解析、人脸和抠像
-- `studio/src/zhanpeng/` 模板（合成名 `ZP`），`theme.json` 是全部可调的数
+- `studio/src/zhanpeng/` 模板（合成名 `ZP`），`theme.json` 是全部可调的数，`fonts.json` 是字体库
+- 换字体：`python3 scripts/zp.py fonts --preview` 出样张挑，规则见 `style-spec.md` 第 4 节。默认的寒蝉正楷最接近对标片
 - 这条线建在视频生产线上：识别用 `scripts/asr.py`，自查用 `scripts/qc.py`，时间格式同 `timing.json`，生产线的说明见 `skills/README.md`

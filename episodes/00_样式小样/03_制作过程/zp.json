@@ -2110,10 +2110,10 @@
   "dropped": []
  },
  "face": {
-  "x": 0.3051,
-  "y": 0.2625,
-  "w": 0.4224,
-  "h": 0.321,
+  "x": 0.3919,
+  "y": 0.2167,
+  "w": 0.2824,
+  "h": 0.2194,
   "detected": true,
   "hits": 24
  },
@@ -2125,9 +2125,5 @@
   "missing": 11,
   "scenes": 7,
   "overlays": 10
- },
- "render": {
-  "out": "/home/user/bailing/episodes/00_样式小样/out/成片.mp4",
-  "missing": 11
  }
 }

@@ -2,7 +2,7 @@ import React from "react";
 import {AbsoluteFill, Img, Loop, OffthreadVideo, Sequence, staticFile, useCurrentFrame, useVideoConfig} from "remotion";
 import {Pip} from "./Pip";
 import type {Scene, Shot, StoryProps} from "./types";
-import {KAI, ramp} from "./util";
+import {STRONG, bold, ramp} from "./util";
 
 const CROSS = 0.3;
 
@@ -234,12 +234,12 @@ const CardWord: React.FC<{scene: Scene; props: StoryProps; t: number}> = ({scene
           right: 0,
           top: "38.6%",
           textAlign: "center",
-          fontFamily: KAI,
-          fontWeight: 700,
+          fontFamily: STRONG,
+          fontWeight: 400,
           fontSize: 128 * u,
           letterSpacing: "0.06em",
           color: "#F6E58A",
-          WebkitTextStroke: `${1.6 * u}px #F6E58A`,
+          ...bold(128 * u, props.fonts.strong.stroke, "#F6E58A"),
           textShadow: `0 0 ${18 * u}px rgba(246,229,138,0.45), 0 ${3 * u}px ${10 * u}px rgba(0,0,0,0.8)`,
           opacity: ramp(local, 0, 0.18),
           transform: `scale(${0.92 + 0.08 * ramp(local, 0, 0.3) + 0.03 * Math.min(1, local / 2)})`,

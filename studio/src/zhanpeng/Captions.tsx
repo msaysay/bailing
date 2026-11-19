@@ -1,9 +1,9 @@
 import React from "react";
 import {useCurrentFrame, useVideoConfig} from "remotion";
 import type {StoryProps} from "./types";
-import {SONG, ramp} from "./util";
+import {SUB, bold, ramp} from "./util";
 
-/** 字幕：白色宋体，一行，固定在画面三分之二高处。没有底条、没有描边，只有软阴影。 */
+/** 字幕：白色楷体（字体包的 sub），一行，固定在画面三分之二高处。没有底条、没有描边，只有软阴影。 */
 export const Captions: React.FC<{props: StoryProps}> = ({props}) => {
   const frame = useCurrentFrame();
   const {width, height, fps} = useVideoConfig();
@@ -22,8 +22,9 @@ export const Captions: React.FC<{props: StoryProps}> = ({props}) => {
         right: 40 * u,
         top: spec.y * height - spec.size * u * 0.62,
         textAlign: "center",
-        fontFamily: SONG,
-        fontWeight: 600,
+        fontFamily: SUB,
+        fontWeight: 400,
+        ...bold(spec.size * u, props.fonts.sub.stroke, props.theme.colors.white),
         fontSize: spec.size * u,
         lineHeight: 1.24,
         letterSpacing: `${spec.spacing}em`,

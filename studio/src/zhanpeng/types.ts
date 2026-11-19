@@ -54,6 +54,10 @@ export type StoryTheme = {
   camera: {drift: number};
 };
 
+export type FontRole = {file: string; stroke: number};
+/** 人脸逐帧位置（归一化）：cx、cy 是脸中心，w 是脸宽；每秒 fps 个采样。头像靠它追着头走。 */
+export type FaceTrack = {fps: number; cx: number[]; cy: number[]; w: number[]};
+
 export type StoryProps = {
   fps: number;
   width: number;
@@ -65,6 +69,8 @@ export type StoryProps = {
   captions: StoryCaption[];
   camera: {start: number; zoom: number; ease: boolean}[];
   face: Box;
+  faceTrack?: FaceTrack | null;
+  fonts: {sub: FontRole; strong: FontRole; big: FontRole};
   scenes: Scene[];
   overlays: Overlay[];
   /** 音效：at 秒，file 是 public/sfx/ 下的文件名。 */

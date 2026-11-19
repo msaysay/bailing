@@ -1,7 +1,37 @@
 {
-  "colors": {"white": "#FFFFFF", "red": "#D4161C", "yellow": "#F7E36B", "yellowBox": "#FBEE7E", "ink": "#1E1A14", "frame": "#150D09"},
-  "caption": {"y": 0.664, "size": 54, "spacing": 0.07},
-  "hook": {"y": 0.716, "size": 138},
-  "pip": {"left": {"cx": 0.29, "cy": 0.2, "face": 0.185}, "right": {"cx": 0.79, "cy": 0.2, "face": 0.15}, "rx": 0.255, "ry": 0.155},
-  "camera": {"drift": 0.025}
+ "colors": {
+  "white": "#FFFFFF",
+  "red": "#D4161C",
+  "yellow": "#F7E36B",
+  "yellowBox": "#FBEE7E",
+  "ink": "#1E1A14",
+  "frame": "#150D09"
+ },
+ "caption": {
+  "y": 0.664,
+  "size": 58,
+  "spacing": 0.1
+ },
+ "hook": {
+  "y": 0.716,
+  "size": 138
+ },
+ "pip": {
+  "left": {
+   "cx": 0.29,
+   "cy": 0.2,
+   "face": 0.185
+  },
+  "right": {
+   "cx": 0.79,
+   "cy": 0.2,
+   "face": 0.15
+  },
+  "rx": 0.255,
+  "ry": 0.155
+ },
+ "camera": {
+  "drift": 0.025
+ },
+ "fontPack": "chill"
 }
