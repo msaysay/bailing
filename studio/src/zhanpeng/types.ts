@@ -67,6 +67,8 @@ export type StoryProps = {
   face: Box;
   scenes: Scene[];
   overlays: Overlay[];
+  /** 音效：at 秒，file 是 public/sfx/ 下的文件名。 */
+  sfx?: {at: number; file: string; volume: number}[];
   theme: StoryTheme;
   title: string;
 };

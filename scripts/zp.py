@@ -23,6 +23,8 @@ FONT_URLS = {
     "zp-song-black.ttf": ["https://cdn.jsdelivr.net/fontsource/fonts/noto-serif-sc@5.2.8/chinese-simplified-900-normal.ttf"],
     "zp-kai.ttf": ["https://github.com/lxgw/LxgwWenKai/releases/download/v1.520/LXGWWenKai-Medium.ttf", "https://raw.githubusercontent.com/google/fonts/main/ofl/lxgwwenkaitc/LXGWWenKaiTC-Bold.ttf"],
 }
+SV_URL = "https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-sense-voice-zh-en-ja-ko-yue-int8-2024-07-17.tar.bz2"
+NPX = shutil.which("npx") or "npx"   # Windows 上是 npx.cmd，要用全路径才起得来
 def die(msg): sys.exit("✗ " + msg)
 def run(cmd, **kw): return subprocess.run(cmd, check=True, **kw)
 def paths(ep):
@@ -53,7 +55,16 @@ def cmd_setup(a):
     try: __import__("mediapipe")
     except ImportError: print("· 没装 mediapipe：「论文卡」版式会退成不抠像的版本。要抠像：pip install mediapipe")
     sv = os.path.expanduser("~/.cache/video-studio/sherpa-onnx-sense-voice-zh-en-ja-ko-yue-int8-2024-07-17/model.int8.onnx")
-    if not os.path.exists(sv): print("✗ 缺识别模型，下载地址见 scripts/asr.py 开头，解压到 ~/.cache/video-studio/"); ok = False
+    if not os.path.exists(sv):
+        print("下载识别模型（约 160MB，只下一次）…"); cache = os.path.dirname(os.path.dirname(sv)); os.makedirs(cache, exist_ok=True); tb = os.path.join(cache, "sensevoice.tar.bz2")
+        try:
+            import tarfile
+            urllib.request.urlretrieve(SV_URL, tb)
+            with tarfile.open(tb, "r:bz2") as t: t.extractall(cache)
+            os.remove(tb)
+        except Exception as e: print("  下载失败：", e)
+    if os.path.exists(sv): print("✓ 识别模型")
+    else: print("✗ 缺识别模型。手动下载后解压到 ~/.cache/video-studio/ ：" + SV_URL); ok = False
     from zplib import vision
     try: vision.fetch(vision.YUNET, vision.YUNET_URL); print("✓ 人脸模型")
     except Exception as e: print("✗ 人脸模型下载失败：", e); ok = False
@@ -69,7 +80,12 @@ def cmd_setup(a):
                 except Exception: pass
         good = os.path.exists(dest) and os.path.getsize(dest) > 100_000
         print(("✓ " if good else "✗ 字体没下到：") + name); ok = ok and good
-    if not os.path.isdir(os.path.join(STUDIO, "node_modules", "remotion")): print("✗ 还没装渲染依赖：cd studio && npm install"); ok = False
+    if not os.path.isdir(os.path.join(STUDIO, "node_modules", "remotion")) and shutil.which("npm"):
+        print("安装渲染依赖（npm install）…"); subprocess.run([shutil.which("npm"), "install", "--no-audit", "--no-fund"], cwd=STUDIO, capture_output=True)
+    if os.path.isdir(os.path.join(STUDIO, "node_modules", "remotion")): print("✓ 渲染依赖")
+    else: print("✗ 渲染依赖没装上：cd studio && npm install"); ok = False
+    for f in ("thud.wav", "tick.wav", "whoosh.wav"):
+        if not os.path.exists(os.path.join(STUDIO, "public", "sfx", f)): print(f"· 没有音效 studio/public/sfx/{f}，分镜表里写 \"sfx\": false，或补上这个文件")
     print("环境就绪。" if ok else "上面打 ✗ 的补齐后再跑一次 setup。"); sys.exit(0 if ok else 1)
 
 def cmd_new(a):
@@ -91,6 +107,11 @@ def cmd_new(a):
     words = [{"word": t["t"], "start": t["s"], "end": t["s"] + 0.2} for t in asr["tokens"]]
     draft = os.path.join(p["work"], "script.draft.txt"); open(draft, "w", encoding="utf-8").write(draft_from_words(words))
     print(f"原片 {asr['dur']:.1f} 秒，识别出 {len(asr['tokens'])} 个字。识别稿在 {draft}")
+    sheet = os.path.join(p["out"], "原片联系表.jpg"); n = min(24, max(6, int(asr["dur"] // 5)))
+    subprocess.run(["ffmpeg", "-nostdin", "-y", "-v", "error", "-i", raw, "-vf", f"fps={n}/{max(1.0, asr['dur']):.2f},scale=270:-2,tile=6x{-(-n // 6)}:padding=4", "-frames:v", "1", "-q:v", "4", sheet])
+    if os.path.exists(sheet): print("原片联系表（先看一眼机位、背景、有没有水印）：" + sheet)
+    w0 = next(s for s in info["streams"] if s.get("codec_type") == "video")
+    if w0.get("width", 0) > w0.get("height", 1): print("⚠ 原片是横屏：会以人脸为中心裁成竖屏，两侧画面丢掉，清晰度也会下降。")
     if a.script: a.script_path = a.script; cmd_align(a)
     else: print("没给文案：把 script.draft.txt 改成定稿（删掉不要的句子、改错字、一行一句字幕），存成 script.txt，再运行 align。")
 
@@ -223,7 +244,7 @@ def cutouts(p, st, props):
 
 def remotion(args):
     extra = ["--browser-executable=" + os.environ["ZP_BROWSER"]] if os.environ.get("ZP_BROWSER") else []
-    r = subprocess.run(["npx", "--no-install", "remotion"] + args + extra + ["--log=error"], cwd=STUDIO, capture_output=True, text=True)
+    r = subprocess.run([NPX, "--no-install", "remotion"] + args + extra + ["--log=error"], cwd=STUDIO, capture_output=True, text=True)
     if r.returncode != 0: die("渲染失败：\n" + (r.stderr or r.stdout)[-1500:] + "\n没有显示器的 Linux 上要设环境变量 ZP_BROWSER 指向 chrome-headless-shell。")
 
 def cmd_stills(a):

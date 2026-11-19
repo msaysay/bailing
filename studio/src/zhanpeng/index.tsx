@@ -2,7 +2,7 @@
 // 风格全部锁在这个目录里，每期只换数据：scripts/zp.py board 生成 props，渲染时用 --props 传进来。
 // 对标拆解和每个数值的出处见 .claude/skills/zhanpeng-talk/references/style-spec.md。
 import React from 'react';
-import {AbsoluteFill, Audio, continueRender, delayRender, staticFile} from 'remotion';
+import {AbsoluteFill, Audio, Sequence, continueRender, delayRender, staticFile} from 'remotion';
 import {Base} from './Base';
 import {Captions} from './Captions';
 import {OverlayLayer} from './Overlays';
@@ -30,6 +30,11 @@ export const ZP: React.FC<StoryProps> = (props) => {
       <Captions props={props} />
       <OverlayLayer props={props} />
       <Audio src={staticFile(props.videoFile)} />
+      {(props.sfx ?? []).map((x, i) => (
+        <Sequence key={i} from={Math.max(0, Math.round(x.at * props.fps))} layout="none">
+          <Audio src={staticFile('sfx/' + x.file)} volume={x.volume} />
+        </Sequence>
+      ))}
       {props.musicFile ? <Audio src={staticFile(props.musicFile)} volume={props.musicVolume} loop /> : null}
     </AbsoluteFill>
   );

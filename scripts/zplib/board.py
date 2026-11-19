@@ -187,5 +187,18 @@ def build(board, timing, face, cuts, assets_dir, theme):
         if sc["type"] == "illustration":
             for sh in sc["shots"]:
                 if sh["end"] - sh["start"] > 4.5: warns.append(f"{sc['id']} 里「{sh['file']}」一张图停了 {sh['end'] - sh['start']:.1f} 秒，超过 4 秒会显得静。再配一张或换成视频。")
-    props = {"captions": captions, "camera": cam, "scenes": scenes, "overlays": overlays, "face": {k: face[k] for k in "xywh"}, "theme": theme, "title": board.get("title", "")}
+    # 音效：很轻，只垫在转场和花字落下的那一下。分镜表里写 "sfx": false 可以整片关掉。
+    sfx = []
+    if board.get("sfx", True):
+        for sc in scenes:
+            if sc["type"] == "card": sfx.append({"at": sc["start"], "file": "thud.wav", "volume": 0.3})
+            elif sc["transition"] != "cut": sfx.append({"at": max(0, sc["start"] - 0.05), "file": "whoosh.wav", "volume": 0.3})
+            if sc["out"] == "blur": sfx.append({"at": max(0, sc["end"] - 0.08), "file": "whoosh.wav", "volume": 0.2})
+        for o in overlays:
+            if o["type"] in ("hook", "bigword"): sfx.append({"at": o["start"], "file": "thud.wav", "volume": 0.4})
+            elif o["type"] in ("label", "question"): sfx.append({"at": o["start"], "file": "whoosh.wav", "volume": 0.16})
+            elif o["type"] in ("scatter", "bullets", "flow"): sfx += [{"at": it["at"], "file": "tick.wav", "volume": 0.45} for it in o["items"]]
+            elif o["type"] in ("float", "ask"): sfx.append({"at": o["start"], "file": "tick.wav", "volume": 0.45})
+        sfx.sort(key=lambda x: x["at"])
+    props = {"sfx": sfx, "captions": captions, "camera": cam, "scenes": scenes, "overlays": overlays, "face": {k: face[k] for k in "xywh"}, "theme": theme, "title": board.get("title", "")}
     return props, wanted, R.errors, warns

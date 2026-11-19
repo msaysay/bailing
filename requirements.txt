@@ -1,0 +1,8 @@
+sherpa-onnx
+soundfile
+numpy
+opencv-python-headless
+pypinyin
+pillow
+# 可选：论文卡的人物抠像。装不上也能出片。
+mediapipe

@@ -24,3 +24,4 @@ studio/public/*/cutout-*.webm
 __pycache__/
 episodes/*/03_制作过程/props.json
 episodes/*/03_制作过程/script.draft.txt
+dist/
