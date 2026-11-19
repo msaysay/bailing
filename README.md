@@ -7,6 +7,7 @@
 | 看什么 | 在哪 |
 |---|---|
 | 工作流操作说明（先读这个） | [skills/README.md](skills/README.md) |
+| 约读书房相框口播线（给客户长期出片，每期不写代码） | [skills/frame-00-setup/SKILL.md](skills/frame-00-setup/SKILL.md) |
 | 项目完整规划 | [docs/PLAN.md](docs/PLAN.md) |
 | 第三方开源代码、来源与许可 | [vendor/README.md](vendor/README.md) |
 | 按需取 FredTalk 组件源码（约 570MB，不入库） | `scripts/fetch-fredtalk-components.sh` |
