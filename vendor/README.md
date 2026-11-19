@@ -8,7 +8,6 @@
 |---|---|---|---|---|
 | `fredtalk/` | https://github.com/njrhts2kvv-star/FredTalk | commit `eec77dc`（2026-10-18，FredTalk 2.5） | MIT，仅覆盖 Fred 原创的代码、Skill、模板、文档 | 口播成片主管线：`fred-remotion-output`（选组件、门禁、关键帧、整期编排、审片台、动态与可读性检查）、音频字幕粗剪、复刻、云渲染、Deck 动效；组件目录 `library/catalog.json`（432 条）；检索与素材脚本；视觉库前端源码 |
 | `video-shotcraft/` | https://github.com/Vincentwei1021/video-shotcraft | commit `6700db2`（2026-11-12） | Apache-2.0 | 124 张镜头配方卡 + demo 源码、Ink Press 整片模板、PageCam 等组件、审美准则、终检规程、音效选材、动效工作台、剪映导出、社交发布 |
-| `video-talkcraft/` | https://github.com/Vincentwei1021/video-talkcraft | commit `5017088`（2026-11-09） | **PolyForm Noncommercial 1.0.0：仅限非商用**，商用须先取得作者授权 | 108 张口播动效卡的 Remotion 源码（`template/cards/`）、逐卡调参说明（`references/cards/`）、镜头语言与设计规范、口播制作 Skill。用户 2026-11-14 说明是自用后入库。接进工程的办法见 `scripts/sync_talkcraft.py`，索引见 `../docs/参考-talkcraft动效索引.md` |
 | `remocn/` | https://github.com/Remocn/remocn | commit `1d15141` | MIT | 789 个 Remotion 组件源码（`registry/`）：图表、对比、计数、文字、转场、背景 |
 | `snapcn/` | https://github.com/shadcn-labs/snapcn | commit `18b973d` | MIT | 60 多个产品演示组件、配套 Skill、设计与动效规范 |
 | `remotion-bits/` | https://github.com/av/remotion-bits | commit `de35fda` | MIT（见其 `package.json`，仓库无单独 LICENSE 文件） | 计数器、打字机、代码块、粒子等基础件 |
@@ -30,14 +29,6 @@
 Fred 的组件分三类（见 `fredtalk/docs/license-scope.md`）：他原创的（MIT）；参考别人成片复刻的（权利未确认）；媒体、字体、音效、品牌（各自许可）。**项目决定：三类都用，按来源登记，便于日后替换。** 目录里标为会员专享的条目源码不在公开仓库。
 
 remocn、snapcn 只带了组件源码和说明，没带它们的文档站和演示应用。
-
-### video-talkcraft 的使用边界
-
-上游 66MB，这里 4MB。没带：`gallery/`（展示页和缩略图）、`demos/`（网页版演示和示意素材）、`workbench/`、`assets/`。在线看：https://vincentwei1021.github.io/video-talkcraft/
-
-- **只能非商用**。接商单、给客户做片、放进收费产品之前，先找作者要授权；要不到就把用到的卡换成我们自己的组件。
-- **不进我们的组件包**（`studio/out/组件包`），避免把两种许可混在一起发出去。
-- 复制卡片进成片工程时，文件头的来源和许可说明要留着。
 
 ### video-shotcraft 没带进来的部分
 
