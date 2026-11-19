@@ -1,0 +1,22 @@
+// 《早早晚晚》的场景表：每个场景从原曲第几秒开始、用哪个函数、歌词放多高、怎么转场
+const SCENES = [
+  { a: 14.6, f: sHome, ly: 600, x: 0 },
+  { a: 23.6, f: sCampus, ly: 430, x: 1.0 },
+  { a: 37.75, f: sCity, ly: 500, x: .7 },
+  { a: 44.9, f: sTrain, ly: 1345, x: .6 },
+  { a: 58.7, f: sChorus1, ly: 700, x: .5, fx: 'white' },
+  { a: 73.2, f: sField, ly: 700, x: .9 },
+  { a: 88.9, f: sStreet, ly: 400, x: 1.2 },
+  { a: 97.8, f: sCrowd, ly: 420, x: .35, fx: 'white', dark: true },
+  { a: 101.4, f: sDoor, ly: 400, x: .3, fx: 'black' },
+  { a: 105.2, f: sApartment, ly: 420, x: .8 },
+  { a: 119.4, f: sRoad, ly: 520, x: .4, fx: 'white' },
+  { a: 126.5, f: sDepart, ly: 420, x: .7 },
+  { a: 133.9, f: sInk, ly: 1125, x: 1.4, dark: true },
+  { a: 143.9, f: sWindow, ly: 880, x: 1.3 },
+  { a: 151.3, f: sRoof, ly: 330, x: 1.2 },
+  { a: 167.3, f: sChorus2, ly: 700, x: .5, fx: 'white' },
+  { a: 181.7, f: sSummit, ly: 640, x: .6, fx: 'white' },
+  { a: 197.5, f: sLake, ly: 420, x: 1.6 },
+  { a: 211.6, f: sFinale, ly: 520, x: 2.2 },
+];

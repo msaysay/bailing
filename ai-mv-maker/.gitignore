@@ -1,0 +1,7 @@
+node_modules/
+projects/*
+!projects/README.md
+examples/*/song.*
+examples/*/out/
+fonts/*.ttf
+*.zip

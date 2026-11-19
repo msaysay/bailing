@@ -1,0 +1,14 @@
+{
+  "name": "ai-mv-maker",
+  "version": "1.0.0",
+  "private": true,
+  "description": "用 AI 把一首歌做成竖屏 MV：听写歌词、写分镜、代码画画面、渲染出片",
+  "scripts": {
+    "doctor": "node tools/doctor.js",
+    "fix": "node tools/doctor.js --fix"
+  },
+  "dependencies": {
+    "ffmpeg-static": "^5.2.0",
+    "playwright": "^1.48.0"
+  }
+}

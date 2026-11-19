@@ -1,0 +1,21 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:'Noto Serif SC';font-weight:100 900;src:url(../fonts/NotoSerifSC-700.ttf)}
+@font-face{font-family:'Ma Shan Zheng';src:url(../fonts/MaShanZheng.ttf)}
+@font-face{font-family:'Zhi Mang Xing';src:url(../fonts/ZhiMangXing.ttf)}
+html,body{margin:0;background:#000}canvas{width:540px;height:960px}</style></head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// 用法：page.html?project=../projects/我的歌   （也可以直接用浏览器打开预览：加 &play=1 会边放歌边播动画）
+const PROJECT = new URLSearchParams(location.search).get('project') || '../examples/zaozaowanwan';
+function load(src) { return new Promise((ok, bad) => { const s = document.createElement('script'); s.src = src; s.onload = ok; s.onerror = () => { document.title = '读不到 ' + src; bad(src); }; document.body.appendChild(s); }); }
+(async () => {
+  for (const f of ['lib.js', 'fx.js', 'lyrics.js']) await load(f);
+  await load(PROJECT + '/config.js');
+  for (const st of (CONFIG.styles || [])) await load('../styles/' + st + '/scenes.js');
+  await load(PROJECT + '/data.js'); await load(PROJECT + '/scenes.js'); await load('player.js');
+  await window.ready; window.__mvReady = true;
+  if (new URLSearchParams(location.search).get('play')) { // 浏览器里实时预览（会掉帧，只用来看大概）
+    const au = new Audio(PROJECT + '/' + (CONFIG.song || 'song.mp3')); au.currentTime = CONFIG.start; document.body.onclick = () => au.play();
+    document.title = '点一下画面开始播放'; (function tick() { if (!au.paused) renderFrame(Math.round((au.currentTime - CONFIG.start) * FPS)); requestAnimationFrame(tick); })();
+  }
+})();
+</script></body></html>
