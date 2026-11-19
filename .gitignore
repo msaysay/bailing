@@ -22,3 +22,5 @@ episodes/*/04_成片/*.mp4
 episodes/*/04_成片/qc/
 studio/public/yuedu/
 dist/
+studio/public/*/*.wav
+studio/public/stut-test/
