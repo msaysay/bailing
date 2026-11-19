@@ -1,0 +1,94 @@
+/* 舞台样式：设计稿基准 1080×1920，所有动效由 stage.js 按时间 t 逐帧计算（不用 CSS 动画，保证可复现）。 */
+@font-face { font-family: "SubTalk";  src: url("../../fonts/ZCOOLQingKeHuangYou.ttf"); }
+@font-face { font-family: "SubCard";  src: url("../../fonts/YouSheBiaoTiHei.ttf"); }
+@font-face { font-family: "Num";      src: url("../../fonts/AlimamaShuHeiTi-Bold.ttf"); }
+@font-face { font-family: "Brush";    src: url("../../fonts/MaShanZheng.ttf"); }
+
+:root {
+  --bg0: #04060d; --bg1: #0a1020; --bg2: #131f3d;
+  --ink: #ffffff; --stroke: #0a0d18;
+  --gold: #ffd84a; --gold2: #ffb300; --red: #ff3b30; --blue: #3b82f6;
+  --violet: #6d3fe0; --violet2: #9a6bff;
+  --line: rgba(255,255,255,.16);
+}
+html, body { margin: 0; background: transparent; }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: "SubCard", "Num", sans-serif; color: var(--ink); }
+#root * { box-sizing: border-box; }
+.abs { position: absolute; }
+.full { position: absolute; inset: 0; }
+
+/* ---------- 背景 ---------- */
+.bg { background:
+    radial-gradient(1200px 900px at 50% 38%, var(--bg2) 0%, rgba(22,37,74,0) 70%),
+    linear-gradient(180deg, var(--bg1) 0%, var(--bg0) 100%); }
+.bg .blob { position: absolute; width: 900px; height: 900px; border-radius: 50%; filter: blur(120px); opacity: .2; }
+.bg .grid { position: absolute; inset: 0; opacity: .5;
+  background-image: radial-gradient(rgba(255,255,255,.10) 1.2px, transparent 1.6px); background-size: 36px 36px;
+  -webkit-mask-image: radial-gradient(900px 1300px at 50% 45%, #000 0%, transparent 85%); }
+.bg .vig { position: absolute; inset: 0; background: radial-gradient(1100px 1500px at 50% 46%, transparent 55%, rgba(0,0,0,.62) 100%); }
+
+/* ---------- 画框 ---------- */
+.card-border { border: 2px solid var(--line); box-shadow: 0 30px 80px rgba(0,0,0,.55); }
+.card-border.gold { border-color: rgba(255,216,74,.75); box-shadow: 0 0 34px rgba(255,190,40,.38), 0 30px 80px rgba(0,0,0,.55); }
+.ring { border-radius: 50%; border: 4px solid rgba(255,255,255,.92); box-shadow: 0 0 0 10px rgba(8,10,20,.55), 0 0 44px rgba(150,180,255,.45), 0 24px 60px rgba(0,0,0,.6); }
+.glowline { height: 5px; background: linear-gradient(90deg, transparent, #fff 18%, #fff 82%, transparent); box-shadow: 0 0 22px 4px rgba(190,205,255,.75); border-radius: 3px; }
+.brk { background: rgba(255,255,255,.85); }
+.dot { width: 9px; height: 9px; border-radius: 50%; background: #fff; }
+.shutter { background: var(--bg0); }
+
+/* ---------- 字幕 ---------- */
+.sub { position: absolute; left: 0; width: 1080px; text-align: center; white-space: nowrap; line-height: 1.15;
+  -webkit-text-stroke: 9px var(--stroke); paint-order: stroke fill; text-shadow: 0 6px 14px rgba(0,0,0,.55); letter-spacing: 1px; }
+.sub.talk { font-family: "SubTalk", "SubCard"; }
+.sub.card { font-family: "SubCard"; }
+.sub .hl { color: var(--gold); }
+.sub.emph { color: var(--gold); font-family: "SubCard"; }
+
+/* ---------- 花字 ---------- */
+.kw { position: absolute; left: 0; width: 1080px; text-align: center; white-space: nowrap; font-family: "SubCard"; }
+.kw span { display: inline-block; -webkit-text-stroke: 10px var(--stroke); paint-order: stroke fill; }
+.kw.gold span { color: var(--gold); text-shadow: 0 0 26px rgba(255,200,40,.55), 0 8px 16px rgba(0,0,0,.6); }
+.kw.red span { color: var(--red); -webkit-text-stroke: 10px #fff; text-shadow: 0 0 22px rgba(255,59,48,.6), 0 8px 16px rgba(0,0,0,.6); }
+.kw.white span { color: #fff; text-shadow: 0 8px 16px rgba(0,0,0,.6); }
+.kw .bar { position: absolute; height: 8px; border-radius: 4px; background: linear-gradient(90deg, var(--gold2), var(--gold)); box-shadow: 0 0 18px rgba(255,190,40,.7); }
+
+.li { position: absolute; white-space: nowrap; font-family: "SubCard"; -webkit-text-stroke: 9px var(--stroke); paint-order: stroke fill; text-shadow: 0 6px 14px rgba(0,0,0,.55); }
+.li i { font-style: normal; font-family: "Num"; margin-right: 18px; }
+
+.chap { position: absolute; }
+.chap .ban { position: absolute; white-space: nowrap; left: 0; top: 46px; height: 132px; padding: 0 66px 0 54px; display: flex; flex-direction: column; justify-content: center;
+  background: linear-gradient(100deg, #4b24b8 0%, var(--violet) 45%, var(--violet2) 100%); clip-path: polygon(0 0, 100% 0, calc(100% - 44px) 100%, 0 100%);
+  box-shadow: inset 0 -6px 0 rgba(255,255,255,.22); }
+.chap .ban b { font-family: "SubCard"; font-weight: normal; font-size: 76px; line-height: 1; letter-spacing: 14px; -webkit-text-stroke: 8px #1b0f45; paint-order: stroke fill; }
+.chap .ban em { font-family: "Num"; font-style: italic; font-size: 24px; opacity: .92; margin-top: 6px; letter-spacing: 2px; }
+.chap .no { position: absolute; left: 0; top: 0; height: 62px; min-width: 150px; padding: 0 30px 0 44px; background: linear-gradient(90deg, #ffe45c, var(--gold2));
+  clip-path: polygon(0 0, 100% 0, calc(100% - 22px) 100%, 0 100%); font-family: "Num"; font-style: italic; font-size: 46px; line-height: 62px; color: #fff; -webkit-text-stroke: 6px #2a1a00; paint-order: stroke fill; }
+
+.label { position: absolute; white-space: nowrap; font-family: "SubCard"; }
+.label .t { color: var(--red); -webkit-text-stroke: 9px #fff; paint-order: stroke fill; text-shadow: 0 0 22px rgba(255,59,48,.55), 0 8px 18px rgba(0,0,0,.55); display: inline-block; }
+.label .s { color: #fff; -webkit-text-stroke: 8px var(--stroke); paint-order: stroke fill; display: block; margin-top: 10px; }
+
+.rec .c { position: absolute; width: 70px; height: 70px; border: 5px solid rgba(255,255,255,.9); }
+.rec .txt { position: absolute; font-family: "Num"; font-size: 32px; letter-spacing: 2px; text-shadow: 0 2px 8px rgba(0,0,0,.7); }
+.rec .r { display: inline-block; width: 20px; height: 20px; border-radius: 50%; background: var(--red); margin-right: 12px; box-shadow: 0 0 14px rgba(255,59,48,.9); }
+
+.punch { position: absolute; left: 0; width: 1080px; text-align: center; font-family: "Brush"; color: var(--gold); line-height: 1.12;
+  -webkit-text-stroke: 12px #2a1500; paint-order: stroke fill; text-shadow: 0 0 40px rgba(255,150,20,.85), 0 10px 20px rgba(0,0,0,.6); }
+.flash { background: radial-gradient(900px 900px at 50% 60%, rgba(255,220,150,.9), rgba(255,140,30,.35) 55%, transparent 80%); mix-blend-mode: screen; }
+
+/* ---------- 数据面板 ---------- */
+.panel { position: absolute; border-radius: 30px; background: linear-gradient(180deg, rgba(22,32,62,.92), rgba(9,13,28,.94)); border: 2px solid var(--line);
+  box-shadow: 0 0 0 1px rgba(255,216,74,.10), 0 40px 100px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.10); overflow: hidden; }
+.panel .hd { position: absolute; left: 56px; top: 44px; right: 56px; font-family: "SubCard"; font-size: 46px; color: rgba(255,255,255,.82); display: flex; align-items: center; gap: 18px; }
+.panel .hd::before { content: ""; width: 10px; height: 44px; border-radius: 5px; background: linear-gradient(180deg, var(--gold), var(--gold2)); }
+.panel .big { position: absolute; left: 0; right: 0; text-align: center; font-family: "Num"; font-variant-numeric: tabular-nums; color: #fff; text-shadow: 0 0 60px rgba(255,200,60,.35); }
+.panel .big u { text-decoration: none; font-family: "SubCard"; color: var(--gold); margin-left: 14px; }
+.panel .cap { position: absolute; left: 0; right: 0; text-align: center; font-family: "SubCard"; color: rgba(255,255,255,.7); }
+.panel .row { position: absolute; left: 56px; right: 56px; }
+.panel .row .nm { font-family: "SubCard"; font-size: 44px; display: flex; justify-content: space-between; align-items: baseline; }
+.panel .row .nm span { font-family: "Num"; font-size: 64px; font-variant-numeric: tabular-nums; }
+.panel .row .track { margin-top: 14px; height: 30px; border-radius: 15px; background: rgba(255,255,255,.08); overflow: hidden; }
+.panel .row .fill { height: 100%; border-radius: 15px; }
+.panel .step { position: absolute; left: 56px; right: 56px; height: 124px; border-radius: 20px; background: rgba(255,255,255,.06); border: 2px solid var(--line); display: flex; align-items: center; padding: 0 34px; font-family: "SubCard"; font-size: 48px; }
+.panel .step i { font-style: normal; font-family: "Num"; color: #1a1200; background: linear-gradient(180deg, var(--gold), var(--gold2)); width: 62px; height: 62px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 36px; margin-right: 26px; flex: none; }
+.panel .conn { position: absolute; left: 118px; width: 4px; background: linear-gradient(180deg, var(--gold), rgba(255,216,74,.2)); transform-origin: top; }

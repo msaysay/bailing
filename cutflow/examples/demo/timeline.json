@@ -1,0 +1,264 @@
+{
+ "meta": {
+  "fps": 30,
+  "width": 1080,
+  "height": 1920,
+  "duration": 29
+ },
+ "host": {
+  "src": "work/host.mp4",
+  "face": {
+   "cx": 0.5034722222222222,
+   "cy": 0.426171875,
+   "w": 0.3541666666666667,
+   "h": 0.19921875,
+   "hits": 16
+  }
+ },
+ "scenes": [
+  {
+   "start": 0,
+   "end": 2.04,
+   "layout": "talk",
+   "push": 0.05
+  },
+  {
+   "start": 2.04,
+   "end": 5.48,
+   "layout": "band",
+   "hostPos": "right",
+   "media": {
+    "src": "raw/broll_fly.mp4",
+    "in": 0.4
+   }
+  },
+  {
+   "start": 5.48,
+   "end": 8.36,
+   "layout": "talk",
+   "zoom": 1.12
+  },
+  {
+   "start": 8.36,
+   "end": 15.6,
+   "layout": "talk",
+   "push": 0.04
+  },
+  {
+   "start": 15.6,
+   "end": 18.94,
+   "layout": "cardBottom",
+   "media": {
+    "src": "raw/broll_track.mp4"
+   }
+  },
+  {
+   "start": 18.94,
+   "end": 22.6,
+   "layout": "cardTop",
+   "media": {
+    "src": "raw/broll_carriage.mp4"
+   }
+  },
+  {
+   "start": 22.6,
+   "end": 25.56,
+   "layout": "data",
+   "hostPos": "right",
+   "panel": {
+    "type": "steps",
+    "title": "两种创新，争的不是一回事",
+    "items": [
+     {
+      "text": "改善体验 · 争今天的客户",
+      "at": 0.3
+     },
+     {
+      "text": "突破边界 · 争明天的定价权",
+      "at": 1.2,
+      "hl": true
+     }
+    ]
+   }
+  },
+  {
+   "start": 25.56,
+   "end": 29,
+   "layout": "talk",
+   "zoom": 1.1
+  }
+ ],
+ "overlays": [
+  {
+   "type": "chapter",
+   "start": 2.04,
+   "end": 5.48,
+   "no": "3",
+   "title": "定价",
+   "en": "Pricing Power"
+  },
+  {
+   "type": "label",
+   "start": 3.7,
+   "end": 5.48,
+   "y": 1240,
+   "text": "凭什么卖这么贵",
+   "size": 84
+  },
+  {
+   "type": "keyword",
+   "start": 6,
+   "end": 8.36,
+   "text": "什么才是创新",
+   "color": "gold"
+  },
+  {
+   "type": "list",
+   "start": 10.2,
+   "end": 15.6,
+   "items": [
+    {
+     "at": 10.4,
+     "text": "改善使用体验",
+     "color": "gold"
+    },
+    {
+     "at": 12.5,
+     "text": "突破能力边界",
+     "color": "red"
+    }
+   ]
+  },
+  {
+   "type": "rec",
+   "start": 25.56,
+   "end": 27.6
+  },
+  {
+   "type": "punch",
+   "start": 27.74,
+   "end": 29,
+   "text": "在别人画的价格区间里\n遥遥领先"
+  }
+ ],
+ "subs": [
+  {
+   "text": "好那咱们最后就讨论一个",
+   "start": 0,
+   "end": 1.28
+  },
+  {
+   "text": "终极问题啊",
+   "hl": [
+    "终极问题"
+   ],
+   "start": 1.28,
+   "end": 2.04
+  },
+  {
+   "text": "凭什么人家特斯拉",
+   "start": 2.04,
+   "end": 3.62
+  },
+  {
+   "text": "敢把汽车的价格定那么贵啊",
+   "hl": [
+    "定那么贵"
+   ],
+   "start": 3.62,
+   "end": 5.48
+  },
+  {
+   "text": "到底什么才是我们所谓的",
+   "start": 5.48,
+   "end": 7.26
+  },
+  {
+   "text": "创新跟遥遥领先",
+   "hl": [
+    "创新",
+    "遥遥领先"
+   ],
+   "start": 7.26,
+   "end": 8.36
+  },
+  {
+   "text": "我呢认为创新主要分两种",
+   "hl": [
+    "两种"
+   ],
+   "start": 8.36,
+   "end": 10.2
+  },
+  {
+   "text": "一种是改善使用体验",
+   "start": 10.2,
+   "end": 11.96
+  },
+  {
+   "text": "而另一种是在突破能力边界",
+   "start": 11.96,
+   "end": 14.06
+  },
+  {
+   "text": "这两种创新有什么区别呢",
+   "start": 14.06,
+   "end": 15.6
+  },
+  {
+   "text": "当然了啊",
+   "start": 15.6,
+   "end": 16.12
+  },
+  {
+   "text": "这两种创新没有谁好谁坏",
+   "start": 16.12,
+   "end": 17.78
+  },
+  {
+   "text": "也没有谁先谁后",
+   "start": 17.78,
+   "end": 18.94
+  },
+  {
+   "text": "但我只能说啊",
+   "start": 18.94,
+   "end": 20.12
+  },
+  {
+   "text": "如果只是在车里",
+   "start": 20.12,
+   "end": 21.3
+  },
+  {
+   "text": "加装个冰箱或帐篷",
+   "hl": [
+    "冰箱",
+    "帐篷"
+   ],
+   "start": 21.3,
+   "end": 22.6
+  },
+  {
+   "text": "就觉着已经遥遥领先的话",
+   "start": 22.6,
+   "end": 24.12
+  },
+  {
+   "text": "那这种遥遥领先",
+   "start": 24.12,
+   "end": 25.56
+  },
+  {
+   "text": "只不过是在别人给你画出的",
+   "start": 25.56,
+   "end": 27.74
+  },
+  {
+   "text": "价格区间里遥遥领先",
+   "start": 27.74,
+   "end": 29,
+   "hide": true
+  }
+ ]
+}
