@@ -120,11 +120,17 @@ def build(plan):
                   x + int(ln.get("indent", 0)), y, an=1, fade=ST["title_fade"])
 
     # ---- regular subtitles: one cue = one line, hard cut, no animation ----
-    for i, c in enumerate(cues):
-        if i in hidden or c.get("sub") is False or not c.get("text"):
-            continue
-        txt = mark_keywords(c["text"], c.get("kw"), ST["sub_fs"], ST["kw_fs"])
-        a.add(cf[i][0], cf[i][1], "Sub", txt, W // 2, ST["sub_y"], an=2)
+    i = 0
+    while i < len(cues):
+        c, j = cues[i], i
+        while j + 1 < len(cues) and cues[j + 1].get("cont") and (j + 1 in hidden) == (i in hidden):
+            j += 1                                   # "cont" cues = the same line after a tightened pause
+        if not (i in hidden or c.get("sub") is False or not c.get("text") or c.get("cont")):
+            txt = mark_keywords(c["text"], c.get("kw"), ST["sub_fs"], ST["kw_fs"])
+            a.add(cf[i][0], cf[j][1], "Sub", txt, W // 2, ST["sub_y"], an=2)
+        elif c.get("cont") and i not in hidden and c.get("sub") is not False and c.get("text"):
+            a.add(cf[i][0], cf[j][1], "Sub", c["text"], W // 2, ST["sub_y"], an=2)   # its head sat under a title
+        i = j + 1
 
     # ---- person card (人物介绍): right side, name 19 / intro 10 at 61%, fade ----
     p = plan.get("person")

@@ -12,6 +12,7 @@ import numpy as np
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from common import *
 import ass as assmod
+import audiomix, json
 
 SPF = SR // FPS  # audio samples per video frame
 
@@ -128,7 +129,10 @@ def main():
                     j += 1
                 parts.append((i, j))
                 i = j + 1
-            for pi, (i, j) in enumerate(parts):
+            pi = 0
+            for (i, j) in parts:
+                if i > c0 and jump(cues[i - 1], cues[i]) == "hard":
+                    pi += 1                                    # micro jumps (tightened pauses) keep the framing
                 main_src = cues[i]["src"]
                 src = sh.get("src", main_src)                 # optional second camera
                 off = float(sh.get("offset", 0.0))            # camB_time = main_time + offset
@@ -185,10 +189,9 @@ def main():
         f.write(assmod.build(plan))
     total = (body + endf) / FPS
     logo = rp(plan, plan.get("brand", {}).get("logo", "$SKILL/assets/brand/logo.png"))
-    cmd = ["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", lst,
-           "-f", "s16le", "-ar", str(SR), "-ac", "2", "-i", vpath]
+    cmd = ["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", lst]
     fc, vlast = [], "0:v"
-    nin = 2
+    nin = 1
     if logo and os.path.exists(logo):
         cmd += ["-i", logo]
         fc.append("[%d:v]scale=%d:-1:flags=lanczos[lg];[0:v][lg]overlay=%d:%d[v1]"
@@ -198,26 +201,25 @@ def main():
         print("WARNING: logo not found (%s) -- the logo is mandatory in the final film" % logo)
     esc = lambda s: s.replace("\\", "/").replace(":", "\\:").replace("'", "\\'")
     fc.append("[%s]ass='%s':fontsdir='%s'[vout]" % (vlast, esc(asspath), esc(FONTS)))
-    voice_f = "[1:a]highpass=f=80,acompressor=threshold=-22dB:ratio=3:attack=5:release=150:makeup=2[vo]"
-    bgm = plan.get("bgm")
-    if bgm and bgm.get("src"):
-        cmd += ["-stream_loop", "-1", "-i", rp(plan, bgm["src"])]
-        g = float(bgm.get("gain_db", -22))
-        tail = max(total - endf / FPS, 0)
-        fc.append(voice_f)
-        # bed under the voice, lifted a little on the ending, 1.5 s fade-out
-        fc.append("[%d:a]atrim=start=%.2f,asetpts=PTS-STARTPTS,aformat=sample_rates=%d:channel_layouts=stereo,"
-                  "volume='if(gte(t,%.2f),%.3f,%.3f)':eval=frame,afade=t=in:d=0.3,afade=t=out:st=%.2f:d=1.5[bg]"
-                  % (nin, float(bgm.get("src_in", 0)), SR, tail, 10 ** ((g + 6) / 20), 10 ** (g / 20), max(total - 1.5, 0)))
-        fc.append("[vo][bg]amix=inputs=2:duration=first:normalize=0,loudnorm=I=-16:TP=-1.5:LRA=11[aout]")
-    else:
-        fc.append(voice_f.replace("[vo]", ",loudnorm=I=-16:TP=-1.5:LRA=11[aout]"))
-        print("WARNING: no bgm in plan -- the reference film has a quiet music bed")
-    cmd += ["-filter_complex", ";".join(fc), "-map", "[vout]", "-map", "[aout]", "-t", "%.3f" % total,
+    cmd += ["-filter_complex", ";".join(fc), "-map", "[vout]", "-an", "-t", "%.3f" % total,
             "-c:v", "libx264", "-preset", "ultrafast" if a.draft else "medium", "-crf", "26" if a.draft else "18",
-            "-pix_fmt", "yuv420p", "-r", str(FPS), "-c:a", "aac", "-b:a", "192k", "-ar", str(SR),
-            "-movflags", "+faststart", a.out]
+            "-pix_fmt", "yuv420p", "-r", str(FPS), os.path.join(tmp, "picture.mp4")]
     run(cmd)
+    # ---- sound: clean the voice (denoise), keep it as a stem, then lay the music under it
+    base = os.path.splitext(a.out)[0]
+    stem = base + ".voice.wav"
+    mode, snr, vl = audiomix.clean_voice(vpath, stem, (plan.get("audio") or {}).get("denoise", "auto"), body / FPS)
+    print("voice: SNR %.0f dB -> denoise %s, %.1f LUFS" % (snr, mode, vl))
+    bgm = dict(plan.get("bgm") or {})
+    if bgm.get("src"):
+        bgm["src"] = rp(plan, bgm["src"])
+    else:
+        print("WARNING: no bgm in plan -- run bgm_match.py (the reference film has a quiet music bed)")
+    audiomix.mix(stem, vl, bgm, total, endf / FPS, os.path.join(tmp, "sound.m4a"))
+    run(["ffmpeg", "-v", "error", "-y", "-i", os.path.join(tmp, "picture.mp4"), "-i", os.path.join(tmp, "sound.m4a"),
+         "-c", "copy", "-movflags", "+faststart", a.out])
+    json.dump({"voice_lufs": vl, "total": total, "ending": endf / FPS, "denoise": mode, "snr": snr},
+              open(base + ".mix.json", "w"))
     shutil.copy(asspath, os.path.splitext(a.out)[0] + ".ass")
     if a.keep:
         print("temp kept:", tmp)

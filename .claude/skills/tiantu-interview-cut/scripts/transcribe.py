@@ -15,6 +15,9 @@ ap.add_argument("--model", default="large-v3-turbo")
 ap.add_argument("--prompt", default="")
 a = ap.parse_args()
 
+# Asking for a verbatim record makes Whisper keep (some) stutters and fillers instead of silently tidying
+# them away, and leaves the rest as un-transcribed gaps that cues_from_script.py can find acoustically.
+VERBATIM = "以下是普通话口语的逐字记录，保留口吃、重复和语气词：嗯，呃，我、我们这个，这个这个渠道，就是，就是说。"
 from faster_whisper import WhisperModel
 m = WhisperModel(a.model, device="cpu", compute_type="int8", cpu_threads=os.cpu_count() or 4)
 res = []
@@ -24,7 +27,7 @@ for v in a.videos:
     audio = np.frombuffer(raw, dtype=np.int16).astype(np.float32) / 32768
     segs, _ = m.transcribe(audio, language="zh", word_timestamps=True, vad_filter=True,
                            vad_parameters={"min_silence_duration_ms": 400}, condition_on_previous_text=False,
-                           initial_prompt="以下是普通话的句子。" + a.prompt)
+                           initial_prompt=VERBATIM + a.prompt)
     for s in segs:
         res.append({"src": v, "start": round(s.start, 2), "end": round(s.end, 2), "text": s.text.strip(),
                     "words": [{"s": round(w.start, 2), "e": round(w.end, 2), "w": w.word.strip()} for w in s.words]})

@@ -112,6 +112,16 @@ def runs(plan):
     return out
 
 
+def jump(prev, cur):
+    """None = plays on seamlessly; "micro" = a pause/stutter (<0.7s) was removed; "hard" = a real edit."""
+    if prev["src"] != cur["src"]:
+        return "hard"
+    g = float(cur["in"]) - float(prev["out"])
+    if abs(g) < 0.03:
+        return None
+    return "micro" if 0 < g < 0.7 else "hard"
+
+
 def shot_ranges(plan):
     """[(shot, first_cue, last_cue)] -- shots must tile the cue list in order."""
     res = []

@@ -34,29 +34,35 @@ def chk(p, what):
 
 # ---------- cues = subtitles
 kwn = 0
+nline = sum(1 for c in cues if not c.get("cont")) or 1
+ldur = {}                                   # a line's time on screen incl. its "cont" pieces
+for i, c in enumerate(cues):
+    h = i
+    while cues[h].get("cont") and h: h -= 1
+    ldur[h] = ldur.get(h, 0) + c["out"] - c["in"]
 for i, c in enumerate(cues):
     inf = chk(c["src"], "cue %d" % i)
     d = c["out"] - c["in"]
-    if d <= 0.15: err("cue %d (%s): duration %.2fs" % (i, c.get("text"), d))
+    if d <= 0.1: err("cue %d (%s): duration %.2fs" % (i, c.get("text"), d))
     if inf and c["out"] > inf["duration"] + 0.05: err("cue %d: out beyond source end" % i)
     t = c.get("text", "")
     if re.search(r"[，。！？、；：,.!?;:]", t): err("cue %d '%s': no punctuation in subtitles" % (i, t))
     if len(t) > STYLE["sub_max_chars"]: err("cue %d '%s': %d chars > %d, split it" % (i, t, len(t), STYLE["sub_max_chars"]))
+    d = ldur.get(i, d)
+    if c.get("cont"): continue
     if d > 3.2: warn("cue %d '%s': on screen %.1fs, split it (reference lines last 0.6-2.2s)" % (i, t, d))
-    if len(t) and d / max(len(t), 1) > 0.45 and d > 1.5: warn("cue %d '%s': slow line (%.1fs for %d chars) - dead air? trim in/out" % (i, t, d, len(t)))
+    if len(t) and d / max(len(t), 1) > 0.45 and d > 1.5: warn("cue %d '%s': slow line (%.1fs for %d chars) - stutter or dragging left in? check cues_from_script output" % (i, t, d, len(t)))
     for k in c.get("kw", []) or []:
         if k not in t: err("cue %d: keyword '%s' not in text '%s'" % (i, k, t))
         if len(k) > 7: warn("cue %d: keyword '%s' too long - emphasise 2-5 chars" % (i, k))
     if c.get("kw"): kwn += 1
-    if i and cues[i - 1]["src"] == c["src"] and 0.03 <= c["in"] - cues[i - 1]["out"] < 0.25:
-        warn("cue %d->%d: %.2fs sliver removed - make them contiguous or cut more" % (i - 1, i, c["in"] - cues[i - 1]["out"]))
-r = kwn / len(cues)
+r = kwn / nline
 if not 0.25 <= r <= 0.75: warn("keyword emphasis on %.0f%% of lines (reference ~50%%; keep 30-70%%)" % (r * 100))
 
 # ---------- shots tile the cues
 nxt, kinds = 0, []
-jump = runs(plan)
-breaks = {r[3] for r in jump[1:]}            # cue indexes where the source jumps
+breaks = {i for i in range(1, len(cues)) if jump(cues[i - 1], cues[i]) == "hard"}   # real edits (not tightened pauses)
+micro = sum(1 for i in range(1, len(cues)) if jump(cues[i - 1], cues[i]) == "micro")
 for si, s in enumerate(shots):
     a, b = s["cues"]
     if a != nxt or b < a or b >= len(cues):
@@ -133,8 +139,9 @@ else:
     if not 3.5 <= float(e.get("dur", 0)) <= 6: err("ending dur %.1fs (reference 4.7s; keep 4-5.5s)" % float(e.get("dur", 0)))
 logo = rp(plan, plan.get("brand", {}).get("logo", "$SKILL/assets/brand/logo.png"))
 if not os.path.exists(logo): err("brand logo missing: %s" % logo)
-if not (plan.get("bgm") or {}).get("src"): warn("no bgm - reference has a quiet music bed (ask the user for a cleared track)")
-elif chk(plan["bgm"]["src"], "bgm") and not -30 <= float(plan["bgm"].get("gain_db", -22)) <= -14: warn("bgm gain_db outside -30..-14")
+if not (plan.get("bgm") or {}).get("src"): warn("no bgm - reference has a quiet music bed: run bgm_match.py or use the user's track")
+elif chk(plan["bgm"]["src"], "bgm") and not -20 <= float(plan["bgm"].get("level", -13)) <= -8: warn("bgm level outside -20..-8 LU (reference about -13)")
+if (plan.get("audio") or {}).get("denoise", "auto") not in ("auto", "off", "light", "strong"): err("audio.denoise must be auto|off|light|strong")
 if not any(os.path.exists(os.path.join(FONTS, f)) for f in ("HarmonyOS_Sans_SC_Bold.ttf",)): err("HarmonyOS Sans SC Bold not installed - run scripts/setup.sh")
 if not os.path.isdir(FONTS) or not any(f.lower().startswith(("title.", "notoserifsc-light")) for f in os.listdir(FONTS)): err("title font missing - run scripts/setup.sh")
 
@@ -150,6 +157,11 @@ if video and os.path.exists(video):
     for m in re.finditer(r"black_start:([\d.]+).*?black_duration:([\d.]+)", r): err("black frames at %ss (%ss)" % m.groups())
     for m in re.finditer(r"freeze_start: ([\d.]+)", r):
         (warn if float(m.group(1)) < want - 0.1 else (lambda *_: None))("frozen picture from %ss - b-roll ran out or still without motion" % m.group(1))
+    mj = base_ = os.path.splitext(video)[0] + ".mix.json"
+    if os.path.exists(mj):
+        mx = json.load(open(mj))
+        print("sound: voice SNR %.0f dB, denoise %s" % (mx.get("snr", 0), mx.get("denoise")))
+        if mx.get("snr", 99) < 25 and mx.get("denoise") != "off": warn("very noisy source (SNR %.0f dB): listen for denoise artefacts; consider audio.denoise 'light'" % mx["snr"])
     m = re.findall(r"I:\s+(-?[\d.]+) LUFS", r)
     if m and not -18.5 <= float(m[-1]) <= -13.5: warn("loudness %s LUFS (target -16)" % m[-1])
     base = os.path.splitext(video)[0]
@@ -163,8 +175,8 @@ elif video:
     err("video not found: " + video)
 
 bt = sum(d for k, d, *_ in kinds if k == "broll")
-print("\n%d cues | %d shots (avg %.1fs) | b-roll %.0f%% | %d titles | talk %.1fs + ending %.1fs"
-      % (len(cues), len(kinds), sec(body) / max(len(kinds), 1), 100 * bt / max(sec(body), 1e-9), len(tl), sec(body), sec(endf)))
+print("\n%d lines, %d micro-cuts (pauses/stutters) | %d shots (avg %.1fs) | b-roll %.0f%% | %d titles | talk %.1fs + ending %.1fs"
+      % (nline, micro, len(kinds), sec(body) / max(len(kinds), 1), 100 * bt / max(sec(body), 1e-9), len(tl), sec(body), sec(endf)))
 for w in Wn: print("WARN  " + w)
 for x in E: print("ERROR " + x)
 print("QC %s (%d errors, %d warnings)" % ("FAILED" if E else "PASSED", len(E), len(Wn)))

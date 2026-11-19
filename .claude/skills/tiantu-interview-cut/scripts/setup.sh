@@ -5,7 +5,13 @@ HERE="$(cd "$(dirname "$0")/.." && pwd)"
 F="$HERE/assets/fonts"; mkdir -p "$F"
 command -v ffmpeg >/dev/null || { echo "ffmpeg is required (with libass)"; exit 1; }
 ffmpeg -hide_banner -filters 2>/dev/null | grep -q " ass " || { echo "ffmpeg lacks the ass filter (libass)"; exit 1; }
-python3 -c "import faster_whisper, cv2, numpy, PIL" 2>/dev/null || pip install -q faster-whisper opencv-python-headless numpy pillow
+python3 -c "import faster_whisper, cv2, numpy, PIL, pypinyin" 2>/dev/null || pip install -q faster-whisper opencv-python-headless numpy pillow pypinyin
+ffmpeg -hide_banner -filters 2>/dev/null | grep -q " arnndn " || echo "!! ffmpeg lacks arnndn - denoise falls back to afftdn"
+# 降噪: RNNoise 语音模型 (speech / recording noise)
+R="$HERE/assets/rnnoise"; mkdir -p "$R"
+[ -f "$R/sh.rnnn" ] || curl -fsSL -o "$R/sh.rnnn" \
+  https://raw.githubusercontent.com/GregorR/rnnoise-models/master/somnolent-hogwash-2018-09-01/sh.rnnn \
+  || echo "!! could not fetch the RNNoise model - denoise falls back to afftdn"
 # 常规字幕/关键词: 鸿蒙体粗 HarmonyOS Sans SC Bold (free to use, Huawei)
 if [ ! -f "$F/HarmonyOS_Sans_SC_Bold.ttf" ]; then
   T="$(mktemp -d)"; (cd "$T" && npm pack @fontpkg/harmony-os-sans-sc --silent >/dev/null && tar xzf *.tgz \

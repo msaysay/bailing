@@ -15,7 +15,7 @@
 
   "cues": [                         // 直接粘贴 work/cues.json；顺序即成片顺序
     { "src": "raw/a.mp4", "in": 12.31, "out": 13.02, "text": "要提货", "kw": ["提货"] }
-    // "sub": false 可隐藏该句字幕
+    // "sub": false 可隐藏该句字幕；"cont": true = 上一句字幕在抽掉停顿/口吃后的后半段（自动生成，别手写）
   ],
 
   "shots": [                        // 按顺序铺满全部 cue，区间为闭区间 [首cue, 末cue]
@@ -45,7 +45,8 @@
   "ending": { "src": "broll/end.mp4", "src_in": 2.0, "dur": 4.7,
               "speed": 1.0, "focus_x": 0.5, "slogan": true },                       // "x","y" 可调标语位置
 
-  "bgm": { "src": "bgm/track.mp3", "gain_db": -22, "src_in": 0 }                    // 可选
+  "bgm": { "src": "bgm/track.mp3", "src_in": 0, "level": -13 },     // level: 比人声低多少 LU（默认 -13，自动对齐响度）
+  "audio": { "denoise": "auto" }                                     // auto | off | light | strong；原片带音乐时用 off
 }
 ```
 
