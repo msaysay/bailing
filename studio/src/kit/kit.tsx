@@ -17,7 +17,7 @@ export const useFonts = () => {
   const [h] = React.useState(() => delayRender('fonts'));
   React.useEffect(() => {
     // 字体包里的字体登记成 100–900 全字重，浏览器就不会再合成假粗体
-    const extra = ([['Pack Sub', PACK.sub], ['Pack Title', PACK.title]] as [string, string | null][]).filter(([, f]) => f).map(([fam, f]) => new FontFace(fam, `url(${staticFile('fonts/' + f)})`, { weight: '100 900' }).load().then((x) => document.fonts.add(x)));
+    const extra = ([['Pack Sub', PACK.sub], ['Pack Title', PACK.title]] as [string, string | null][]).filter(([, f]) => f).map(([fam, f]) => new FontFace(fam, `url(${staticFile('fonts/' + f)})`, { weight: '100 900' }).load().then((x) => document.fonts.add(x)).catch(() => console.warn(`字体包里的 ${f} 没装（python3 scripts/fonts.py install ${PACK.pack}），这次用 MiSans 顶上`)));
     Promise.all([...fonts.map(([f, w]) => new FontFace('MiSans', `url(${staticFile('fonts/' + f)})`, { weight: String(w) }).load().then((x) => document.fonts.add(x))), ...extra]).then(() => continueRender(h));
   }, [h]);
 };

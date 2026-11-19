@@ -19,12 +19,16 @@ export type Beat = {
   dur?: number;
   /** bubble、card 的位置和大小 [左, 上, 宽, 高]。不给就用默认：小圆在右上，卡片在左上。 */
   box?: [number, number, number, number];
+  /** bubble、card 里脸宽占框宽的比例（默认小圆 0.6、卡片 0.52）。实测小 Lin 的小圆是 0.42，能看到肩膀。 */
+  fit?: number;
+  /** bubble、card 里脸的中心在框高的什么位置（0 到 1）。 */
+  ay?: number;
 };
 type St = { x: number; y: number; w: number; h: number; r: number; s: number; ax: number; ay: number; ring: number; op: number };
 const target = (b: Beat, f: Face, vw: number, vh: number, prev?: St): St => {
   if (b.mode === 'full') return { x: 0, y: 0, w: TW, h: PH, r: 0, s: (TW / vw) * (b.zoom ?? 1), ax: f.x / vw, ay: f.y / vh, ring: 0, op: 1 };
-  if (b.mode === 'bubble') { const [x, y, w, h] = b.box ?? [806, 118, 196, 196]; return { x, y, w, h, r: w / 2, s: (0.6 * w) / f.w, ax: 0.5, ay: 0.54, ring: 1, op: 1 }; }
-  if (b.mode === 'card') { const [x, y, w, h] = b.box ?? [40, 330, 440, 640]; return { x, y, w, h, r: 40, s: (0.52 * w) / f.w, ax: 0.5, ay: 0.42, ring: 0.5, op: 1 }; }
+  if (b.mode === 'bubble') { const [x, y, w, h] = b.box ?? [806, 118, 196, 196]; return { x, y, w, h, r: w / 2, s: ((b.fit ?? 0.6) * w) / f.w, ax: 0.5, ay: b.ay ?? 0.54, ring: 1, op: 1 }; }
+  if (b.mode === 'card') { const [x, y, w, h] = b.box ?? [40, 330, 440, 640]; return { x, y, w, h, r: 40, s: ((b.fit ?? 0.52) * w) / f.w, ax: 0.5, ay: b.ay ?? 0.42, ring: 0.5, op: 1 }; }
   return { ...(prev as St), op: 0 };
 };
 const lerp = (a: St, b: St, p: number): St => ({ x: mix(a.x, b.x, p), y: mix(a.y, b.y, p), w: mix(a.w, b.w, p), h: mix(a.h, b.h, p), r: mix(a.r, b.r, p), s: mix(a.s, b.s, p), ax: mix(a.ax, b.ax, p), ay: mix(a.ay, b.ay, p), ring: mix(a.ring, b.ring, p), op: mix(a.op, b.op, p) });

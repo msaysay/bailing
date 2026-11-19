@@ -3,8 +3,8 @@
  "styles": {
   "xiaolin": {
    "name": "财经解读风",
-   "default": "xiaolin-default",
-   "roles": "sub→字幕，title→章节标题；组件库里的字仍是 MiSans"
+   "default": "xiaolin-v2",
+   "roles": "sub→字幕，title→卡片、角标、章节标题、大字；组件库里的字仍是 MiSans"
   },
   "danjie": {
    "name": "商业快节奏风",
@@ -29,7 +29,7 @@
  },
  "packs": {
   "xiaolin-default": {
-   "name": "MiSans 全套（财经解读风的原配）",
+   "name": "MiSans 全套（财经解读风第一版的字）",
    "note": "干净中性，组件库里的字都是它。",
    "fit": [
     "xiaolin"
@@ -39,6 +39,20 @@
     "title": "misans-heavy",
     "accent": "misans-heavy",
     "num": "misans-heavy"
+   }
+  },
+  "xiaolin-v2": {
+   "name": "庞门标题体（财经解读风第二版的原配，最接近小 Lin 成片）",
+   "note": "字幕、卡片、标题都用庞门正道标题体，字幕带一点右倾；数字用数黑体。",
+   "fit": [
+    "xiaolin",
+    "danjie"
+   ],
+   "roles": {
+    "sub": "pangmen-biaoti",
+    "title": "pangmen-biaoti",
+    "accent": "pangmen-biaoti",
+    "num": "shuhei"
    }
   },
   "danjie-default": {

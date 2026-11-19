@@ -9,7 +9,7 @@ import argparse, importlib.util, json, os, shutil, subprocess, sys, tarfile, url
 R = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); CACHE = os.path.expanduser("~/.cache/video-studio")
 ASR = "sherpa-onnx-sense-voice-zh-en-ja-ko-yue-int8-2024-07-17"
 ASR_URL = f"https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/{ASR}.tar.bz2"
-YUNET_URL = "https://github.com/opencv/opencv_zoo/raw/main/models/face_detection_yunet/face_detection_yunet_2023mar.onnx"
+YUNET_URL = "https://media.githubusercontent.com/media/opencv/opencv_zoo/main/models/face_detection_yunet/face_detection_yunet_2023mar.onnx"   # github.com/…/raw/ 那个地址会跳转，有的网络下 403
 ap = argparse.ArgumentParser(); ap.add_argument("--line", choices=["news", "talk", "pet"]); ap.add_argument("--fix", action="store_true"); ap.add_argument("--json", action="store_true"); a = ap.parse_args()
 def ver(cmd):
     try: return subprocess.run(cmd, capture_output=True, text=True, timeout=30).stdout.strip().splitlines()[0]
@@ -29,6 +29,14 @@ def fix_tts():
 def fix_misans():
     sys.path.insert(0, os.path.join(R, "scripts")); import fontlib
     return not fontlib.install(["misans-regular", "misans-semibold", "misans-heavy"], quiet=True)
+def fix_talkfont():
+    sys.path.insert(0, os.path.join(R, "scripts")); import fontlib
+    return not fontlib.install(fontlib.pack_fonts(fontlib.active()["xiaolin"]), quiet=True)
+def talkfont_ok():
+    try:
+        sys.path.insert(0, os.path.join(R, "scripts")); import fontlib
+        return all(fontlib.installed(i) for i in fontlib.pack_fonts(fontlib.active()["xiaolin"]))
+    except Exception: return False
 def fix_yunet(): os.makedirs(CACHE, exist_ok=True); urllib.request.urlretrieve(YUNET_URL, os.path.join(CACHE, "yunet.onnx")); return True
 fonts = os.path.join(R, "studio", "public", "fonts"); need_fonts = ["MiSans-Regular.otf", "MiSans-Semibold.otf", "MiSans-Heavy.otf"]
 blend = os.path.join(R, "pet", "assets", "QuietCompanions.blend")
@@ -45,6 +53,7 @@ C = [
  ("AI 配音模型（约 350MB，没有录音时用）", "news talk", os.path.exists(os.path.join(CACHE, "tts", "kokoro-multi-lang-v1_1", "model.onnx")), "下载 https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/kokoro-multi-lang-v1_1.tar.bz2 解压到 ~/.cache/video-studio/tts/", lambda: fix_tts()),
  ("人脸检测模型", "news talk", os.path.exists(os.path.join(CACHE, "yunet.onnx")), f"下载 {YUNET_URL} 存为 {CACHE}/yunet.onnx", fix_yunet),
  ("MiSans 字体（三个字重）", "news talk pet", all(os.path.exists(os.path.join(fonts, f)) for f in need_fonts), "python3 scripts/fonts.py install xiaolin-default；或去小米官网 hyperos.mi.com/font 免费下载 MiSans，把 Regular、Semibold、Heavy 三个 otf 放进 studio/public/fonts/", fix_misans),
+ ("口播字幕字体（当前字体包）", "talk", talkfont_ok(), "python3 scripts/fonts.py install xiaolin-v2", fix_talkfont),
  ("TikHub 钥匙（自动找新闻画面用，可选）", "news", bool(os.environ.get("TIKHUB_TOKEN")) or os.path.exists(os.path.join(R, "钥匙.txt")), "去 tikhub.io 注册、充一点钱，在后台拿到 API Token；在这个文件夹最外层新建一个「钥匙.txt」，把那串字符贴进去保存。没有也能做，你自己把视频链接发给助手就行", None),
  ("Blender 4.2 以上（宠物用）", "pet", bool(shutil.which("blender")), "去 blender.org 装 4.2 LTS，确保命令行能运行 blender", None),
  ("海豹底模", "pet", os.path.exists(blend), "把 QuietCompanions.blend 放到 pet/assets/", None),

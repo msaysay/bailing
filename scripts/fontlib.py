@@ -83,7 +83,7 @@ def apply(style, name):
     if bad: raise SystemExit("字体没装全，没有切换：" + "、".join(lib()["fonts"][i]["name"] for i in bad))
     f = lambda role: role_file(name, role)
     if style == "xiaolin":
-        _write(os.path.join(R, "studio", "src", "kit", "fontpack.json"), {"pack": name, "sub": None if is_default else f("sub"), "title": None if is_default else f("title")})
+        _write(os.path.join(R, "studio", "src", "kit", "fontpack.json"), {"pack": name, "sub": None if name == "xiaolin-default" else f("sub"), "title": None if name == "xiaolin-default" else f("title")})   # xiaolin-default 是纯 MiSans，不用另外加载
     elif style == "zhanpeng":
         tp = os.path.join(R, "studio", "src", "zhanpeng", "theme.json"); th = json.load(open(tp, encoding="utf-8")); th["fontPack"] = "chill" if is_default else name; _write(tp, th)
     elif style == "frame":

@@ -34,7 +34,7 @@ if a.cmd == "transcribe":
     fr = os.path.join(tmp, "f.png"); subprocess.run(["ffmpeg", "-nostdin", "-v", "error", "-y", "-ss", "3", "-i", raw, "-frames:v", "1", fr], check=True)
     import cv2
     im = cv2.imread(fr); h, w = im.shape[:2]; det = cv2.FaceDetectorYN.create(os.path.expanduser("~/.cache/video-studio/yunet.onnx"), "", (w, h), .6, .3, 50); _, fs = det.detect(im)
-    print(f"\\n画面 {w}×{h}，{fps} 帧/秒；第 3 秒截图在 {fr}（看一眼顶部有没有水印）")
+    print(f"\n画面 {w}×{h}，{fps} 帧/秒；第 3 秒截图在 {fr}（看一眼顶部有没有水印）")
     if fs is not None:
         x, y, fw, fh = [int(v) for v in max(fs, key=lambda f: f[2] * f[3])[:4]]; cy = y + fh // 2
         top = max(0, min(h - 1620 * w // 1080, cy - int(.38 * 1620 * w / 1080)))
@@ -65,7 +65,14 @@ else:
     wav(cut, os.path.join(tmp, "cut.wav")); subprocess.run([PY, os.path.join(R, "scripts", "asr.py"), os.path.join(tmp, "cut.wav"), os.path.join(work, "asr.json")], check=True, capture_output=True)
     script = os.path.join(work, "script.txt")
     if not os.path.exists(script):
-        txt = "".join(x["t"] for x in json.load(open(os.path.join(work, "asr.json")))["tokens"])
-        open(script, "w", encoding="utf-8").write("# 由录音转写，请校对错字\\n## 全文\\n" + txt + "\\n"); print("没有稿子，已用转写结果生成 script.txt，校对错字后可再跑一次 cut。")
+        tk = json.load(open(os.path.join(work, "asr.json"), encoding="utf-8"))["tokens"]
+        gap = [tk[i + 1]["s"] - tk[i]["s"] for i in range(len(tk) - 1)] + [9]          # 每个字到下一个字隔多久，越长越像停顿
+        def split(lo, hi):                   # 把 [lo, hi) 这些字切成不超过 12 个字的行：每次在中间一段里找停顿最长的地方切
+            if hi - lo <= 12: return [(lo, hi)]
+            k = max(range(lo + 3, hi - 4), key=lambda i: gap[i] - 0.004 * abs(i - (lo + hi) // 2)) + 1
+            return split(lo, k) + split(k, hi)
+        txt = ""
+        for lo, hi in split(0, len(tk)): txt += "".join(x["t"] for x in tk[lo:hi]).strip() + ("。" if gap[hi - 1] > 0.6 else "，")
+        open(script, "w", encoding="utf-8").write("# 由录音转写。请校对错字；句读是按停顿加的，决定字幕在哪断行，断得不对就挪一下逗号句号（一行不超过 14 个字）\n## 全文\n" + txt + "\n"); print("没有稿子，已用转写结果生成 script.txt，校对错字后可再跑一次 cut。")
     subprocess.run([PY, os.path.join(R, "scripts", "align.py"), "--script", script, "--asr", os.path.join(work, "asr.json"), "--audio", cut, "--out-timing", os.path.join(code, "timing.json"), "--out-audio", os.path.join(R, "studio", "public", slug, "voice.wav"), "--max", "14", "--fps", str(fps)], check=True)
     print("好了：人物视频、配音、字幕时间表都已就位。")

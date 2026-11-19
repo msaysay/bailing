@@ -16,7 +16,7 @@ for _s in (_sys.stdout, _sys.stderr): getattr(_s, "reconfigure", lambda **k: Non
 import argparse, json, os, re, shutil, subprocess, sys, time
 R = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); E = os.path.join(R, "episodes"); PY = sys.executable
 REG = json.load(open(os.path.join(R, "styles", "talk-styles.json"), encoding="utf-8")); S = REG["styles"]; O = REG["options"]
-SKILL = {"xiaolin": "make-talk", "danjie": "danjie-cut", "zhanpeng": "zhanpeng-talk", "frame": "frame-talk", "interview": "tiantu-interview-cut"}
+SKILL = {"xiaolin": "xiaolin-talk", "danjie": "danjie-cut", "zhanpeng": "zhanpeng-talk", "frame": "frame-talk", "interview": "tiantu-interview-cut"}
 def ppath(ep): return os.path.join(E, ep, "进度.json")
 def load(ep):
     if not os.path.exists(ppath(ep)): sys.exit(f"没有这一期：{ep}（先 talk.py new）")
@@ -109,7 +109,8 @@ def recipe(ep, st):
         add(("转写，找口误和重录", f"python3 scripts/talk_prep.py {q(ep)} transcribe"))
         flags = (" --auto-drop" if has("retake") or has("stutter") else "") + (" --grade" if has("grade") else "") + (" --beauty 0.3" if has("beauty") else "") + (" --denoise auto" if has("denoise") else "")
         add(("粗剪、对齐（--drop 里补上你通读后找到的口误）", f"python3 scripts/talk_prep.py {q(ep)} cut --drop \"…\" --vf \"…\"{flags}"))
-        add(("排版", f"在 studio/src/episodes/{slug}/index.tsx 里搭；关键帧：cd studio && npx remotion still src/index.tsx {slug} out/{slug}-k.png --frame=<帧>"))
+        add(("版式表（逐句定版式，给用户确认）和备素材", f"写 {ed}/03_制作过程/版式表.md；素材放 studio/public/{slug}/footage/"))
+        add(("搭画面（照抄 talk02）", f"在 studio/src/episodes/{slug}/index.tsx 里搭；关键帧：cd studio && npx remotion still src/index.tsx {slug} out/{slug}-k.png --frame=<帧>"))
         add(("渲染和自查", f"cd studio && npx remotion render src/index.tsx {slug} out/{slug}.mp4；python3 scripts/qc.py …；python3 scripts/talk_check.py …"))
         if has("music"): add(("配乐（成片上做，不用重渲）", f"python3 scripts/polish.py studio/out/{slug}.mp4 --music auto --mood warm -o studio/out/{slug}-配乐.mp4"))
     elif style == "zhanpeng":
