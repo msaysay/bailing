@@ -24,3 +24,4 @@ studio/public/yuedu/
 dist/
 studio/public/*/*.wav
 studio/public/stut-test/
+__pycache__/
