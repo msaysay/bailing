@@ -93,8 +93,10 @@ const Under: React.FC<{ p: FrameProps }> = ({ p }) => {
   return (
     <>
       {p.base.map((b, i) => {
-        const t1 = p.base[i + 1]?.t ?? p.total;
-        if (t < b.t || t >= t1) return null;
+        const nx = p.base[i + 1], t1 = nx?.t ?? p.total;
+        // 小圆放大回铺满的那 0.42 秒里，卡片继续垫在下面，不露黑底
+        const tail = nx && personMode(b) === 'bubble' && personMode(nx) === 'full' ? MODE_DUR : 0;
+        if (t < b.t || t >= t1 + tail) return null;
         if (b.card) { const Card = CARDS[b.card.name]; if (!Card) throw new Error('没有这张卡：' + b.card.name); return <Card key={i} {...(b.card.props as object)} t0={b.t} t1={t1} cues={b.card.cues} bubble={personMode(b) === 'bubble'} />; }
         if (b.show) return <ShowLayer key={i} show={b.show} t0={b.t} t1={t1} />;
         return null;
@@ -182,9 +184,9 @@ const BigText: React.FC<{ p: FrameProps }> = ({ p }) => {
     const fs = Math.min(SZ[cur.size ?? 'xl'], Math.floor(1000 / cur.text.length)), a = pop(t, cur.t, 0.34);
     return <div style={{ position: 'absolute', left: 0, right: 0, bottom: 18, textAlign: 'center', fontFamily: SLANT, fontSize: fs, color: COL[cur.tone ?? 'white'], whiteSpace: 'nowrap', transform: `scale(${mix(0.86, 1, a)})`, transformOrigin: 'center bottom', opacity: c01((t - cur.t) / 0.1), ...outline(fs * 0.1) }}>{cur.text}</div>;
   }
-  const onShow = b.spotOn === 'show', m = p.media, room = onShow ? 900 : Math.max(300, m.face.x * Math.max(WIN.w / m.vw, WIN.h / m.vh) - m.face.w * 0.5 - 70);   // 聚光打在人身上时，字只占人脸左边
+  const onShow = b.spotOn === 'show', m = p.media, room = onShow ? 900 : Math.max(300, m.face.x * Math.max(WIN.w / m.vw, WIN.h / m.vh) - m.face.w * 0.5 - 56);   // 聚光打在人身上时，字只占人脸左边
   return (
-    <div style={{ position: 'absolute', left: 44, right: 44, top: onShow ? undefined : WIN.h * 0.42, bottom: onShow ? 80 : undefined, display: 'flex', flexDirection: 'column', gap: 6, alignItems: onShow ? 'center' : 'flex-start', opacity: 1 - c01((t - end + 0.12) / 0.12) }}>
+    <div style={{ position: 'absolute', left: 30, right: 30, top: onShow ? undefined : WIN.h * 0.42, bottom: onShow ? 80 : undefined, display: 'flex', flexDirection: 'column', gap: 6, alignItems: onShow ? 'center' : 'flex-start', opacity: 1 - c01((t - end + 0.12) / 0.12) }}>
       {b.lines.map((l, k) => {
         if (t < l.t) return null;
         const fs = Math.max(40, Math.min(SZ[l.size ?? 'm'], Math.floor((room * (l.size === 'l' ? 1.16 : 1)) / l.text.length))), a = outQuint((t - l.t) / 0.3);
