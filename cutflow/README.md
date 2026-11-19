@@ -1,7 +1,6 @@
 # cutflow · 口播短视频 AI 剪辑工作流
 
-> 这是蛋解创业版式和花字的**原型**（HTML 舞台 + ffmpeg），写的时候还没接上仓库里的 `studio/` 和 `skills/`。
-> 重录检测和调光已经移到 `scripts/retakes.py`、`scripts/grade.py`，接在 `talk-02-roughcut` 里；版式和花字待并进 `studio/`，见 `brands/danjie/README.md`。
+> 给蛋解创业定制的独立工作流（HTML 舞台 + ffmpeg），不依赖仓库里的 `studio/`。可以整个目录交给任何能读文件、跑命令的 AI，入口是 `SKILL.md`。
 
 对标「蛋解创业」成片做的一条流水线：**原片 + 素材进，成片出**。人和 AI 只需要改一份 `timeline.json`，
 版式、字体、花字动效、调光全部由模板保证一致。设计依据见 [docs/STYLE_SPEC.md](docs/STYLE_SPEC.md)，
@@ -23,18 +22,21 @@ AI 排片规则见 [docs/PLAYBOOK.md](docs/PLAYBOOK.md)。
 ## 快速开始
 
 ```bash
-npm run fonts                 # 拉 4 款可商用字体到 fonts/（不进仓库）
-pip install faster-whisper "opencv-python-headless<4.11" numpy
-# 需要 ffmpeg ≥ 6、Node ≥ 20、playwright + chromium
+npm install && npx playwright install chromium
+pip install -r requirements.txt
+node scripts/setup.js                              # 体检 + 下载字体
 
-mkdir -p projects/ep01/raw   # 原片放 raw/host.mp4，素材也放 raw/
-node src/prep.js projects/ep01 --beauty 0.3 --model large-v3-turbo
-# …AI/人编辑 projects/ep01/subs.txt 与 timeline.json…
-node src/resub.js projects/ep01
-node src/render.js projects/ep01 --still 12.5      # 某一秒的合成静帧，排版自检
+mkdir -p projects/ep01/raw                         # 原片放 raw/host.mp4，素材也放 raw/
+node src/prep.js   projects/ep01 --beauty 0.3      # 转写、删重录、去气口、调光
+# …AI 编辑 projects/ep01/subs.txt 与 timeline.json（见 SKILL.md）…
+node src/resub.js  projects/ep01
+node src/render.js projects/ep01 --preview --still 12.5   # 某一秒的静帧
 node src/render.js projects/ep01 --preview         # 预览片
+node src/check.js  projects/ep01                   # 硬指标 + 联系表
 node src/render.js projects/ep01                   # 成片
 ```
+
+交给 AI 用：让它先读 `SKILL.md`。
 
 ## 组件一览（都在 `src/stage/`，纯 HTML/CSS，逐帧确定性渲染）
 
@@ -44,13 +46,14 @@ node src/render.js projects/ep01                   # 成片
 | 版式 | `band` | 01 Roadster | 通栏素材 + 上下光条 + 圆形头像压边；`hostPos:"right"` 时头像靠右、左上放章节角标（02） |
 | 版式 | `cardTop` | 02 | 上：圆角素材卡；下：带取景角标的主讲人小窗 |
 | 版式 | `cardBottom` | 02 / 03 | 上：主讲人小窗；下：金色描边素材卡 |
-| 版式 | `data` | 02 / 03 | 深色底 + 圆形头像 + 数据面板：`stat` 数字滚动 / `compare` 对比条 / `steps` 因果链 |
+| 版式 | `data` | 02 / 03 | 深色底 + 圆形头像 + 数据面板：`stat` 数字滚动 / `compare` 对比条 / `steps` 因果链 / `line` 折线 / `quote` 引文卡 |
 | 字幕 | `subs` | 全部 | 口播全屏用黄油体正体，卡片版式用标题黑斜体；`hl` 关键词变金，`emph` 整行金句 |
 | 花字 | `keyword` | 01「反作用姿态控制」 | 逐字砸入 + 扫光 + 下划线 |
 | 花字 | `list` | 01「改善使用体验/突破能力边界」 | 分点逐条滑入，新条出现旧条压暗，字幕自动下移让位 |
 | 花字 | `label` | 01「碳纤维缠绕压力容器」 | 素材上的红字白边标注，可带副标 |
 | 花字 | `chapter` | 02「1 关税 / 2 油价」 | 紫色斜切横幅 + 黄色序号 |
 | 花字 | `punch` | 结尾金句 | 书法体砸入 + 暖光闪 + 余震 |
+| 花字 | `image` | 03 新闻截图 | 图片卡：截图、报道、logo 压在任意版式上 |
 | 装饰 | `rec` | 01 | 取景框 + REC 闪烁 |
 
 ## timeline.json
@@ -101,9 +104,10 @@ node src/render.js projects/ep01                   # 成片
 4 核 CPU 上成片约 4.4× 实时（29 秒片渲 129 秒），5 分钟片大约 20 多分钟；预览档快约 4 倍。
 场景带指纹缓存，改一句花字只重渲那一个场景。
 
-## 已知边界 / 下一步
+## 已知边界
 
-- 音效（whoosh、叮）还没做成组件；BGM 只有整体压低，没有按人声自动闪避。
-- 地图高亮、折线图、关系图谱这类成片里的定制信息图（02、03 用得多）目前只覆盖了 `stat / compare / steps` 三种通用面板，复杂的建议按需加面板类型。
-- 素材检索（自己找 B-roll）现在由 AI 剪辑师按 PLAYBOOK 人工完成，没有自动下载器；注意素材版权。
-- 口播全屏的画面抖动/闪白这类“镜头级特效”需要在 ffmpeg 侧做，暂未实现。
+- 只在 Linux 上实际跑通过；Windows / macOS 做了路径和 python 的兼容处理，但没有实机验证。
+- 重录检测只看字面，换了说法的重录要靠 AI 通读补删。
+- 地图高亮、关系图谱这类定制信息图没有对应面板，用 `image` 贴片或素材代替。
+- 素材检索没有自动下载器，由 AI 按 PLAYBOOK 找；注意版权。
+- 抠像（人叠在新闻截图上）、火焰、画面抖动这类镜头级特效没有做。

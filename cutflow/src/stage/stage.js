@@ -50,7 +50,7 @@
   // 入场/出场包络：0→1（in 秒）…保持…1→0（out 秒）
   const envelope = (t, s, e, din = .25, dout = .18) => Math.min(prog(t, s, din), 1 - prog(t, e - dout, dout));
 
-  let TL = null;
+  let TL = null; const POOL = {};
   function load(timeline) {
     TL = timeline;
     TL.scenes.forEach((s, i) => { s._prev = TL.scenes[i - 1] || null; });
@@ -181,6 +181,12 @@
         <span class="t" style="opacity:${clamp(p * 2)};transform:translateX(${px((1 - p) * -50)}) skewX(${(1 - p) * -18}deg) scale(${lerp(1.15, 1, p)});filter:blur(${px((1 - p) * 8)})">${esc(o.text)}</span>
         ${o.sub ? `<span class="s" style="font-size:${px(size * .82)};opacity:${p2};transform:translateY(${px((1 - p2) * 14)})">${esc(o.sub)}</span>` : ''}</div>`;
     },
+    // 图片卡：截图、报道、logo。压在任意版式上，带白边、轻微倾斜和投影（成片里“新闻截图飞进来”那种）
+    image(o, t) {
+      const st = t - o.start, p = E.out5(prog(st, 0, .4)), out = 1 - prog(t, o.end - .18, .18), rot = o.rotate != null ? o.rotate : -3;
+      const drift = 1 + .03 * prog(t, o.start, o.end - o.start);
+      return `<div class="abs" style="left:${o.x}px;top:${px(o.y + (1 - p) * 90)};width:${o.w}px;${o.h ? `height:${o.h}px;` : ''}border-radius:${o.r != null ? o.r : 18}px;overflow:hidden;border:${o.border != null ? o.border : 6}px solid #fff;box-shadow:0 30px 70px rgba(0,0,0,.6);opacity:${clamp(p * 2.5) * out};transform:rotate(${rot * (2 - p)}deg) scale(${lerp(.88, 1, p) * drift})"><span data-img="${esc(o.src)}" style="display:block;width:100%;${o.h ? 'height:100%;' : ''}"></span></div>`;
+    },
     // 取景框
     rec(o, t) {
       const a = envelope(t, o.start, o.end, .2, .2), m = 54, s = 1 + (1 - E.out5(prog(t, o.start, .4))) * .06;
@@ -233,9 +239,35 @@
       }).join('');
     },
   };
+  // 折线走势：points 是数值数组（或 [{x,y}]），线从左画到右，终点带数值
+  PANELS.line = (pn, t, st, R) => {
+    const pts = pn.points.map((p, i) => typeof p === 'number' ? { x: i, y: p } : p), x0 = 70, y0 = 190, w = R.w - 140, h = R.h - 330;
+    const xs = pts.map(p => p.x), ys = pts.map(p => p.y), xa = Math.min(...xs), xb = Math.max(...xs), ya = Math.min(...ys), yb = Math.max(...ys), pad = (yb - ya) * .12 || 1;
+    const X = v => x0 + (v - xa) / (xb - xa || 1) * w, Y = v => y0 + h - (v - (ya - pad)) / (yb - ya + 2 * pad) * h;
+    const p = E.inOut(prog(st, pn.at || .3, pn.dur || 1.6)), n = pts.length - 1, f = p * n, k = Math.min(n - 1, Math.floor(f)), r = f - k;
+    const cur = { x: lerp(X(pts[k].x), X(pts[k + 1].x), r), y: lerp(Y(pts[k].y), Y(pts[k + 1].y), r), v: lerp(pts[k].y, pts[k + 1].y, r) };
+    const d = pts.slice(0, k + 1).map((q, i) => `${i ? 'L' : 'M'}${X(q.x).toFixed(1)},${Y(q.y).toFixed(1)}`).join('') + `L${cur.x.toFixed(1)},${cur.y.toFixed(1)}`;
+    const col = pn.color === 'red' ? '#ff5a4f' : '#ffd84a', dec = pn.decimals || 0;
+    const grid = [0, 1, 2, 3].map(i => `<line x1="${x0}" x2="${x0 + w}" y1="${y0 + h * i / 3}" y2="${y0 + h * i / 3}" stroke="rgba(255,255,255,.08)" stroke-width="2"/>`).join('');
+    return `<svg class="abs" style="left:0;top:0" width="${R.w}" height="${R.h}">${grid}
+      <path d="${d}L${cur.x.toFixed(1)},${y0 + h}L${x0},${y0 + h}Z" fill="${col}" opacity=".10"/>
+      <path d="${d}" fill="none" stroke="${col}" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 0 12px ${col})"/>
+      <circle cx="${cur.x}" cy="${cur.y}" r="13" fill="#fff" stroke="${col}" stroke-width="6"/></svg>
+      <div class="abs" style="left:${px(Math.min(R.w - 330, Math.max(40, cur.x - 150)))};top:${px(cur.y - 120)};width:300px;text-align:center;font-family:Num;font-size:72px;font-variant-numeric:tabular-nums;text-shadow:0 4px 18px rgba(0,0,0,.8);opacity:${clamp(p * 4)}">${pn.prefix ? esc(pn.prefix) : ''}${fmt(cur.v, dec)}<span style="font-family:SubCard;font-size:36px;color:var(--gold);margin-left:6px">${pn.unit ? esc(pn.unit) : ''}</span></div>
+      ${(pn.labels || []).map((lb, i, arr) => `<div class="abs" style="left:${px(x0 + w * i / (arr.length - 1 || 1) - 100)};top:${px(y0 + h + 24)};width:200px;text-align:center;font-family:Num;font-size:30px;color:rgba(255,255,255,.55)">${esc(lb)}</div>`).join('')}`;
+  };
+  // 引文/文件卡：来源 + 逐行出现的原话，hl 里的词划金线
+  PANELS.quote = (pn, t, st, R) => {
+    const lines = String(pn.text).split('\n');
+    return `${pn.source ? `<div class="abs" style="left:56px;top:${R.h - 96}px;font-family:Num;font-size:30px;color:rgba(255,255,255,.5);opacity:${E.out3(prog(st, .2, .4))}">— ${esc(pn.source)}</div>` : ''}` + lines.map((ln, i) => {
+      const a = E.out5(prog(st, .3 + i * .28, .4));
+      return `<div class="abs" style="left:56px;right:56px;top:${px(170 + i * 96)};font-family:SubCard;font-size:${Math.min(60, (R.w - 112) / textLen(ln))}px;white-space:nowrap;opacity:${clamp(a * 2)};transform:translateY(${px((1 - a) * 22)});filter:blur(${px((1 - a) * 5)})">${hlText(ln, pn.hl)}</div>`;
+    }).join('');
+  };
+
   function panel(t, scene, L) {
     const pn = scene.panel; if (!pn || !L.panel) return '';
-    const auto = pn.type === 'steps' ? 180 + pn.items.length * 170 + 10 : pn.type === 'compare' ? 190 + pn.rows.length * 190 + 30 : pn.type === 'stat' ? 640 : L.panel.h;
+    const auto = pn.type === 'steps' ? 180 + pn.items.length * 170 + 10 : pn.type === 'compare' ? 190 + pn.rows.length * 190 + 30 : pn.type === 'stat' ? 640 : pn.type === 'line' ? 760 : pn.type === 'quote' ? 170 + String(pn.text).split('\n').length * 96 + 130 : L.panel.h;
     const R = { ...L.panel, h: pn.h || Math.min(L.panel.h, auto) }, st = t - scene.start;
     R.y = L.panel.y + (L.panel.h - R.h) / 2 - 40;
     const p = E.out5(prog(st, 0, .45));
@@ -267,6 +299,7 @@
   }
 
   const api = { W, H, LAYOUTS, layoutOf, rectsOf, load, frame, overlayTypes: Object.keys(OV), panelTypes: Object.keys(PANELS),
-    draw(t) { document.getElementById('root').innerHTML = frame(t); } };
+    async preload(srcs) { for (const src of srcs) { const im = new Image(); im.src = src; im.style.cssText = 'display:block;width:100%;height:100%;object-fit:cover'; await im.decode(); POOL[src] = im; } },
+    draw(t) { const root = document.getElementById('root'); root.innerHTML = frame(t); root.querySelectorAll('[data-img]').forEach(el => { const im = POOL[el.getAttribute('data-img')]; if (im) el.appendChild(im); }); } };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else global.Stage = api;
 })(typeof window !== 'undefined' ? window : globalThis);

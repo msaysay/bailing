@@ -7,7 +7,7 @@ const fs = require('fs'), path = require('path'), { spawn, execFileSync } = requ
 const Stage = require('./stage/stage.js');
 const args = process.argv.slice(2), dir = path.resolve(args[0] || '.');
 const opt = (k, d) => { const i = args.indexOf('--' + k); return i < 0 ? d : (args[i + 1] && !args[i + 1].startsWith('--') ? args[i + 1] : true); };
-const playwright = (() => { try { return require('playwright'); } catch (_) { return require('/opt/node-tools/node_modules/playwright'); } })();
+const { python, playwright: loadPW } = require('./util'), playwright = loadPW();
 
 const tl = JSON.parse(fs.readFileSync(path.join(dir, opt('timeline', 'timeline.json')), 'utf8'));
 const preview = !!opt('preview', false);
@@ -33,6 +33,13 @@ function validate() {
   if (Math.abs(tl.scenes[tl.scenes.length - 1].end - D) > 0.05) errs.push(`最后一个场景应结束于 meta.duration=${D}`);
   (tl.overlays || []).forEach((o, i) => { if (!Stage.overlayTypes.includes(o.type)) errs.push(`贴片${i}: 未知类型 ${o.type}`); if (!(o.end > o.start)) errs.push(`贴片${i}: 时间非法`); });
   (tl.subs || []).forEach((s, i) => { if ([...s.text].length > 16) errs.push(`字幕${i}: 超过16字「${s.text}」`); });
+  // 剪口必须盖住：要么落在人很小的版式里，要么正好在场景交界（换版式或硬切景别）
+  (tl.meta.cuts || []).forEach(c => {
+    const i = tl.scenes.findIndex(s => c >= s.start && c < s.end), s = tl.scenes[i]; if (!s || s.layout !== 'talk') return;
+    if (c - s.start > 0.12 && s.end - c > 0.12) errs.push(`剪口 ${c}s 落在口播全屏场景${i}中间，人会跳：在这一刻拆成两个场景并换 zoom（差 ≥0.08），或让这一段用素材版式`);
+  });
+  tl.scenes.forEach((s, i) => { const p = tl.scenes[i - 1]; if (p && p.layout === 'talk' && s.layout === 'talk' && Math.abs((p.zoom || 1) - (s.zoom || 1)) < 0.08 && (tl.meta.cuts || []).some(c => Math.abs(c - s.start) <= 0.12)) errs.push(`场景${i - 1}→${i}: 剪口处两个口播全屏的 zoom 至少差 0.08（现在 ${p.zoom || 1} → ${s.zoom || 1}）`); });
+  (tl.overlays || []).forEach((o, i) => { if (o.type === 'image' && !fs.existsSync(P(o.src))) errs.push(`贴片${i}: 图片不存在 ${o.src}`); });
   if (errs.length) { console.error('timeline 校验未通过:\n  ' + errs.join('\n  ')); process.exit(2); }
 }
 
@@ -85,8 +92,9 @@ async function renderScene(browser, scene, idx, outFile, host, stillAt) {
 async function newPage(browser) {
   const page = await browser.newPage({ viewport: { width: Stage.W, height: Stage.H }, deviceScaleFactor: K });
   page.on('pageerror', e => { console.error('舞台报错:', e.message); process.exit(3); });
-  await page.goto('file://' + path.join(__dirname, 'stage/stage.html'));
-  await page.evaluate(async tl => { Stage.load(tl); await Promise.all(['SubTalk', 'SubCard', 'Num', 'Brush'].map(f => document.fonts.load(`40px "${f}"`, '字A1'))); await document.fonts.ready; }, tl);
+  await page.goto(require('url').pathToFileURL(path.join(__dirname, 'stage/stage.html')).href);
+  const view = JSON.parse(JSON.stringify(tl)); (view.overlays || []).forEach(o => { if (o.type === 'image') o.src = require('url').pathToFileURL(P(o.src)).href; });
+  await page.evaluate(async tl => { Stage.load(tl); await Stage.preload([...new Set(tl.overlays.filter(o => o.type === 'image').map(o => o.src))]); await Promise.all(['SubTalk', 'SubCard', 'Num', 'Brush'].map(f => document.fonts.load(`40px "${f}"`, '字A1'))); await document.fonts.ready; }, view);
   return page;
 }
 
@@ -104,7 +112,8 @@ async function newPage(browser) {
   const only = opt('only', false) ? String(opt('only')).split(',').map(Number) : null;
   // 场景指纹：没改过的场景直接复用上次的分段
   const crypto = require('crypto');
-  const fp = (s, i) => crypto.createHash('md5').update(JSON.stringify([s, tl.scenes[i - 1] && tl.scenes[i - 1].layout, tl.host, (tl.subs || []).filter(x => x.end > s.start && x.start < s.end), (tl.overlays || []).filter(x => x.end > s.start && x.start < s.end), fs.readFileSync(path.join(__dirname, 'stage/stage.js')), fs.readFileSync(path.join(__dirname, 'stage/stage.css')), FPS, OW])).digest('hex').slice(0, 12);
+  const stamp = f => { try { const st = fs.statSync(P(f)); return [f, st.size, Math.round(st.mtimeMs)]; } catch (_) { return [f]; } };   // 原片或素材换了也要重渲
+  const fp = (s, i) => crypto.createHash('md5').update(JSON.stringify([stamp(tl.host.src), s.media && stamp(s.media.src), (tl.overlays || []).filter(x => x.type === 'image').map(x => stamp(x.src)), s, tl.scenes[i - 1] && tl.scenes[i - 1].layout, tl.host, (tl.subs || []).filter(x => x.end > s.start && x.start < s.end), (tl.overlays || []).filter(x => x.end > s.start && x.start < s.end), fs.readFileSync(path.join(__dirname, 'stage/stage.js')), fs.readFileSync(path.join(__dirname, 'stage/stage.css')), FPS, OW])).digest('hex').slice(0, 12);
   const jobs = tl.scenes.map((s, i) => ({ s, i, file: path.join(segDir, `s${String(i).padStart(3, '0')}_${fp(s, i)}.mp4`) }));
   const todo = jobs.filter(j => (only ? only.includes(j.i) : true) && !fs.existsSync(j.file));
   console.log(`共 ${jobs.length} 个场景，需渲染 ${todo.length} 个（${OW}×${OH}@${FPS}${preview ? ' 预览档' : ''}）`);
@@ -115,12 +124,14 @@ async function newPage(browser) {
   await browser.close();
   if (only) { console.log('仅渲染指定场景，未拼接'); return; }
   // 拼接 + 音频（主讲人声 + 可选 BGM 自动压低）
-  const list = path.join(segDir, 'list.txt'); fs.writeFileSync(list, jobs.map(j => `file '${j.file}'`).join('\n'));
+  const list = path.join(segDir, 'list.txt'); fs.writeFileSync(list, jobs.map(j => `file '${j.file.replace(/\\/g, '/')}'`).join('\n'));
   const out = P(opt('out', preview ? 'out/preview.mp4' : 'out/final.mp4')); fs.mkdirSync(path.dirname(out), { recursive: true });
-  const a = ['-v', 'error', '-y', '-f', 'concat', '-safe', '0', '-i', list, '-i', P(tl.host.src)];
-  if (tl.audio && tl.audio.bgm) {
-    a.push('-stream_loop', '-1', '-i', P(tl.audio.bgm), '-filter_complex', `[2:a]volume=${tl.audio.bgmVolume || 0.12}[b];[1:a][b]amix=inputs=2:duration=first:normalize=0[a]`, '-map', '0:v', '-map', '[a]');
-  } else a.push('-map', '0:v', '-map', '1:a');
+  // 音轨：人声 + 程序合成的音效（转场、花字入场）+ 可选 BGM（人声一响自动压低）
+  const A = tl.audio || {}, a = ['-v', 'error', '-y', '-f', 'concat', '-safe', '0', '-i', list, '-i', P(tl.host.src)], mix = ['[1:a]aresample=48000,asplit=2[v0][vk]']; let n = 2, ins = ['[v0]'];
+  if (A.sfx !== false) { const sfx = P('work/sfx.wav'); execFileSync(python(), [path.join(__dirname, '../py/sfx.py'), path.join(dir, opt('timeline', 'timeline.json')), sfx, String(A.sfxVolume != null ? A.sfxVolume : 1)], { stdio: 'inherit' }); a.push('-i', sfx); ins.push(`[${n}:a]`); n++; }
+  if (A.bgm) { a.push('-stream_loop', '-1', '-i', P(A.bgm)); mix.push(`[${n}:a]aresample=48000,volume=${A.bgmVolume || 0.16}[b0];[b0][vk]sidechaincompress=threshold=0.03:ratio=6:attack=40:release=500[b1]`); ins.push('[b1]'); n++; } else mix.push('[vk]anullsink');
+  mix.push(`${ins.join('')}amix=inputs=${ins.length}:duration=first:normalize=0,alimiter=limit=0.95[a]`);
+  a.push('-filter_complex', mix.join(';'), '-map', '0:v', '-map', '[a]');
   a.push('-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-t', String(tl.meta.duration), '-movflags', '+faststart', out);
   execFileSync('ffmpeg', a, { stdio: 'inherit' });
   // 用过的旧分段清掉
