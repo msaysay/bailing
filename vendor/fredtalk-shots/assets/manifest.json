@@ -1,0 +1,137 @@
+{
+  "brand": "Fredtalk Shots",
+  "version": "2.0.0",
+  "files": [
+    {
+      "path": "LICENSE",
+      "bytes": 1061,
+      "sha256": "3503816e32cb9e674005dbbbc2edcd4b20e94c1221b0f0e6adff0a44e6bc192d"
+    },
+    {
+      "path": "NOTICE",
+      "bytes": 591,
+      "sha256": "58aa22df18e22ebbfd18e9882b365ccfc6dfceffdce49a1a347655ab509f85fa"
+    },
+    {
+      "path": "SKILL.md",
+      "bytes": 8840,
+      "sha256": "3ee414b6f6ec1e667914bcbadd60fb73eefbabcb66b53d178aff6f93b9a0500d"
+    },
+    {
+      "path": "agents/openai.yaml",
+      "bytes": 357,
+      "sha256": "d0ff36d3a2f891a90b07be82de32e448c09471f64e45d6d1f631b03102e43be8"
+    },
+    {
+      "path": "assets/report.css",
+      "bytes": 17751,
+      "sha256": "58ed00cf567407b7de6fa61264bf8913be9fb569fea62c189f585bfaa3b378a0"
+    },
+    {
+      "path": "assets/report.js",
+      "bytes": 11932,
+      "sha256": "8fb87061a1a2a2db0d2de166259ac4fb83d36364c0094becc7290fd1119b2aa4"
+    },
+    {
+      "path": "assets/verification.json",
+      "bytes": 1054,
+      "sha256": "4111adcce43b67c848bb175cbb73072c9f3db55ebf826c6af64b4c34c06ec5ce"
+    },
+    {
+      "path": "references/analysis-method.md",
+      "bytes": 14764,
+      "sha256": "9145e8d9106cfaa9a8e7304b627c2775af5503762542b4c6f59aa1b1753e72a9"
+    },
+    {
+      "path": "references/engine-method.md",
+      "bytes": 4414,
+      "sha256": "8b08632c9f7dd6a91cfcec7675bcaf3e1e636862ac90f9da8b51e9e3c4edb68d"
+    },
+    {
+      "path": "references/prompt-method.md",
+      "bytes": 12921,
+      "sha256": "798be8542f50caf9c5a1868a0e5627568625d7069a1b7ce53918b29bb3fea0d5"
+    },
+    {
+      "path": "references/report-input.schema.json",
+      "bytes": 20553,
+      "sha256": "c03fa0ddda523d11de322c5e686963de7c63bdf63dfce046b1343f2d5d5de0b9"
+    },
+    {
+      "path": "references/report-qa.md",
+      "bytes": 3031,
+      "sha256": "cb6a29a67ae978c7cf9b74d65203e9bf0c8a37198a85252d6523b70005788e16"
+    },
+    {
+      "path": "references/taxonomy.md",
+      "bytes": 6506,
+      "sha256": "58a7ba2d2c99ec3f203c33ab52ad110588460febeb2a3dc40a0b4116b27605bc"
+    },
+    {
+      "path": "scripts/build_report.py",
+      "bytes": 39306,
+      "sha256": "9779ecc8aca7141c897eee754d36e8d2e6208e73ee6329a68570ba04dc4a9477"
+    },
+    {
+      "path": "scripts/bundle_selftest.py",
+      "bytes": 35510,
+      "sha256": "d701f420b3f5c1d5f21208dc3ac9874778d7a36b93ca6157d065d9bb85e2dd85"
+    },
+    {
+      "path": "scripts/crop_portrait.py",
+      "bytes": 2318,
+      "sha256": "89b55d657b7e5505d66c7d5ce021b3dfd09aa5d97c2b37a2aeff48acc4ca9146"
+    },
+    {
+      "path": "scripts/doctor.py",
+      "bytes": 4507,
+      "sha256": "e80cd991588fb321264918698d2183355847ed6706e96d70355bd4126a42dd18"
+    },
+    {
+      "path": "scripts/engine.py",
+      "bytes": 51026,
+      "sha256": "040862e7c3b3b6990094a2739b1e16fcff2a658fab42371d34422487a2fe8e71"
+    },
+    {
+      "path": "scripts/engine_selftest.py",
+      "bytes": 48072,
+      "sha256": "37bba65abb408b726a3bad989b0e33c8a64e7f7dfde2b919193aa4d308a242a6"
+    },
+    {
+      "path": "scripts/prepare.py",
+      "bytes": 4360,
+      "sha256": "6c6d3aab1ee4922ac36f0310773391eeb897836601a87c470336fd2894fdab9e"
+    },
+    {
+      "path": "scripts/report_selftest.py",
+      "bytes": 9574,
+      "sha256": "1f953aa1a600be09b3408d5e6a3442816c952b364129ce28159356779e04cd0a"
+    },
+    {
+      "path": "scripts/sample.py",
+      "bytes": 2683,
+      "sha256": "5dc801fb132d48f8715c8da306a2fa0135cb91ed3a19a0f4df34e661a3e9d53b"
+    },
+    {
+      "path": "scripts/serve_report.py",
+      "bytes": 2930,
+      "sha256": "9028ecc593c3477bc0fda048ed1d79385bd6f24e81a9b6433a9fe3d5fed8a38c"
+    },
+    {
+      "path": "scripts/validate_bundle.py",
+      "bytes": 29125,
+      "sha256": "dee13f7bde5edecc826ae62604ab695613387ea209c5cd1063f0164a4a5767c1"
+    },
+    {
+      "path": "scripts/write_manifest.py",
+      "bytes": 1151,
+      "sha256": "5911f149eba185e839551180b9874da1cb121e723def0d458a85d920fc0d13d5"
+    }
+  ],
+  "runtimeDependencies": {
+    "python3": ">=3.10",
+    "ffmpeg": "on PATH",
+    "ffprobe": "on PATH"
+  },
+  "internalDependencies": "All workflow scripts, report assets and references are inside this package."
+}

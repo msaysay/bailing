@@ -1,0 +1,37 @@
+{
+  "brand": "Fredtalk Shots",
+  "version": "2.0.0",
+  "verifiedAt": "2026-10-05T11:16:36.182827+00:00",
+  "testSuites": [
+    {
+      "suite": "engine",
+      "tests": 55,
+      "seconds": 18.044,
+      "passed": true
+    },
+    {
+      "suite": "bundle",
+      "tests": 31,
+      "seconds": 15.547,
+      "passed": true
+    },
+    {
+      "suite": "report",
+      "tests": 11,
+      "seconds": 1.914,
+      "passed": true
+    }
+  ],
+  "totalTests": 97,
+  "fixturePolicy": "Fresh temporary synthetic media and fictional annotations; no example videos distributed.",
+  "engine": "Python standard library with FFmpeg and ffprobe; decoded PTS, source hashing, motion and recut provenance.",
+  "integration": {
+    "realUserVideoMeasured": true,
+    "bundleValidated": true,
+    "continuousPlayback": true,
+    "shotSynchronization": true,
+    "promptCopy": true,
+    "desktopAndMobileNoTimeLabelOverlap": true
+  },
+  "scope": "Measured data, file protection and structural correctness; visual identity, action and audio judgments require actual review."
+}

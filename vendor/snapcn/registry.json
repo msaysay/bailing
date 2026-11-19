@@ -1,0 +1,11 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "snapcn",
+  "homepage": "https://snapcn.dev",
+  "include": [
+    "registry/snap-cn/registry.json",
+    "registry/snap-cn-ui/registry.json",
+    "registry/snap-cn-pro/registry.json"
+  ],
+  "items": []
+}
