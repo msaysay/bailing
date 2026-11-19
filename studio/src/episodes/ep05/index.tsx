@@ -25,7 +25,7 @@ const hide = [ln('开场', '帮我做条'), ln('怎么用', '我想做一条视�
 
 // ---------- 通用小件 ----------
 const Grain: React.FC = () => { const t = useT(); return <AbsoluteFill style={{ pointerEvents: 'none', opacity: .06, backgroundImage: 'radial-gradient(rgba(255,255,255,.9) 1px, transparent 1.2px)', backgroundSize: '3px 3px', backgroundPosition: `${(Math.floor(t * 24) * 7) % 3}px ${(Math.floor(t * 24) * 5) % 3}px`, mixBlendMode: 'overlay' }} />; };
-const Clip: React.FC<{ src: string; at: number; style?: React.CSSProperties }> = ({ src, at, style }) => <Sequence from={Math.round(at * FPS)} layout="none"><OffthreadVideo src={staticFile(src)} muted style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', ...style }} /></Sequence>;
+const Clip: React.FC<{ src: string; at: number; rate?: number; style?: React.CSSProperties }> = ({ src, at, rate = 1, style }) => <Sequence from={Math.round(at * FPS)} layout="none"><OffthreadVideo src={staticFile(src)} muted playbackRate={rate} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', ...style }} /></Sequence>;
 const Label: React.FC<{ children: React.ReactNode; color?: string; size?: number; style?: React.CSSProperties }> = ({ children, color = LIME, size = 22, style }) => <div style={{ fontFamily: MONO, fontSize: size, letterSpacing: '.22em', color, whiteSpace: 'nowrap', ...style }}>{children}</div>;
 const Pop: React.FC<{ at: number; children: React.ReactNode; style?: React.CSSProperties; from?: 'up' | 'left' | 'right' | 'scale' }> = ({ at, children, style, from = 'up' }) => {
   const t = useT(), k = sp(t, at), tf = from === 'scale' ? `scale(${k})` : from === 'left' ? `translateX(${(1 - k) * -120}px)` : from === 'right' ? `translateX(${(1 - k) * 120}px)` : `translateY(${(1 - k) * 70}px)`;
@@ -48,7 +48,7 @@ const Opening: React.FC = () => {
   const t = useT(), ai = say('开场', '全是'), toc = say('开场', '它能做什么');
   return <>
     <Scene from={0} to={say('开场', '我只跟') - .05} hard><AbsoluteFill style={{ background: INK, alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 30 }}>
-      {t < ai - .03 ? <SlamWords words={[{ text: '稿子' }, { text: '画面', color: LIME }, { text: '剪辑' }, { text: '特效', color: LIME }]} ats={[say('开场', '稿子'), say('开场', '画面'), say('开场', '剪辑'), say('开场', '特效')]} size={150} width={1500} />
+      {t < say('开场', '稿子') - .05 ? <div style={{ textAlign: 'center' }}><Label color={CORAL} style={{ opacity: Math.floor(t * 2) % 2 ? .3 : 1 }}>● REC</Label><Thin size={200} color={PAPER} style={{ opacity: prog(t, 0, .25) }}>THIS VIDEO</Thin></div> : t < ai - .03 ? <SlamWords words={[{ text: '稿子' }, { text: '画面', color: LIME }, { text: '剪辑' }, { text: '特效', color: LIME }]} ats={[say('开场', '稿子'), say('开场', '画面'), say('开场', '剪辑'), say('开场', '特效')]} size={150} width={1500} />
         : <div style={{ transform: `translate(${(1 - Math.min(1, (t - ai) / .25)) * noise(t, { amplitude: 22, frequency: 30, seed: 2 })}px, 0)` }}><GlitchText text="ALL BY AI" at={ai - .03} size={270} color={LIME} /></div>}
       <Label color={DIM} style={{ opacity: prog(t, ai + .3, .3) }}>SCRIPT · FOOTAGE · EDIT · VFX · QC</Label>
     </AbsoluteFill></Scene>
@@ -71,7 +71,7 @@ const Formats: React.FC = () => {
   const card = (i: number, node: React.ReactNode) => { const d = Math.abs(camX - i), k = 1 - Math.min(1, d); return <div style={{ position: 'absolute', left: W / 2 + (i - camX) * 1250, top: H / 2, transform: `translate(-50%, -52%) scale(${mix(.72, 1, k)}) rotateY(${(i - camX) * -18}deg)`, opacity: mix(.25, 1, k), filter: `blur(${(1 - k) * 4}px)` }}>{node}</div>; };
   return <Scene from={s.start} to={s.end}><AbsoluteFill style={{ background: `radial-gradient(1200px 800px at 50% 45%, #141A24, ${INK})`, perspective: 1800 }}>
     <Pop at={s.start + .05} style={{ position: 'absolute', left: 110, top: 60 }}><div style={{ display: 'flex', alignItems: 'baseline', gap: 26 }}><Thin size={120} color={LIME}>3</Thin><Label size={28} color={PAPER}>FORMATS · 三种成片</Label></div></Pop>
-    {card(0, <div style={{ position: 'relative' }}><Frame w={1040} h={585} tag="01 · 横屏解读片 · 16:9 · 人不出镜"><Clip src="ep05/clip-news.mp4" at={s.start} /></Frame>
+    {card(0, <div style={{ position: 'relative' }}><Frame w={1040} h={585} tag="01 · 横屏解读片 · 16:9 · 人不出镜"><Clip src="ep05/clip-news.mp4" at={s.start + .3} rate={.66} /></Frame>
       <div style={{ position: 'absolute', right: -40, top: 90, display: 'flex', flexDirection: 'column', gap: 14 }}><Chip at={say('能做什么', '写稿')} text="✎ 稿子" /><Chip at={say('能做什么', '找新闻')} text="▶ 新闻画面" /><Chip at={say('能做什么', '数字')} text="▮ 数字图表" color={PAPER} /></div></div>)}
     {card(1, <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 60 }}><div style={{ width: 380, height: 676, borderRadius: 48, padding: 14, background: '#1B1F27', boxShadow: '0 40px 100px rgba(0,0,0,.6)' }}><div style={{ width: '100%', height: '100%', borderRadius: 36, overflow: 'hidden' }}><Clip src="ep05/clip-talk.mp4" at={a2 - .5} /></div></div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}><Label size={20}>02 · 竖屏口播 · 9:16 · 人出镜</Label><Chip at={say('能做什么', '剪掉')} text="✂ 剪掉口误" color={CORAL} ink="#fff" /><Chip at={say('能做什么', '配上字幕')} text="字幕自动对齐" /><Chip at={say('能做什么', '画面就跟到哪')} text="画面跟着你走" color={PAPER} /></div></div>)}
