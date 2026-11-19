@@ -26,3 +26,4 @@ __pycache__/
 episodes/*/03_制作过程/props.json
 episodes/*/03_制作过程/script.draft.txt
 dist/
+studio/public/*/*.frames/

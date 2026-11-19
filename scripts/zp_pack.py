@@ -20,7 +20,7 @@ README = """# 张展鹏科普口播 · 自动剪辑包
 把整个文件夹交给它，让它先读 `AGENTS.md`。人只需要在三个节点确认：剪掉了哪些话、分镜和素材、成片。
 
 需要：Python 3.10+、Node.js 20+、ffmpeg。第一次运行 `python3 scripts/zp.py setup`。
-字体：寒蝉正楷、霞鹜文楷、思源宋体、马善政、站酷小薇（均为 SIL OFL 1.1，可商用），`python3 scripts/zp.py fonts --preview` 出样张挑。渲染用 Remotion：个人和三人以下团队免费，更大的公司需要它的公司许可。
+字体：寒蝉正楷、霞鹜文楷、思源宋体、马善政（均为 SIL OFL 1.1，可商用），`python3 scripts/zp.py fonts --preview` 出样张挑。渲染用 Remotion：个人和三人以下团队免费，更大的公司需要它的公司许可。
 """
 files = {"AGENTS.md": os.path.join(R, "AGENTS.zp.md"), "requirements.txt": os.path.join(R, "requirements.txt")}
 def tree(src, dst, skip=()):

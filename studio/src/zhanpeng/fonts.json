@@ -81,22 +81,6 @@
     "stroke": 0.016
    }
   },
-  "xiaowei": {
-   "name": "站酷小薇",
-   "note": "细瘦文艺的标题字，适合情感、生活方式类选题。",
-   "sub": {
-    "file": "ZCOOLXiaoWei-Regular.ttf",
-    "stroke": 0.006
-   },
-   "strong": {
-    "file": "ZCOOLXiaoWei-Regular.ttf",
-    "stroke": 0.014
-   },
-   "big": {
-    "file": "ZCOOLXiaoWei-Regular.ttf",
-    "stroke": 0.016
-   }
-  },
   "custom": {
    "name": "自备字体",
    "note": "有授权的商业字体（方正楷体、方正粗楷、汉仪楷体等）放进 studio/public/fonts/，命名为 custom-sub.ttf、custom-strong.ttf、custom-big.ttf（后两个没有就用第一个）。粗体字不需要描边时把 stroke 改成 0。",
@@ -156,13 +140,6 @@
    "from": "Fontsource",
    "urls": [
     "https://cdn.jsdelivr.net/fontsource/fonts/noto-serif-sc@5.2.8/chinese-simplified-900-normal.ttf"
-   ]
-  },
-  "ZCOOLXiaoWei-Regular.ttf": {
-   "license": "SIL OFL 1.1",
-   "from": "Google Fonts",
-   "urls": [
-    "https://raw.githubusercontent.com/google/fonts/main/ofl/zcoolxiaowei/ZCOOLXiaoWei-Regular.ttf"
    ]
   }
  }
