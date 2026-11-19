@@ -56,14 +56,14 @@
 | 步 | Skill | 做什么 | 输入 | 输出 | 要人确认 |
 |---|---|---|---|---|---|
 | 0 | `frame-00-setup` | 环境、署名、客户素材入库 | 客户素材（可无） | `speaker.json`、`library.json` | 署名（变的时候） |
-| 1 | `frame-01-cut` | 转写、校对、粗剪、对齐 | 口播原片 | `script.txt`、`person.mp4`、`timing.json`、`cuts.json` | ✔ 文字 |
+| 1 | `frame-01-cut` | 转写、校对、去口吃和重说、粗剪、对齐、降噪、配乐 | 口播原片 | `script.txt`、`person.mp4`、`mix.wav`、`timing.json`、`cuts.json` | ✔ 文字 |
 | 2 | `frame-02-plan` | 三组标题、逐句排画面、机器检查 | 以上全部 | `标题候选.md`、`edl.json`、`版式表.md` | ✔ 标题和版式表 |
 | 3 | `frame-03-render` | 关键帧、整片、自查、封面 | `edl.json` | `成片.mp4`、`封面.png` | ✔ 成片 |
 
 - 相框里能改的只有三行标题和署名条的名字、头衔（`brands/yuedu/speaker.json`）；底图、标志、位置、颜色、字体都锁死。
 - 画面三个来源，按顺序用：客户素材 → 搜（`scripts/tikhub.py`）→ 生成卡片（十三张，见 `skills/frame-02-plan/卡片目录.md`）。
 - 这条线不用 talkcraft 的卡（仅限非商用）。
-- 样片：`episodes/14_约读书房_样片/`，关键帧在 `04_成片/关键帧.jpg`。它的输入素材不进 git，用 `scripts/frame_demo_fixture.sh <参考成片>` 重建。
+- 样片：`episodes/14_约读书房_样片/`，关键帧在 `04_成片/关键帧.jpg`。它的输入素材不进 git，用 `python3 scripts/frame_demo_fixture.py <参考成片>` 重建。
 - 设计依据：`docs/约读书房-口播成片工作流设计.md`。
 
 ## 目录约定

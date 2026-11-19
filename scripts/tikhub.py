@@ -14,6 +14,8 @@
 搜索结果缓存在 ~/.cache/tikhub-search.json，下载时从缓存取播放地址（地址几小时内有效）。
 API Token 由云端环境的网络代理注入；本地运行时设置环境变量 TIKHUB_TOKEN。
 登记到 <目录>/sources.json 的许可一栏写「平台公开内容，未取得授权」——能不能用进成片由人判断。"""
+import sys as _sys
+for _s in (_sys.stdout, _sys.stderr): getattr(_s, "reconfigure", lambda **k: None)(encoding="utf-8", errors="replace")   # Windows 终端也能打印中文
 import argparse, json, os, shutil, subprocess, sys, urllib.request
 API = "https://api.tikhub.io/api/v1/douyin/search/fetch_video_search_v2"
 CACHE = os.path.expanduser("~/.cache/tikhub-search.json")

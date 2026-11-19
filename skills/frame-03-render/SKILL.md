@@ -8,7 +8,7 @@ description: 相框口播线第 3 步：按剪辑决定表出关键帧、看图�
 ## 1. 先看关键帧（一分钟）
 
 ```bash
-scripts/frame_render.sh "episodes/<期>" keys
+python3 scripts/frame_render.py "episodes/<期>" keys
 ```
 得到 `04_成片/关键帧.jpg`：每段画面、每个贴纸出现后不久各一张，拼成一张联系表。**打开它，一格一格看**：
 
@@ -27,7 +27,7 @@ scripts/frame_render.sh "episodes/<期>" keys
 ## 2. 整片渲染和自查
 
 ```bash
-scripts/frame_render.sh "episodes/<期>" full
+python3 scripts/frame_render.py "episodes/<期>" full
 ```
 产物：`04_成片/成片.mp4`、`04_成片/qc/`（每秒一张的联系表）。四分半的片子在 4 核机器上大约二十分钟。
 
@@ -40,18 +40,14 @@ scripts/frame_render.sh "episodes/<期>" full
 ## 3. 封面
 
 ```bash
-cd studio && python3 - <<'PY'
-import json; p = json.load(open("../episodes/<期>/03_制作过程/props.json")); p["coverAt"] = <人表情好的那一秒>
-json.dump(p, open("/tmp/cover.json", "w"), ensure_ascii=False)
-PY
-npx remotion still src/yuedu/index.tsx YueduCover "../episodes/<期>/04_成片/封面.png" --props=/tmp/cover.json
+python3 scripts/frame_render.py "episodes/<期>" cover --at <秒数>
 ```
-`coverAt` 是人物视频里的秒数：挑一帧眼睛睁开、嘴没张大的。出完看一眼。
+`--at` 是人物视频里的秒数：挑一帧眼睛睁开、嘴没张大的。得到 `04_成片/封面.png`（1080×1440）。出完看一眼，表情不好就换个秒数再出。
 
 ## 4. 交付时要说清楚的
 
 1. 成片在哪、多长、用的哪组标题。
-2. 剪掉了哪几句。
+2. 剪掉了哪几句（口吃、重说各几处）。声音：降噪用了哪一档，配乐是哪一首或是合成的。**声音我听不到**，请用户听一遍人声有没有发闷、音乐会不会太响。
 3. 画面的来源：客户素材几段、搜来的几段（列出处，请用户确认能用）、生成卡片几张。
 4. 哪些卡片是「示意」（数字不是真实数据），请用户确认能接受，或提供真实截图替换。
 5. `frame_plan.py` 的「提醒」里没处理的那些，以及原因。

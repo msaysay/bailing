@@ -8,6 +8,8 @@
   <输出目录>/联系表.jpg      每条素材一格，左上角写着 id
 下一步由助手看联系表，把每条的 desc 填上（一句话：地点、谁、在干什么、有没有文字），排版式时按 desc 找画面。
 已经在 library.json 里的 id 不会被覆盖（desc 和 used 保留）。"""
+import sys as _sys
+for _s in (_sys.stdout, _sys.stderr): getattr(_s, "reconfigure", lambda **k: None)(encoding="utf-8", errors="replace")   # Windows 终端也能打印中文
 import argparse, glob, json, os, shutil, subprocess, sys
 import cv2
 ap = argparse.ArgumentParser(); ap.add_argument("src"); ap.add_argument("out"); ap.add_argument("--min", type=float, default=1.5); ap.add_argument("--scene", type=float, default=0.25); a = ap.parse_args()

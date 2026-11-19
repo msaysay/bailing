@@ -5,6 +5,8 @@
 写：<期目录>/03_制作过程/props.json、版式表.md
 有「不通过」时退出码为 1，不写 props.json。「提醒」不拦，但 --strict 时也算不通过。
 edl.json 的写法见 skills/frame-02-plan/SKILL.md。"""
+import sys as _sys
+for _s in (_sys.stdout, _sys.stderr): getattr(_s, "reconfigure", lambda **k: None)(encoding="utf-8", errors="replace")   # Windows 终端也能打印中文
 import argparse, json, os, re, sys
 
 ap = argparse.ArgumentParser(); ap.add_argument("ep"); ap.add_argument("--brand", default=None); ap.add_argument("--strict", action="store_true"); a = ap.parse_args()

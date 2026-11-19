@@ -12,23 +12,26 @@ description: 相框口播线（约读书房这类「固定相框 + 横屏口播�
 | 步 | Skill | 做什么 | 要人确认 |
 |---|---|---|---|
 | 0 | `frame-00-setup` | 环境、署名、素材入库 | 署名对不对（只在变的时候） |
-| 1 | `frame-01-cut` | 转写、校对、粗剪、对齐 | ✔ **文字对不对** |
+| 1 | `frame-01-cut` | 转写、校对、去口误、粗剪、对齐、降噪和配乐 | ✔ **文字对不对** |
 | 2 | `frame-02-plan` | 出三组标题、排剪辑决定表 | ✔ **选标题、看版式表** |
 | 3 | `frame-03-render` | 关键帧、整片渲染、自查、封面 | ✔ **看成片** |
 
 ## 环境（一次）
 
-```bash
-cd studio && npm install && cd ..
-pip install sherpa-onnx soundfile numpy opencv-python-headless
-scripts/fetch-fonts.sh                      # 思源宋体、得意黑、MiSans → studio/public/fonts/
-```
-识别模型和人脸模型放 `~/.cache/video-studio/`，下载地址在 `scripts/asr.py`、`scripts/faces.py` 开头。
-（人脸模型的 GitHub raw 地址被拒时，换 `https://media.githubusercontent.com/media/opencv/opencv_zoo/main/models/face_detection_yunet/face_detection_yunet_2023mar.onnx`。）
+先自己装好三样：Python 3.10 以上、Node.js 20 以上、ffmpeg（`ffmpeg` 和 `ffprobe` 都要在 PATH 里）。然后：
 
-验证环境：`scripts/frame_render.sh episodes/14_约读书房_样片 keys`，一分钟内应当得到 `04_成片/关键帧.jpg`。
-样片的人物视频不进 git；仓库里没有 `studio/public/yuedu-demo/person.mp4` 时这条命令会失败，改用卡片总览验证：
-`cd studio && tools/yuedu_stills.sh YueduCards /tmp/cards.jpg - 135,285,435,585 2`。
+```bash
+python3 scripts/frame_setup.py            # 装依赖，下载识别模型、人脸模型、字体；约 500 MB，重复运行不会重下
+python3 scripts/frame_setup.py --check    # 只检查，不安装
+```
+所有脚本都是 Python 和 Node，Windows、macOS、Linux 都能跑（Windows 上把 `python3` 换成 `python`）。
+哪一项标了「缺」就按提示补；下载失败多半是网络，地址都在 `scripts/frame_setup.py` 里，可以手动下好放到对应目录。
+
+验证环境（出一张卡片总览，半分钟）：
+```bash
+cd studio && node tools/yuedu_stills.cjs YueduCards cards.jpg - 135,285,435,585 2
+```
+能得到一张四格的 `cards.jpg`，字体是宋体标题加绿色小标，就说明渲染没问题。
 
 ## 品牌包 `brands/yuedu/`
 
@@ -46,6 +49,10 @@ python3 scripts/library_index.py "<客户给的素材目录>" studio/public/<期
 画面上已经烧了字幕、贴纸、水印的镜头，从 `library.json` 里删掉，不用。
 
 客户没给素材，或者给的不够：不要停，也不要回头催。第 2 步里有搜索和生成卡片两条路。
+
+## 配乐（可选）
+
+用户给了音乐文件，就放进 `brands/yuedu/music/`，之后每期自动用。没给也不用问：第 1 步会用代码合成一条。
 
 ## 输出
 `brands/yuedu/speaker.json`（确认过）、`studio/public/<期短名>/clips/library.json`（每条都有 desc；没有素材时这个文件可以不存在）。

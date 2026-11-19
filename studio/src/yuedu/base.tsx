@@ -15,7 +15,7 @@ export const K = {
   orange: '#F0892E', orangeSoft: '#FDEBD8', yellow: '#F1B32E', hot: '#FFDE6B', white: '#FFFFFF',
 };
 export const SERIF = '"Source Han Serif SC", "Songti SC", serif';
-export const SANS = 'MiSans, "PingFang SC", sans-serif';
+export const SANS = 'MiSans, "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif';
 export const SLANT = '"Smiley Sans", MiSans, sans-serif';
 
 const FONTS: [string, string, number][] = [
@@ -23,13 +23,13 @@ const FONTS: [string, string, number][] = [
   ['Smiley Sans', 'SmileySans-Oblique.otf', 400],
   ['MiSans', 'MiSans-Regular.otf', 400], ['MiSans', 'MiSans-Semibold.otf', 600], ['MiSans', 'MiSans-Heavy.otf', 900],
 ];
-/** 字体没放进 studio/public/fonts/ 时渲染会直接报错（先跑 scripts/fetch-fonts.sh）。 */
+/** 思源宋体和得意黑是必需的，缺了直接报错（先跑 python3 scripts/frame_setup.py）；MiSans 缺了就退回系统黑体，只影响卡片正文。 */
 export const useFonts = () => {
   const [h] = React.useState(() => delayRender('yuedu-fonts'));
   React.useEffect(() => {
-    Promise.all(FONTS.map(([fam, f, w]) => new FontFace(fam, `url(${staticFile('fonts/' + f)})`, { weight: String(w) }).load().then((x) => document.fonts.add(x))))
+    Promise.all(FONTS.map(([fam, f, w]) => new FontFace(fam, `url(${staticFile('fonts/' + f)})`, { weight: String(w) }).load().then((x) => document.fonts.add(x)).catch((e) => { if (fam !== 'MiSans') throw e; })))
       .then(() => continueRender(h))
-      .catch((e) => { throw new Error('字体加载失败，先运行 scripts/fetch-fonts.sh：' + e); });
+      .catch((e) => { throw new Error('字体加载失败，先运行 python3 scripts/frame_setup.py：' + e); });
   }, [h]);
 };
 

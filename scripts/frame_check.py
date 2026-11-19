@@ -3,6 +3,8 @@
 用法：scripts/frame_check.py <成片.mp4> <props.json>
 每秒抽一帧。标题区和署名条和第一帧比（应当一模一样）；画面窗按 props.json 里这一秒的处理来查。
 机器查不了的：口型对不对、卡片出现得早还是晚、素材和这句话搭不搭。这些交付时要明说，请人看一遍。"""
+import sys as _sys
+for _s in (_sys.stdout, _sys.stderr): getattr(_s, "reconfigure", lambda **k: None)(encoding="utf-8", errors="replace")   # Windows 终端也能打印中文
 import glob, json, os, subprocess, sys, tempfile
 import cv2, numpy as np
 video, props = sys.argv[1], json.load(open(sys.argv[2], encoding="utf-8")); d = tempfile.mkdtemp()

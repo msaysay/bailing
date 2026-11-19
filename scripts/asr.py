@@ -6,6 +6,8 @@
 下载：https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-sense-voice-zh-en-ja-ko-yue-int8-2024-07-17.tar.bz2
 输出：{"dur": 秒, "tokens": [{"t": 字, "s": 起点秒}]}，供 scripts/align.py 使用。
 识别结果只用来取时间，字幕文字以逐字稿为准。"""
+import sys as _sys
+for _s in (_sys.stdout, _sys.stderr): getattr(_s, "reconfigure", lambda **k: None)(encoding="utf-8", errors="replace")   # Windows 终端也能打印中文
 import json, os, subprocess, sys, tempfile
 import numpy as np, sherpa_onnx, soundfile as sf
 src, out = sys.argv[1], sys.argv[2]
@@ -22,5 +24,5 @@ while i < len(a):                                     # 约 25 秒一段，在�
     s = r.create_stream(); s.accept_waveform(sr, a[i:j]); r.decode_stream(s)
     for t, ts in zip(s.result.tokens, s.result.timestamps): toks.append({"t": t, "s": round(i / sr + ts, 3)})
     i = j
-json.dump({"dur": len(a) / sr, "tokens": toks}, open(out, "w"), ensure_ascii=False)
+json.dump({"dur": len(a) / sr, "tokens": toks}, open(out, "w", encoding="utf-8"), ensure_ascii=False)
 print("".join(x["t"] for x in toks)); os.remove(wav)
