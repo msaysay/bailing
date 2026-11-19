@@ -1,0 +1,650 @@
+{
+ "sources": {
+  "raw/a.mp4": {
+   "focus_x": 0.5,
+   "focus_y": 0.33,
+   "zoom": 1.0,
+   "tight_zoom": 1.3
+  }
+ },
+ "brand": {
+  "logo": "$SKILL/assets/brand/logo.png",
+  "slogan": [
+   "天图通逊",
+   "为客户",
+   "竭尽全力"
+  ]
+ },
+ "cues": [
+  {
+   "src": "raw/a.mp4",
+   "in": 0,
+   "out": 0.65,
+   "text": "十三日达"
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 0.65,
+   "out": 2.2,
+   "text": "美国时间周一"
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 2.2,
+   "out": 2.81,
+   "text": "要提货",
+   "kw": [
+    "提货"
+   ]
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 2.81,
+   "out": 3.78,
+   "text": "然后提完之后拆",
+   "kw": [
+    "提完之后"
+   ]
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 3.78,
+   "out": 5.21,
+   "text": "拆完之后再进行派送",
+   "kw": [
+    "派送"
+   ]
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 5.21,
+   "out": 7.24,
+   "text": "所以从正班这个维度",
+   "kw": [
+    "正班"
+   ]
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 7.24,
+   "out": 8.035,
+   "text": "周三开船"
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 8.035,
+   "out": 8.99,
+   "text": "然后完了以后"
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 8.99,
+   "out": 10.51,
+   "text": "10天或11天船期",
+   "kw": [
+    "10天",
+    "11天"
+   ]
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 10.51,
+   "out": 11.28,
+   "text": "正常情况下"
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 11.28,
+   "out": 12.83,
+   "text": "因为一般情况下十二日达"
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 12.83,
+   "out": 14.325,
+   "text": "我们可能一周就装个一两条",
+   "kw": [
+    "一周"
+   ]
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 14.325,
+   "out": 16.08,
+   "text": "就相对于十二日达来讲"
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 16.08,
+   "out": 18.37,
+   "text": "除了第一时间操作十二日达",
+   "kw": [
+    "第一时间"
+   ]
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 18.37,
+   "out": 20.29,
+   "text": "剩下的洛杉矶的操作运营",
+   "kw": [
+    "洛杉矶"
+   ]
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 20.29,
+   "out": 22.44,
+   "text": "肯定就是先操作十三日达",
+   "kw": [
+    "先操作十三日达"
+   ]
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 22.44,
+   "out": 23.59,
+   "text": "很多客人其实走我们"
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 23.59,
+   "out": 24.24,
+   "text": "走了一次"
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 24.24,
+   "out": 25.31,
+   "text": "就发现它是真的快",
+   "kw": [
+    "真的快"
+   ]
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 25.31,
+   "out": 26.67,
+   "text": "所以我们这个渠道呢"
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 26.67,
+   "out": 27.61,
+   "text": "每个星期"
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 27.61,
+   "out": 29.55,
+   "text": "可能有差不多20条柜上下",
+   "kw": [
+    "20条柜"
+   ]
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 29.55,
+   "out": 30.71,
+   "text": "能够做到"
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 30.71,
+   "out": 32.36,
+   "text": "14个自然日之内"
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 32.36,
+   "out": 33.79,
+   "text": "上网或者是LOCAL仓",
+   "kw": [
+    "LOCAL仓"
+   ]
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 33.79,
+   "out": 35.54,
+   "text": "14个自然日之内进行派送",
+   "kw": [
+    "14个自然日"
+   ]
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 35.54,
+   "out": 36.69,
+   "text": "就这个其实我们"
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 36.69,
+   "out": 38.75,
+   "text": "整个时效的达标率来讲",
+   "kw": [
+    "时效",
+    "达标率"
+   ]
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 38.75,
+   "out": 39.85,
+   "text": "是能够做到"
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 39.85,
+   "out": 40.75,
+   "text": "这个渠道"
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 40.75,
+   "out": 42.37,
+   "text": "其实它的主要客户群体",
+   "kw": [
+    "主要客户群体"
+   ]
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 42.37,
+   "out": 43.78,
+   "text": "也是针对"
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 43.78,
+   "out": 44.35,
+   "text": "比如说"
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 44.35,
+   "out": 45.83,
+   "text": "客户高货值"
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 45.83,
+   "out": 46.86,
+   "text": "要求高周转"
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 46.86,
+   "out": 48.03,
+   "text": "季节性产品"
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 48.03,
+   "out": 49.18,
+   "text": "就是上新品",
+   "kw": [
+    "上新品"
+   ]
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 49.18,
+   "out": 51.61,
+   "text": "还有就是包括要断货补货",
+   "kw": [
+    "断货补货"
+   ]
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 51.61,
+   "out": 52.97,
+   "text": "就这一类客户群体",
+   "kw": [
+    "客户群体"
+   ]
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 52.97,
+   "out": 54.59,
+   "text": "选择它的是非常非常多的"
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 54.59,
+   "out": 56.01,
+   "text": "其实也是我们王牌渠道",
+   "kw": [
+    "王牌渠道"
+   ]
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 56.01,
+   "out": 56.55,
+   "text": "就很多人"
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 56.55,
+   "out": 57.5,
+   "text": "其实走了我们之后"
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 57.5,
+   "out": 58.128,
+   "text": "就觉得确实"
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 58.328,
+   "out": 58.848,
+   "text": "就觉得确实",
+   "cont": true
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 59.098,
+   "out": 59.83,
+   "text": "它是真的快",
+   "kw": [
+    "真的快"
+   ]
+  },
+  {
+   "src": "raw/a.mp4",
+   "in": 59.83,
+   "out": 60.83,
+   "text": "其实它也真的贵"
+  }
+ ],
+ "shots": [
+  {
+   "cues": [
+    0,
+    1
+   ],
+   "type": "aroll",
+   "framing": "wide"
+  },
+  {
+   "cues": [
+    2,
+    3
+   ],
+   "type": "broll",
+   "src": "broll/clip1.mp4",
+   "src_in": 0
+  },
+  {
+   "cues": [
+    4,
+    4
+   ],
+   "type": "broll",
+   "src": "broll/clip6.mp4",
+   "src_in": 3
+  },
+  {
+   "cues": [
+    5,
+    5
+   ],
+   "type": "aroll",
+   "framing": "tight"
+  },
+  {
+   "cues": [
+    6,
+    7
+   ],
+   "type": "broll",
+   "src": "broll/clip1.mp4",
+   "src_in": 8
+  },
+  {
+   "cues": [
+    8,
+    9
+   ],
+   "type": "broll",
+   "src": "broll/clip1.mp4",
+   "src_in": 11
+  },
+  {
+   "cues": [
+    10,
+    10
+   ],
+   "type": "broll",
+   "src": "broll/clip6.mp4",
+   "src_in": 0
+  },
+  {
+   "cues": [
+    11,
+    11
+   ],
+   "type": "broll",
+   "src": "broll/clip6.mp4",
+   "src_in": 8
+  },
+  {
+   "cues": [
+    12,
+    12
+   ],
+   "type": "aroll",
+   "framing": "wide"
+  },
+  {
+   "cues": [
+    13,
+    15
+   ],
+   "type": "aroll",
+   "framing": "tight"
+  },
+  {
+   "cues": [
+    16,
+    18
+   ],
+   "type": "broll",
+   "src": "broll/clip6.mp4",
+   "src_in": 12
+  },
+  {
+   "cues": [
+    19,
+    19
+   ],
+   "type": "broll",
+   "src": "broll/clip5.mp4",
+   "src_in": 2
+  },
+  {
+   "cues": [
+    20,
+    21
+   ],
+   "type": "broll",
+   "src": "broll/clip5.mp4",
+   "src_in": 8
+  },
+  {
+   "cues": [
+    22,
+    23
+   ],
+   "type": "aroll",
+   "framing": "wide"
+  },
+  {
+   "cues": [
+    24,
+    24
+   ],
+   "type": "broll",
+   "src": "broll/clip2.mp4",
+   "src_in": 2
+  },
+  {
+   "cues": [
+    25,
+    25
+   ],
+   "type": "broll",
+   "src": "broll/clip2.mp4",
+   "src_in": 9
+  },
+  {
+   "cues": [
+    26,
+    27
+   ],
+   "type": "broll",
+   "src": "broll/clip4.mp4",
+   "src_in": 1
+  },
+  {
+   "cues": [
+    28,
+    28
+   ],
+   "type": "aroll",
+   "framing": "tight"
+  },
+  {
+   "cues": [
+    29,
+    31
+   ],
+   "type": "broll",
+   "src": "broll/clip5.mp4",
+   "src_in": 13
+  },
+  {
+   "cues": [
+    32,
+    35
+   ],
+   "type": "aroll",
+   "framing": "wide"
+  },
+  {
+   "cues": [
+    36,
+    37
+   ],
+   "type": "aroll",
+   "framing": "tight"
+  },
+  {
+   "cues": [
+    38,
+    39
+   ],
+   "type": "broll",
+   "src": "broll/clip4.mp4",
+   "src_in": 6
+  },
+  {
+   "cues": [
+    40,
+    42
+   ],
+   "type": "broll",
+   "src": "broll/clip2.mp4",
+   "src_in": 13
+  },
+  {
+   "cues": [
+    43,
+    46
+   ],
+   "type": "aroll",
+   "framing": "wide"
+  }
+ ],
+ "titles": [
+  {
+   "cues": [
+    0,
+    1
+   ],
+   "lines": [
+    {
+     "text": "十三日达"
+    }
+   ]
+  },
+  {
+   "cues": [
+    22,
+    23
+   ],
+   "lines": [
+    {
+     "text": "能够做到",
+     "size": "m",
+     "at_cue": 22
+    },
+    {
+     "text": "14个自然日之内",
+     "at_cue": 23,
+     "indent": 190
+    }
+   ]
+  },
+  {
+   "cues": [
+    28,
+    28
+   ],
+   "pos": "top",
+   "lines": [
+    {
+     "text": "百分之九十几"
+    }
+   ]
+  },
+  {
+   "cues": [
+    33,
+    35
+   ],
+   "x": 300,
+   "lines": [
+    {
+     "text": "客户高货值",
+     "at_cue": 33
+    },
+    {
+     "text": "要求高周转",
+     "at_cue": 34
+    },
+    {
+     "text": "季节性产品",
+     "at_cue": 35
+    }
+   ]
+  }
+ ],
+ "ending": {
+  "src": "raw/a.mp4",
+  "src_in": 61.05,
+  "dur": 4.6
+ },
+ "bgm": {
+  "src": "bgm/Inspired.mp3",
+  "src_in": 0.02
+ },
+ "audio": {
+  "denoise": "off"
+ }
+}

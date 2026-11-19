@@ -1,0 +1,1156 @@
+{
+ "_说明": "共用字体库。fonts 是一个个字体文件（都装到 studio/public/fonts/）；packs 是搭配好的字体包，每包四个角色：sub 字幕、title 标题和花字、accent 金句和大字、num 数字。各风格怎么用这四个角色见 styles。命令：scripts/fonts.py list / install / preview / use。stroke 是单字重字体用描边补粗的量（占字号的比例），只有知识科普风用。授权信息按字体官方公开声明整理，发布商业内容前请到出处核对一次。",
+ "styles": {
+  "xiaolin": {
+   "name": "财经解读风",
+   "default": "xiaolin-default",
+   "roles": "sub→字幕，title→章节标题；组件库里的字仍是 MiSans"
+  },
+  "danjie": {
+   "name": "商业快节奏风",
+   "default": "danjie-default",
+   "roles": "sub→口播全屏字幕，title→卡片字幕、花字、清单，num→数字，accent→结尾金句"
+  },
+  "zhanpeng": {
+   "name": "知识科普风",
+   "default": "zhanpeng-default",
+   "roles": "sub→字幕和小字，title→钩子、黄字、标签，accent→白色大字"
+  },
+  "frame": {
+   "name": "相框老板风",
+   "default": "frame-default",
+   "roles": "title→三行标题和署名，sub→字幕、贴纸、大字；卡片正文仍是 MiSans"
+  },
+  "interview": {
+   "name": "访谈纪实风",
+   "default": "interview-default",
+   "roles": "sub→字幕和关键词，title→小标题和片尾标语"
+  }
+ },
+ "packs": {
+  "xiaolin-default": {
+   "name": "MiSans 全套（财经解读风的原配）",
+   "note": "干净中性，组件库里的字都是它。",
+   "fit": [
+    "xiaolin"
+   ],
+   "roles": {
+    "sub": "misans-semibold",
+    "title": "misans-heavy",
+    "accent": "misans-heavy",
+    "num": "misans-heavy"
+   }
+  },
+  "danjie-default": {
+   "name": "黄油体 + 标题黑（商业快节奏风的原配）",
+   "note": "宽扁白字幕、粗斜花字、数黑体数字、毛笔金句。",
+   "fit": [
+    "danjie"
+   ],
+   "roles": {
+    "sub": "zcool-huangyou",
+    "title": "youshe-hei",
+    "accent": "mashan",
+    "num": "shuhei"
+   }
+  },
+  "zhanpeng-default": {
+   "name": "寒蝉正楷一套字（知识科普风的原配）",
+   "note": "全片一套正楷，白字幕、红钩子、黄关键词。",
+   "fit": [
+    "zhanpeng"
+   ],
+   "roles": {
+    "sub": "chill-kai",
+    "title": "chill-kai",
+    "accent": "chill-kai",
+    "num": "shuhei"
+   }
+  },
+  "frame-default": {
+   "name": "思源宋体 + 得意黑（相框老板风的原配）",
+   "note": "宋体标题和署名，得意黑字幕和贴纸。",
+   "fit": [
+    "frame"
+   ],
+   "roles": {
+    "sub": "smiley",
+    "title": "source-serif-bold",
+    "accent": "smiley",
+    "num": "shuhei"
+   }
+  },
+  "interview-default": {
+   "name": "鸿蒙粗黑 + 细宋（访谈纪实风的原配）",
+   "note": "白色粗黑字幕，纤细宋体小标题。",
+   "fit": [
+    "interview"
+   ],
+   "roles": {
+    "sub": "harmony-bold",
+    "title": "siyuan-song-light",
+    "accent": "siyuan-song-light",
+    "num": "shuhei"
+   }
+  },
+  "business": {
+   "name": "商务稳重",
+   "note": "鸿蒙黑字幕配思源宋标题，企业、金融、管理类。",
+   "fit": [
+    "xiaolin",
+    "frame",
+    "interview",
+    "danjie"
+   ],
+   "roles": {
+    "sub": "harmony-bold",
+    "title": "siyuan-song-black",
+    "accent": "siyuan-song-black",
+    "num": "ddin-bold"
+   }
+  },
+  "impact": {
+   "name": "财经冲击",
+   "note": "普惠特粗字幕、标题黑花字、粗毛笔金句，信息密度高的商业内容。",
+   "fit": [
+    "danjie",
+    "xiaolin"
+   ],
+   "roles": {
+    "sub": "puhui-heavy",
+    "title": "youshe-hei",
+    "accent": "cushu",
+    "num": "shuhei"
+   }
+  },
+  "trendy": {
+   "name": "短视频潮流",
+   "note": "抖音美好体字幕配追光体标题，年轻、热点、带货。",
+   "fit": [
+    "danjie",
+    "xiaolin",
+    "zhanpeng"
+   ],
+   "roles": {
+    "sub": "douyin",
+    "title": "douyu",
+    "accent": "zcool-kuaile",
+    "num": "shuhei"
+   }
+  },
+  "tech": {
+   "name": "科技进步",
+   "note": "MiSans 字幕配进步体标题、正锐黑大字，AI、数码、职场。",
+   "fit": [
+    "xiaolin",
+    "danjie",
+    "interview"
+   ],
+   "roles": {
+    "sub": "misans-semibold",
+    "title": "jinbu",
+    "accent": "zhengrui",
+    "num": "ddin-bold"
+   }
+  },
+  "power": {
+   "name": "力量健身",
+   "note": "普惠特粗字幕、酷黑标题、粗毛笔大字，健身、运动、减脂。",
+   "fit": [
+    "zhanpeng",
+    "danjie",
+    "xiaolin"
+   ],
+   "roles": {
+    "sub": "puhui-heavy",
+    "title": "zcool-kuhei",
+    "accent": "cushu",
+    "num": "shuhei"
+   }
+  },
+  "smiley": {
+   "name": "得意斜黑",
+   "note": "字幕和标题都用得意黑，利落、有速度感。",
+   "fit": [
+    "frame",
+    "xiaolin",
+    "danjie",
+    "zhanpeng"
+   ],
+   "roles": {
+    "sub": "smiley",
+    "title": "smiley",
+    "accent": "mashan",
+    "num": "shuhei"
+   }
+  },
+  "boss": {
+   "name": "老板大气",
+   "note": "思源粗黑字幕、庞门标题体、行书金句，创始人和老板口播。",
+   "fit": [
+    "frame",
+    "xiaolin",
+    "danjie",
+    "interview"
+   ],
+   "roles": {
+    "sub": "siyuan-hei-bold",
+    "title": "pangmen-biaoti",
+    "accent": "jinglong",
+    "num": "shuhei"
+   }
+  },
+  "kai-brush": {
+   "name": "正楷 + 毛笔大字",
+   "note": "寒蝉正楷配马善政毛笔，科普里更有手写的劲。",
+   "fit": [
+    "zhanpeng",
+    "frame"
+   ],
+   "roles": {
+    "sub": "chill-kai",
+    "title": "chill-kai",
+    "accent": "mashan",
+    "num": "shuhei"
+   }
+  },
+  "wenkai": {
+   "name": "文楷亲和",
+   "note": "霞鹜文楷配行楷大字，轻松、生活、情感。",
+   "fit": [
+    "zhanpeng",
+    "frame",
+    "interview"
+   ],
+   "roles": {
+    "sub": "wenkai",
+    "title": "wenkai-medium",
+    "accent": "xiaxing",
+    "num": "shuhei"
+   }
+  },
+  "song": {
+   "name": "书卷宋体",
+   "note": "思源宋体配悠然小楷，读书、历史、文献多的选题。",
+   "fit": [
+    "zhanpeng",
+    "frame",
+    "interview",
+    "xiaolin"
+   ],
+   "roles": {
+    "sub": "siyuan-song-semibold",
+    "title": "siyuan-song-black",
+    "accent": "youran",
+    "num": "shuhei"
+   }
+  },
+  "guofeng": {
+   "name": "国风书法",
+   "note": "汇文正楷字幕、刀隶标题、榜书大字，传统文化、白酒、茶。",
+   "fit": [
+    "frame",
+    "zhanpeng",
+    "interview"
+   ],
+   "roles": {
+    "sub": "huiwen-kai",
+    "title": "daoli",
+    "accent": "bangshu",
+    "num": "shuhei"
+   }
+  },
+  "retro": {
+   "name": "怀旧老宋",
+   "note": "活楷字幕配京华老宋标题，老故事、品牌历史。",
+   "fit": [
+    "frame",
+    "interview",
+    "zhanpeng"
+   ],
+   "roles": {
+    "sub": "huokai",
+    "title": "laosong",
+    "accent": "laosong",
+    "num": "shuhei"
+   }
+  },
+  "documentary": {
+   "name": "纪实细宋",
+   "note": "端黑字幕配新致宋标题，人物故事、纪录感。",
+   "fit": [
+    "interview",
+    "frame"
+   ],
+   "roles": {
+    "sub": "chill-duan-bold",
+    "title": "zhisong",
+    "accent": "siyuan-song-light",
+    "num": "shuhei"
+   }
+  },
+  "round": {
+   "name": "亲切圆润",
+   "note": "半圆体字幕、标题圆、快乐体大字，教育、亲子、美食。",
+   "fit": [
+    "frame",
+    "xiaolin",
+    "zhanpeng",
+    "danjie"
+   ],
+   "roles": {
+    "sub": "chill-round",
+    "title": "youshe-yuan",
+    "accent": "zcool-kuaile",
+    "num": "shuhei"
+   }
+  },
+  "handwrite": {
+   "name": "手写板书",
+   "note": "文楷字幕、板书标题、软笔大字，讲课、笔记、成长类。",
+   "fit": [
+    "zhanpeng",
+    "xiaolin",
+    "frame"
+   ],
+   "roles": {
+    "sub": "wenkai",
+    "title": "honglei-ban",
+    "accent": "softbrush",
+    "num": "shuhei"
+   }
+  },
+  "sign": {
+   "name": "签名行书",
+   "note": "思源黑字幕、硬笔行书标题，个人 IP、观点输出。",
+   "fit": [
+    "interview",
+    "frame",
+    "xiaolin"
+   ],
+   "roles": {
+    "sub": "siyuan-hei-bold",
+    "title": "honglei-xing",
+    "accent": "honglei-xing",
+    "num": "shuhei"
+   }
+  }
+ },
+ "fonts": {
+  "misans-regular": {
+   "name": "MiSans 常规",
+   "file": "MiSans-Regular.otf",
+   "cat": "黑体",
+   "mood": "干净、中性，屏幕上最稳",
+   "license": "MiSans 字体许可协议（免费商用）",
+   "stroke": 0,
+   "from": "小米 hyperos.mi.com/font",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/mi-sans@4.3.0/MiSans-Regular.otf",
+    "https://unpkg.com/@fontpkg/mi-sans@4.3.0/MiSans-Regular.otf",
+    "https://registry.npmmirror.com/@fontpkg/mi-sans/4.3.0/files/MiSans-Regular.otf"
+   ]
+  },
+  "misans-semibold": {
+   "name": "MiSans 半粗",
+   "file": "MiSans-Semibold.otf",
+   "cat": "黑体",
+   "mood": "干净、中性，屏幕上最稳",
+   "license": "MiSans 字体许可协议（免费商用）",
+   "stroke": 0,
+   "from": "小米 hyperos.mi.com/font",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/mi-sans@4.3.0/MiSans-Semibold.otf",
+    "https://unpkg.com/@fontpkg/mi-sans@4.3.0/MiSans-Semibold.otf",
+    "https://registry.npmmirror.com/@fontpkg/mi-sans/4.3.0/files/MiSans-Semibold.otf"
+   ]
+  },
+  "misans-heavy": {
+   "name": "MiSans 特粗",
+   "file": "MiSans-Heavy.otf",
+   "cat": "黑体",
+   "mood": "干净、中性，屏幕上最稳",
+   "license": "MiSans 字体许可协议（免费商用）",
+   "stroke": 0,
+   "from": "小米 hyperos.mi.com/font",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/mi-sans@4.3.0/MiSans-Heavy.otf",
+    "https://unpkg.com/@fontpkg/mi-sans@4.3.0/MiSans-Heavy.otf",
+    "https://registry.npmmirror.com/@fontpkg/mi-sans/4.3.0/files/MiSans-Heavy.otf"
+   ]
+  },
+  "siyuan-hei-bold": {
+   "name": "思源黑体 粗",
+   "file": "SourceHanSansSC-Bold.otf",
+   "cat": "黑体",
+   "mood": "标准、耐看，什么内容都不出错",
+   "license": "SIL OFL 1.1（可商用）",
+   "stroke": 0,
+   "from": "npm @fontpkg/source-han-sans-sc@2.5.3",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/source-han-sans-sc@2.5.3/SourceHanSansSC-Bold.otf",
+    "https://unpkg.com/@fontpkg/source-han-sans-sc@2.5.3/SourceHanSansSC-Bold.otf",
+    "https://registry.npmmirror.com/@fontpkg/source-han-sans-sc/2.5.3/files/SourceHanSansSC-Bold.otf"
+   ]
+  },
+  "siyuan-hei-heavy": {
+   "name": "思源黑体 特粗",
+   "file": "SourceHanSansSC-Heavy.otf",
+   "cat": "黑体",
+   "mood": "厚重、醒目，适合大字幕",
+   "license": "SIL OFL 1.1（可商用）",
+   "stroke": 0,
+   "from": "npm @fontpkg/source-han-sans-sc@2.5.3",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/source-han-sans-sc@2.5.3/SourceHanSansSC-Heavy.otf",
+    "https://unpkg.com/@fontpkg/source-han-sans-sc@2.5.3/SourceHanSansSC-Heavy.otf",
+    "https://registry.npmmirror.com/@fontpkg/source-han-sans-sc/2.5.3/files/SourceHanSansSC-Heavy.otf"
+   ]
+  },
+  "harmony-bold": {
+   "name": "鸿蒙黑体 粗",
+   "file": "HarmonyOS_Sans_SC_Bold.ttf",
+   "cat": "黑体",
+   "mood": "现代、克制，纪实和商务感",
+   "license": "HarmonyOS Sans 字体许可协议（免费商用）",
+   "stroke": 0,
+   "from": "华为",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/harmony-os-sans-sc@1.0.3/HarmonyOS_Sans_SC_Bold.ttf",
+    "https://unpkg.com/@fontpkg/harmony-os-sans-sc@1.0.3/HarmonyOS_Sans_SC_Bold.ttf",
+    "https://registry.npmmirror.com/@fontpkg/harmony-os-sans-sc/1.0.3/files/HarmonyOS_Sans_SC_Bold.ttf"
+   ]
+  },
+  "harmony-black": {
+   "name": "鸿蒙黑体 特粗",
+   "file": "HarmonyOS_Sans_SC_Black.ttf",
+   "cat": "黑体",
+   "mood": "现代、有分量",
+   "license": "HarmonyOS Sans 字体许可协议（免费商用）",
+   "stroke": 0,
+   "from": "华为",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/harmony-os-sans-sc@1.0.3/HarmonyOS_Sans_SC_Black.ttf",
+    "https://unpkg.com/@fontpkg/harmony-os-sans-sc@1.0.3/HarmonyOS_Sans_SC_Black.ttf",
+    "https://registry.npmmirror.com/@fontpkg/harmony-os-sans-sc/1.0.3/files/HarmonyOS_Sans_SC_Black.ttf"
+   ]
+  },
+  "puhui-bold": {
+   "name": "阿里巴巴普惠体 粗",
+   "file": "AlibabaPuHuiTi-3-85-Bold.ttf",
+   "cat": "黑体",
+   "mood": "商业、亲和",
+   "license": "官方声明免费商用",
+   "stroke": 0,
+   "from": "阿里巴巴",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/alibaba-pu-hui-ti-3-0@3.1.2/AlibabaPuHuiTi-3-85-Bold.ttf",
+    "https://unpkg.com/@fontpkg/alibaba-pu-hui-ti-3-0@3.1.2/AlibabaPuHuiTi-3-85-Bold.ttf",
+    "https://registry.npmmirror.com/@fontpkg/alibaba-pu-hui-ti-3-0/3.1.2/files/AlibabaPuHuiTi-3-85-Bold.ttf"
+   ]
+  },
+  "puhui-heavy": {
+   "name": "阿里巴巴普惠体 特粗",
+   "file": "AlibabaPuHuiTi-3-105-Heavy.ttf",
+   "cat": "黑体",
+   "mood": "商业、冲击力强",
+   "license": "官方声明免费商用",
+   "stroke": 0,
+   "from": "阿里巴巴",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/alibaba-pu-hui-ti-3-0@3.1.2/AlibabaPuHuiTi-3-105-Heavy.ttf",
+    "https://unpkg.com/@fontpkg/alibaba-pu-hui-ti-3-0@3.1.2/AlibabaPuHuiTi-3-105-Heavy.ttf",
+    "https://registry.npmmirror.com/@fontpkg/alibaba-pu-hui-ti-3-0/3.1.2/files/AlibabaPuHuiTi-3-105-Heavy.ttf"
+   ]
+  },
+  "douyin": {
+   "name": "抖音美好体",
+   "file": "DouyinSansBold.otf",
+   "cat": "黑体",
+   "mood": "短视频原生感，年轻、有活力",
+   "license": "官方声明免费商用",
+   "stroke": 0,
+   "from": "抖音",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/douyin-sans@1.0.0/DouyinSansBold.otf",
+    "https://unpkg.com/@fontpkg/douyin-sans@1.0.0/DouyinSansBold.otf",
+    "https://registry.npmmirror.com/@fontpkg/douyin-sans/1.0.0/files/DouyinSansBold.otf"
+   ]
+  },
+  "neo-xihei": {
+   "name": "霞鹜新晰黑",
+   "file": "LXGWNeoXiHei.ttf",
+   "cat": "黑体",
+   "mood": "清爽、细一点，适合小字和说明",
+   "license": "IPA Font License 1.0（可商用）",
+   "stroke": 0.006,
+   "from": "npm @fontpkg/lxgw-neo-xi-hei@1.110.0",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/lxgw-neo-xi-hei@1.110.0/LXGWNeoXiHei.ttf",
+    "https://unpkg.com/@fontpkg/lxgw-neo-xi-hei@1.110.0/LXGWNeoXiHei.ttf",
+    "https://registry.npmmirror.com/@fontpkg/lxgw-neo-xi-hei/1.110.0/files/LXGWNeoXiHei.ttf"
+   ]
+  },
+  "chill-duan-bold": {
+   "name": "寒蝉端黑 粗",
+   "file": "ChillDuanSans_Bold.otf",
+   "cat": "黑体",
+   "mood": "端正、略带人文气",
+   "license": "SIL OFL 1.1（可商用）",
+   "stroke": 0,
+   "from": "npm @fontpkg/chill-duan-sans@1.300.2",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/chill-duan-sans@1.300.2/ChillDuanSans_Bold.otf",
+    "https://unpkg.com/@fontpkg/chill-duan-sans@1.300.2/ChillDuanSans_Bold.otf",
+    "https://registry.npmmirror.com/@fontpkg/chill-duan-sans/1.300.2/files/ChillDuanSans_Bold.otf"
+   ]
+  },
+  "smiley": {
+   "name": "得意黑",
+   "file": "SmileySans-Oblique.otf",
+   "cat": "黑体",
+   "mood": "窄斜体，有速度感，贴纸和字幕都好用",
+   "license": "SIL OFL 1.1（可商用）",
+   "stroke": 0,
+   "from": "npm @fontpkg/smiley-sans@2.0.4",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/smiley-sans@2.0.4/SmileySans-Oblique.otf",
+    "https://unpkg.com/@fontpkg/smiley-sans@2.0.4/SmileySans-Oblique.otf",
+    "https://registry.npmmirror.com/@fontpkg/smiley-sans/2.0.4/files/SmileySans-Oblique.otf"
+   ]
+  },
+  "youshe-hei": {
+   "name": "优设标题黑",
+   "file": "YouSheBiaoTiHei.ttf",
+   "cat": "标题",
+   "mood": "粗斜标题黑，财经和带货最常见",
+   "license": "官方声明免费商用",
+   "stroke": 0,
+   "from": "优设",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/you-she-biao-ti-hei@1.0.0/%E4%BC%98%E8%AE%BE%E6%A0%87%E9%A2%98%E9%BB%91.ttf",
+    "https://unpkg.com/@fontpkg/you-she-biao-ti-hei@1.0.0/%E4%BC%98%E8%AE%BE%E6%A0%87%E9%A2%98%E9%BB%91.ttf",
+    "https://registry.npmmirror.com/@fontpkg/you-she-biao-ti-hei/1.0.0/files/%E4%BC%98%E8%AE%BE%E6%A0%87%E9%A2%98%E9%BB%91.ttf"
+   ]
+  },
+  "zcool-gaoduan": {
+   "name": "站酷高端黑",
+   "file": "ZCOOLGaoDuanHei.ttf",
+   "cat": "标题",
+   "mood": "扁宽、硬朗，科技和商务标题",
+   "license": "官方声明免费商用",
+   "stroke": 0,
+   "from": "站酷",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/zcool-gdh@2.10.0/%20%E7%AB%99%E9%85%B7%E9%AB%98%E7%AB%AF%E9%BB%91%E4%BF%AE%E8%AE%A2151105.ttf",
+    "https://unpkg.com/@fontpkg/zcool-gdh@2.10.0/%20%E7%AB%99%E9%85%B7%E9%AB%98%E7%AB%AF%E9%BB%91%E4%BF%AE%E8%AE%A2151105.ttf",
+    "https://registry.npmmirror.com/@fontpkg/zcool-gdh/2.10.0/files/%20%E7%AB%99%E9%85%B7%E9%AB%98%E7%AB%AF%E9%BB%91%E4%BF%AE%E8%AE%A2151105.ttf"
+   ]
+  },
+  "zcool-kuhei": {
+   "name": "站酷酷黑体",
+   "file": "ZCOOLKuHei.ttf",
+   "cat": "标题",
+   "mood": "方硬、有力量，运动和健身",
+   "license": "官方声明免费商用",
+   "stroke": 0,
+   "from": "站酷",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/zcool-ku-hei@3.12.0/%E7%AB%99%E9%85%B7%E9%85%B7%E9%BB%91%E4%BD%93.ttf",
+    "https://unpkg.com/@fontpkg/zcool-ku-hei@3.12.0/%E7%AB%99%E9%85%B7%E9%85%B7%E9%BB%91%E4%BD%93.ttf",
+    "https://registry.npmmirror.com/@fontpkg/zcool-ku-hei/3.12.0/files/%E7%AB%99%E9%85%B7%E9%85%B7%E9%BB%91%E4%BD%93.ttf"
+   ]
+  },
+  "zcool-huangyou": {
+   "name": "站酷庆科黄油体",
+   "file": "ZCOOLQingKeHuangYou.ttf",
+   "cat": "标题",
+   "mood": "宽扁方正，口播大字幕",
+   "license": "SIL OFL 1.1（可商用）",
+   "stroke": 0,
+   "from": "Google Fonts",
+   "urls": [
+    "https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/zcoolqingkehuangyou/ZCOOLQingKeHuangYou-Regular.ttf",
+    "https://raw.githubusercontent.com/google/fonts/main/ofl/zcoolqingkehuangyou/ZCOOLQingKeHuangYou-Regular.ttf"
+   ]
+  },
+  "pangmen-biaoti": {
+   "name": "庞门正道标题体",
+   "file": "PangMenZhengDaoBiaoTi.ttf",
+   "cat": "标题",
+   "mood": "粗壮、大气，老板和品牌标题",
+   "license": "官方声明免费商用",
+   "stroke": 0,
+   "from": "庞门正道",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/pang-men-zheng-dao-biao-ti-ti-mian-fei-ban@4.0.0/%E5%BA%9E%E9%97%A8%E6%AD%A3%E9%81%93%E6%A0%87%E9%A2%98%E4%BD%93%E5%85%8D%E8%B4%B9%E7%89%88.ttf",
+    "https://unpkg.com/@fontpkg/pang-men-zheng-dao-biao-ti-ti-mian-fei-ban@4.0.0/%E5%BA%9E%E9%97%A8%E6%AD%A3%E9%81%93%E6%A0%87%E9%A2%98%E4%BD%93%E5%85%8D%E8%B4%B9%E7%89%88.ttf",
+    "https://registry.npmmirror.com/@fontpkg/pang-men-zheng-dao-biao-ti-ti-mian-fei-ban/4.0.0/files/%E5%BA%9E%E9%97%A8%E6%AD%A3%E9%81%93%E6%A0%87%E9%A2%98%E4%BD%93%E5%85%8D%E8%B4%B9%E7%89%88.ttf"
+   ]
+  },
+  "shuhei": {
+   "name": "阿里妈妈数黑体",
+   "file": "AlimamaShuHeiTi-Bold.ttf",
+   "cat": "标题",
+   "mood": "粗几何体，数字特别好看",
+   "license": "官方声明免费商用",
+   "stroke": 0,
+   "from": "阿里妈妈",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/alimama-shu-hei-ti@1.0.5/AlimamaShuHeiTi-Bold.ttf",
+    "https://unpkg.com/@fontpkg/alimama-shu-hei-ti@1.0.5/AlimamaShuHeiTi-Bold.ttf",
+    "https://registry.npmmirror.com/@fontpkg/alimama-shu-hei-ti/1.0.5/files/AlimamaShuHeiTi-Bold.ttf"
+   ]
+  },
+  "jinbu": {
+   "name": "钉钉进步体",
+   "file": "DingTalkJinBuTi.ttf",
+   "cat": "标题",
+   "mood": "向上倾斜，科技、增长、职场",
+   "license": "官方声明免费商用",
+   "stroke": 0,
+   "from": "钉钉",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/ding-talk-jin-bu-ti@1.0.3/DingTalk%20JinBuTi.ttf",
+    "https://unpkg.com/@fontpkg/ding-talk-jin-bu-ti@1.0.3/DingTalk%20JinBuTi.ttf",
+    "https://registry.npmmirror.com/@fontpkg/ding-talk-jin-bu-ti/1.0.3/files/DingTalk%20JinBuTi.ttf"
+   ]
+  },
+  "douyu": {
+   "name": "斗鱼追光体",
+   "file": "DouyuZhuiGuang.ttf",
+   "cat": "标题",
+   "mood": "速度感强，游戏、潮流",
+   "license": "官方声明免费商用",
+   "stroke": 0,
+   "from": "斗鱼",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/douyu@1.0.0/%E6%96%97%E9%B1%BC%E8%BF%BD%E5%85%89%E4%BD%932.0.ttf",
+    "https://unpkg.com/@fontpkg/douyu@1.0.0/%E6%96%97%E9%B1%BC%E8%BF%BD%E5%85%89%E4%BD%932.0.ttf",
+    "https://registry.npmmirror.com/@fontpkg/douyu/1.0.0/files/%E6%96%97%E9%B1%BC%E8%BF%BD%E5%85%89%E4%BD%932.0.ttf"
+   ]
+  },
+  "zhengrui": {
+   "name": "卢帅正锐黑体",
+   "file": "LuShuaiZhengRuiHei.ttf",
+   "cat": "标题",
+   "mood": "锐利、紧凑，科技和数码",
+   "license": "官方声明免费商用",
+   "stroke": 0,
+   "from": "联盟起艺",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/lianmengqiyilushuaizhengruiheiti@1.0.0/%E8%81%94%E7%9B%9F%E8%B5%B7%E8%89%BA%E5%8D%A2%E5%B8%85%E6%AD%A3%E9%94%90%E9%BB%91%E4%BD%93.ttf",
+    "https://unpkg.com/@fontpkg/lianmengqiyilushuaizhengruiheiti@1.0.0/%E8%81%94%E7%9B%9F%E8%B5%B7%E8%89%BA%E5%8D%A2%E5%B8%85%E6%AD%A3%E9%94%90%E9%BB%91%E4%BD%93.ttf",
+    "https://registry.npmmirror.com/@fontpkg/lianmengqiyilushuaizhengruiheiti/1.0.0/files/%E8%81%94%E7%9B%9F%E8%B5%B7%E8%89%BA%E5%8D%A2%E5%B8%85%E6%AD%A3%E9%94%90%E9%BB%91%E4%BD%93.ttf"
+   ]
+  },
+  "haoshen": {
+   "name": "优设好身体",
+   "file": "YSHaoShenTi.ttf",
+   "cat": "标题",
+   "mood": "瘦高纤细，时尚、美妆、塑形",
+   "license": "官方声明免费商用",
+   "stroke": 0,
+   "from": "优设",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/yoush-ehaoshenti@1.0.0/YSHaoShenTi-2.ttf",
+    "https://unpkg.com/@fontpkg/yoush-ehaoshenti@1.0.0/YSHaoShenTi-2.ttf",
+    "https://registry.npmmirror.com/@fontpkg/yoush-ehaoshenti/1.0.0/files/YSHaoShenTi-2.ttf"
+   ]
+  },
+  "maoken-shijin": {
+   "name": "猫啃什锦黑",
+   "file": "MaokenAssortedSans.ttf",
+   "cat": "标题",
+   "mood": "略带复古的标题黑",
+   "license": "SIL OFL 1.1（可商用）",
+   "stroke": 0,
+   "from": "npm @fontpkg/maoken-assorted-sans@1.62.1",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/maoken-assorted-sans@1.62.1/MaokenAssortedSans.ttf",
+    "https://unpkg.com/@fontpkg/maoken-assorted-sans@1.62.1/MaokenAssortedSans.ttf",
+    "https://registry.npmmirror.com/@fontpkg/maoken-assorted-sans/1.62.1/files/MaokenAssortedSans.ttf"
+   ]
+  },
+  "chill-round": {
+   "name": "寒蝉半圆体",
+   "file": "ChillRoundF.ttf",
+   "cat": "圆体",
+   "mood": "圆润、亲切，教育和亲子",
+   "license": "SIL OFL 1.1（可商用）",
+   "stroke": 0,
+   "from": "npm @fontpkg/chill-round-f@3.0.0",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/chill-round-f@3.0.0/ChillRoundF.ttf",
+    "https://unpkg.com/@fontpkg/chill-round-f@3.0.0/ChillRoundF.ttf",
+    "https://registry.npmmirror.com/@fontpkg/chill-round-f/3.0.0/files/ChillRoundF.ttf"
+   ]
+  },
+  "zcool-kuaile": {
+   "name": "站酷快乐体",
+   "file": "ZCOOLKuaiLe.ttf",
+   "cat": "圆体",
+   "mood": "俏皮、轻松",
+   "license": "官方声明免费商用",
+   "stroke": 0,
+   "from": "站酷",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/happy-zcool-2016@3.12.0/%E7%AB%99%E9%85%B7%E5%BF%AB%E4%B9%90%E4%BD%932016%E4%BF%AE%E8%AE%A2%E7%89%88.ttf",
+    "https://unpkg.com/@fontpkg/happy-zcool-2016@3.12.0/%E7%AB%99%E9%85%B7%E5%BF%AB%E4%B9%90%E4%BD%932016%E4%BF%AE%E8%AE%A2%E7%89%88.ttf",
+    "https://registry.npmmirror.com/@fontpkg/happy-zcool-2016/3.12.0/files/%E7%AB%99%E9%85%B7%E5%BF%AB%E4%B9%90%E4%BD%932016%E4%BF%AE%E8%AE%A2%E7%89%88.ttf"
+   ]
+  },
+  "youshe-yuan": {
+   "name": "优设标题圆",
+   "file": "YouSheBiaoTiYuan.otf",
+   "cat": "圆体",
+   "mood": "粗圆标题，亲和又醒目",
+   "license": "官方声明免费商用",
+   "stroke": 0,
+   "from": "优设",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/you-she-biao-ti-yuan@1.5.0/%E4%BC%98%E8%AE%BE%E6%A0%87%E9%A2%98%E5%9C%86.otf",
+    "https://unpkg.com/@fontpkg/you-she-biao-ti-yuan@1.5.0/%E4%BC%98%E8%AE%BE%E6%A0%87%E9%A2%98%E5%9C%86.otf",
+    "https://registry.npmmirror.com/@fontpkg/you-she-biao-ti-yuan/1.5.0/files/%E4%BC%98%E8%AE%BE%E6%A0%87%E9%A2%98%E5%9C%86.otf"
+   ]
+  },
+  "maoken-zhuyuan": {
+   "name": "猫啃珠圆体",
+   "file": "MaokenZhuyuanTi.ttf",
+   "cat": "圆体",
+   "mood": "珠圆玉润，可爱风",
+   "license": "SIL OFL 1.1（可商用）",
+   "stroke": 0,
+   "from": "npm @fontpkg/maoken-zhuyuan-ti@1.0.0",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/maoken-zhuyuan-ti@1.0.0/%E7%8C%AB%E5%95%83%E7%8F%A0%E5%9C%86%E4%BD%93%20MaokenZhuyuanTi.ttf",
+    "https://unpkg.com/@fontpkg/maoken-zhuyuan-ti@1.0.0/%E7%8C%AB%E5%95%83%E7%8F%A0%E5%9C%86%E4%BD%93%20MaokenZhuyuanTi.ttf",
+    "https://registry.npmmirror.com/@fontpkg/maoken-zhuyuan-ti/1.0.0/files/%E7%8C%AB%E5%95%83%E7%8F%A0%E5%9C%86%E4%BD%93%20MaokenZhuyuanTi.ttf"
+   ]
+  },
+  "siyuan-song-semibold": {
+   "name": "思源宋体 半粗",
+   "file": "NotoSerifSC-SemiBold.ttf",
+   "cat": "宋体",
+   "mood": "书卷气、清楚",
+   "license": "SIL OFL 1.1（可商用）",
+   "stroke": 0,
+   "from": "Fontsource",
+   "urls": [
+    "https://cdn.jsdelivr.net/fontsource/fonts/noto-serif-sc@5.2.8/chinese-simplified-600-normal.ttf"
+   ]
+  },
+  "siyuan-song-black": {
+   "name": "思源宋体 特粗",
+   "file": "NotoSerifSC-Black.ttf",
+   "cat": "宋体",
+   "mood": "庄重、有分量，标题用",
+   "license": "SIL OFL 1.1（可商用）",
+   "stroke": 0,
+   "from": "Fontsource",
+   "urls": [
+    "https://cdn.jsdelivr.net/fontsource/fonts/noto-serif-sc@5.2.8/chinese-simplified-900-normal.ttf"
+   ]
+  },
+  "siyuan-song-light": {
+   "name": "思源宋体 细",
+   "file": "NotoSerifSC-Light.otf",
+   "cat": "宋体",
+   "mood": "纤细、高级，纪实片的小标题",
+   "license": "SIL OFL 1.1（可商用）",
+   "stroke": 0.004,
+   "from": "notofonts/noto-cjk",
+   "urls": [
+    "https://raw.githubusercontent.com/notofonts/noto-cjk/main/Serif/SubsetOTF/SC/NotoSerifSC-Light.otf",
+    "https://cdn.jsdelivr.net/gh/notofonts/noto-cjk@main/Serif/SubsetOTF/SC/NotoSerifSC-Light.otf"
+   ]
+  },
+  "source-serif-medium": {
+   "name": "思源宋体 中（相框线用）",
+   "file": "SourceHanSerifSC-Medium.otf",
+   "cat": "宋体",
+   "mood": "标题、署名",
+   "license": "SIL OFL 1.1（可商用）",
+   "stroke": 0,
+   "from": "adobe-fonts/source-han-serif",
+   "urls": [
+    "https://cdn.jsdelivr.net/gh/adobe-fonts/source-han-serif@2.003R/SubsetOTF/CN/SourceHanSerifCN-Medium.otf",
+    "https://raw.githubusercontent.com/adobe-fonts/source-han-serif/release/SubsetOTF/CN/SourceHanSerifCN-Medium.otf"
+   ]
+  },
+  "source-serif-bold": {
+   "name": "思源宋体 粗（相框线用）",
+   "file": "SourceHanSerifSC-Bold.otf",
+   "cat": "宋体",
+   "mood": "标题、署名",
+   "license": "SIL OFL 1.1（可商用）",
+   "stroke": 0,
+   "from": "adobe-fonts/source-han-serif",
+   "urls": [
+    "https://cdn.jsdelivr.net/gh/adobe-fonts/source-han-serif@2.003R/SubsetOTF/CN/SourceHanSerifCN-Bold.otf",
+    "https://raw.githubusercontent.com/adobe-fonts/source-han-serif/release/SubsetOTF/CN/SourceHanSerifCN-Bold.otf"
+   ]
+  },
+  "source-serif-heavy": {
+   "name": "思源宋体 特粗（相框线用）",
+   "file": "SourceHanSerifSC-Heavy.otf",
+   "cat": "宋体",
+   "mood": "标题、署名",
+   "license": "SIL OFL 1.1（可商用）",
+   "stroke": 0,
+   "from": "adobe-fonts/source-han-serif",
+   "urls": [
+    "https://cdn.jsdelivr.net/gh/adobe-fonts/source-han-serif@2.003R/SubsetOTF/CN/SourceHanSerifCN-Heavy.otf",
+    "https://raw.githubusercontent.com/adobe-fonts/source-han-serif/release/SubsetOTF/CN/SourceHanSerifCN-Heavy.otf"
+   ]
+  },
+  "laosong": {
+   "name": "京华老宋体",
+   "file": "KingHwaOldSong.ttf",
+   "cat": "宋体",
+   "mood": "老报纸、老招牌的味道，怀旧和历史",
+   "license": "SIL OFL 1.1（可商用）",
+   "stroke": 0,
+   "from": "npm @fontpkg/king-hwa-old-song@2.2.0",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/king-hwa-old-song@2.2.0/%E4%BA%AC%E8%8F%AF%E8%80%81%E5%AE%8B%E4%BD%93v2.002.ttf",
+    "https://unpkg.com/@fontpkg/king-hwa-old-song@2.2.0/%E4%BA%AC%E8%8F%AF%E8%80%81%E5%AE%8B%E4%BD%93v2.002.ttf",
+    "https://registry.npmmirror.com/@fontpkg/king-hwa-old-song/2.2.0/files/%E4%BA%AC%E8%8F%AF%E8%80%81%E5%AE%8B%E4%BD%93v2.002.ttf"
+   ]
+  },
+  "jinshu-song": {
+   "name": "寒蝉锦书宋",
+   "file": "ChillJinshuSongPro_Regular.otf",
+   "cat": "宋体",
+   "mood": "雕版书的感觉，文化和读书",
+   "license": "SIL OFL 1.1（可商用）",
+   "stroke": 0.004,
+   "from": "npm @fontpkg/chill-jinshu-song-pro@2.0.0",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/chill-jinshu-song-pro@2.0.0/ChillJinshuSongPro_Regular.otf",
+    "https://unpkg.com/@fontpkg/chill-jinshu-song-pro@2.0.0/ChillJinshuSongPro_Regular.otf",
+    "https://registry.npmmirror.com/@fontpkg/chill-jinshu-song-pro/2.0.0/files/ChillJinshuSongPro_Regular.otf"
+   ]
+  },
+  "zhisong": {
+   "name": "霞鹜新致宋",
+   "file": "LXGWNeoZhiSong.ttf",
+   "cat": "宋体",
+   "mood": "现代宋体，清秀",
+   "license": "IPA Font License 1.0（可商用）",
+   "stroke": 0.005,
+   "from": "npm @fontpkg/lxgw-neo-zhi-song@0.910.0",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/lxgw-neo-zhi-song@0.910.0/LXGWNeoZhiSong.ttf",
+    "https://unpkg.com/@fontpkg/lxgw-neo-zhi-song@0.910.0/LXGWNeoZhiSong.ttf",
+    "https://registry.npmmirror.com/@fontpkg/lxgw-neo-zhi-song/0.910.0/files/LXGWNeoZhiSong.ttf"
+   ]
+  },
+  "daoli": {
+   "name": "阿里妈妈刀隶体",
+   "file": "AlimamaDaoLiTi.ttf",
+   "cat": "宋体",
+   "mood": "刀刻隶书，国潮标题",
+   "license": "官方声明免费商用",
+   "stroke": 0,
+   "from": "阿里妈妈",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/alimama-dao-li-ti@1.0.5/AlimamaDaoLiTi.ttf",
+    "https://unpkg.com/@fontpkg/alimama-dao-li-ti@1.0.5/AlimamaDaoLiTi.ttf",
+    "https://registry.npmmirror.com/@fontpkg/alimama-dao-li-ti/1.0.5/files/AlimamaDaoLiTi.ttf"
+   ]
+  },
+  "chill-kai": {
+   "name": "寒蝉正楷",
+   "file": "ChillKai.ttf",
+   "cat": "楷体",
+   "mood": "传统正楷，科普和知识类",
+   "license": "SIL OFL 1.1（可商用）",
+   "stroke": 0.011,
+   "from": "npm @fontpkg/chill-kai@2.0.1",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/chill-kai@2.0.1/ChillKai.ttf",
+    "https://unpkg.com/@fontpkg/chill-kai@2.0.1/ChillKai.ttf",
+    "https://registry.npmmirror.com/@fontpkg/chill-kai/2.0.1/files/ChillKai.ttf"
+   ]
+  },
+  "huokai": {
+   "name": "寒蝉活楷",
+   "file": "ChillHuoKai_Regular.otf",
+   "cat": "楷体",
+   "mood": "活字印刷的楷体，有年代感",
+   "license": "SIL OFL 1.1（可商用）",
+   "stroke": 0.008,
+   "from": "npm @fontpkg/chill-huo-kai@1.0.0",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/chill-huo-kai@1.0.0/ChillHuoKai_Regular.otf",
+    "https://unpkg.com/@fontpkg/chill-huo-kai@1.0.0/ChillHuoKai_Regular.otf",
+    "https://registry.npmmirror.com/@fontpkg/chill-huo-kai/1.0.0/files/ChillHuoKai_Regular.otf"
+   ]
+  },
+  "wenkai": {
+   "name": "霞鹜文楷",
+   "file": "LXGWWenKaiGB-Regular.ttf",
+   "cat": "楷体",
+   "mood": "现代、圆润、亲和",
+   "license": "SIL OFL 1.1（可商用）",
+   "stroke": 0.008,
+   "from": "npm @fontpkg/lxgw-wen-kai-gb@1.520.0",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/lxgw-wen-kai-gb@1.520.0/LXGWWenKaiGB-Regular.ttf",
+    "https://unpkg.com/@fontpkg/lxgw-wen-kai-gb@1.520.0/LXGWWenKaiGB-Regular.ttf",
+    "https://registry.npmmirror.com/@fontpkg/lxgw-wen-kai-gb/1.520.0/files/LXGWWenKaiGB-Regular.ttf"
+   ]
+  },
+  "wenkai-medium": {
+   "name": "霞鹜文楷 中",
+   "file": "LXGWWenKaiGB-Medium.ttf",
+   "cat": "楷体",
+   "mood": "同上，粗一点",
+   "license": "SIL OFL 1.1（可商用）",
+   "stroke": 0.004,
+   "from": "npm @fontpkg/lxgw-wen-kai-gb@1.520.0",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/lxgw-wen-kai-gb@1.520.0/LXGWWenKaiGB-Medium.ttf",
+    "https://unpkg.com/@fontpkg/lxgw-wen-kai-gb@1.520.0/LXGWWenKaiGB-Medium.ttf",
+    "https://registry.npmmirror.com/@fontpkg/lxgw-wen-kai-gb/1.520.0/files/LXGWWenKaiGB-Medium.ttf"
+   ]
+  },
+  "wenkai-bold": {
+   "name": "霞鹜文楷 粗（繁体字形）",
+   "file": "LXGWWenKaiTC-Bold.ttf",
+   "cat": "楷体",
+   "mood": "文楷的粗体",
+   "license": "SIL OFL 1.1（可商用）",
+   "stroke": 0.006,
+   "from": "Google Fonts",
+   "urls": [
+    "https://raw.githubusercontent.com/google/fonts/main/ofl/lxgwwenkaitc/LXGWWenKaiTC-Bold.ttf",
+    "https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/lxgwwenkaitc/LXGWWenKaiTC-Bold.ttf"
+   ]
+  },
+  "huiwen-kai": {
+   "name": "汇文正楷",
+   "file": "HuiwenZhengKai.ttf",
+   "cat": "楷体",
+   "mood": "铅字正楷，典雅",
+   "license": "官方声明免费商用",
+   "stroke": 0.008,
+   "from": "汇文",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/huiwen-zheng-kai@1.0.0/%E6%B1%87%E6%96%87%E6%AD%A3%E6%A5%B7.ttf",
+    "https://unpkg.com/@fontpkg/huiwen-zheng-kai@1.0.0/%E6%B1%87%E6%96%87%E6%AD%A3%E6%A5%B7.ttf",
+    "https://registry.npmmirror.com/@fontpkg/huiwen-zheng-kai/1.0.0/files/%E6%B1%87%E6%96%87%E6%AD%A3%E6%A5%B7.ttf"
+   ]
+  },
+  "youran": {
+   "name": "演示悠然小楷",
+   "file": "SlideYouran.ttf",
+   "cat": "楷体",
+   "mood": "手写小楷，文气",
+   "license": "官方声明免费商用",
+   "stroke": 0.004,
+   "from": "Slidefu 演示字体",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/slideyouran@1.0.0/%E6%BC%94%E7%A4%BA%E6%82%A0%E7%84%B6%E5%B0%8F%E6%A5%B7.ttf",
+    "https://unpkg.com/@fontpkg/slideyouran@1.0.0/%E6%BC%94%E7%A4%BA%E6%82%A0%E7%84%B6%E5%B0%8F%E6%A5%B7.ttf",
+    "https://registry.npmmirror.com/@fontpkg/slideyouran/1.0.0/files/%E6%BC%94%E7%A4%BA%E6%82%A0%E7%84%B6%E5%B0%8F%E6%A5%B7.ttf"
+   ]
+  },
+  "qiuhong": {
+   "name": "演示秋鸿楷",
+   "file": "SlideQiuhong.ttf",
+   "cat": "楷体",
+   "mood": "硬朗的手写楷书",
+   "license": "官方声明免费商用",
+   "stroke": 0.004,
+   "from": "Slidefu 演示字体",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/slideqiuhong@1.0.0/%E6%BC%94%E7%A4%BA%E7%A7%8B%E9%B8%BF%E6%A5%B7.ttf",
+    "https://unpkg.com/@fontpkg/slideqiuhong@1.0.0/%E6%BC%94%E7%A4%BA%E7%A7%8B%E9%B8%BF%E6%A5%B7.ttf",
+    "https://registry.npmmirror.com/@fontpkg/slideqiuhong/1.0.0/files/%E6%BC%94%E7%A4%BA%E7%A7%8B%E9%B8%BF%E6%A5%B7.ttf"
+   ]
+  },
+  "mashan": {
+   "name": "马善政毛笔楷书",
+   "file": "MaShanZheng-Regular.ttf",
+   "cat": "书法",
+   "mood": "毛笔楷书，金句和大字",
+   "license": "SIL OFL 1.1（可商用）",
+   "stroke": 0.004,
+   "from": "Google Fonts",
+   "urls": [
+    "https://raw.githubusercontent.com/google/fonts/main/ofl/mashanzheng/MaShanZheng-Regular.ttf",
+    "https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/mashanzheng/MaShanZheng-Regular.ttf"
+   ]
+  },
+  "longcang": {
+   "name": "龙藏体",
+   "file": "LongCang-Regular.ttf",
+   "cat": "书法",
+   "mood": "行草，随性",
+   "license": "SIL OFL 1.1（可商用）",
+   "stroke": 0.004,
+   "from": "npm @fontpkg/long-cang@2.1.0",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/long-cang@2.1.0/LongCang-Regular.ttf",
+    "https://unpkg.com/@fontpkg/long-cang@2.1.0/LongCang-Regular.ttf",
+    "https://registry.npmmirror.com/@fontpkg/long-cang/2.1.0/files/LongCang-Regular.ttf"
+   ]
+  },
+  "zhimang": {
+   "name": "志莽行书",
+   "file": "ZhiMangXing-Regular.ttf",
+   "cat": "书法",
+   "mood": "粗犷行书，气势足",
+   "license": "SIL OFL 1.1（可商用）",
+   "stroke": 0,
+   "from": "npm @fontpkg/zhi-mang-xing@2.1.0",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/zhi-mang-xing@2.1.0/ZhiMangXing-Regular.ttf",
+    "https://unpkg.com/@fontpkg/zhi-mang-xing@2.1.0/ZhiMangXing-Regular.ttf",
+    "https://registry.npmmirror.com/@fontpkg/zhi-mang-xing/2.1.0/files/ZhiMangXing-Regular.ttf"
+   ]
+  },
+  "maocao": {
+   "name": "流江毛草",
+   "file": "LiuJianMaoCao-Regular.ttf",
+   "cat": "书法",
+   "mood": "草书，只适合两三个字的大字",
+   "license": "SIL OFL 1.1（可商用）",
+   "stroke": 0,
+   "from": "npm @fontpkg/liu-jian-mao-cao@1.1.0",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/liu-jian-mao-cao@1.1.0/Liu%20Jian%20Mao%20Cao.ttf",
+    "https://unpkg.com/@fontpkg/liu-jian-mao-cao@1.1.0/Liu%20Jian%20Mao%20Cao.ttf",
+    "https://registry.npmmirror.com/@fontpkg/liu-jian-mao-cao/1.1.0/files/Liu%20Jian%20Mao%20Cao.ttf"
+   ]
+  },
+  "xiaxing": {
+   "name": "演示夏行楷",
+   "file": "SlideXiaxing.ttf",
+   "cat": "书法",
+   "mood": "行楷，流畅好认",
+   "license": "官方声明免费商用",
+   "stroke": 0.003,
+   "from": "Slidefu 演示字体",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/slidexiaxing@1.0.0/%E6%BC%94%E7%A4%BA%E5%A4%8F%E8%A1%8C%E6%A5%B7.ttf",
+    "https://unpkg.com/@fontpkg/slidexiaxing@1.0.0/%E6%BC%94%E7%A4%BA%E5%A4%8F%E8%A1%8C%E6%A5%B7.ttf",
+    "https://registry.npmmirror.com/@fontpkg/slidexiaxing/1.0.0/files/%E6%BC%94%E7%A4%BA%E5%A4%8F%E8%A1%8C%E6%A5%B7.ttf"
+   ]
+  },
+  "honglei-xing": {
+   "name": "鸿雷行书简体",
+   "file": "HongLeiXingShu.otf",
+   "cat": "书法",
+   "mood": "硬笔行书，像老板签字",
+   "license": "官方声明免费商用",
+   "stroke": 0.003,
+   "from": "鸿雷",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/hongleixingshu@2.0.0/%E9%B8%BF%E9%9B%B7%E8%A1%8C%E4%B9%A6%E7%AE%80%E4%BD%93.otf",
+    "https://unpkg.com/@fontpkg/hongleixingshu@2.0.0/%E9%B8%BF%E9%9B%B7%E8%A1%8C%E4%B9%A6%E7%AE%80%E4%BD%93.otf",
+    "https://registry.npmmirror.com/@fontpkg/hongleixingshu/2.0.0/files/%E9%B8%BF%E9%9B%B7%E8%A1%8C%E4%B9%A6%E7%AE%80%E4%BD%93.otf"
+   ]
+  },
+  "jinglong": {
+   "name": "云峰静龙行书",
+   "file": "YunFengJingLongXingShu.ttf",
+   "cat": "书法",
+   "mood": "毛笔行书，稳重大气",
+   "license": "官方声明免费商用",
+   "stroke": 0,
+   "from": "云峰",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/yun-feng-jing-long-xing-shu@1.0.0/%E4%BA%91%E5%B3%B0%E9%9D%99%E9%BE%99%E8%A1%8C%E4%B9%A6.ttf",
+    "https://unpkg.com/@fontpkg/yun-feng-jing-long-xing-shu@1.0.0/%E4%BA%91%E5%B3%B0%E9%9D%99%E9%BE%99%E8%A1%8C%E4%B9%A6.ttf",
+    "https://registry.npmmirror.com/@fontpkg/yun-feng-jing-long-xing-shu/1.0.0/files/%E4%BA%91%E5%B3%B0%E9%9D%99%E9%BE%99%E8%A1%8C%E4%B9%A6.ttf"
+   ]
+  },
+  "bangshu": {
+   "name": "仓耳周珂正大榜书",
+   "file": "TsangerBangShu.ttf",
+   "cat": "书法",
+   "mood": "榜书大字，牌匾气势",
+   "license": "官方声明免费商用",
+   "stroke": 0,
+   "from": "仓耳",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/tsanger-zhouke-zhengdabangshu@1.0.0/%E4%BB%93%E8%80%B3%E5%91%A8%E7%8F%82%E6%AD%A3%E5%A4%A7%E6%A6%9C%E4%B9%A6.ttf",
+    "https://unpkg.com/@fontpkg/tsanger-zhouke-zhengdabangshu@1.0.0/%E4%BB%93%E8%80%B3%E5%91%A8%E7%8F%82%E6%AD%A3%E5%A4%A7%E6%A6%9C%E4%B9%A6.ttf",
+    "https://registry.npmmirror.com/@fontpkg/tsanger-zhouke-zhengdabangshu/1.0.0/files/%E4%BB%93%E8%80%B3%E5%91%A8%E7%8F%82%E6%AD%A3%E5%A4%A7%E6%A6%9C%E4%B9%A6.ttf"
+   ]
+  },
+  "cushu": {
+   "name": "庞门正道粗书体",
+   "file": "PangMenZhengDaoCuShu.ttf",
+   "cat": "书法",
+   "mood": "粗毛笔，冲击力最强的金句字",
+   "license": "官方声明免费商用",
+   "stroke": 0,
+   "from": "庞门正道",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/pang-men-zheng-dao-cu6-0@6.0.0/%E5%BA%9E%E9%97%A8%E6%AD%A3%E9%81%93%E7%B2%97%E4%B9%A6%E4%BD%93.ttf",
+    "https://unpkg.com/@fontpkg/pang-men-zheng-dao-cu6-0@6.0.0/%E5%BA%9E%E9%97%A8%E6%AD%A3%E9%81%93%E7%B2%97%E4%B9%A6%E4%BD%93.ttf",
+    "https://registry.npmmirror.com/@fontpkg/pang-men-zheng-dao-cu6-0/6.0.0/files/%E5%BA%9E%E9%97%A8%E6%AD%A3%E9%81%93%E7%B2%97%E4%B9%A6%E4%BD%93.ttf"
+   ]
+  },
+  "honglei-ban": {
+   "name": "鸿雷板书简体",
+   "file": "HongLeiBanShu.ttf",
+   "cat": "手写",
+   "mood": "粉笔板书，讲课感",
+   "license": "官方声明免费商用",
+   "stroke": 0.003,
+   "from": "鸿雷",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/honglei-sim@1.0.0/%E9%B8%BF%E9%9B%B7%E6%9D%BF%E4%B9%A6%E7%AE%80%E4%BD%93-Regular.ttf",
+    "https://unpkg.com/@fontpkg/honglei-sim@1.0.0/%E9%B8%BF%E9%9B%B7%E6%9D%BF%E4%B9%A6%E7%AE%80%E4%BD%93-Regular.ttf",
+    "https://registry.npmmirror.com/@fontpkg/honglei-sim/1.0.0/files/%E9%B8%BF%E9%9B%B7%E6%9D%BF%E4%B9%A6%E7%AE%80%E4%BD%93-Regular.ttf"
+   ]
+  },
+  "xiaolai": {
+   "name": "小赖字体",
+   "file": "XiaolaiSC-Regular.ttf",
+   "cat": "手写",
+   "mood": "马克笔手写，白板和笔记",
+   "license": "SIL OFL 1.1（可商用）",
+   "stroke": 0.003,
+   "from": "npm @fontpkg/xiaolai-sc@3.11.0",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/xiaolai-sc@3.11.0/XiaolaiSC-Regular.ttf",
+    "https://unpkg.com/@fontpkg/xiaolai-sc@3.11.0/XiaolaiSC-Regular.ttf",
+    "https://registry.npmmirror.com/@fontpkg/xiaolai-sc/3.11.0/files/XiaolaiSC-Regular.ttf"
+   ]
+  },
+  "softbrush": {
+   "name": "沐瑶软笔手写体",
+   "file": "Muyao-Softbrush.ttf",
+   "cat": "手写",
+   "mood": "软笔手写，温柔、生活",
+   "license": "SIL OFL 1.1（可商用）",
+   "stroke": 0,
+   "from": "npm @fontpkg/muyao-softbrush@1.0.0",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/muyao-softbrush@1.0.0/Muyao-Softbrush.ttf",
+    "https://unpkg.com/@fontpkg/muyao-softbrush@1.0.0/Muyao-Softbrush.ttf",
+    "https://registry.npmmirror.com/@fontpkg/muyao-softbrush/1.0.0/files/Muyao-Softbrush.ttf"
+   ]
+  },
+  "ddin-bold": {
+   "name": "D-DIN PRO 粗（只有数字和英文）",
+   "file": "D-DIN-PRO-700-Bold.otf",
+   "cat": "数字",
+   "mood": "仪表盘数字，数据面板",
+   "license": "SIL OFL 1.1（可商用）",
+   "stroke": 0,
+   "from": "npm @fontpkg/d-din-pro@1.0.0",
+   "urls": [
+    "https://cdn.jsdelivr.net/npm/@fontpkg/d-din-pro@1.0.0/D-DIN-PRO-700-Bold.otf",
+    "https://unpkg.com/@fontpkg/d-din-pro@1.0.0/D-DIN-PRO-700-Bold.otf",
+    "https://registry.npmmirror.com/@fontpkg/d-din-pro/1.0.0/files/D-DIN-PRO-700-Bold.otf"
+   ]
+  }
+ }
+}

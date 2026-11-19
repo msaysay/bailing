@@ -6,6 +6,8 @@
   音频：去片头静音、响度归一到 -16 LUFS，输出 voice.wav。
 输出 timing.json：{fps,total,segments:[{id,name,start,end,lines}],lines:[{n,seg,text,start,end,chars:[{c,t}]}]}
 同时打印每段对齐率；低于 0.85 的段要人工听一下。"""
+import sys as _sys
+for _s in (_sys.stdout, _sys.stderr): getattr(_s, "reconfigure", lambda **k: None)(encoding="utf-8", errors="replace")   # Windows 终端也能打印中文
 import argparse, difflib, json, os, re, subprocess, sys
 ap = argparse.ArgumentParser()
 ap.add_argument("--script", required=True); ap.add_argument("--asr", required=True); ap.add_argument("--audio", required=True)
@@ -37,7 +39,7 @@ def split_lines(text, mx):
         d = re.sub(r"[，、：；]", " ", o); d = re.sub(r"[。！？“”\"—…]", "", d).strip(); d = re.sub(r"\s+", " ", d)
         if d: res.append(d)
     return res
-asr = json.load(open(a.asr)); toks = [(t["t"].strip().lower(), t["s"]) for t in asr["tokens"] if t["t"].strip()]
+asr = json.load(open(a.asr, encoding="utf-8")); toks = [(t["t"].strip().lower(), t["s"]) for t in asr["tokens"] if t["t"].strip()]
 A = []                                    # 识别侧逐字符：(字, 时间)
 for t, s in toks:
     for ch in t: A.append((ch, s))
@@ -79,7 +81,7 @@ for si, sg in enumerate(segs):
 for x, y in zip(seglist, seglist[1:]): x["end"] = round(y["start"] - 0.25, 3); y["start"] = x["end"]
 seglist[0]["start"] = 0.0; seglist[-1]["end"] = round(total, 3)
 os.makedirs(os.path.dirname(a.out_timing), exist_ok=True)
-json.dump({"fps": a.fps, "total": round(total, 3), "segments": seglist, "lines": lines}, open(a.out_timing, "w"), ensure_ascii=False, indent=1)
+json.dump({"fps": a.fps, "total": round(total, 3), "segments": seglist, "lines": lines}, open(a.out_timing, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 os.makedirs(os.path.dirname(a.out_audio), exist_ok=True)
 subprocess.run(["ffmpeg", "-nostdin", "-v", "fatal", "-y", "-err_detect", "ignore_err", "-i", a.audio, "-af",
                 f"atrim={t0:.3f}:{end_src:.3f},asetpts=PTS-STARTPTS,pan=mono|c0=0.5*c0+0.5*c1,loudnorm=I=-16:TP=-1.5:LRA=9", "-ar", "48000", a.out_audio], check=True)

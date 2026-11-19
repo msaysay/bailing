@@ -1,0 +1,12 @@
+# 全部风格要的 Python 包。scripts/doctor.py --fix 会按你做的那条线自动装，一般不用手动跑这个文件。
+sherpa-onnx
+soundfile
+numpy
+opencv-python-headless<4.11   # 自动调光找人脸要 4.10 及以下
+pypinyin
+pillow
+yt-dlp
+# 可选：访谈纪实风的识别引擎
+faster-whisper
+# 可选：知识科普风论文卡的人物抠像。装不上也能出片。
+mediapipe

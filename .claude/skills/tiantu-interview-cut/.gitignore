@@ -1,0 +1,5 @@
+# client brand assets, reference stills (identifiable person) and fonts are shipped in the skill zip, not in git
+assets/brand/*.png
+assets/reference/
+assets/fonts/
+__pycache__/

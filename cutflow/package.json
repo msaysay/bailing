@@ -1,0 +1,15 @@
+{
+  "name": "danjie-cut",
+  "private": true,
+  "version": "0.1.0",
+  "description": "口播类短视频 AI 剪辑工作流：粗剪/调光 → AI 排时间线 → HTML 动效花字 + ffmpeg 合成",
+  "scripts": {
+    "setup": "node scripts/setup.js",
+    "prep": "node src/prep.js",
+    "resub": "node src/resub.js",
+    "preview": "node src/render.js --preview",
+    "render": "node src/render.js",
+    "check": "node src/check.js"
+  },
+  "dependencies": { "playwright": "^1.50.0" }
+}

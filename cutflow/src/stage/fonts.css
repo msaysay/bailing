@@ -1,0 +1,5 @@
+/* 字体包：danjie-default（黄油体 + 标题黑（商业快节奏风的原配））。由 scripts/fonts.py use 生成，不要手改；换回原配：scripts/fonts.py use default --style danjie */
+@font-face { font-family: "SubTalk"; src: url("../../fonts/ZCOOLQingKeHuangYou.ttf"); }
+@font-face { font-family: "SubCard"; src: url("../../fonts/YouSheBiaoTiHei.ttf"); }
+@font-face { font-family: "Num"; src: url("../../fonts/AlimamaShuHeiTi-Bold.ttf"); }
+@font-face { font-family: "Brush"; src: url("../../fonts/MaShanZheng.ttf"); }

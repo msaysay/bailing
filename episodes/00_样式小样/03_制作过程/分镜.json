@@ -1,0 +1,41 @@
+{
+  "title": "生理期为什么会同步",
+  "music": null,
+  "camera": "auto",
+  "scenes": [
+    {"id": "部落", "type": "illustration", "from": 5, "to": 10, "pip": "left", "shots": [
+      {"asset": "部落-俯视.png", "from": 5, "motion": "zoom-out", "prompt": "岩画质感的扁平插画，俯视原始部落营地：中间一圈石头围着篝火，四周树木，几位女性席地劳作。暖土黄色，颗粒纸纹，无文字"},
+      {"asset": "部落-洞内.png", "from": 7, "motion": "zoom-in", "prompt": "同一风格。从山洞内向外看，洞口是一个圆，外面是营地；洞内近处两位女性在磨石、缝兽皮。暖色火光"},
+      {"asset": "部落-夜晚.png", "from": 9, "motion": "zoom-in", "prompt": "同一风格。俯视夜晚的营地，篝火在中间，树影拉长，几个人站在不同位置，画面留出标红点的空",
+       "marks": [{"x": 0.62, "y": 0.47}, {"x": 0.33, "y": 0.6}, {"x": 0.58, "y": 0.68}, {"x": 0.3, "y": 0.72}]}
+    ]},
+    {"id": "安全稳定", "type": "card", "from": 12, "text": "安全稳定"},
+    {"id": "嗅觉通路", "type": "illustration", "from": 16, "to": 20, "pip": "right", "frame": "full", "transition": "blur", "shots": [
+      {"asset": "鼻腔.png", "from": 16, "motion": "zoom-in", "prompt": "医学可视化风格，半透明蓝色 X 光质感的人头侧面特写，鼻腔内有发光的青色神经末梢。冷蓝灰色，柔光，无文字"},
+      {"asset": "神经上行.png", "from": 17, "motion": "pan-up", "prompt": "同一风格。颈部到颅底的半透明骨骼与神经，一条青色发光信号线自下而上"},
+      {"asset": "全身指挥.png", "from": 19, "motion": "zoom-out", "prompt": "同一风格。半透明人体上半身，大脑深处一点发亮，青色神经网络向心、肺、腹部扩散"}
+    ]},
+    {"id": "论文", "type": "paper", "from": 21, "to": 22, "asset": "论文首页.png", "prompt": "文献首页截图：Stern & McClintock (1998) Regulation of ovulation by human pheromones, Nature。白底黑字，取标题、作者、摘要第一段"},
+    {"id": "篝火", "type": "illustration", "from": 23, "to": 25, "pip": "left", "shots": [
+      {"asset": "篝火-近景.png", "from": 23, "motion": "zoom-out", "prompt": "岩画质感扁平插画（同第一组）。洞穴里近景，一堆篝火，右侧一位女性伸手烤火"},
+      {"asset": "篝火-围坐.png", "from": 24, "motion": "zoom-in", "prompt": "同一风格。拉远，五六位女性围坐篝火，岩壁上投着她们的影子",
+       "marks": [{"x": 0.3, "y": 0.66}, {"x": 0.72, "y": 0.64}, {"x": 0.5, "y": 0.78}]}
+    ]},
+    {"id": "公园", "type": "illustration", "from": 33, "to": 34, "pip": "none", "frame": "full", "transition": "fade", "out": "cut", "shots": [
+      {"asset": "公园.png", "motion": "zoom-in", "prompt": "温暖的手绘绘本风插画，俯视公园小广场，三三两两的人在聊天、牵手，每个人身边有一圈淡淡的光晕。暖米色，无文字"}
+    ]},
+    {"id": "外景", "type": "broll", "from": 35, "to": 38, "asset": "外景-边走边说.mp4", "prompt": "出镜人自己的生活化实拍：傍晚在街边或公园边走边看镜头，手持自拍视角，4 秒以上"}
+  ],
+  "overlays": [
+    {"type": "hook", "from": 2},
+    {"type": "alert", "from": 10},
+    {"type": "question", "from": 13, "to": 15, "text": "到底什么在悄悄调节我们的周期？"},
+    {"type": "float", "from": "15:气味", "to": 15, "text": "气味"},
+    {"type": "flow", "from": 17, "to": 18, "items": ["气息信号", "下丘脑"]},
+    {"type": "label", "from": 20, "text": "身体总指挥官"},
+    {"type": "bullets", "from": 22, "items": ["内分泌", "情绪", "生育节奏"]},
+    {"type": "scatter", "from": 29, "items": ["饮食", "作息", "情绪压力"]},
+    {"type": "bigword", "from": 39, "to": 40, "text": "圈子", "sub": "就是无形的环境"},
+    {"type": "ask", "from": 45, "text": "生理周期同步的经历"}
+  ]
+}

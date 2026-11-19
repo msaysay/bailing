@@ -1,0 +1,10 @@
+{
+  "name": "约读书房",
+  "canvas": [1080, 1920],
+  "window": { "x": 0, "y": 555, "w": 1080, "h": 813 },
+  "colors": { "paper": "#FAF8F2", "ink": "#22261F", "green": "#2F7D46", "greenDeep": "#33513A", "logoGreen": "#4AA159", "orange": "#F0892E", "yellow": "#F1B32E", "hot": "#FFDE6B" },
+  "fonts": { "标题、署名": "思源宋体 Bold / Heavy", "字幕、贴纸、大字": "得意黑", "卡片正文": "MiSans" },
+  "locked": ["纸纹底 plate.png", "标志 logo.png", "标题三行的位置和样式", "署名条的位置和样式", "字幕的位置和样式", "配色", "字体"],
+  "editable": ["speaker.json 里的名字和头衔", "每期的三行标题"],
+  "note": "颜色和坐标的生效位置是 studio/src/yuedu/base.tsx。这份文件是给人和助手看的对照表，改这里不会改变渲染结果。"
+}

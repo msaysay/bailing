@@ -2,16 +2,23 @@
 import React from 'react';
 import { AbsoluteFill, useCurrentFrame, useVideoConfig, staticFile, continueRender, delayRender } from 'remotion';
 import { prog, mix } from './clock';
+import fontpack from './fontpack.json';
 
 export const C = { bg: '#0B0E14', surface: '#151A24', glass: 'rgba(13,17,25,.82)', line: '#263042', text: '#F3F1EA', muted: '#8A93A6', accent: '#5B9BFF', down: '#FF5D5D', warm: '#FFD479' };
 export const FONT = 'MiSans, "WenQuanYi Zen Hei", sans-serif';
+/** 口播字幕和章节标题的字体。默认就是 MiSans；换字体包：scripts/fonts.py use <包> --style xiaolin（改的是 fontpack.json）。 */
+const PACK = fontpack as { pack: string; sub: string | null; title: string | null };
+export const FONT_SUB = PACK.sub ? `"Pack Sub", ${FONT}` : FONT;
+export const FONT_TITLE = PACK.title ? `"Pack Title", ${FONT}` : FONT;
 export const useT = () => useCurrentFrame() / useVideoConfig().fps;
 
 const fonts: [string, number][] = [['MiSans-Regular.otf', 400], ['MiSans-Semibold.otf', 600], ['MiSans-Heavy.otf', 900]];
 export const useFonts = () => {
   const [h] = React.useState(() => delayRender('fonts'));
   React.useEffect(() => {
-    Promise.all(fonts.map(([f, w]) => new FontFace('MiSans', `url(${staticFile('fonts/' + f)})`, { weight: String(w) }).load().then((x) => document.fonts.add(x)))).then(() => continueRender(h));
+    // 字体包里的字体登记成 100–900 全字重，浏览器就不会再合成假粗体
+    const extra = ([['Pack Sub', PACK.sub], ['Pack Title', PACK.title]] as [string, string | null][]).filter(([, f]) => f).map(([fam, f]) => new FontFace(fam, `url(${staticFile('fonts/' + f)})`, { weight: '100 900' }).load().then((x) => document.fonts.add(x)));
+    Promise.all([...fonts.map(([f, w]) => new FontFace('MiSans', `url(${staticFile('fonts/' + f)})`, { weight: String(w) }).load().then((x) => document.fonts.add(x))), ...extra]).then(() => continueRender(h));
   }, [h]);
 };
 /** 到点出现：淡入 + 上移。until 给了就在那一刻淡出。 */

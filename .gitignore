@@ -20,3 +20,31 @@ studio/public/*/person.mp4
 pet/assets/*.blend
 studio/public/pet/
 钥匙.txt
+# —— 口播五种风格并进来之后新增 ——
+__pycache__/
+dist/
+# 字体统一由 scripts/fonts.py 下载到 studio/public/fonts/，不进仓库；每台机器当前用哪个包也不进
+studio/public/fonts/*.ttf
+fonts/active.json
+cutflow/fonts/
+# 知识科普风：每期的素材副本、抠像、渲染数据都是生成物
+studio/public/*/assets/
+studio/public/*/cutout-*.webm
+studio/public/*/*.frames/
+episodes/*/03_制作过程/props.json
+episodes/*/03_制作过程/script.draft.txt
+# 相框老板风：品牌件副本、混音、素材片段、成片
+studio/public/yuedu/
+studio/public/*/*.wav
+studio/public/*/clips/*.mp4
+episodes/*/04_成片/*.mp4
+episodes/*/04_成片/qc/
+# 商业快节奏风、访谈纪实风：每期的工作目录只留决定表
+episodes/*/cut/raw/
+episodes/*/cut/work/
+episodes/*/cut/out/
+episodes/*/proj/raw/
+episodes/*/proj/broll/
+episodes/*/proj/bgm/
+episodes/*/proj/work/
+episodes/*/proj/out/

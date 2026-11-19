@@ -21,7 +21,7 @@ python3 scripts/episode.py list
 | 回答 | 做哪种 | 技能 | `--line` |
 |---|---|---|---|
 | 不出镜（讲新闻、事件、产品、任何题目） | 横屏解读片：真实画面 + 动效 + 配音 | `make-news` | `news` |
-| 出镜，已经拍了或打算拍 | 竖屏口播：人和画面交替 | `make-talk` | `talk` |
+| 出镜，已经拍了或打算拍（口播、访谈都算） | 口播剪辑：五种风格选一种 | `make-talk` | `talk` |
 
 用户只说「做条视频」、没说别的：默认 `news`，题目问他一句「讲什么？」。
 片子做完后，频道宠物可以叠上去（技能 `pet`），用户提到宠物才做。
@@ -38,7 +38,9 @@ python3 scripts/doctor.py --line <news|talk> --fix
 ```bash
 python3 scripts/episode.py new <两位序号_主题> --line <news|talk>
 ```
-然后打开 `make-news` 或 `make-talk`，从第 1 步做起。
+然后打开 `make-news`，从第 1 步做起。
+
+**口播（`talk`）不在这里建期**：直接打开 `make-talk`，它先带用户选风格和可选功能，再用 `python3 scripts/talk.py new … --style …` 建期（五种风格要的目录不一样）。
 
 ## 一直要做到的
 

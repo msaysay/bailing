@@ -4,7 +4,7 @@
 import React from 'react';
 import { AbsoluteFill, OffthreadVideo, Sequence, staticFile, useVideoConfig } from 'remotion';
 import { inOut, mix, prog, useClock } from './clock';
-import { C, FONT, useT } from './kit';
+import { C, FONT, FONT_SUB, FONT_TITLE, useT } from './kit';
 
 export const TW = 1080, TH = 1920, PH = 1620;
 /** 几个固定区域（纵向位置，像素）。SUB_Y：字幕行；UPPER：小圆头像版式里素材放的地方；LOWER：全屏版式里组件放的地方（下巴以下）。 */
@@ -54,7 +54,7 @@ export const TalkSubs: React.FC<{ hot?: string[]; y?: number; size?: number; hid
   if (!l || hide.includes(l.n) || t > l.end + 0.5) return null;
   let parts: { s: string; hot: boolean }[] = [{ s: l.text, hot: false }];
   hot.forEach((h) => { parts = parts.flatMap((p) => (p.hot || !p.s.includes(h) ? [p] : p.s.split(h).flatMap((x, k, arr) => (k < arr.length - 1 ? [{ s: x, hot: false }, { s: h, hot: true }] : [{ s: x, hot: false }])))); });
-  return <div style={{ position: 'absolute', left: 40, right: 40, top: y, textAlign: 'center', fontSize: size, fontWeight: 600, color: '#fff', lineHeight: 1.25, textShadow: '0 2px 4px rgba(0,0,0,.9), 0 0 18px rgba(0,0,0,.75)', whiteSpace: 'pre-wrap', opacity: prog(t, l.start - 0.04, 0.12) }}>{parts.filter((p) => p.s).map((p, k) => <span key={k} style={{ color: p.hot ? C.warm : undefined, fontWeight: p.hot ? 900 : undefined }}>{p.s}</span>)}</div>;
+  return <div style={{ position: 'absolute', left: 40, right: 40, top: y, textAlign: 'center', fontFamily: FONT_SUB, fontSize: size, fontWeight: 600, color: '#fff', lineHeight: 1.25, textShadow: '0 2px 4px rgba(0,0,0,.9), 0 0 18px rgba(0,0,0,.75)', whiteSpace: 'pre-wrap', opacity: prog(t, l.start - 0.04, 0.12) }}>{parts.filter((p) => p.s).map((p, k) => <span key={k} style={{ color: p.hot ? C.warm : undefined, fontWeight: p.hot ? 900 : undefined }}>{p.s}</span>)}</div>;
 };
 /** 素材片段：放在 UPPER 区的一段横屏画面，圆角，可带一行来源。从 at 开始播，到 until 淡出。 */
 export const TalkClip: React.FC<{ src: string; at: number; until: number; top?: number; height?: number; credit?: string; startFrom?: number }> = ({ src, at, until, top = UPPER.top, height = UPPER.height, credit, startFrom = 0 }) => {
@@ -73,7 +73,7 @@ export const TalkTitle: React.FC<{ no: string; title: string; at: number; hold?:
     <AbsoluteFill style={{ background: `radial-gradient(900px 900px at 50% 42%, #18233A 0%, #07090D 75%)`, opacity: Math.min(1, p * 3) * q, alignItems: 'center', justifyContent: 'center', flexDirection: 'column', paddingBottom: 300 }}>
       <div style={{ fontSize: 300, fontWeight: 900, lineHeight: 1, color: 'transparent', WebkitTextStroke: `4px ${C.accent}`, transform: `translateY(${mix(60, 0, p)}px)` }}>{no}</div>
       <div style={{ width: 120 * p, height: 8, background: C.warm, margin: '30px 0' }} />
-      <div style={{ fontSize: 130, fontWeight: 900, color: C.text, transform: `translateY(${mix(-40, 0, p)}px)` }}>{title}</div>
+      <div style={{ fontFamily: FONT_TITLE, fontSize: 130, fontWeight: 900, color: C.text, transform: `translateY(${mix(-40, 0, p)}px)` }}>{title}</div>
     </AbsoluteFill>
   );
 };

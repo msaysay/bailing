@@ -8,6 +8,7 @@ import { Gallery, GFPS } from './gallery';
 import { CATALOG, SLOT } from './gallery/all';
 import { DemoClip } from './gallery/demoClip';
 import { Registered } from './episodes/_registry';
+import { ZP, ZP_FPS, ZP_H, ZP_W, zpDefault } from './zhanpeng';
 // 每期一个 Composition；-P1 是只到第一件事结束的预览。
 registerRoot(() => (
   <>
@@ -15,6 +16,8 @@ registerRoot(() => (
     <Composition id="EP02" component={EP02} width={1920} height={1080} fps={clock.fps} durationInFrames={Math.ceil(clock.total * clock.fps)} />
     <Composition id="EP02-P1" component={EP02} width={1920} height={1080} fps={clock.fps} durationInFrames={Math.ceil(clock.seg('一·律师').end * clock.fps)} />
     <Composition id="TALK01" component={TALK01} width={1080} height={1920} fps={talkClock.fps} durationInFrames={Math.ceil(talkClock.total * talkClock.fps)} />
+    {/* 知识科普风（张展鹏式）：数据驱动，一个合成做所有期。scripts/zp.py render 用 --props 传每期的数据。相框老板风有自己的入口 src/yuedu/index.tsx。 */}
+    <Composition id="ZP" component={ZP} width={ZP_W} height={ZP_H} fps={ZP_FPS} durationInFrames={90} defaultProps={zpDefault} calculateMetadata={({ props }) => ({ durationInFrames: Math.max(1, Math.round(props.durationInFrames)) })} />
     <Composition id="PET-DEMO" component={PetDemo} width={1920} height={1080} fps={30} durationInFrames={PET_DEMO_SEC * 30} />
     <Composition id="GALLERY" component={Gallery} width={1920} height={1080} fps={GFPS} durationInFrames={CATALOG.length * SLOT * GFPS} />
     <Composition id="DEMO-CLIP" component={DemoClip} width={1920} height={1080} fps={30} durationInFrames={240} />

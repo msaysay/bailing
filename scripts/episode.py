@@ -31,6 +31,7 @@ def latest():
     return max(eps, key=lambda d: os.path.getmtime(path(d))) if eps else None
 def show(st):
     print(f"【{st['name']}】{ {'news': '事为主（横屏新闻解读）', 'talk': '人为主（竖屏口播）', 'pet': '频道宠物'}[st['line']]}")
+    if st.get("style"): print(f"风格：{st['style']}；可选功能：{'、'.join(st.get('options', [])) or '无'}" + (f"；字体包：{st['font']}" if st.get("font") else "") + f"（做法：python3 scripts/talk.py recipe {st['name']}）")
     nxt = None
     for s in st["steps"]:
         mark = "✓" if s["done"] else ("→" if nxt is None else " ")

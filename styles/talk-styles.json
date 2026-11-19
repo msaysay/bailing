@@ -1,0 +1,320 @@
+{
+ "_说明": "口播剪辑的风格和可选功能登记表。给人和程序读：scripts/talk.py 读它列选项、建期、打印做法；要加一种风格就在这里加一项，再写它自己的技能。options 里每种风格对每个可选功能写的是「怎么开」；null 表示这种风格没有这个功能。",
+ "options": {
+  "retake": {
+   "name": "去重录",
+   "what": "一句话录了好几遍，只留最后一遍",
+   "default": true
+  },
+  "stutter": {
+   "name": "去口吃和语气词",
+   "what": "结巴重复、单独的「呃、嗯」剪掉",
+   "default": true
+  },
+  "pause": {
+   "name": "收紧长停顿",
+   "what": "句子之间的空白收到自然的长度",
+   "default": true
+  },
+  "denoise": {
+   "name": "人声降噪",
+   "what": "压掉空调、风机、电流声，顺带修音、统一响度",
+   "default": false
+  },
+  "grade": {
+   "name": "自动调光",
+   "what": "原片偏暗、偏色时以脸为准提亮、修色",
+   "default": false
+  },
+  "beauty": {
+   "name": "轻磨皮",
+   "what": "保边磨皮，不瘦脸、不改五官",
+   "default": false
+  },
+  "music": {
+   "name": "配乐",
+   "what": "铺一条轻配乐，人说话时自动压低",
+   "default": false
+  },
+  "sfx": {
+   "name": "音效",
+   "what": "转场、花字入场带很轻的音效",
+   "default": false
+  },
+  "cover": {
+   "name": "封面",
+   "what": "出一张 1080×1440 的封面",
+   "default": true
+  },
+  "font": {
+   "name": "换字体包",
+   "what": "从共用字体库里挑一套字（scripts/fonts.py preview 出样张）",
+   "default": false
+  }
+ },
+ "styles": {
+  "xiaolin": {
+   "name": "财经解读风",
+   "ref": "对标小 Lin 的竖屏口播",
+   "who": "讲财经、商业、行业分析，要一边讲一边上图表和数据的博主",
+   "look": "人全屏、右上角小圆头像、人物卡片三种版式来回切，深色底，配 298 个动效组件（图表、数字、流程）",
+   "give": "竖屏口播原片（一条拍到底）；稿子可有可无",
+   "engine": "Remotion · studio/src/kit/talk.tsx",
+   "skill": "make-talk（本技能 A 节）",
+   "brand": "没有品牌件，谁都能直接用",
+   "table": "每期一份画面代码 studio/src/episodes/<代号>/index.tsx",
+   "steps": [
+    [
+     "1",
+     "稿子与拍摄",
+     "一条拍好的竖屏口播视频；还没拍就说讲什么",
+     "稿子（已经拍好就跳过）"
+    ],
+    [
+     "2",
+     "粗剪",
+     "",
+     "剪掉了哪几句"
+    ],
+    [
+     "3",
+     "排版出片",
+     "",
+     "关键帧，然后是成片"
+    ],
+    [
+     "4",
+     "封面发布",
+     "",
+     "封面和标题"
+    ]
+   ],
+   "options": {
+    "retake": "talk_prep.py cut 加 --auto-drop（先看 transcribe 打印的清单）",
+    "stutter": "同上，一起剪",
+    "pause": "自带，一直开着",
+    "denoise": "talk_prep.py cut 加 --denoise auto",
+    "grade": "talk_prep.py cut 加 --grade",
+    "beauty": "talk_prep.py cut 加 --beauty 0.3",
+    "music": "成片出来后 polish.py <成片> --music auto",
+    "sfx": "骨架里已接好音效，代码里按需加",
+    "cover": "make-news 第 5 步的做法，竖屏 1080×1440",
+    "font": "fonts.py use <包> --style xiaolin（换字幕和章节标题）"
+   }
+  },
+  "danjie": {
+   "name": "商业快节奏风",
+   "ref": "对标蛋解创业（头部商业财经博主）",
+   "who": "商业、财经、创业类，信息密度高、素材多、要花字和数据面板的账号",
+   "look": "近黑藏青底；口播全屏和四种素材版式交替，素材两三秒一换；金色重点词、清单、章节角标、数据面板，结尾毛笔金句",
+   "give": "口播原片；有素材、截图、配乐一起给（没有也能做）",
+   "engine": "HTML 动效 + Playwright + ffmpeg · cutflow/",
+   "skill": "danjie-cut（cutflow/SKILL.md）",
+   "brand": "长期规则在 brands/danjie/rules.md；版式不带任何标志，别的账号可以直接用",
+   "table": "subs.txt（字幕）和 timeline.json（剪辑决定表）",
+   "steps": [
+    [
+     "1",
+     "收原片",
+     "口播原片；有素材、配乐一起给",
+     ""
+    ],
+    [
+     "2",
+     "粗剪调光",
+     "",
+     "重录删了哪几处、调光对比图"
+    ],
+    [
+     "3",
+     "字幕",
+     "",
+     "字幕断句和重点词"
+    ],
+    [
+     "4",
+     "排片",
+     "",
+     "联系表和 540p 预览"
+    ],
+    [
+     "5",
+     "出片交付",
+     "",
+     "成片和交付说明"
+    ]
+   ],
+   "options": {
+    "retake": "自带，一直开着（prep.js 的重录检测，逐条复核）",
+    "stutter": "自带，一直开着（结巴重复算在重录检测里；语气词按这条线的规矩保留）",
+    "pause": "自带，一直开着",
+    "denoise": "prep 之后对 work/host.mp4 跑 polish.py --inplace --denoise auto",
+    "grade": "自带，默认开；不要就 prep.js 加 --no-grade",
+    "beauty": "prep.js 加 --beauty 0.3",
+    "music": "timeline.json 里写 bgm；或成片后 polish.py --music",
+    "sfx": "自带，默认开",
+    "cover": "render.js --still 挑一帧",
+    "font": "fonts.py use <包> --style danjie"
+   }
+  },
+  "zhanpeng": {
+   "name": "知识科普风",
+   "ref": "对标张展鹏（健身、健康科普博主）",
+   "who": "健身、健康、心理、育儿这类讲知识、引用研究的博主",
+   "look": "全片一套楷体：白字幕、红色钩子、黄色关键词；切插画时带一个跟着头走的羽化头像；论文卡、黑底金句、墨迹转场",
+   "give": "口播原片和定稿文案（没有文案就用识别稿改）；插画和空镜可以后补",
+   "engine": "Remotion · studio/src/zhanpeng/",
+   "skill": "zhanpeng-talk",
+   "brand": "没有品牌件，谁都能直接用",
+   "table": "分镜.json（只写行号和词，不写秒数）",
+   "steps": [
+    [
+     "1",
+     "收原片和文案",
+     "口播原片和定稿文案",
+     ""
+    ],
+    [
+     "2",
+     "对齐粗剪",
+     "",
+     "剪掉了哪些话、字幕断句"
+    ],
+    [
+     "3",
+     "排分镜",
+     "",
+     "分镜表和素材清单"
+    ],
+    [
+     "4",
+     "备素材",
+     "清单里的插画、空镜、文献截图（没有的先用占位图）",
+     ""
+    ],
+    [
+     "5",
+     "关键帧出片",
+     "",
+     "关键帧，然后是成片"
+    ]
+   ],
+   "options": {
+    "retake": "自带，一直开着（文案对齐时同一句留最后一遍）",
+    "stutter": "自带，一直开着（文案里没有的话都会剪掉）",
+    "pause": "自带，一直开着",
+    "denoise": "cut 之后对 studio/public/<代号>/person.mp4 跑 polish.py --inplace --denoise auto",
+    "grade": "同上，polish.py --inplace --grade",
+    "beauty": "同上，加 --beauty 0.3",
+    "music": "分镜.json 里写 \"music\": \"文件名\"；或成片后 polish.py --music",
+    "sfx": "自带，默认开；分镜.json 里 \"sfx\": false 关掉",
+    "cover": "从关键帧里挑一张钩子画面",
+    "font": "zp.py fonts --use <包>，或 fonts.py use <包> --style zhanpeng"
+   }
+  },
+  "frame": {
+   "name": "相框老板风",
+   "ref": "对标约读书房（企业老板、创始人口播）",
+   "who": "企业老板、创始人、机构负责人，横屏机位拍的口播，要品牌感和稳重感",
+   "look": "固定相框：纸纹底、三行大标题、署名条、品牌标志；中间一个画面窗，人、素材、贴纸、十三种生成卡片都在窗里",
+   "give": "横屏口播原片（没有稿子也行，识别后请出镜人确认）；出镜人的名字和头衔",
+   "engine": "Remotion · studio/src/yuedu/",
+   "skill": "frame-talk",
+   "brand": "品牌包在 brands/<品牌>/（底图、标志、署名、专名表、音乐库）。换一家公司：复制 brands/yuedu 改成自己的",
+   "table": "edl.json（段名加词，脚本换成秒数）",
+   "steps": [
+    [
+     "1",
+     "转写确认",
+     "横屏口播原片",
+     "转写出来的文字"
+    ],
+    [
+     "2",
+     "粗剪和声音",
+     "",
+     "剪掉了哪几处口误"
+    ],
+    [
+     "3",
+     "标题和版式",
+     "",
+     "三组标题选一组、版式表"
+    ],
+    [
+     "4",
+     "关键帧出片",
+     "",
+     "关键帧，然后是成片和封面"
+    ]
+   ],
+   "options": {
+    "retake": "自带（frame_ingest.py 出口误建议，逐条看过再剪）",
+    "stutter": "同上",
+    "pause": "自带，一直开着",
+    "denoise": "自带，默认 auto；frame_audio.py --denoise off 关掉",
+    "grade": "粗剪前跑 grade.py，把滤镜串放到 roughcut.py --vf 最前面",
+    "beauty": "grade.py 加 --beauty 0.3",
+    "music": "自带，默认开（品牌音乐库或代码合成）；frame_audio.py --music off 关掉",
+    "sfx": null,
+    "cover": "自带（frame_render.py cover）",
+    "font": "fonts.py use <包> --style frame（品牌锁定字体时不要换）"
+   }
+  },
+  "interview": {
+   "name": "访谈纪实风",
+   "ref": "对标天图通逊的访谈成片（「一条」那种调性）",
+   "who": "访谈、人物采访、企业宣传口播；有实拍空镜，或者愿意让助手去找空镜的",
+   "look": "口播和满屏空镜交替，全部硬切；白色粗黑字幕、关键词只放大不变色；细宋体小标题；左上角标志；四五秒品牌片尾",
+   "give": "访谈或口播原片（横竖都行，可以多机位）；空镜、标志、片尾画面、配乐有就给",
+   "engine": "ffmpeg + ASS 字幕 · .claude/skills/tiantu-interview-cut/",
+   "skill": "tiantu-interview-cut",
+   "brand": "标志放 assets/brand/logo.png，片尾标语写在 plan.json 的 brand.slogan 里。换一家公司改这两处",
+   "table": "script.txt（纸面剪辑）和 plan.json（分镜）",
+   "steps": [
+    [
+     "1",
+     "看原片转写",
+     "访谈或口播原片；有空镜、标志、配乐一起给",
+     ""
+    ],
+    [
+     "2",
+     "纸面剪辑",
+     "",
+     "留下哪些话、怎么断句"
+    ],
+    [
+     "3",
+     "备空镜和配乐",
+     "（可选）实拍空镜",
+     ""
+    ],
+    [
+     "4",
+     "分镜",
+     "",
+     "每句话配什么画面"
+    ],
+    [
+     "5",
+     "出片交付",
+     "",
+     "成片、配乐备选和交付说明"
+    ]
+   ],
+   "options": {
+    "retake": "自带，一直开着（声学加文字两层，verify 干净才往下走）",
+    "stutter": "自带，一直开着",
+    "pause": "自带，一直开着（超过 0.28 秒的停顿压到 0.13 秒）",
+    "denoise": "自带，默认 auto；plan.json 里 \"audio\": {\"denoise\": \"off\"} 关掉",
+    "grade": "转写前对原片跑 polish.py --grade，用调好的那条当原片",
+    "beauty": "同上，加 --beauty 0.3",
+    "music": "自带（bgm_match.py 配三首出 A/B/C 版，swap_bgm.py 一键换）",
+    "sfx": null,
+    "cover": "qc.py 出的静帧里挑一张",
+    "font": "fonts.py use <包> --style interview（换字幕和小标题的字）"
+   }
+  }
+ }
+}

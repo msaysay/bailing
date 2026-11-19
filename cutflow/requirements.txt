@@ -1,0 +1,4 @@
+numpy
+sherpa-onnx
+opencv-python-headless<4.11
+faster-whisper  # 备选识别引擎，可不装

@@ -2,6 +2,8 @@
 """出片前自查：黑场、闪帧、亮度突变、画面停滞、响度，并输出每秒一张的联系表。
 用法：scripts/qc.py <成片.mp4> [--out <目录>] [--stall 6.0] [--ignore-bottom 0.2]
 画面停滞的判断会忽略底部一条（默认 20%），否则字幕换行会掩盖上方画面没动。"""
+import sys as _sys
+for _s in (_sys.stdout, _sys.stderr): getattr(_s, "reconfigure", lambda **k: None)(encoding="utf-8", errors="replace")   # Windows 终端也能打印中文
 import argparse, json, os, re, subprocess, sys
 import numpy as np
 ap = argparse.ArgumentParser(); ap.add_argument("video"); ap.add_argument("--out"); ap.add_argument("--stall", type=float, default=6.0); ap.add_argument("--ignore-bottom", type=float, default=0.2)
@@ -51,7 +53,7 @@ cols = 10; rows = int(np.ceil(dur / cols))
 subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", a.video, "-vf", f"fps=1,scale=384:-1,drawtext=text='%{{pts\\:hms}}':x=6:y=6:fontsize=18:fontcolor=white:box=1:boxcolor=black@0.6,tile={cols}x{rows}:padding=3", "-frames:v", "1", os.path.join(out, "sheet-1fps.jpg")])
 ok = not res["黑场"] and not res["闪帧"] and not res["亮度突变"] and not res["画面停滞"] and -18 <= res["响度LUFS"] <= -14 and res["峰值dBTP"] <= -1
 res["机器检查"] = "通过" if ok else "未通过"
-json.dump(res, open(os.path.join(out, "qc.json"), "w"), ensure_ascii=False, indent=1)
+json.dump(res, open(os.path.join(out, "qc.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 for k, v in res.items(): print(f"{k}: {v}")
 print("联系表：", os.path.join(out, "sheet-1fps.jpg"))
 sys.exit(0 if ok else 1)

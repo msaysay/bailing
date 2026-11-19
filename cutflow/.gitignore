@@ -1,0 +1,8 @@
+fonts/*.ttf
+fonts/*.otf
+work/
+out/
+examples/*/work/
+examples/*/out/
+examples/*/raw/
+__pycache__/
