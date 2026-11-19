@@ -12,9 +12,17 @@
         sort：0 综合 1 最多点赞 2 最新；days：0 不限 1 一天 7 一周 180 半年；dur：0 / 0-1 / 1-5 / 5-10000
   下载：scripts/tikhub.py get <作品ID> --out <目录> --name <别名>
 搜索结果缓存在 ~/.cache/tikhub-search.json，下载时从缓存取播放地址（地址几小时内有效）。
-API Token 由云端环境的网络代理注入；本地运行时设置环境变量 TIKHUB_TOKEN。
+API Token：放在文件夹根目录的「钥匙.txt」里（一行，只写那串字符），或者设环境变量 TIKHUB_TOKEN。云端环境由网络代理注入，可以都不放。
 登记到 <目录>/sources.json 的许可一栏写「平台公开内容，未取得授权」——能不能用进成片由人判断。"""
 import argparse, json, os, shutil, subprocess, sys, urllib.request
+def _load_key():
+    """从根目录的 钥匙.txt 读 TikHub 的钥匙（没有就用环境变量）。"""
+    if os.environ.get("TIKHUB_TOKEN"): return
+    f = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "钥匙.txt")
+    if os.path.exists(f):
+        k = open(f, encoding="utf-8").read().strip().splitlines()
+        if k and k[0].strip(): os.environ["TIKHUB_TOKEN"] = k[0].strip()
+_load_key()
 API = "https://api.tikhub.io/api/v1/douyin/search/fetch_video_search_v2"
 CACHE = os.path.expanduser("~/.cache/tikhub-search.json")
 def post(body):

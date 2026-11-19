@@ -42,7 +42,7 @@ C = [
  ("AI 配音模型（约 350MB，没有录音时用）", "news talk", os.path.exists(os.path.join(CACHE, "tts", "kokoro-multi-lang-v1_1", "model.onnx")), "下载 https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/kokoro-multi-lang-v1_1.tar.bz2 解压到 ~/.cache/video-studio/tts/", lambda: fix_tts()),
  ("人脸检测模型", "news talk", os.path.exists(os.path.join(CACHE, "yunet.onnx")), f"下载 {YUNET_URL} 存为 {CACHE}/yunet.onnx", fix_yunet),
  ("MiSans 字体（三个字重）", "news talk pet", all(os.path.exists(os.path.join(fonts, f)) for f in need_fonts), "去小米官网 hyperos.mi.com/font 免费下载 MiSans，把 Regular、Semibold、Heavy 三个 otf 放进 studio/public/fonts/", None),
- ("TikHub 密钥（搜新闻画面用）", "news", bool(os.environ.get("TIKHUB_TOKEN")), "去 tikhub.io 注册拿 API Token，设环境变量 TIKHUB_TOKEN（没有也能做，素材就得你自己给）", None),
+ ("TikHub 钥匙（自动找新闻画面用，可选）", "news", bool(os.environ.get("TIKHUB_TOKEN")) or os.path.exists(os.path.join(R, "钥匙.txt")), "去 tikhub.io 注册、充一点钱，在后台拿到 API Token；在这个文件夹最外层新建一个「钥匙.txt」，把那串字符贴进去保存。没有也能做，你自己把视频链接发给助手就行", None),
  ("Blender 4.2 以上（宠物用）", "pet", bool(shutil.which("blender")), "去 blender.org 装 4.2 LTS，确保命令行能运行 blender", None),
  ("海豹底模", "pet", os.path.exists(blend), "把 QuietCompanions.blend 放到 pet/assets/", None),
 ]
