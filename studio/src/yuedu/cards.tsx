@@ -168,6 +168,9 @@ export const Curve: React.FC<CardBase & Head & { series: string[]; xLabels?: str
   const t = useT(), n = c.series.length, CW = 900, CH = c.bubble ? 360 : 430, cols = [K.green, K.orange, K.greenDeep, K.yellow];
   const path = (i: number) => { const pts = Array.from({ length: 9 }, (_, k) => { const x = 20 + (k / 8) * (CW - 250), g = Math.pow(k / 8, 1.25 + i * 0.25), y = CH - 46 - g * (CH - 110) * (1 - i * 0.16) - rnd(k + i * 9, 5) * 16 - i * 8; return [x, y]; }); return pts; };
   const xl = c.xLabels ?? ['入学', '第 1 期', '第 2 期', '第 3 期'];
+  // 线尾的名字至少隔开 38 像素，不互相压
+  const ends = c.series.map((_, i) => path(i)[8][1]), order = ends.map((y, i) => [y, i]).sort((p, q) => p[0] - q[0]), ly: number[] = [];
+  order.forEach(([y, i], k) => { ly[i] = k === 0 ? y : Math.max(y, ly[order[k - 1][1]] + 38); });
   return (
     <Shell {...c} note={c.note ?? '示意'}>
       <svg width={CW} height={CH} viewBox={`0 0 ${CW} ${CH}`}>
@@ -179,7 +182,7 @@ export const Curve: React.FC<CardBase & Head & { series: string[]; xLabels?: str
             <g key={i} opacity={t >= at ? 1 : 0}>
               <path d={d} fill="none" stroke={cols[i % 4]} strokeWidth={i === 0 ? 7 : 5} strokeLinecap="round" strokeLinejoin="round" pathLength={1} strokeDasharray="1" strokeDashoffset={1 - p} />
               <circle cx={last[0]} cy={last[1]} r={9 * la} fill="#fff" stroke={cols[i % 4]} strokeWidth="5" />
-              <text x={last[0] + 22} y={last[1] + 10} fill={cols[i % 4]} fontFamily={SANS} fontWeight="900" fontSize={Math.min(32, Math.floor(200 / name.length))} opacity={la}>{name}</text>
+              <text x={last[0] + 22} y={ly[i] + 10} fill={cols[i % 4]} fontFamily={SANS} fontWeight="900" fontSize={Math.min(32, Math.floor(200 / name.length))} opacity={la}>{name}</text>
             </g>
           );
         })}
