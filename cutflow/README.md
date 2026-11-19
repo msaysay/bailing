@@ -6,7 +6,7 @@ AI 排片规则见 [docs/PLAYBOOK.md](docs/PLAYBOOK.md)。
 
 ```
 原片 raw/host.mp4 ─┐
-                   ├─① prep ──→ work/host.mp4（去气口 + 自动调光 + 1080×1920@30）
+                   ├─① prep ──→ work/host.mp4（删重录 + 去气口 + 自动调光 + 1080×1920@30）
 专名表 terms.json ─┘            work/transcript.json（逐字时间戳）· timeline.json 草稿（全口播）
                                       │
         ② AI 剪辑师（Claude）按 PLAYBOOK：写 subs.txt（断句/纠错/标重点）→ resub 对齐时间
@@ -73,6 +73,16 @@ node src/render.js projects/ep01                   # 成片
 
 `render.js` 开头会校验（场景不相接、素材缺失、字幕超 16 字等直接报错），所以 AI 写错了不会悄悄出坏片。
 完整可跑的例子见 [examples/demo/timeline.json](examples/demo/timeline.json)。
+
+## 重录自动剪（`src/retakes.js`）
+
+录的时候一句话说好几遍、说到一半重来、结巴重说，`prep` 会自动**只留最后一遍**：
+
+- **整句重录 / 半句重来**：按停顿把逐字稿切成气口段，某段文字和后面 4 段内某段的开头相似度 ≥ 0.72，就判定前面是废掉的一遍，连同中间的内容一起删。
+- **不停顿的结巴**：同一串 ≥3 个字紧挨着说了两遍，删前一遍。
+- 相似度 0.55–0.72 的、只重复 2 个字的（可能是“研究研究”这种正常说法）不自动删，列进“待复核”。
+- 结果写在 `work/retakes.json`（每条有时间段、删掉的字、保留的字）。删错了就把那条从 `auto` 里去掉；漏了就把 `suspect` 里的挪进 `auto`，或把时间段写进 `drops.json`，然后重跑 `prep`。`--retakes off` 可整体关闭，`--redetect` 重新检测。
+- 约定是“最后一遍最好”。如果某句其实前一遍更好，在 `retakes.json` 里把那条的 `range` 改成后一遍的时间段即可。
 
 ## 调光与美颜（`py/grade.py`）
 

@@ -27,15 +27,22 @@ if (!opt('no-grade', false)) {
   vfGrade = J(gFile).filter;
 }
 
-// 3) 保留区间：词间停顿超过 gap 的剪掉（两侧各留 pad），再扣掉 drops.json 里标记的口误/重说
+// 3) 重录检测（一句话录多遍留最后一遍）。结果存 work/retakes.json，可手改后重跑；--retakes off 关闭
+const rtFile = path.join(work, 'retakes.json');
+let retakes = { auto: [], suspect: [] };
+if (opt('retakes', 'auto') !== 'off') {
+  if (!fs.existsSync(rtFile) || opt('redetect', false)) fs.writeFileSync(rtFile, JSON.stringify(require('./retakes').detect(tr.words), null, 1));
+  retakes = J(rtFile);
+}
+// 4) 保留区间：扣掉重录和 drops.json 里手工标记的时间段，再把词间停顿超过 gap 的剪掉（两侧各留 pad）
 const GAP = +opt('gap', 0.45), PAD = 0.12;
-const dropsFile = path.join(dir, 'drops.json'), drops = fs.existsSync(dropsFile) ? J(dropsFile) : [];
-const dropped = w => drops.some(([s, e]) => w.s >= s - 1e-3 && w.e <= e + 1e-3);
+const dropsFile = path.join(dir, 'drops.json'), drops = (fs.existsSync(dropsFile) ? J(dropsFile) : []).concat(retakes.auto.map(r => r.range));
+const dropped = w => drops.some(([s, e]) => w.s >= s - 1e-3 && w.s < e - 1e-3);
 const words = tr.words.filter(w => !dropped(w));
 let keep = [];
 for (const w of words) {
   const last = keep[keep.length - 1];
-  if (last && w.s - last[1] <= GAP && !drops.some(([s, e]) => s >= last[1] - 1e-3 && e <= w.s + 1e-3)) last[1] = w.e;
+  if (last && w.s - last[1] <= GAP && !drops.some(([s, e]) => s < w.s && e > last[1])) last[1] = w.e;
   else keep.push([w.s, w.e]);
 }
 keep = keep.map(([s, e]) => [Math.max(0, s - PAD), Math.min(tr.duration, e + PAD)]);
@@ -80,5 +87,10 @@ if (fs.existsSync(tlFile) && !opt('force', false)) {   // 已排过的时间线�
   const old = J(tlFile); old.host = tl.host; fs.writeFileSync(tlFile, JSON.stringify(old, null, 1));
   fs.writeFileSync(path.join(work, 'timeline.draft.json'), JSON.stringify(tl, null, 1)); console.log('已有 timeline.json：仅更新 host，草稿写到 work/timeline.draft.json（--force 可整体覆盖）');
 } else fs.writeFileSync(tlFile, JSON.stringify(tl, null, 1));
-fs.writeFileSync(path.join(work, 'cuts.json'), JSON.stringify({ keep, removed: +(tr.duration - total).toFixed(2) }));
-console.log(`粗剪: ${tr.duration.toFixed(1)}s → ${total.toFixed(1)}s（去掉 ${(tr.duration - total).toFixed(1)}s 气口，${keep.length} 段）· 字幕 ${subs.length} 行`);
+fs.writeFileSync(path.join(work, 'cuts.json'), JSON.stringify({ keep, drops, removed: +(tr.duration - total).toFixed(2) }));
+if (retakes.auto.length || retakes.suspect.length) {
+  console.log(`重录检测: 自动删 ${retakes.auto.length} 处，待复核 ${retakes.suspect.length} 处（work/retakes.json）`);
+  retakes.auto.forEach(r => console.log(`  ✂ ${r.range[0]}–${r.range[1]}s 删「${r.dropped}」 留「${r.kept}」`));
+  retakes.suspect.forEach(r => console.log(`  ? ${r.range[0]}–${r.range[1]}s 疑似「${r.dropped}」≈「${r.kept}」(${r.score})`));
+}
+console.log(`粗剪: ${tr.duration.toFixed(1)}s → ${total.toFixed(1)}s（去掉 ${(tr.duration - total).toFixed(1)}s 气口/重录，${keep.length} 段）· 字幕 ${subs.length} 行`);

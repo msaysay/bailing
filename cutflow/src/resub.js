@@ -8,7 +8,7 @@ const fs = require('fs'), path = require('path');
 const dir = path.resolve(process.argv[2] || '.'), J = f => JSON.parse(fs.readFileSync(f, 'utf8'));
 const tr = J(path.join(dir, 'work/transcript.json')), cuts = J(path.join(dir, 'work/cuts.json')), tlFile = path.join(dir, 'timeline.json'), tl = J(tlFile);
 const remap = t => { let acc = 0; for (const [s, e] of cuts.keep) { if (t <= s) return acc; if (t < e) return acc + (t - s); acc += e - s; } return acc; };
-const inKeep = t => cuts.keep.some(([s, e]) => t >= s - 1e-3 && t <= e + 1e-3);
+const inKeep = t => cuts.keep.some(([s, e]) => t >= s - 1e-3 && t <= e + 1e-3) && !(cuts.drops || []).some(([s, e]) => t >= s && t < e);
 const clean = s => s.replace(/[，。！？、,.!?…：:；;“”"《》（）()\s]/g, '');
 // 识别结果摊成逐字序列（词内时间线性插值）
 const src = [];
