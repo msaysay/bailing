@@ -40,6 +40,8 @@
 | 4 | `talk-04-build` | 写代码、先看关键帧、整片渲染、自查 | `版式表.md` | 成片 | ✔ 成片 |
 | — | `video-08-cover` | 封面和发布包（竖屏封面） | 成片 | 封面图、标题、简介 | ✔ 发布 |
 
+> **给固定出镜人做的专用线**：张展鹏的科普口播走 `.claude/skills/zhanpeng-talk/`（入口 `scripts/zp.py`，模板 `studio/src/zhanpeng/`）。风格锁在模板里，每期只写一份 `分镜.json`，不写场景代码；同一句说了几遍时自动留最后一遍。
+
 五种版式和切换规律来自 `docs/对标拆解-小Lin口播.md`；参考实现是 `studio/src/episodes/talk01/`。
 
 ### 人为主另外四条规矩

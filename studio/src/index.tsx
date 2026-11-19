@@ -23,6 +23,7 @@ import { EP13B, clock13b } from './episodes/ep13/v2';
 import { Cover13B } from './episodes/ep13/cover';
 import { EP11, clock11 } from './episodes/ep11';
 import { Cover11 } from './episodes/ep11/cover';
+import { ZP, ZP_FPS, ZP_H, ZP_W, zpDefault } from './zhanpeng';
 // 每期一个 Composition；-P1 是只到第一件事结束的预览。
 registerRoot(() => (
   <>
@@ -37,6 +38,8 @@ registerRoot(() => (
     <Composition id="TALK02" component={TALK02} width={1080} height={1920} fps={talk2Clock.fps} durationInFrames={Math.ceil(talk2Clock.total * talk2Clock.fps)} />
     <Composition id="TALK03" component={TALK03} width={1080} height={1920} fps={talk3Clock.fps} durationInFrames={Math.ceil(talk3Clock.total * talk3Clock.fps)} />
     <Composition id="TALK03B" component={TALK03B} width={1080} height={1920} fps={talk3bClock.fps} durationInFrames={Math.ceil(talk3bClock.total * talk3bClock.fps)} />
+    {/* 张展鹏科普口播：数据驱动，一个合成做所有期。scripts/zp.py render 用 --props 传每期的数据。 */}
+    <Composition id="ZP" component={ZP} width={ZP_W} height={ZP_H} fps={ZP_FPS} durationInFrames={90} defaultProps={zpDefault} calculateMetadata={({ props }) => ({ durationInFrames: Math.max(1, Math.round(props.durationInFrames)) })} />
     <Composition id="TALKCRAFT" component={Talkcraft} width={TC_W} height={TC_H + TC_BAR} fps={TC_FPS} durationInFrames={TC_TOTAL} />
     <Composition id="GALLERY" component={Gallery} width={1920} height={1080} fps={GFPS} durationInFrames={CATALOG.length * SLOT * GFPS} />
     <Composition id="SHOWREEL" component={Showreel} width={1080} height={1920} fps={SR_FPS} durationInFrames={SR_TOTAL} />
