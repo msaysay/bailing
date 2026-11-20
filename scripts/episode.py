@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """每一期的进度表：建目录、记到哪一步了、告诉人下一步该给什么。人不用记流程，助手每做完一步更新这里。
 用法：
-  scripts/episode.py new <期名> --line news|talk|pet     建一期：目录骨架 + 进度表 episodes/<期名>/进度.json
+  scripts/episode.py new <期名> --line news|talk|wide|pet     建一期：目录骨架 + 进度表 episodes/<期名>/进度.json
   scripts/episode.py status [<期名>]                     看这一期（不给就看最近一期）到哪了、下一步是什么
   scripts/episode.py done <期名> <步骤号> [--note 说明]   这一步完成
   scripts/episode.py list                                所有期和进度
@@ -21,6 +21,12 @@ LINES = {
           ("4", "备素材", "xiaolin-talk", "（可选）你想用的画面、截图", ""),
           ("5", "搭画面出片", "xiaolin-talk", "", "关键帧，然后是成片"),
           ("6", "封面", "xiaolin-talk", "", "封面和标题")],
+ "wide": [("1", "收原片或写稿", "ziqi-wide", "一条拍好的横屏口播视频；还没拍就说讲什么", "稿子和章节（已经拍好就只确认章节）"),
+          ("2", "粗剪", "ziqi-wide", "", "剪掉了哪几句"),
+          ("3", "章节和版式表", "ziqi-wide", "", "章节名、版式表和素材清单"),
+          ("4", "备素材", "ziqi-wide", "（可选）你想用的画面、截图、数据", ""),
+          ("5", "搭画面出片", "ziqi-wide", "", "第一章小样，然后是成片"),
+          ("6", "封面", "ziqi-wide", "", "封面和标题")],
  "pet":  [("1", "成长结算", "pet", "上期的点赞、评论、转发、收藏、新关注，和上期评论", "涨了多少、AI 的判断和证据"),
           ("2", "叠进成片", "pet", "这一期做好的片子", "宠物出场、升级、片尾三处关键帧")],
 }
@@ -32,7 +38,7 @@ def latest():
     eps = [d for d in os.listdir(E) if os.path.exists(path(d))] if os.path.isdir(E) else []
     return max(eps, key=lambda d: os.path.getmtime(path(d))) if eps else None
 def show(st):
-    print(f"【{st['name']}】{ {'news': '事为主（横屏新闻解读）', 'talk': '人为主（竖屏口播）', 'pet': '频道宠物'}[st['line']]}")
+    print(f"【{st['name']}】{ {'news': '事为主（横屏新闻解读）', 'talk': '人为主（竖屏口播）', 'wide': '人为主（横屏深度解读）', 'pet': '频道宠物'}[st['line']]}")
     if st.get("style"): print(f"风格：{st['style']}；可选功能：{'、'.join(st.get('options', [])) or '无'}" + (f"；字体包：{st['font']}" if st.get("font") else "") + f"（做法：python3 scripts/talk.py recipe {st['name']}）")
     nxt = None
     for s in st["steps"]:
@@ -57,14 +63,14 @@ if a.cmd == "new":
     for sd in ("01_输入素材", "03_制作过程"): os.makedirs(os.path.join(base, sd), exist_ok=True)
     m = re.match(r"(\d+)", a.name); slug = "ep" + (m.group(1).zfill(2) if m else time.strftime("%m%d%H%M"))
     st = {"name": a.name, "line": a.line, "slug": slug, "created": time.strftime("%Y-%m-%d %H:%M"), "steps": [{"no": no, "name": nm, "skill": sk, "ask": ask, "confirm": cf, "done": False} for no, nm, sk, ask, cf in LINES[a.line]]}
-    if a.line in ("news", "talk"):   # 代码骨架 + 注册合成，助手直接往里加画面
+    if a.line in ("news", "talk", "wide"):   # 代码骨架 + 注册合成，助手直接往里加画面
         S = os.path.join(R, "studio"); code = os.path.join(S, "src", "episodes", slug); os.makedirs(code, exist_ok=True); os.makedirs(os.path.join(S, "public", slug), exist_ok=True)
         tpl = open(os.path.join(S, "templates", a.line + ".tsx"), encoding="utf-8").read().replace("__SLUG__", slug).replace("__SHOW__", "").replace("__TITLE__", a.name.split("_", 1)[-1])
         if not os.path.exists(os.path.join(code, "index.tsx")): open(os.path.join(code, "index.tsx"), "w", encoding="utf-8").write(tpl)
         if not os.path.exists(os.path.join(code, "timing.json")): json.dump({"fps": 30, "total": 10, "segments": [{"id": 1, "name": "开场", "start": 0, "end": 10, "lines": []}], "lines": []}, open(os.path.join(code, "timing.json"), "w"), ensure_ascii=False)
         reg = os.path.join(S, "src", "episodes", "_registry.tsx"); r = open(reg, encoding="utf-8").read(); V = slug.upper()
         if f"'./{slug}'" not in r:
-            w, h = (1920, 1080) if a.line == "news" else (1080, 1920)
+            w, h = {"news": (1920, 1080), "talk": (1080, 1920), "wide": (1920, 1280)}[a.line]
             r = r.replace("import { Composition } from 'remotion';", f"import {{ Composition }} from 'remotion';\nimport {{ Episode as {V}, clock as {V}_C }} from './{slug}';")
             r = r.replace("  <>\n", f"  <>\n    <Composition id=\"{slug}\" component={{{V}}} width={{{w}}} height={{{h}}} fps={{{V}_C.fps}} durationInFrames={{Math.max(1, Math.ceil({V}_C.total * {V}_C.fps))}} />\n", 1)
             open(reg, "w", encoding="utf-8").write(r)

@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-"""口播剪辑的统一入口：选风格、选可选功能、建一期、打印这一期该怎么做。五种风格和可选功能登记在 styles/talk-styles.json。
-  scripts/talk.py styles                       五种风格各是什么样、适合谁、要用户给什么（拿去让用户选）
+"""口播剪辑的统一入口：选风格、选可选功能、建一期、打印这一期该怎么做。六种风格和可选功能登记在 styles/talk-styles.json。
+  scripts/talk.py styles                       六种风格各是什么样、适合谁、要用户给什么（拿去让用户选）
   scripts/talk.py options [--style 风格]        可选功能清单；给了风格就写明这种风格里每一项怎么开
   scripts/talk.py new <期名> --style 风格 [--video 原片] [--script 文案.txt] [--opts 逗号隔开的可选功能] [--font 字体包] [--slug 英文代号]
                                                建一期（episodes/<期名>/进度.json），原片放到这种风格要的位置，然后打印做法
   scripts/talk.py set <期名> [--opts …] [--font 字体包]
                                                中途改可选功能或字体包
   scripts/talk.py recipe [<期名>]               这一期按顺序该跑哪些命令（已经把选的功能配进去了）。不给期名就看最近一期
-风格：xiaolin 财经解读风 · danjie 商业快节奏风 · zhanpeng 知识科普风 · frame 相框老板风 · interview 访谈纪实风
+风格：xiaolin 财经解读风 · danjie 商业快节奏风 · zhanpeng 知识科普风 · frame 相框老板风 · interview 访谈纪实风 · ziqi 横屏深度解读风
 可选功能：retake 去重录 · stutter 去口吃和语气词 · pause 收紧停顿 · denoise 降噪 · grade 调光 · beauty 轻磨皮 · music 配乐 · sfx 音效 · cover 封面
   --opts 不写就用默认的（retake,stutter,pause,cover）；写 --opts all 全开；前面加减号是关掉，比如 --opts denoise,music,-cover
 进度照旧用 scripts/episode.py status / done 记。"""
@@ -16,7 +16,7 @@ for _s in (_sys.stdout, _sys.stderr): getattr(_s, "reconfigure", lambda **k: Non
 import argparse, json, os, re, shutil, subprocess, sys, time
 R = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); E = os.path.join(R, "episodes"); PY = sys.executable
 REG = json.load(open(os.path.join(R, "styles", "talk-styles.json"), encoding="utf-8")); S = REG["styles"]; O = REG["options"]
-SKILL = {"xiaolin": "xiaolin-talk", "danjie": "danjie-cut", "zhanpeng": "zhanpeng-talk", "frame": "frame-talk", "interview": "tiantu-interview-cut"}
+SKILL = {"xiaolin": "xiaolin-talk", "danjie": "danjie-cut", "zhanpeng": "zhanpeng-talk", "frame": "frame-talk", "interview": "tiantu-interview-cut", "ziqi": "ziqi-wide"}
 def ppath(ep): return os.path.join(E, ep, "进度.json")
 def load(ep):
     if not os.path.exists(ppath(ep)): sys.exit(f"没有这一期：{ep}（先 talk.py new）")
@@ -37,7 +37,7 @@ def parse_opts(text, style, base=None):
     return [k for k in O if k in on and k not in none]
 
 def cmd_styles(a):
-    print("口播剪辑有五种风格。把下面的讲给用户听（不用念编号），让他挑一种；拿不准就按「适合谁」替他选一个再问他行不行。\n")
+    print("口播剪辑有六种风格（五种竖屏，一种横屏长视频）。把下面的讲给用户听（不用念编号），让他挑一种；拿不准就按「适合谁」替他选一个再问他行不行。\n")
     for k, v in S.items():
         print(f"【{v['name']}】（{k}）{v['ref']}")
         print(f"  适合谁：{v['who']}\n  长什么样：{v['look']}\n  要你给：{v['give']}\n  品牌件：{v['brand']}\n")
@@ -57,10 +57,10 @@ def cmd_new(a):
     if os.path.exists(ppath(a.name)): sys.exit("这一期已经有了：" + a.name)
     if a.video and not os.path.isfile(a.video): sys.exit("找不到原片：" + a.video)
     opts = parse_opts(a.opts, a.style); v = S[a.style]; base = os.path.join(E, a.name); m = re.match(r"(\d+)", a.name)
-    slug = a.slug or {"xiaolin": "ep", "danjie": "dj", "zhanpeng": "zp", "frame": "fr", "interview": "iv"}[a.style] + (m.group(1).zfill(2) if m else time.strftime("%m%d%H%M"))
+    slug = a.slug or {"xiaolin": "ep", "danjie": "dj", "zhanpeng": "zp", "frame": "fr", "interview": "iv", "ziqi": "ep"}[a.style] + (m.group(1).zfill(2) if m else time.strftime("%m%d%H%M"))
     ext = os.path.splitext(a.video)[1].lower() if a.video else ".mp4"; note = []
-    if a.style == "xiaolin":      # 原来的口播线：episode.py 建目录、代码骨架并注册合成
-        r = subprocess.run([PY, os.path.join(R, "scripts", "episode.py"), "new", a.name, "--line", "talk"], capture_output=True, text=True)
+    if a.style in ("xiaolin", "ziqi"):      # 这两种每期一份画面代码：episode.py 建目录、代码骨架并注册合成（ziqi 是横屏 1920×1280）
+        r = subprocess.run([PY, os.path.join(R, "scripts", "episode.py"), "new", a.name, "--line", "wide" if a.style == "ziqi" else "talk"], capture_output=True, text=True)
         if r.returncode != 0: sys.exit(r.stdout + r.stderr)
         st = load(a.name); slug = st["slug"]
         if a.video: shutil.copyfile(a.video, os.path.join(base, "01_输入素材", "口播原片.mp4") if ext == ".mp4" else os.path.join(base, "01_输入素材", "口播原片" + ext)); note.append("原片已放到 01_输入素材/" + ("" if ext == ".mp4" else f"（是 {ext}，请先转成 口播原片.mp4）"))
@@ -113,6 +113,15 @@ def recipe(ep, st):
         add(("搭画面（照抄 talk02）", f"在 studio/src/episodes/{slug}/index.tsx 里搭；关键帧：cd studio && npx remotion still src/index.tsx {slug} out/{slug}-k.png --frame=<帧>"))
         add(("渲染和自查", f"cd studio && npx remotion render src/index.tsx {slug} out/{slug}.mp4；python3 scripts/qc.py …；python3 scripts/talk_check.py …"))
         if has("music"): add(("配乐（成片上做，不用重渲）", f"python3 scripts/polish.py studio/out/{slug}.mp4 --music auto --mood warm -o studio/out/{slug}-配乐.mp4"))
+    elif style == "ziqi":
+        add(("环境", "python3 scripts/doctor.py --line talk --fix；python3 scripts/fonts.py install ziqi-default"))
+        add(("转写，找口误和重录（横屏原片会打印 FACE 和 --vf）", f"python3 scripts/talk_prep.py {q(ep)} transcribe"))
+        flags = (" --auto-drop" if has("retake") or has("stutter") else "") + (" --grade" if has("grade") else "") + (" --beauty 0.3" if has("beauty") else "") + (" --denoise auto" if has("denoise") else "")
+        add(("粗剪、对齐", f"python3 scripts/talk_prep.py {q(ep)} cut --drop \"…\" --vf \"scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080\"{flags}"))
+        add(("章节和版式表（给用户确认）、备素材", f"写 {ed}/03_制作过程/版式表.md；素材放 studio/public/{slug}/footage/"))
+        add(("搭画面（照抄 wide01），先出第一章小样", f"在 studio/src/episodes/{slug}/index.tsx 里搭；cd studio && npx remotion still src/index.tsx {slug} out/{slug}-k.png --frame=<帧>"))
+        add(("分章渲染、自查", f"cd studio && npx remotion render src/index.tsx {slug} out/{slug}.mp4；python3 scripts/qc.py studio/out/{slug}.mp4；python3 scripts/wide_check.py studio/out/{slug}.mp4"))
+        if has("music"): add(("配乐（成片上做）", f"python3 scripts/polish.py studio/out/{slug}.mp4 --music auto --mood calm -o studio/out/{slug}-配乐.mp4"))
     elif style == "zhanpeng":
         add(("环境", "python3 scripts/zp.py setup"))
         vid = st.get("pending_video") or "<原片路径>"; sc = f" --script {q(st['pending_script'])}" if st.get("pending_script") else ""

@@ -35,7 +35,13 @@ if a.cmd == "transcribe":
     import cv2
     im = cv2.imread(fr); h, w = im.shape[:2]; det = cv2.FaceDetectorYN.create(os.path.expanduser("~/.cache/video-studio/yunet.onnx"), "", (w, h), .6, .3, 50); _, fs = det.detect(im)
     print(f"\n画面 {w}×{h}，{fps} 帧/秒；第 3 秒截图在 {fr}（看一眼顶部有没有水印）")
-    if fs is not None:
+    if w > h:      # 横屏原片（横屏深度解读风）：不裁成竖的，统一成 1920×1080
+        if fs is not None:
+            x, y, fw, fh = [int(v) for v in max(fs, key=lambda f: f[2] * f[3])[:4]]; k = 1920 / w
+            print(f"横屏原片。人脸：中心 ({x + fw // 2}, {y + fh // 2})，宽 {fw}（占画面宽 {fw / w:.0%}）；转成 1920×1080 后是 FACE = {{ x: {int((x + fw / 2) * k)}, y: {int((y + fh / 2) * k)}, w: {int(fw * k)} }}")
+        else: print("横屏原片，没找到人脸，请看截图手动定。")
+        print("粗剪时加：--vf \"scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080\"")
+    elif fs is not None:
         x, y, fw, fh = [int(v) for v in max(fs, key=lambda f: f[2] * f[3])[:4]]; cy = y + fh // 2
         top = max(0, min(h - 1620 * w // 1080, cy - int(.38 * 1620 * w / 1080)))
         print(f"人脸：中心 ({x + fw // 2}, {cy})，宽 {fw}（占画面宽 {fw / w:.0%}）。建议裁切：crop={w}:{1620 * w // 1080}:0:{top}")
@@ -68,11 +74,11 @@ else:
         tk = json.load(open(os.path.join(work, "asr.json"), encoding="utf-8"))["tokens"]
         gap = [tk[i + 1]["s"] - tk[i]["s"] for i in range(len(tk) - 1)] + [9]          # 每个字到下一个字隔多久，越长越像停顿
         def split(lo, hi):                   # 把 [lo, hi) 这些字切成不超过 12 个字的行：每次在中间一段里找停顿最长的地方切
-            if hi - lo <= 12: return [(lo, hi)]
+            if hi - lo <= (14 if st.get("line") == "wide" else 12): return [(lo, hi)]
             k = max(range(lo + 3, hi - 4), key=lambda i: gap[i] - 0.004 * abs(i - (lo + hi) // 2)) + 1
             return split(lo, k) + split(k, hi)
         txt = ""
         for lo, hi in split(0, len(tk)): txt += "".join(x["t"] for x in tk[lo:hi]).strip() + ("。" if gap[hi - 1] > 0.6 else "，")
         open(script, "w", encoding="utf-8").write("# 由录音转写。请校对错字；句读是按停顿加的，决定字幕在哪断行，断得不对就挪一下逗号句号（一行不超过 14 个字）\n## 全文\n" + txt + "\n"); print("没有稿子，已用转写结果生成 script.txt，校对错字后可再跑一次 cut。")
-    subprocess.run([PY, os.path.join(R, "scripts", "align.py"), "--script", script, "--asr", os.path.join(work, "asr.json"), "--audio", cut, "--out-timing", os.path.join(code, "timing.json"), "--out-audio", os.path.join(R, "studio", "public", slug, "voice.wav"), "--max", "14", "--fps", str(fps)], check=True)
+    subprocess.run([PY, os.path.join(R, "scripts", "align.py"), "--script", script, "--asr", os.path.join(work, "asr.json"), "--audio", cut, "--out-timing", os.path.join(code, "timing.json"), "--out-audio", os.path.join(R, "studio", "public", slug, "voice.wav"), "--max", "16" if st.get("line") == "wide" else "14", "--fps", str(fps)], check=True)
     print("好了：人物视频、配音、字幕时间表都已就位。")

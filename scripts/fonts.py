@@ -8,7 +8,7 @@
   scripts/fonts.py use <字体包|default> --style <风格|all>
                                                         把字体包套到一种风格上，以后这种风格出片都用它；default 换回原配
   scripts/fonts.py status                               每种风格现在用的是哪个包
-风格：xiaolin 财经解读风 · danjie 商业快节奏风 · zhanpeng 知识科普风 · frame 相框老板风 · interview 访谈纪实风
+风格：xiaolin 财经解读风 · danjie 商业快节奏风 · zhanpeng 知识科普风 · frame 相框老板风 · interview 访谈纪实风 · ziqi 横屏深度解读风
 每个字体包四个角色：sub 字幕、title 标题和花字、accent 金句和大字、num 数字。每种风格怎么用它们，list 里会写。
 加字体：在 fonts/library.json 的 fonts 里加一项（文件名、下载地址、授权），再在 packs 里搭一个包。
 自己买的商业字体：把文件放进 studio/public/fonts/，同样登记一项（urls 留空数组），不会被打包分发。"""

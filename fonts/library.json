@@ -25,6 +25,11 @@
    "name": "访谈纪实风",
    "default": "interview-default",
    "roles": "sub→字幕和关键词，title→小标题和片尾标语"
+  },
+  "ziqi": {
+   "name": "横屏深度解读风",
+   "default": "ziqi-default",
+   "roles": "sub→字幕、名片、角标，title→章节导航条、大字标题卡、竖幅、频道标志，num→数据面板的数字"
   }
  },
  "packs": {
@@ -107,6 +112,19 @@
     "num": "shuhei"
    }
   },
+  "ziqi-default": {
+   "name": "标题体字幕 + 宋体标题（横屏深度解读风的原配）",
+   "note": "白色标题体字幕，章节条和金色大字用思源宋体特粗，数字用 D-DIN。",
+   "fit": [
+    "ziqi"
+   ],
+   "roles": {
+    "sub": "pangmen-biaoti",
+    "title": "siyuan-song-black",
+    "accent": "siyuan-song-black",
+    "num": "ddin-bold"
+   }
+  },
   "business": {
    "name": "商务稳重",
    "note": "鸿蒙黑字幕配思源宋标题，企业、金融、管理类。",
@@ -114,7 +132,8 @@
     "xiaolin",
     "frame",
     "interview",
-    "danjie"
+    "danjie",
+    "ziqi"
    ],
    "roles": {
     "sub": "harmony-bold",
@@ -205,7 +224,8 @@
     "frame",
     "xiaolin",
     "danjie",
-    "interview"
+    "interview",
+    "ziqi"
    ],
    "roles": {
     "sub": "siyuan-hei-bold",
@@ -250,7 +270,8 @@
     "zhanpeng",
     "frame",
     "interview",
-    "xiaolin"
+    "xiaolin",
+    "ziqi"
    ],
    "roles": {
     "sub": "siyuan-song-semibold",
@@ -265,7 +286,8 @@
    "fit": [
     "frame",
     "zhanpeng",
-    "interview"
+    "interview",
+    "ziqi"
    ],
    "roles": {
     "sub": "huiwen-kai",
@@ -280,7 +302,8 @@
    "fit": [
     "frame",
     "interview",
-    "zhanpeng"
+    "zhanpeng",
+    "ziqi"
    ],
    "roles": {
     "sub": "huokai",
@@ -294,7 +317,8 @@
    "note": "端黑字幕配新致宋标题，人物故事、纪录感。",
    "fit": [
     "interview",
-    "frame"
+    "frame",
+    "ziqi"
    ],
    "roles": {
     "sub": "chill-duan-bold",

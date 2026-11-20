@@ -4,11 +4,12 @@
   zhanpeng  studio/src/zhanpeng/theme.json 的 fontPack
   frame     studio/src/yuedu/fonts.json
   danjie    cutflow/src/stage/fonts.css（字体文件另拷一份到 cutflow/fonts/）
-  interview .claude/skills/tiantu-interview-cut/assets/fonts/ 里的 sub.* 和 title.*"""
+  interview .claude/skills/tiantu-interview-cut/assets/fonts/ 里的 sub.* 和 title.*
+  ziqi      studio/src/kit/widefont.json"""
 import glob, json, os, shutil, urllib.request
 R = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LIB = os.path.join(R, "fonts", "library.json"); DIR = os.path.join(R, "studio", "public", "fonts"); ACTIVE = os.path.join(R, "fonts", "active.json")
-STYLES = ("xiaolin", "danjie", "zhanpeng", "frame", "interview")
+STYLES = ("xiaolin", "danjie", "zhanpeng", "frame", "interview", "ziqi")
 ROLES = ("sub", "title", "accent", "num")
 _lib = None
 def lib():
@@ -84,6 +85,8 @@ def apply(style, name):
     f = lambda role: role_file(name, role)
     if style == "xiaolin":
         _write(os.path.join(R, "studio", "src", "kit", "fontpack.json"), {"pack": name, "sub": None if name == "xiaolin-default" else f("sub"), "title": None if name == "xiaolin-default" else f("title")})   # xiaolin-default 是纯 MiSans，不用另外加载
+    elif style == "ziqi":
+        _write(os.path.join(R, "studio", "src", "kit", "widefont.json"), {"pack": name, "sub": f("sub"), "title": f("title"), "num": f("num")})
     elif style == "zhanpeng":
         tp = os.path.join(R, "studio", "src", "zhanpeng", "theme.json"); th = json.load(open(tp, encoding="utf-8")); th["fontPack"] = "chill" if is_default else name; _write(tp, th)
     elif style == "frame":
