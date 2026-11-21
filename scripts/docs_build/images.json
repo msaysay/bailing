@@ -1,0 +1,87 @@
+{
+ "folder": {
+  "w": 1500,
+  "h": 550,
+  "path": "img/folder.jpg"
+ },
+ "setup": {
+  "w": 1500,
+  "h": 688,
+  "path": "img/setup.jpg"
+ },
+ "onekey": {
+  "w": 1500,
+  "h": 853,
+  "path": "img/onekey.jpg"
+ },
+ "step": {
+  "w": 1500,
+  "h": 954,
+  "path": "img/step.jpg"
+ },
+ "options": {
+  "w": 1500,
+  "h": 778,
+  "path": "img/options.jpg"
+ },
+ "flow": {
+  "w": 1500,
+  "h": 679,
+  "path": "img/flow.jpg"
+ },
+ "terminal": {
+  "w": 1500,
+  "h": 620,
+  "path": "img/terminal.jpg"
+ },
+ "tpl-xiaolin": {
+  "w": 960,
+  "h": 540,
+  "path": "img/tpl-xiaolin.jpg"
+ },
+ "tpl-ziqi": {
+  "w": 960,
+  "h": 540,
+  "path": "img/tpl-ziqi.jpg"
+ },
+ "tpl-zhanpeng": {
+  "w": 960,
+  "h": 540,
+  "path": "img/tpl-zhanpeng.jpg"
+ },
+ "tpl-danjie": {
+  "w": 960,
+  "h": 540,
+  "path": "img/tpl-danjie.jpg"
+ },
+ "cover": {
+  "w": 1280,
+  "h": 720,
+  "path": "img/cover.jpg"
+ },
+ "fonts": {
+  "w": 1400,
+  "h": 812,
+  "path": "img/fonts.jpg"
+ },
+ "qr": {
+  "w": 660,
+  "h": 660,
+  "path": "img/qr.jpg"
+ },
+ "wb": {
+  "w": 1400,
+  "h": 885,
+  "path": "img/wb.jpg"
+ },
+ "three": {
+  "w": 1510,
+  "h": 560,
+  "path": "img/three.jpg"
+ },
+ "poster": {
+  "w": 810,
+  "h": 1440,
+  "path": "img/poster.jpg"
+ }
+}
