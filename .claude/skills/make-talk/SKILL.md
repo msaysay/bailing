@@ -62,7 +62,7 @@ python3 scripts/episode.py status <期名>              # 到哪一步了
 | `scripts/retakes.py <asr.json>` | 找重录、结巴、语气词，给出要删的时间段 | 粗剪之前；逐条看过再用 |
 | `scripts/polish.py <视频> --inplace --denoise auto` | 人声降噪加修音 | 剪好的人物视频上（渲染之前） |
 | `scripts/polish.py <视频> --inplace --grade [--beauty 0.3] --preview 对比.jpg` | 自动调光、轻磨皮 | 同上；**先看对比图**，肤色不自然就不用 |
-| `scripts/polish.py <成片> --music auto\|曲子 -o 新文件` | 配乐，人声在时自动压低 | 成片上（渲染之后），换曲子不用重渲 |
+| `scripts/polish.py <成片> --music auto --mood light\|calm\|drive\|warm -o 新文件` | 从默认配乐库（`music/`，19 首）挑一首配上，人声在时自动压低；`--no-credit` 只用不用署名的；也可以 `--music 曲子文件` | 成片上（渲染之后），换曲子不用重渲。用到需署名的曲子时它会打印署名文字，**交付时原样转给用户** |
 | `scripts/fonts.py use <包> --style <风格>` | 换字体包 | 渲染之前 |
 
 有的风格自带其中几样（比如访谈纪实风自带降噪和配乐匹配），以 `talk.py options --style` 说的为准，自带的不要再叠一遍。

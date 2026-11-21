@@ -41,6 +41,10 @@ if a.music != "off":
     else:
         files = music_files(os.path.join(brand, "music"))
         if files: src = files[int(hashlib.md5(meta["slug"].encode()).hexdigest(), 16) % len(files)]; label = "品牌音乐库的 " + os.path.basename(src)
+        else:      # 品牌音乐库是空的：用默认配乐库里不用署名的合成曲（要用需署名的曲子，用 --music 指定文件）
+            from soundlib import pick_music
+            src, _ = pick_music(a.mood, int(hashlib.md5(meta["slug"].encode()).hexdigest(), 16), no_credit=True)
+            if src: label = "默认配乐库的 " + os.path.basename(src)
     bed = os.path.join(tmp, "bed.wav"); make_bed(bed, total, src, a.mood, int(hashlib.md5(meta["slug"].encode()).hexdigest(), 16) % 2 ** 31)
     if not src: label = f"代码合成的配乐（{a.mood}）"
     mix_music(voice, bed, pre, total, a.music_db)

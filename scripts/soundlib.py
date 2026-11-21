@@ -104,3 +104,17 @@ def mix_music(voice, bed, dst, total, music_db=-27.0):
 def normalize(src, dst, target=-16.0):
     """整体拉回 target LUFS（只调音量，不改时长）。"""
     ff("-i", src, "-af", f"volume={target - lufs(src):.2f}dB,alimiter=limit=0.84:level=0", "-ar", str(SR), dst)
+
+LIB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "music")
+MOOD_ALIAS = {"bright": "light"}          # 老的叫法
+def pick_music(mood, seed, no_credit=False, root=None):
+    """从默认配乐库（music/<情绪>/）里按 seed 固定挑一首。no_credit 只挑代码合成的（不用署名）。
+    返回 (文件路径, 署名文字或 None)；库里没有合适的返回 (None, None)。建库：python3 scripts/music_lib.py build"""
+    import json
+    root = root or LIB; mood = MOOD_ALIAS.get(mood, mood); files = music_files(os.path.join(root, mood))
+    credits = {}
+    lj = os.path.join(root, "library.json")
+    if os.path.exists(lj): credits = {os.path.join(root, t["file"]): t.get("credit") for t in json.load(open(lj, encoding="utf-8")).get("tracks", [])}
+    if no_credit: files = [f for f in files if os.path.basename(f).startswith("合成-")]
+    if not files: return None, None
+    f = files[seed % len(files)]; return f, credits.get(f)

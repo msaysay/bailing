@@ -1,0 +1,173 @@
+{
+ "moods": {
+  "light": "轻快明亮：产品讲解、干货、日常",
+  "calm": "安静舒缓：人物故事、理念、复盘",
+  "drive": "有推进感：数据、增长、观点输出",
+  "warm": "温暖：客户故事、服务、感谢"
+ },
+ "tracks": [
+  {
+   "mood": "warm",
+   "file": "warm/合成-钢琴暖.mp3",
+   "title": "合成 · 钢琴暖",
+   "bpm": 78,
+   "licence": "代码合成，没有版权问题，不用署名",
+   "credit": null
+  },
+  {
+   "mood": "warm",
+   "file": "warm/合成-钢琴暖二.mp3",
+   "title": "合成 · 钢琴暖二",
+   "bpm": 78,
+   "licence": "代码合成，没有版权问题，不用署名",
+   "credit": null
+  },
+  {
+   "mood": "light",
+   "file": "light/合成-钢琴轻快.mp3",
+   "title": "合成 · 钢琴轻快",
+   "bpm": 92,
+   "licence": "代码合成，没有版权问题，不用署名",
+   "credit": null
+  },
+  {
+   "mood": "light",
+   "file": "light/合成-钢琴轻快二.mp3",
+   "title": "合成 · 钢琴轻快二",
+   "bpm": 92,
+   "licence": "代码合成，没有版权问题，不用署名",
+   "credit": null
+  },
+  {
+   "mood": "calm",
+   "file": "calm/合成-钢琴沉稳.mp3",
+   "title": "合成 · 钢琴沉稳",
+   "bpm": 66,
+   "licence": "代码合成，没有版权问题，不用署名",
+   "credit": null
+  },
+  {
+   "mood": "calm",
+   "file": "calm/合成-钢琴沉稳二.mp3",
+   "title": "合成 · 钢琴沉稳二",
+   "bpm": 66,
+   "licence": "代码合成，没有版权问题，不用署名",
+   "credit": null
+  },
+  {
+   "mood": "drive",
+   "file": "drive/合成-节奏脉冲.mp3",
+   "title": "合成 · 节奏脉冲",
+   "bpm": 120,
+   "licence": "代码合成，没有版权问题，不用署名",
+   "credit": null
+  },
+  {
+   "mood": "drive",
+   "file": "drive/合成-节奏快.mp3",
+   "title": "合成 · 节奏快",
+   "bpm": 132,
+   "licence": "代码合成，没有版权问题，不用署名",
+   "credit": null
+  },
+  {
+   "mood": "light",
+   "file": "light/Inspired.mp3",
+   "title": "Inspired",
+   "bpm": 120.0,
+   "instruments": "Guitar, Synths, Percussion",
+   "licence": "CC BY 4.0：可商用，发布时必须署名",
+   "credit": "\"Inspired\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/"
+  },
+  {
+   "mood": "light",
+   "file": "light/Somewhere_Sunny_ver_2.mp3",
+   "title": "Somewhere Sunny (ver 2)",
+   "bpm": 106.0,
+   "instruments": "Guitar",
+   "licence": "CC BY 4.0：可商用，发布时必须署名",
+   "credit": "\"Somewhere Sunny (ver 2)\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/"
+  },
+  {
+   "mood": "light",
+   "file": "light/Wallpaper.mp3",
+   "title": "Wallpaper",
+   "bpm": 92.0,
+   "instruments": "Synths, Drum Kit, Guitar",
+   "licence": "CC BY 4.0：可商用，发布时必须署名",
+   "credit": "\"Wallpaper\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/"
+  },
+  {
+   "mood": "calm",
+   "file": "calm/Sunshine_version_2.mp3",
+   "title": "Sunshine (version 2)",
+   "bpm": 79.0,
+   "instruments": "Guitar, Bass, Drum Kit, Piano",
+   "licence": "CC BY 4.0：可商用，发布时必须署名",
+   "credit": "\"Sunshine (version 2)\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/"
+  },
+  {
+   "mood": "calm",
+   "file": "calm/Sunshine.mp3",
+   "title": "Sunshine",
+   "bpm": 88.0,
+   "instruments": "Guitar, Bass, Drum Kit, Piano",
+   "licence": "CC BY 4.0：可商用，发布时必须署名",
+   "credit": "\"Sunshine\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/"
+  },
+  {
+   "mood": "calm",
+   "file": "calm/Easy_Lemon.mp3",
+   "title": "Easy Lemon",
+   "bpm": 82.0,
+   "instruments": "Guitar, Bass, Drum Kit, Celesta, Marimba",
+   "licence": "CC BY 4.0：可商用，发布时必须署名",
+   "credit": "\"Easy Lemon\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/"
+  },
+  {
+   "mood": "drive",
+   "file": "drive/Motivator.mp3",
+   "title": "Motivator",
+   "bpm": 126.0,
+   "instruments": "Bass, Drum Kit, Synths",
+   "licence": "CC BY 4.0：可商用，发布时必须署名",
+   "credit": "\"Motivator\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/"
+  },
+  {
+   "mood": "drive",
+   "file": "drive/Nonstop.mp3",
+   "title": "Nonstop",
+   "bpm": 128.0,
+   "instruments": "Guitar, Percussion, Synths",
+   "licence": "CC BY 4.0：可商用，发布时必须署名",
+   "credit": "\"Nonstop\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/"
+  },
+  {
+   "mood": "drive",
+   "file": "drive/Raving_Energy.mp3",
+   "title": "Raving Energy",
+   "bpm": 122.0,
+   "instruments": "Synths, Percussion",
+   "licence": "CC BY 4.0：可商用，发布时必须署名",
+   "credit": "\"Raving Energy\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/"
+  },
+  {
+   "mood": "warm",
+   "file": "warm/Dream_Culture.mp3",
+   "title": "Dream Culture",
+   "bpm": 70.0,
+   "instruments": "Piano, Percussion",
+   "licence": "CC BY 4.0：可商用，发布时必须署名",
+   "credit": "\"Dream Culture\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/"
+  },
+  {
+   "mood": "warm",
+   "file": "warm/Gymnopedie_No_2.mp3",
+   "title": "Gymnopedie No. 2",
+   "bpm": 77.0,
+   "instruments": "Piano",
+   "licence": "CC BY 4.0：可商用，发布时必须署名",
+   "credit": "\"Gymnopedie No. 2\" Kevin MacLeod (incompetech.com) Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/"
+  }
+ ]
+}
