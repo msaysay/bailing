@@ -1,0 +1,39 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>海报</title>
+<style>
+/* 海报 1080×1920。用浏览器打开后截图，或运行 scripts 里的截图命令（见 site/README.md）。价格和星球名改下面的文字。 */
+@font-face { font-family: "Hei"; src: url("assets/fonts/hei.otf"); } @font-face { font-family: "DIN"; src: url("assets/fonts/ddin.otf"); }
+* { box-sizing: border-box; margin: 0; padding: 0; } body { width: 1080px; height: 1920px; overflow: hidden; background: #0A0A0B; color: #F4F2EC; font-family: "Hei", "PingFang SC", sans-serif; position: relative; }
+em { font-style: normal; color: #D6FF3D; } .din { font-family: "DIN"; }
+.bg { position: absolute; inset: 0; background: radial-gradient(900px 700px at 85% 12%, rgba(214,255,61,.20), transparent 70%), radial-gradient(800px 600px at 0% 100%, rgba(255,216,74,.14), transparent 70%); }
+.grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(244,242,236,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(244,242,236,.05) 1px, transparent 1px); background-size: 90px 90px; -webkit-mask-image: linear-gradient(180deg, #000, transparent 55%); }
+.in { position: absolute; inset: 0; padding: 64px 64px 0; }
+.top { display: flex; justify-content: space-between; align-items: center; font-size: 26px; letter-spacing: 3px; } .top b { display: flex; align-items: center; gap: 12px; } .top b::before { content: ""; width: 18px; height: 18px; background: #D6FF3D; transform: skewX(-12deg); box-shadow: 0 0 18px #D6FF3D; } .top span { font-family: "DIN"; color: rgba(244,242,236,.6); letter-spacing: 6px; font-size: 22px; }
+h1 { margin-top: 34px; line-height: 1.04; } h1 .a { font-size: 112px; display: block; letter-spacing: 2px; } h1 .b { font-size: 52px; color: rgba(244,242,236,.6); letter-spacing: 22px; display: block; margin: 6px 0 2px; } h1 .c { font-size: 186px; color: #D6FF3D; display: block; text-shadow: 0 0 90px rgba(214,255,61,.4); white-space: nowrap; } h1 .c i { font-style: normal; font-family: "DIN"; font-size: 210px; }
+.lead { font-size: 30px; line-height: 1.5; margin-top: 12px; color: rgba(244,242,236,.82); } .lead b { background: #D6FF3D; color: #0A0A0B; padding: 0 12px; }
+.shots { display: flex; gap: 16px; align-items: center; margin-top: 26px; } .shots div { border-radius: 12px; overflow: hidden; outline: 2px solid rgba(244,242,236,.85); outline-offset: 5px; background: #000 center/cover; box-shadow: 0 20px 50px rgba(0,0,0,.6); } .shots .v { width: 124px; height: 220px; } .shots .h { width: 306px; height: 204px; }
+.shots p { font-size: 28px; line-height: 1.45; margin-left: 16px; } .shots p span { display: block; font-family: "DIN"; font-size: 22px; color: rgba(244,242,236,.55); letter-spacing: 3px; margin-top: 8px; }
+.cards { display: grid; grid-template-columns: 1.12fr 1fr; gap: 20px; margin-top: 28px; }
+.card { border: 2px solid #D6FF3D; background: linear-gradient(150deg, rgba(214,255,61,.14), #111214 60%); padding: 24px 26px 20px; position: relative; } .card.g { border-color: #FFD84A; background: linear-gradient(150deg, rgba(255,216,74,.16), #111214 60%); }
+.k { font-family: "DIN"; font-size: 20px; letter-spacing: 4px; color: #D6FF3D; } .g .k { color: #FFD84A; } .card h3 { font-size: 40px; margin: 4px 0 2px; white-space: nowrap; }
+.pr { display: flex; align-items: baseline; gap: 8px; } .pr small { font-family: "DIN"; font-size: 40px; color: #D6FF3D; } .pr b { font-family: "DIN"; font-size: 124px; line-height: .95; color: #D6FF3D; } .g .pr small, .g .pr b { color: #FFD84A; } .pr s { font-family: "DIN"; font-size: 38px; color: rgba(244,242,236,.5); }
+.tag { display: inline-block; font-size: 24px; padding: 4px 14px; border: 2px solid currentColor; margin-top: 6px; } .card ul { list-style: none; margin-top: 16px; } .card li { font-size: 25px; line-height: 1.36; padding: 6px 0 6px 26px; position: relative; color: rgba(244,242,236,.86); } .card li::before { content: ""; position: absolute; left: 2px; top: 17px; width: 11px; height: 11px; background: #D6FF3D; transform: rotate(45deg); } .g li::before { background: #FFD84A; } .card li b { color: #fff; }
+.bench { display: flex; gap: 22px; align-items: center; margin-top: 20px; border: 2px solid rgba(244,242,236,.2); padding: 14px; background: #111214; } .bench .shot { flex: 0 0 230px; height: 124px; background: #fff left top/cover; border-radius: 6px; } .bench span { font-size: 20px; color: #0A0A0B; background: #D6FF3D; padding: 1px 10px; margin-right: 12px; } .bench b { font-size: 34px; } .bench p { font-size: 23px; color: rgba(244,242,236,.72); line-height: 1.45; margin-top: 6px; }
+.foot { position: absolute; left: 64px; right: 64px; bottom: 44px; display: flex; align-items: center; gap: 34px; }
+.foot img { width: 224px; height: 224px; background: #fff; border-radius: 18px; box-shadow: 0 0 60px rgba(214,255,61,.35); } .foot h4 { font-size: 50px; line-height: 1.2; } .foot p { font-size: 26px; color: rgba(244,242,236,.7); margin-top: 10px; line-height: 1.5; } .foot .arrow { font-family: "DIN"; color: #D6FF3D; font-size: 60px; }
+</style></head><body>
+<div class="bg"></div><div class="grid"></div>
+<div class="in">
+  <div class="top"><b>宁少 AI 进化论</b><span>AI EDIT · OPEN SOURCE</span></div>
+  <h1><span class="a">短视频剪辑</span><span class="b">正式进入</span><span class="c"><i>AI</i> 时代</span></h1>
+  <p class="lead">头部博主的剪法，我做成了 AI 工作流。<br>录一条原片丢进去，AI 剪到成片。<b>核心流程免费开源</b></p>
+  <div class="shots"><div class="v" style="background-image:url(assets/img/p-d1.jpg)"></div><div class="h" style="background-image:url(assets/img/p-d3.jpg)"></div><div class="v" style="background-image:url(assets/img/p-d2.jpg)"></div><p>同一段原片<br><em>AI 剪出三种风格</em><span>6 套风格 · 298 个组件</span></p></div>
+  <div class="cards">
+    <div class="card"><div class="k">知识星球 · 更新社群</div><h3>AI获客工坊</h3><div class="pr"><small>¥</small><b>980</b></div><span class="tag">满 100 人后涨到 ¥2,980</span>
+      <ul><li><b>全部 6 套风格</b>，每天更新新模板</li><li>不出镜的纯内容生产线</li><li>全部 298 个动效组件</li><li>答疑，帮你调成适合自己业务的</li></ul></div>
+    <div class="card g"><div class="k">线下小班 · 两天一夜</div><h3>AI 内容工作流培训</h3><div class="pr"><small>¥</small><b>6,980</b><s>¥9,800</s></div><span class="tag" style="color:#FFD84A">带着你现场直接做出来</span>
+      <ul><li>全程动手，用你自己的原片和账号</li><li>个人：一个人用 AI 做内容</li><li>企业：现场搭出自己的自动化流程，<b>一人管 N 个号</b></li><li>配发<b>「内容创作工作台」</b></li></ul></div>
+  </div>
+  <div class="bench"><div class="shot" style="background-image:url(assets/img/wb-dashboard.jpg)"></div><div><span>预告</span><b>内容创作工作台</b><p>选题、发布、复盘一站管，抖音、小红书、视频号三个平台。线下培训现场配发。</p></div></div>
+</div>
+<div class="foot"><img src="assets/img/zsxq-qr.png" alt=""><div><h4>微信扫码<br>加入 <em>AI获客工坊</em></h4><p>按人数涨价，早进早划算<br>培训的时间地点在星球里公布</p></div></div>
+</body></html>

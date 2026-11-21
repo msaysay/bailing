@@ -22,3 +22,9 @@ cd site && python3 -m http.server 8080
 
 ## 上线前要确认
 见 `dist/release/下载对照表.md` 末尾的四条。
+
+## 海报
+`poster.html` 是 1080×1920 的海报，价格和文字直接改里面的字。出图：本地起预览后，用浏览器打开 `http://localhost:8080/poster.html`，窗口设成 1080×1920 截图即可。
+
+## 改价格
+知识星球和培训的价格、人数线都在 `config.js`，改完官网上所有出现的地方一起变。海报里的价格是写死的，要单独改 `poster.html`。

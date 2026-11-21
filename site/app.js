@@ -44,7 +44,8 @@
     ['AI 剪的片子，哪些地方还要人看？', '嘴型对不对、剪口顺不顺、降噪后人声闷不闷、配乐响不响。这些机器查不了，助手交片时会明说，请你看一遍。'],
     ['授权和版权要注意什么？', '渲染引擎 Remotion 对个人和三人以下团队免费，更大的公司商用要自己买授权。字体都是可免费商用的，商用前请到出处核对一次。搜来的素材版权不归你，助手会列出来请你确认。'],
     ['你们说的「对标」是什么意思？', '我们逐帧量了这些博主公开成片的版式、节奏和字幕位置，把剪法做成模板。复刻的是剪法，不是他们的选题、稿子和出镜表现，也不代表和他们有合作。'],
-    ['社群怎么进，里面有什么？', (C.community && C.community.how) || '见页面上的社群入口。' + ' 社群里是全量工作流、每天更新的新模板，以及按你的业务做的定制。'],
+    ['社群怎么进，多少钱？', '微信扫页面上的二维码，加入知识星球「' + ((C.community || {}).name || '') + '」。现在是 ¥' + ((C.community || {}).price || '') + '，满 ' + ((C.community || {}).limit || '') + ' 人后涨到 ¥' + ((C.community || {}).next || '') + '，之后随人数继续上调。星球里是全量工作流、每天更新的新模板和答疑。'],
+    ['线下培训适合谁？', '想自己做内容的个人，和想把内容生产交给 AI 流程的企业。两天一夜全程动手，用你自己的原片和账号来做。现场配发内容创作工作台。时间和地点在知识星球里公布。'],
   ];
 
   // ———— 渲染内容 ————
@@ -54,9 +55,27 @@
   }
   STYLES.forEach(([name, ref, desc, tier, img], i) => $('#styles-grid').appendChild(h(`<div class="card rv" style="--d:${(i % 3) * 0.08}s"><span class="tag ${tier}">${tier === F ? '免费开源' : '社群'}</span><div class="shot ${img ? '' : 'ph'}" ${img ? `style="background-image:url(${img})"` : ''}>${img ? '' : '样片在社群里看'}</div><div class="body"><h4>${name}</h4><div class="ref">${ref}</div><p>${desc}</p></div><div class="glow"></div></div>`)));
   FAQ.forEach(([q, a]) => $('#faq-list').appendChild(h(`<details class="rv"><summary>${q}</summary><p>${a}</p></details>`)));
-  const pkg = (p, tier) => h(`<div class="pkg rv ${tier}"><div class="k">${p.code}　${tier === F ? 'FREE' : 'COMMUNITY'}</div><h4>${p.name}</h4><p>${p.desc}</p><div class="file">${p.file}<span>${p.size || ''}</span></div>${tier === F ? `<a class="btn lime" href="${(C.downloadBase || 'downloads/') + encodeURIComponent(p.file)}" download>下载 <i>↓</i></a>` : `<a class="btn" href="#community">进社群获取 <i>→</i></a>`}</div>`);
+  const pkg = (p, tier) => h(`<div class="pkg rv ${tier}"><div class="k">${p.code}　${tier === F ? 'FREE' : 'COMMUNITY'}</div><h4>${p.name}</h4><p>${p.desc}</p><div class="file">${p.file}<span>${p.size || ''}</span></div>${tier === F ? `<a class="btn lime" href="${(C.downloadBase || 'downloads/') + encodeURIComponent(p.file)}" download>下载 <i>↓</i></a>` : `<a class="btn" href="#join">进知识星球获取 <i>→</i></a>`}</div>`);
   DL.free.forEach((p) => $('#dl-free').appendChild(pkg(p, F))); DL.paid.forEach((p) => $('#dl-paid').appendChild(pkg(p, P)));
-  if (C.community) { $('#join-how').textContent = C.community.how; $('#join-note').textContent = C.community.note; if (C.community.qr) { $('#qr').style.backgroundImage = `url(${C.community.qr})`; $('#qr').textContent = ''; } }
+  // 社群、培训、工作台
+  const cm = C.community || {}, tr = C.training || {};
+  $$('[data-c]').forEach((e) => (e.textContent = typeof cm[e.dataset.c] === 'number' ? fmt(cm[e.dataset.c]) : cm[e.dataset.c] || ''));
+  $$('[data-t]').forEach((e) => (e.textContent = typeof tr[e.dataset.t] === 'number' ? fmt(tr[e.dataset.t]) : tr[e.dataset.t] || ''));
+  $$('[data-price]').forEach((e) => (e.textContent = cm.price ? '¥' + fmt(cm.price) : ''));
+  $('#join-how').textContent = cm.how || ''; $('#join-note').textContent = cm.note || ''; if (cm.qr) $('#zsxq').src = cm.qr;
+  $('#train-when').textContent = [tr.date, tr.place, tr.seats].filter(Boolean).join('　·　') || '小班制，名额有限　·　最新一期的时间地点在知识星球里公布';
+  const AGENDA = [
+    ['第一天 · 上午', '跑通第一条', '装好环境，把你带来的口播原片丢进去，出第一条成片。先看到结果，再讲原理。', ['环境一次装好', '口播流程走一遍', '第一条成片']],
+    ['第一天 · 下午', '定你自己的风格', '挑一个你想对标的博主，现场拆：版式、节奏、字幕。把拆出来的数做成你自己的模板。', ['对标拆解', '自己的模板', '字体和配乐']],
+    ['第一天 · 晚上', '共创夜', '每个人用自己的模板做一条完整的片子，逐个过片、当场改。这一晚做出来的就是你能发的第一条。', ['每人一条成片', '一对一过片']],
+    ['第二天 · 上午', '不出镜，和一人多号', '纯内容生产线：给一个题目出一条片。再把流程批量化，一个人同时管多个号、多种风格。', ['纯内容生产线', '批量出片', '一人 N 号']],
+    ['第二天 · 下午', '接上工作台，带走流程', '装好内容创作工作台，把选题、发布、复盘接起来。企业学员把流程写成自己团队能接手的交接文档。', ['工作台上手', '企业流程交接', '结业']],
+  ];
+  AGENDA.forEach(([when, title, what, tags], i) => $('#agenda').appendChild(h(`<div class="slot rv" style="--d:${i * 0.06}s"><span>${when}</span><h4>${title}</h4><p>${what}</p><div>${tags.map((x) => `<i>${x}</i>`).join('')}</div></div>`)));
+  ['你自己跑通的 AI 剪辑工作流（装在你电脑上）', '按你对标的博主做出来的专属模板', '现场做出的成片，可以直接发', '内容创作工作台'].forEach((x) => $('#takeaway').appendChild(h(`<li>${x}</li>`)));
+  ['定位', '计划', '创作', '发布', '采集', '复盘', '打法库', '下周计划'].forEach((x, i) => $('#loop').appendChild(h(`<span style="--i:${i}"><b>${String(i + 1).padStart(2, '0')}</b>${x}</span>`)));
+  [['「今天」页', '打开只看一页：它只告诉你下一步做什么，每一步一个按钮。'], ['数据看板和复盘', '每天自动采集，同龄对比；五段漏斗找出本周唯一要改的事。'], ['数据预测', '发布前让 AI 读稿子预测播放和关注率，数据回来自动对答案，越预测越准。'], ['对标和热点', '盯住同赛道的号，自动标出爆款并拆解；热榜里让 AI 挑适合你的。'], ['一次发三个平台', '一份视频勾选账号排队发出，支持定时；封面按各平台规格自动裁好。'], ['评论区承接', '抓评论、按规则出回复草稿，把「关注」接到私域。'], ['打法库', '每条验收后记下「改了什么、有没有用」，有效的自动进下周计划。越用越准。'], ['用你自己的 AI', '出稿、复盘、拆解都交给你电脑上的 AI 助手，不用另外买模型。']]
+    .forEach(([t, d], i) => $('#feats').appendChild(h(`<div class="feat rv" style="--d:${(i % 4) * 0.06}s"><h4>${t}</h4><p>${d}</p></div>`)));
 
   // ———— 组件墙 ————
   const comps = (window.SITE_DATA && window.SITE_DATA.components) || [], has = new Set(window.SITE_WALL || []), pool = comps.filter((c) => has.has(c.id));
