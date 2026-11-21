@@ -48,3 +48,6 @@ episodes/*/proj/broll/
 episodes/*/proj/bgm/
 episodes/*/proj/work/
 episodes/*/proj/out/
+
+# 开头片花：出镜人和样片的视频不进仓库
+studio/public/open*/
