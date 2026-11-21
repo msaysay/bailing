@@ -158,5 +158,5 @@ python3 scripts/wide_check.py studio/out/<代号>.mp4 --full-w <主持人全景�
 
 - `docs/对标拆解-子祺见微.md` 两条成片的拆解、实测位置、稿子结构
 - `studio/src/kit/wide.tsx` 横屏版式引擎；`studio/src/episodes/wide01/` 版式演示；`studio/templates/wide.tsx` 新一期的骨架
-- `studio/src/components/` 组件库（图表、数字、流程、地图等），可以放进素材窗或铺满内容区
+- `studio/src/components/` 组件库，可以放进素材窗或铺满内容区。免费包带图表、文字、流程、图片视频四组共 56 个；全部 298 个在社群包里
 - `scripts/talk_prep.py` 粗剪一条龙；`retakes.py` 重录检测；`polish.py` 降噪、调光、配乐；`wide_check.py` 版式自查；`fonts.py` 字体

@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """把「财经解读风（小 Lin 式）」口播线打成一个可以单独交给别的 AI 助手用的压缩包（不含视频、字体、模型、node_modules）。
 用法：python3 scripts/talk_pack.py [--out dist/xiaolin-talk-kit.zip] [--reference 目录]
-  --reference  对标片的联系表、并排对比图所在的目录（来自别人的成片，不进仓库），给了就放进包里的 reference/，助手开工前先看。
+  --reference  对标片的联系表、并排对比图所在的目录，放进包里的 reference/，助手开工前先看。默认 docs/reference/ 下对应的目录。
+  --components free（默认，56 个基础组件）或 all（全部 298 个，社群版）。
 包里有：技能 xiaolin-talk、对标拆解、粗剪和声音脚本、版式引擎和组件库、演示工程 talk02、共用字体库目录。
 对方解压后让助手先读 AGENTS.md。"""
 import argparse, os, zipfile
 R = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-ap = argparse.ArgumentParser(); ap.add_argument("--out", default=os.path.join(R, "dist", "xiaolin-talk-kit.zip")); ap.add_argument("--reference"); a = ap.parse_args()
+ap = argparse.ArgumentParser(); ap.add_argument("--out", default=os.path.join(R, "dist", "xiaolin-talk-kit.zip")); ap.add_argument("--reference", default=os.path.join(R, "docs", "reference", "xiaolin")); ap.add_argument("--components", default="free", choices=["free", "all"]); a = ap.parse_args()
 files = {}
 def tree(src, dst=None, skip=()):
     for base, dirs, names in os.walk(os.path.join(R, src)):
@@ -16,11 +17,14 @@ def tree(src, dst=None, skip=()):
             if not any(n.endswith(x) for x in skip): files[rel] = full
 def one(*paths):
     for f in paths: files[f] = os.path.join(R, f)
-tree(".claude/skills/xiaolin-talk"); tree("studio/src/kit"); tree("studio/src/components"); tree("studio/src/episodes/talk02"); tree("studio/templates"); tree("studio/public/sfx")
+tree(".claude/skills/xiaolin-talk"); tree("studio/src/kit"); tree("studio/src/episodes/talk02"); tree("studio/templates"); tree("studio/public/sfx")
 one(*[f"scripts/{s}.py" for s in ("doctor", "episode", "talk_prep", "asr", "align", "roughcut", "retakes", "grade", "polish", "soundlib", "fonts", "fontlib", "qc", "talk_check", "faces", "facecheck", "tikhub", "talk_pack")])
 one("docs/对标拆解-小Lin口播.md", "docs/aesthetic-rules.md", "fonts/library.json", "fonts/字体包样张.jpg", "requirements.txt", "studio/package.json", "studio/package-lock.json", "studio/tsconfig.json", "studio/public/fonts/MiSans-License.txt")
 for f in sorted(os.listdir(os.path.join(R, "docs", "steps"))):
     if f.startswith("talk-"): one("docs/steps/" + f)
+# 组件库：免费包带 56 个基础组件（图表、文字、流程、图片视频四组）；--components all 带全部 298 个（社群版）
+if a.components == "all": tree("studio/src/components")
+else: one(*[f"studio/src/components/{f}.tsx" for f in ("charts", "type", "flow", "media")])
 files = {k: v for k, v in files.items() if os.path.exists(v)}
 INDEX = """import React from 'react';
 import { Composition, registerRoot } from 'remotion';
@@ -87,7 +91,7 @@ AGENTS.md / CLAUDE.md      给 AI 助手的入口说明
 .claude/skills/xiaolin-talk/   操作说明（六步）
 docs/                      对标拆解、制作规则、第一版的分步细节
 scripts/                   环境自检、粗剪、重录检测、降噪调光配乐、版式自查、字体
-studio/                    Remotion 工程：版式引擎 src/kit/talk2.tsx、组件库 src/components、演示 src/episodes/talk02
+studio/                    Remotion 工程：版式引擎 src/kit/talk2.tsx、基础组件 src/components（免费版 56 个，全部 298 个在社群）、演示 src/episodes/talk02
 fonts/                     字体库目录和样张（字体文件用到时自动下载）
 reference/                 对标片的联系表（如果带了）
 ```

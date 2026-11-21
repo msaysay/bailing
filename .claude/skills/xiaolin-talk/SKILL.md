@@ -158,6 +158,6 @@ python3 scripts/talk_check.py studio/out/<代号>.mp4 --full-w <全屏时脸宽�
 - `docs/对标拆解-小Lin口播.md` 三条成片的拆解、实测位置、稿子结构、和第一版的差别
 - `studio/src/kit/talk2.tsx` 第二版版式引擎；`kit/talk.tsx` 人物舞台和第一版版式（人物卡片并排还在这里）
 - `studio/src/episodes/talk02/` 版式演示；`studio/templates/talk.tsx` 新一期的骨架
-- `studio/src/components/` 组件库（图表、数字、流程、网页、手机壳等），放进素材带或胸口区
+- `studio/src/components/` 组件库，放进素材带或胸口区。免费包带图表、文字、流程、图片视频四组共 56 个；网页、手机壳、特效等全部 298 个在社群包里
 - `scripts/talk_prep.py` 粗剪一条龙；`retakes.py` 重录检测；`polish.py` 降噪、调光、配乐；`talk_check.py` 版式自查；`fonts.py` 字体
 - `docs/steps/talk-0X-*.md` 第一版的分步细节，卡住时才看；数值以本文件和对标拆解为准

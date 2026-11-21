@@ -8,7 +8,7 @@ import argparse, os, subprocess, zipfile
 R = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ap = argparse.ArgumentParser(); ap.add_argument("--out", default=os.path.join(R, "dist", "video-studio-all.zip")); ap.add_argument("--with-vendor", action="store_true"); a = ap.parse_args()
 ls = subprocess.run(["git", "-c", "core.quotepath=off", "ls-files", "-z", "--cached", "--others", "--exclude-standard"], cwd=R, capture_output=True).stdout.decode("utf-8").split("\0")
-files = [f for f in ls if f and os.path.isfile(os.path.join(R, f)) and (a.with_vendor or not f.startswith("vendor/")) and not f.startswith("dist/")]
+files = [f for f in ls if f and os.path.isfile(os.path.join(R, f)) and (a.with_vendor or not f.startswith("vendor/")) and not f.startswith(("dist/", "site/downloads/"))]
 os.makedirs(os.path.dirname(os.path.abspath(a.out)), exist_ok=True); top = "video-studio/"; by = {}
 with zipfile.ZipFile(a.out, "w", zipfile.ZIP_DEFLATED) as z:
     for f in sorted(files): z.write(os.path.join(R, f), top + f); k = f.split("/")[0]; by[k] = by.get(k, 0) + 1

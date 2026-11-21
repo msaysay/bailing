@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI 剪辑工作流 · 开源</title>
+<meta name="description" content="不用剪辑团队，也能做出头部博主那种视频。口播剪辑和纯内容生产两条 AI 工作流，核心流程免费开源。">
+<meta name="theme-color" content="#0A0A0B">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<div class="cursor" id="cursor"></div>
+<div class="noise"></div>
+
+<header class="nav" id="nav">
+  <a class="logo" href="#top"><i></i><span data-brand>AI 剪辑工作流</span></a>
+  <nav>
+    <a href="#proof">成片</a><a href="#lines">两条流程</a><a href="#styles">风格</a><a href="#calc">算账</a><a href="#wall">组件</a><a href="#get">下载</a><a href="#faq">问题</a>
+  </nav>
+  <a class="btn sm lime" href="#get">免费下载</a>
+</header>
+
+<main id="top">
+<!-- ① 首屏 -->
+<section class="hero">
+  <canvas id="field"></canvas>
+  <div class="hero-in">
+    <div class="hero-txt">
+      <div class="kicker"><b></b>AI EDIT · OPEN SOURCE<span id="clock"></span></div>
+      <h1>
+        <span class="ln"><span>短视频剪辑</span></span>
+        <span class="ln dim"><span>正式进入</span></span>
+        <span class="ln big"><span><em>AI</em> 时代</span></span>
+      </h1>
+      <p class="lead">不用剪辑团队，也能做出头部博主那种视频。<br>录一条原片丢进去，或者干脆不录，AI 照着工作流剪到成片。<b>核心流程，今天起免费开源。</b></p>
+      <div class="cta">
+        <a class="btn lime magnet" href="#get">免费下载工作流 <i>↓</i></a>
+        <a class="btn ghost magnet" href="#community">进社群拿全部 <i>→</i></a>
+      </div>
+      <ul class="stats">
+        <li><b data-count="6">0</b><span>套剪辑风格</span></li>
+        <li><b data-count="298">0</b><span>个动效组件</span></li>
+        <li><b data-count="59">0</b><span>款可商用字体</span></li>
+        <li><b data-count="2">0</b><span>条生产线</span></li>
+      </ul>
+    </div>
+    <div class="hero-vid" id="tilt">
+      <div class="screen">
+        <div class="bar"><i></i><i></i><i></i><span>AI剪辑时代-整片.mp4　·　全程由工作流剪辑</span></div>
+        <video id="film" src="assets/video/film.mp4" poster="assets/img/cover.jpg" muted loop playsinline autoplay></video>
+        <button class="sound" id="sound">🔇 点一下开声音</button>
+      </div>
+      <span class="chip c1">去重录</span><span class="chip c2">去口吃</span><span class="chip c3">降噪</span><span class="chip c4">调光</span><span class="chip c5">配乐</span><span class="chip c6">换字体</span>
+    </div>
+  </div>
+  <div class="scroll-hint">往下看 <i></i></div>
+</section>
+
+<div class="marquee" aria-hidden="true"><div>
+  <span>财经解读风</span><b>✦</b><span>横屏深度解读风</span><b>✦</b><span>知识科普风</span><b>✦</b><span>商业快节奏风</span><b>✦</b><span>相框老板风</span><b>✦</b><span>访谈纪实风</span><b>✦</b><span>口播剪辑</span><b>✦</b><span>纯内容生产</span><b>✦</b>
+  <span>财经解读风</span><b>✦</b><span>横屏深度解读风</span><b>✦</b><span>知识科普风</span><b>✦</b><span>商业快节奏风</span><b>✦</b><span>相框老板风</span><b>✦</b><span>访谈纪实风</span><b>✦</b><span>口播剪辑</span><b>✦</b><span>纯内容生产</span><b>✦</b>
+</div></div>
+
+<!-- ② 证据 -->
+<section class="sec" id="proof">
+  <div class="head rv"><span class="no">01</span><h2>同一段原片，<em>AI 剪出三种</em></h2><p>下面三条是同一段口播原片。没有人打开过剪辑软件，换的只是一句话里的风格名。</p></div>
+  <div class="cuts">
+    <figure class="rv"><video src="assets/video/cut1.mp4" muted loop playsinline data-auto></video><figcaption><b>01</b>商业快节奏风<span>竖屏</span></figcaption></figure>
+    <figure class="rv wide"><video src="assets/video/cut3.mp4" muted loop playsinline data-auto></video><figcaption><b>02</b>横屏深度解读风<span>横屏 3:2</span></figcaption></figure>
+    <figure class="rv"><video src="assets/video/cut2.mp4" muted loop playsinline data-auto></video><figcaption><b>03</b>财经解读风<span>竖屏</span></figcaption></figure>
+  </div>
+  <div class="strip-head rv"><h3>一条片子里，中途换了 5 套模板</h3><p>首屏那条 41 秒的片子，每一段是一套模板，左上角有标注。</p></div>
+  <div class="strip rv" id="strip">
+    <figure><img src="assets/img/tpl1.jpg" alt="" loading="lazy"><figcaption><b>01</b>电影分屏</figcaption></figure>
+    <figure><img src="assets/img/tpl2.jpg" alt="" loading="lazy"><figcaption><b>02</b>财经解读风</figcaption></figure>
+    <figure><img src="assets/img/tpl3.jpg" alt="" loading="lazy"><figcaption><b>03</b>商业快节奏风</figcaption></figure>
+    <figure><img src="assets/img/tpl4.jpg" alt="" loading="lazy"><figcaption><b>04</b>横屏深度解读风</figcaption></figure>
+    <figure><img src="assets/img/tpl5.jpg" alt="" loading="lazy"><figcaption><b>05</b>知识科普风</figcaption></figure>
+  </div>
+</section>
+
+<!-- ③ 两条流程 -->
+<section class="sec" id="lines">
+  <div class="head rv"><span class="no">02</span><h2>两条生产线，<em>录或不录都能出片</em></h2><p>每一步背后是一个 Skill：写给 AI 助手看的操作说明。你把文件夹交给它，它照着一步步做。</p></div>
+  <div class="tabs rv" id="tabs"><button class="on" data-tab="talk">口播流程<span>你出镜</span></button><button data-tab="news">纯内容生产流程<span>不出镜</span></button><i></i></div>
+  <div class="pipe on" id="pipe-talk"></div>
+  <div class="pipe" id="pipe-news"></div>
+  <p class="enough rv"><b>开源的这部分够不够用？</b>口播流程从粗剪到成片整条都在免费包里，两种风格一竖一横。对大部分只想把口播剪好的人，这已经够了。社群多给的是另外四种风格、不出镜的生产线、每天的新模板，和按你业务做的定制。</p>
+</section>
+
+<!-- ④ 风格 -->
+<section class="sec" id="styles">
+  <div class="head rv"><span class="no">03</span><h2>六套风格，<em>都是拆头部博主拆出来的</em></h2><p>逐帧量过：多久换一次画面、字幕在哪、人什么时候出镜。量出来的数写进模板，AI 照着剪。</p></div>
+  <div class="grid6" id="styles-grid"></div>
+</section>
+
+<!-- ⑤ 算账 -->
+<section class="sec" id="calc">
+  <div class="head rv"><span class="no">04</span><h2>算一笔账：<em>你还需要剪辑团队吗</em></h2><p>数字都能拖。默认值是公开报价里的常见水平，换成你自己的更准。</p></div>
+  <div class="calc rv">
+    <div class="knobs">
+      <label>每月出片<output id="o-videos"></output><input type="range" id="k-videos" min="4" max="90" step="1"></label>
+      <label>一位剪辑师月薪<output id="o-salary"></output><input type="range" id="k-salary" min="5000" max="25000" step="500"></label>
+      <label>外包剪辑单价<output id="o-outsource"></output><input type="range" id="k-outsource" min="50" max="1500" step="10"></label>
+      <label>AI 助手月费<output id="o-ai"></output><input type="range" id="k-ai" min="150" max="2000" step="50"></label>
+      <p class="fine">剪辑师月薪没算社保、设备和管理成本；AI 月费是订阅 AI 编程助手的费用，按用量浮动。工作流本身不收钱。</p>
+    </div>
+    <div class="bars">
+      <div class="bar-row"><span>雇一位剪辑师</span><div><i id="b-salary"></i></div><b id="n-salary"></b></div>
+      <div class="bar-row"><span>外包按条算</span><div><i id="b-outsource"></i></div><b id="n-outsource"></b></div>
+      <div class="bar-row me"><span>AI 工作流</span><div><i id="b-ai"></i></div><b id="n-ai"></b></div>
+      <div class="save"><span>一年少花</span><b id="n-save">0</b><span>元起</span></div>
+      <p class="fine">「一年少花」取的是和两种做法里便宜的那个比。你还是要自己拍、自己审片，这部分时间没算钱。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ⑥ 组件墙 -->
+<section class="sec wall-sec" id="wall">
+  <div class="head rv"><span class="no">05</span><h2><em>298</em> 个动效组件，说到什么出什么</h2><p>说到数字出图表，说到「你看」切素材，说到重点砸大字。鼠标移上去看动效。免费包带 56 个基础组件，全部 298 个在社群。</p></div>
+  <div class="wall" id="wall-rows"></div>
+</section>
+
+<!-- ⑦ 免费 vs 社群 + 下载 -->
+<section class="sec" id="get">
+  <div class="head rv"><span class="no">06</span><h2>免费拿什么，<em>社群多给什么</em></h2><p>每个按钮对应哪个文件，写在卡片上。</p></div>
+  <div class="vs rv">
+    <table>
+      <thead><tr><th></th><th>免费开源</th><th class="hl">社群</th></tr></thead>
+      <tbody>
+        <tr><td>口播流程</td><td>完整可用</td><td class="hl">完整可用</td></tr>
+        <tr><td>剪辑风格</td><td>2 套：财经解读风、横屏深度解读风</td><td class="hl">全部 6 套 + 每天新做的</td></tr>
+        <tr><td>去重录、去口吃、降噪、调光、配乐</td><td>全给</td><td class="hl">全给</td></tr>
+        <tr><td>字体库</td><td>59 款目录，用到自动下载</td><td class="hl">同左</td></tr>
+        <tr><td>动效组件</td><td>56 个基础组件</td><td class="hl">全部 298 个</td></tr>
+        <tr><td>纯内容生产流程（不出镜）</td><td>—</td><td class="hl">有</td></tr>
+        <tr><td>头部博主拆解文档</td><td>全部公开</td><td class="hl">全部公开</td></tr>
+        <tr><td>按你的业务定制工作流、答疑</td><td>—</td><td class="hl">有</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <h3 class="sub rv">免费下载</h3>
+  <div class="dl" id="dl-free"></div>
+  <h3 class="sub rv" id="community">社群里拿</h3>
+  <div class="dl" id="dl-paid"></div>
+  <div class="join rv"><div><h3>进社群</h3><p id="join-how"></p><p class="fine" id="join-note"></p></div><div class="qr" id="qr">二维码<br>待放</div></div>
+</section>
+
+<!-- ⑧ 怎么开始 -->
+<section class="sec" id="start">
+  <div class="head rv"><span class="no">07</span><h2>三步开始，<em>不用写代码</em></h2></div>
+  <div class="steps3">
+    <div class="rv"><b>1</b><h4>下载，解压</h4><p>电脑上装好 Python、Node.js、ffmpeg。不会装也可以让 AI 助手帮你装。</p></div>
+    <div class="rv"><b>2</b><h4>把文件夹交给 AI 助手</h4><p>Claude Code、Codex、Cursor 这类能读文件、跑命令的助手都行。</p></div>
+    <div class="rv"><b>3</b><h4>说一句话</h4><div class="term"><span class="p">›</span> <span id="typed"></span><i>▍</i></div></div>
+  </div>
+</section>
+
+<!-- ⑨ 常见问题 -->
+<section class="sec" id="faq">
+  <div class="head rv"><span class="no">08</span><h2>常见问题</h2></div>
+  <div class="faq" id="faq-list"></div>
+</section>
+
+<footer>
+  <div class="foot-cta rv"><h2>你只管拍，<em>或者连拍都不用</em></h2><a class="btn lime magnet" href="#get">免费下载工作流 <i>↓</i></a></div>
+  <div class="src">
+    <b>算账数字的出处（都是公开文章里的估算，不是官方统计）</b>
+    <a href="https://m.sohu.com/a/1012268942_122328540/" target="_blank" rel="noopener">剪辑师薪资区间 · 搜狐</a>
+    <a href="https://m.sohu.com/a/874882780_121945453" target="_blank" rel="noopener">代运营月费和单条成本 · 搜狐</a>
+    <a href="https://m.sohu.com/a/811128976_211762" target="_blank" rel="noopener">按条计费报价 · 搜狐</a>
+    <a href="https://www.tixiaolu.com/v2/posts/v2-96fd4840.html" target="_blank" rel="noopener">接单平台口播剪辑单价 · 个人经验帖</a>
+  </div>
+  <p class="copy"><span data-brand></span>　·　工作流用到的渲染引擎 Remotion 对个人和三人以下团队免费，更大的公司商用需自行购买授权　·　字体均为可免费商用字体，商用前请到出处核对</p>
+</footer>
+</main>
+
+<div class="modal" id="modal"><div class="box"><button id="modal-x">×</button><video id="modal-v" muted loop playsinline></video><h4 id="modal-t"></h4><p id="modal-d"></p></div></div>
+
+<script src="config.js"></script>
+<script src="data.js"></script>
+<script src="wall.js"></script>
+<script src="downloads.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
