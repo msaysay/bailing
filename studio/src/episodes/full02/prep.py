@@ -51,7 +51,7 @@ for name, s in segs.items():
 # 配乐：用手势全息风那套合成器，砸点对在 s8 开头；人声在的时候压低，结尾卡片推上去
 import hud_music
 END = 3.2; T = off + END; drop = segs["s8"]["start"]; st, _, bpm = hud_music.make(drop, T, [(c, "whoosh") for c in cuts], seed=5, key=38)
-n = len(st); t = np.arange(n) / hud_music.SR; g = np.where(t < drop, 0.20, 0.30); g = np.where((t >= drop) & (t < segs["s9"]["end"]), 0.42, g); g = np.where(t >= off - 0.1, 0.8, g)
+n = len(st); t = np.arange(n) / hud_music.SR; g = np.where(t < drop, 0.16, 0.10); g = np.where((t >= drop) & (t < segs["s9"]["end"]), 0.15, g); g = np.where(t >= off - 0.1, 0.55, g)      # 人声在的时候配乐比人声低 8 分贝以上
 k = int(0.25 * hud_music.SR); g = np.convolve(g, np.ones(k) / k, "same"); sf.write(os.path.join(pub, "bed.wav"), st * g[:, None], hud_music.SR, subtype="PCM_16")
 json.dump({"total": round(off, 3), "end": END, "bpm": round(bpm, 2), "drop": round(drop, 3), "lines": lines, "cuts": cuts, "segs": segs}, open(os.path.join(HERE, "data.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 print(f"正文 {off:.2f} 秒，{len(lines)} 行字幕，{len(cuts)} 个剪口；配乐 {bpm:.1f} 拍/分，第 {drop:.2f} 秒砸下去")
