@@ -236,14 +236,14 @@ const Sign: React.FC = () => {
   </AbsoluteFill>;
 };
 
-export const FULL02: React.FC = () => {
+export const FULL02: React.FC<{ clean?: boolean }> = ({ clean }) => {
   useFontsG();
   const f = useCurrentFrame(), t = f / FPS, at = (k: string) => S[k].start;
   const scene = t < at('s3') ? <Hook /> : t < at('s4a') ? <Doubt /> : t < at('s6') ? <Why /> : t < at('s7') ? <Chat /> : t < at('s8') ? <Wall /> : t < at('s10') ? <Holo /> : t < at('s11') ? <Next /> : t < at('s12') ? <Cta /> : <Sign />;
   const cut = [...data.cuts].reverse().find((c) => t >= c) ?? -9, hit = 1 - out5((t - cut) / 0.22);
   return <T.Provider value={t}><AbsoluteFill style={{ background: '#000' }}>
     <AbsoluteFill style={{ transform: `scale(${1 + hit * 0.035})` }}>{scene}</AbsoluteFill>
-    {t < data.total ? <Subs /> : null}
+    {t < data.total && !clean ? <Subs /> : null}
     <div style={{ position: 'absolute', right: 44, top: 34, fontFamily: HEI, fontSize: 26, color: 'rgba(255,255,255,.6)', letterSpacing: 3, display: t < at('s7') || t >= at('s8') ? 'block' : 'none' }}>宁少 AI 进化论</div>
     <Audio src={staticFile('full02/main.wav')} /><Audio src={staticFile('full02/bed.wav')} />
   </AbsoluteFill></T.Provider>;

@@ -9,6 +9,7 @@ import { OPEN01, OPEN_FPS, OPEN_FRAMES } from './episodes/open01';
 import { OPEN02, OPEN2_FPS, OPEN2_FRAMES } from './episodes/open02';
 import { FULL01, FULL_FPS, FULL_FRAMES } from './episodes/full01';
 import { FULL02, FULL2_FPS, FULL2_FRAMES } from './episodes/full02';
+import { WIDE02, wide2Clock, WIDE2_TAIL } from './episodes/wide02';
 import { Cover01, Cover01V } from './episodes/cover01';
 import { PetDemo, PET_DEMO_SEC } from './episodes/petdemo';
 import { Gallery, GFPS } from './gallery';
@@ -30,6 +31,9 @@ registerRoot(() => (
     <Composition id="OPEN02" component={OPEN02} width={1920} height={1080} fps={OPEN2_FPS} durationInFrames={OPEN2_FRAMES} />
     <Composition id="FULL01" component={FULL01} width={1920} height={1080} fps={FULL_FPS} durationInFrames={FULL_FRAMES} />
     <Composition id="FULL02" component={FULL02} width={1920} height={1080} fps={FULL2_FPS} durationInFrames={FULL2_FRAMES} />
+    {/* 不带字幕的一版，给别的片子当素材用 */}
+    <Composition id="FULL02-CLEAN" component={FULL02} width={1920} height={1080} fps={FULL2_FPS} durationInFrames={FULL2_FRAMES} defaultProps={{ clean: true }} />
+    <Composition id="WIDE02" component={WIDE02} width={1920} height={1280} fps={wide2Clock.fps} durationInFrames={Math.ceil((wide2Clock.total + WIDE2_TAIL) * wide2Clock.fps)} />
     <Still id="COVER01" component={Cover01} width={1920} height={1080} />
     <Still id="COVER01-V" component={Cover01V} width={1080} height={1440} />
     {/* 知识科普风（张展鹏式）：数据驱动，一个合成做所有期。scripts/zp.py render 用 --props 传每期的数据。相框老板风有自己的入口 src/yuedu/index.tsx。 */}
