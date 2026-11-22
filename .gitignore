@@ -60,3 +60,7 @@ site/downloads/*.zip
 # 配乐库：下载来的曲子不进仓库（python3 scripts/music_lib.py build 补回来），合成的进
 music/*/*.mp3
 !music/*/合成-*.mp3
+
+# 手势全息风：每期的底片、手层、跟踪数据、配乐不进仓库；hudtest 是借参考片做的本机测试
+studio/public/hud*/
+episodes/hudtest/

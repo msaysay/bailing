@@ -14,6 +14,7 @@ import { Gallery, GFPS } from './gallery';
 import { CATALOG, SLOT } from './gallery/all';
 import { DemoClip } from './gallery/demoClip';
 import { Registered } from './episodes/_registry';
+import { HudFilm, HUD_FPS, HUD_H, HUD_W, hudDefault } from './kit/hud';
 import { ZP, ZP_FPS, ZP_H, ZP_W, zpDefault } from './zhanpeng';
 // 每期一个 Composition；-P1 是只到第一件事结束的预览。
 registerRoot(() => (
@@ -31,6 +32,8 @@ registerRoot(() => (
     <Still id="COVER01-V" component={Cover01V} width={1080} height={1440} />
     {/* 知识科普风（张展鹏式）：数据驱动，一个合成做所有期。scripts/zp.py render 用 --props 传每期的数据。相框老板风有自己的入口 src/yuedu/index.tsx。 */}
     <Composition id="ZP" component={ZP} width={ZP_W} height={ZP_H} fps={ZP_FPS} durationInFrames={90} defaultProps={zpDefault} calculateMetadata={({ props }) => ({ durationInFrames: Math.max(1, Math.round(props.durationInFrames)) })} />
+    {/* 手势全息风：数据驱动。scripts/hud.py render 用 --props 传每期的 plan。 */}
+    <Composition id="HUD" component={HudFilm} width={HUD_W} height={HUD_H} fps={HUD_FPS} durationInFrames={90} defaultProps={hudDefault} calculateMetadata={({ props }) => ({ durationInFrames: Math.max(1, Math.round(props.total * HUD_FPS)) })} />
     <Composition id="PET-DEMO" component={PetDemo} width={1920} height={1080} fps={30} durationInFrames={PET_DEMO_SEC * 30} />
     <Composition id="GALLERY" component={Gallery} width={1920} height={1080} fps={GFPS} durationInFrames={CATALOG.length * SLOT * GFPS} />
     <Composition id="DEMO-CLIP" component={DemoClip} width={1920} height={1080} fps={30} durationInFrames={240} />

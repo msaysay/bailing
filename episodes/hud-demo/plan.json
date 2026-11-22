@@ -1,0 +1,123 @@
+{
+ "说明": "时刻单位是秒；x、y 是 1080×1920 画面里的位置（anchor 是 world 的按原片第 0 帧看到的位置写）。改完跑 hud.py check。",
+ "dir": "hud-demo",
+ "footage": false,
+ "hudEnd": 11.8,
+ "bpm": 81.36,
+ "accent": "#FFC83D",
+ "cool": "#3DD6FF",
+ "brand": "",
+ "items": [
+  {
+   "type": "avatar",
+   "at": 0.3,
+   "out": 1.2,
+   "anchor": "world",
+   "x": 540,
+   "y": 560,
+   "name": "我"
+  },
+  {
+   "type": "panel",
+   "at": 1.2,
+   "out": 11.55,
+   "anchor": "world",
+   "x": 540,
+   "y": 520,
+   "from": [
+    540,
+    1250
+   ],
+   "title": "你的名字",
+   "sub": "AI WORKFLOW",
+   "slogan": "ONE TAKE · ONE CLICK · ONE FILM",
+   "tiles": [
+    {
+     "k": "风格",
+     "v": "6"
+    },
+    {
+     "k": "组件",
+     "v": "298"
+    },
+    {
+     "k": "字体",
+     "v": "59"
+    },
+    {
+     "k": "今日",
+     "v": "GO",
+     "hot": true
+    }
+   ]
+  },
+  {
+   "type": "ribbon",
+   "at": 2.4,
+   "out": 5.4,
+   "anchor": "screen",
+   "y": 860,
+   "label": "选 一 种 风 格",
+   "items": [
+    "财经解读",
+    "商业快节奏",
+    "知识科普",
+    "相框老板",
+    "访谈纪实",
+    "深度解读"
+   ],
+   "pick": 0,
+   "pickAt": 5.1
+  },
+  {
+   "type": "pick",
+   "at": 5.6,
+   "out": 8.2,
+   "anchor": "world",
+   "x": 560,
+   "y": 1180,
+   "label": "财经解读风"
+  },
+  {
+   "type": "checks",
+   "at": 6.3,
+   "out": 11.55,
+   "anchor": "world",
+   "x": 90,
+   "y": 1050,
+   "items": [
+    {
+     "t": 6.6,
+     "text": "去口吃"
+    },
+    {
+     "t": 7.1,
+     "text": "降噪"
+    },
+    {
+     "t": 7.6,
+     "text": "配乐"
+    }
+   ]
+  },
+  {
+   "type": "dial",
+   "at": 8.5,
+   "out": 11.7,
+   "anchor": "world",
+   "x": 560,
+   "y": 1330,
+   "r": 190,
+   "t0": 8.7,
+   "t1": 11.3,
+   "label": "剪辑中",
+   "done": "成片"
+  }
+ ],
+ "cuts": [],
+ "end": {
+  "title": "界面动画样片",
+  "sub": "换上你拍的原片，手会挡在界面前面"
+ },
+ "total": 14.3
+}
