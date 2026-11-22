@@ -11,14 +11,14 @@ type Hand = { wrist: number[]; palm: number[]; size: number; thumb: number[]; in
 type Track = { cam: number[][]; hands: { L: Hand[]; R: Hand[] }; frames: number; has_hands_layer?: boolean };
 export type HudItem = { type: string; at: number; out?: number; anchor?: 'world' | 'screen'; follow?: string; x?: number; y?: number; [k: string]: any };
 export type HudCut = { src: string; from?: number; beats: number; fx?: 'punch' | 'rgb' | 'whip' | 'iris' | 'flash'; fit?: 'cover' | 'screen'; rate?: number; label?: string; big?: string };
-export type HudPlan = { dir: string; total: number; hudEnd: number; bpm: number; accent?: string; cool?: string; brand?: string; footage?: boolean; items: HudItem[]; cuts: HudCut[]; music?: string; keepSound?: number; end?: { title: string; sub?: string } };
+export type HudPlan = { w?: number; h?: number; trails?: boolean; grade?: string; dir: string; total: number; hudEnd: number; bpm: number; accent?: string; cool?: string; brand?: string; footage?: boolean; items: HudItem[]; cuts: HudCut[]; music?: string; keepSound?: number; end?: { title: string; sub?: string } };
 export const hudDefault: HudPlan = { dir: 'hud-demo', total: 6, hudEnd: 6, bpm: 80, footage: false, items: [], cuts: [] };
 
 const c01 = (x: number) => Math.max(0, Math.min(1, x));
 const out3 = (x: number) => 1 - Math.pow(1 - c01(x), 3), out5 = (x: number) => 1 - Math.pow(1 - c01(x), 5);
 const back = (x: number) => { const p = c01(x), k = 1.9; return 1 + (k + 1) * Math.pow(p - 1, 3) + k * Math.pow(p - 1, 2); };
 const HEI = '"Hud Hei", "PingFang SC", "Microsoft YaHei", sans-serif', DIN = '"Hud Din", "Hud Hei", sans-serif';
-const Ctx = React.createContext<{ t: number; f: number; accent: string; cool: string; tr: Track | null }>({ t: 0, f: 0, accent: '#FFC83D', cool: '#3DD6FF', tr: null });
+const Ctx = React.createContext<{ t: number; f: number; accent: string; cool: string; tr: Track | null; W: number; H: number }>({ t: 0, f: 0, accent: '#FFC83D', cool: '#3DD6FF', tr: null, W: 1080, H: 1920 });
 const useHud = () => React.useContext(Ctx);
 
 const useAssets = (dir: string, want: boolean) => {
@@ -38,8 +38,8 @@ const camAt = (tr: Track | null, f: number) => {
 };
 /** 钉在场景里的一层：里面的坐标都按锚帧写，镜头怎么动它跟着怎么动。 */
 const World: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { tr, f } = useHud(), [a, b, tx, ty] = camAt(tr, f);
-  return <div style={{ position: 'absolute', left: 0, top: 0, width: HUD_W, height: HUD_H, transformOrigin: '0 0', transform: `matrix(${a},${b},${-b},${a},${tx},${ty})` }}>{children}</div>;
+  const { tr, f, W, H } = useHud(), [a, b, tx, ty] = camAt(tr, f);
+  return <div style={{ position: 'absolute', left: 0, top: 0, width: W, height: H, transformOrigin: '0 0', transform: `matrix(${a},${b},${-b},${a},${tx},${ty})` }}>{children}</div>;
 };
 /** 玻璃片：半透明、背后虚化、一圈亮边、顶上一道高光。 */
 const Glass: React.FC<{ w: number; h: number; r?: number; tint?: string; children?: React.ReactNode; style?: React.CSSProperties }> = ({ w, h, r = 36, tint = 'rgba(18,22,32,.42)', children, style }) => (
@@ -95,11 +95,11 @@ const Panel: React.FC<{ it: HudItem }> = ({ it }) => {
 
 /** 选择飘带：一条发光的金色丝带横穿画面，选项一个个顺着它滑过去。 */
 const Ribbon: React.FC<{ it: HudItem }> = ({ it }) => {
-  const { t, accent } = useHud(), out = it.out ?? 1e9; if (t < it.at || t > out + 0.3) return null;
+  const { t, accent, W: HUD_W, H: HUD_H } = useHud(), out = it.out ?? 1e9; if (t < it.at || t > out + 0.3) return null;
   const age = t - it.at, grow = out5(age / 0.6), fade = 1 - out3((t - out) / 0.3), y0 = it.y ?? 860, amp = it.amp ?? 90, items: string[] = it.items ?? [], speed = it.speed ?? 300, gap = it.gap ?? 300;
-  const yAt = (x: number) => y0 + Math.sin(x / 190 + age * 1.6) * amp * (0.5 + 0.5 * Math.sin(x / 520 + 1)) - (x - 540) * 0.12;
+  const yAt = (x: number) => y0 + Math.sin(x / 190 + age * 1.6) * amp * (0.5 + 0.5 * Math.sin(x / 520 + 1)) - (x - HUD_W / 2) * 0.12;
   const pts: string[] = []; for (let x = -60; x <= HUD_W + 60; x += 24) pts.push(`${x},${yAt(x).toFixed(1)}`);
-  const d = 'M' + pts.join(' L'), len = 1400, dash = `${len * grow} ${len * 2}`;
+  const d = 'M' + pts.join(' L'), len = HUD_W * 1.4, dash = `${len * grow} ${len * 2}`;
   return place({ ...it, anchor: it.anchor ?? 'screen' }, <div style={{ position: 'absolute', inset: 0, opacity: fade }}>
     <svg width={HUD_W} height={HUD_H} style={{ position: 'absolute', inset: 0, mixBlendMode: 'screen', overflow: 'visible' }}>
       <defs><filter id="rb1" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="26" /></filter><filter id="rb2" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="7" /></filter></defs>
@@ -192,19 +192,39 @@ const Holo: React.FC<{ it: HudItem }> = ({ it }) => {
 };
 
 const Tag: React.FC<{ it: HudItem }> = ({ it }) => {
-  const pop = usePop(it.at, it.out), { accent } = useHud(); if (!pop) return null;
-  return place(it, <div style={{ position: 'absolute', left: 0, width: HUD_W, top: it.y, display: 'flex', justifyContent: 'center', opacity: pop.o, transform: `translateX(${(it.x ?? 540) - 540}px) scale(${pop.s})` }}>
+  const pop = usePop(it.at, it.out), { accent, W: HUD_W } = useHud(); if (!pop) return null;
+  return place(it, <div style={{ position: 'absolute', left: 0, width: HUD_W, top: it.y, display: 'flex', justifyContent: 'center', opacity: pop.o, transform: `translateX(${(it.x ?? HUD_W / 2) - HUD_W / 2}px) scale(${pop.s})` }}>
     <div style={{ fontFamily: HEI, fontSize: it.size ?? 54, color: it.hot ? '#14110a' : '#fff', background: it.hot ? accent : 'rgba(10,12,18,.55)', backdropFilter: 'blur(12px)', border: `2px solid ${it.hot ? '#fff' : 'rgba(255,255,255,.4)'}`, borderRadius: 26, padding: '14px 36px', boxShadow: it.hot ? `0 0 60px ${accent}aa` : '0 20px 50px rgba(0,0,0,.4)', whiteSpace: 'nowrap' }}>{it.text}</div>
   </div>);
 };
-const KINDS: Record<string, React.FC<{ it: HudItem }>> = { avatar: Avatar, panel: Panel, ribbon: Ribbon, pick: Pick, checks: Checks, dial: Dial, holo: Holo, tag: Tag };
+/** 冲击波：手点下去的那一下，一圈光从指尖荡开，带一个十字闪光。 */
+const Pulse: React.FC<{ it: HudItem }> = ({ it }) => {
+  const { t, accent, cool } = useHud(), a = t - it.at; if (a < 0 || a > 0.7) return null; const p = out5(a / 0.6), col = it.cool ? cool : accent, R = it.r ?? 220;
+  return place(it, <div style={{ position: 'absolute', left: it.x! - R, top: it.y! - R, width: R * 2, height: R * 2, mixBlendMode: 'screen' }}>
+    {[0, 0.12].map((d, i) => { const q = out5((a - d) / 0.55); return a > d ? <div key={i} style={{ position: 'absolute', inset: 0, borderRadius: '50%', border: `${8 * (1 - q) + 1}px solid ${i ? '#fff' : col}`, transform: `scale(${0.1 + q * 0.95})`, opacity: 1 - q, boxShadow: `0 0 40px ${col}, inset 0 0 40px ${col}` }} /> : null; })}
+    <div style={{ position: 'absolute', left: R - 3, top: R * (1 - (1 - p) * 0.9) - R * 0.0, width: 6, height: R * 2 * (1 - p) * 0.9, background: '#fff', boxShadow: `0 0 30px 6px ${col}`, opacity: 1 - p, transform: `translateY(${-(R * (1 - p) * 0.9) + R * (1 - (1 - (1 - p) * 0.9))}px)` }} />
+    <div style={{ position: 'absolute', top: R - 3, left: R * p * 0.9 + R * 0.1 * 0, height: 6, width: R * 2 * (1 - p), marginLeft: R * p - R * p * 0.9, background: '#fff', boxShadow: `0 0 30px 6px ${col}`, opacity: 1 - p }} />
+    <div style={{ position: 'absolute', inset: R * 0.72, borderRadius: '50%', background: '#fff', filter: 'blur(14px)', opacity: (1 - p) * 0.9 }} />
+  </div>);
+};
+/** 指尖拖尾：食指动得快的时候，后面拖一道光。 */
+const Trails: React.FC = () => {
+  const { tr, f, cool, accent, W, H } = useHud(); if (!tr) return null; const N = 6, paths: React.ReactNode[] = [];
+  (['L', 'R'] as const).forEach((s, si) => {
+    const pts: number[][] = []; for (let i = N; i >= 0; i--) { const h = tr.hands[s][Math.max(0, f - i)]; if (!h) return; pts.push(h.index); }
+    const len = pts.slice(1).reduce((a, p, i) => a + Math.hypot(p[0] - pts[i][0], p[1] - pts[i][1]), 0), jump = pts.slice(1).some((p, i) => Math.hypot(p[0] - pts[i][0], p[1] - pts[i][1]) > 170), k = jump ? 0 : c01((len - 120) / 300); if (k <= 0) return;
+    for (let i = 1; i < pts.length; i++) paths.push(<line key={s + i} x1={pts[i - 1][0]} y1={pts[i - 1][1]} x2={pts[i][0]} y2={pts[i][1]} stroke={si ? accent : cool} strokeWidth={3 + (i / N) * 16} strokeLinecap="round" opacity={(i / N) * k} />);
+  });
+  return <svg width={W} height={H} style={{ position: 'absolute', inset: 0, mixBlendMode: 'screen', filter: 'blur(3px) drop-shadow(0 0 14px #fff)' }}>{paths}</svg>;
+};
+const KINDS: Record<string, React.FC<{ it: HudItem }>> = { pulse: Pulse, avatar: Avatar, panel: Panel, ribbon: Ribbon, pick: Pick, checks: Checks, dial: Dial, holo: Holo, tag: Tag };
 
 /** 没有原片时的替身背景（只用来看界面动画本身）。 */
 const Backdrop: React.FC = () => { const { t } = useHud(); return <AbsoluteFill style={{ background: `radial-gradient(900px 700px at ${30 + Math.sin(t * 0.4) * 8}% 22%, #3a1320 0%, transparent 70%), radial-gradient(900px 800px at 78% 30%, #0e3a5c 0%, transparent 70%), linear-gradient(#0b0d14, #141018 60%, #2a1c12)` }} />; };
 
 /** 卡点段的一刀。 */
 const Cut: React.FC<{ c: HudCut; start: number; dur: number; beat: number; i: number }> = ({ c, start, dur, beat, i }) => {
-  const { t, accent } = useHud(), { fps } = useVideoConfig(), a = t - start; if (a < 0 || a >= dur) return null;
+  const { t, accent, W, H } = useHud(), { fps } = useVideoConfig(), a = t - start; if (a < 0 || a >= dur) return null;
   const fx = c.fx ?? 'punch', hit = 1 - out5(a / 0.28), pulse = 1 - out3(((a % beat) / beat) / 0.35), push = 1 + a * 0.035;
   const scale = (fx === 'punch' ? 1 + hit * 0.42 : fx === 'iris' ? 1 + hit * 0.15 : 1 + hit * 0.12) * push * (1 + pulse * 0.018);
   const whip = fx === 'whip' ? hit : 0, split = (fx === 'rgb' ? 26 : 8) * hit, iris = fx === 'iris' ? out5(a / 0.32) : 1;
@@ -219,28 +239,30 @@ const Cut: React.FC<{ c: HudCut; start: number; dur: number; beat: number; i: nu
     <AbsoluteFill style={{ filter: `url(#${fid})`, transform: `translateX(${whip * (i % 2 ? -260 : 260)}px) scale(${scale})` }}>
       {c.fit === 'screen' ? <>
         {vid({ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: 'blur(40px) brightness(.45) saturate(1.3)', transform: 'scale(1.2)' })}
-        <div style={{ position: 'absolute', left: 40, right: 40, top: '50%', transform: `translateY(-50%) perspective(1400px) rotateY(${(i % 2 ? 1 : -1) * (6 - a * 2)}deg)`, borderRadius: 26, overflow: 'hidden', border: '2px solid rgba(255,255,255,.7)', boxShadow: '0 50px 120px rgba(0,0,0,.7)' }}>{vid({ width: '100%', display: 'block' })}</div>
+        <AbsoluteFill style={{ alignItems: 'center', justifyContent: 'center' }}><div style={{ transform: `perspective(1400px) rotateY(${(i % 2 ? 1 : -1) * (6 - a * 2)}deg)`, borderRadius: 26, overflow: 'hidden', border: '2px solid rgba(255,255,255,.7)', boxShadow: '0 50px 120px rgba(0,0,0,.7)', lineHeight: 0 }}>{vid({ maxWidth: W * 0.92, maxHeight: H * 0.88, display: 'block' })}</div></AbsoluteFill>
       </> : vid({ width: '100%', height: '100%', objectFit: 'cover' })}
     </AbsoluteFill>
     <AbsoluteFill style={{ background: '#fff', opacity: (fx === 'flash' ? 0.9 : 0.28) * (1 - out3(a / 0.14)) }} />
-    {c.label ? <div style={{ position: 'absolute', left: 48, top: 150, display: 'flex', alignItems: 'center', gap: 14, transform: `translateX(${(1 - out5(a / 0.3)) * -80}px)`, opacity: c01(a / 0.1) }}>
+    {c.label ? <div style={{ position: 'absolute', left: 48, top: H > W ? 150 : 60, display: 'flex', alignItems: 'center', gap: 14, transform: `translateX(${(1 - out5(a / 0.3)) * -80}px)`, opacity: c01(a / 0.1) }}>
       <span style={{ fontFamily: DIN, fontSize: 34, color: '#14110a', background: accent, padding: '2px 14px', borderRadius: 8 }}>{String(i + 1).padStart(2, '0')}</span>
       <span style={{ fontFamily: HEI, fontSize: 40, color: '#fff', textShadow: '0 3px 16px rgba(0,0,0,.8)' }}>{c.label}</span></div> : null}
-    {c.big ? <div style={{ position: 'absolute', left: 0, right: 0, bottom: 330, textAlign: 'center', fontFamily: HEI, fontSize: 118, color: '#fff', letterSpacing: 4, textShadow: `0 0 40px ${accent}, 0 8px 30px rgba(0,0,0,.8)`, transform: `scale(${1 + hit * 0.5})`, opacity: c01(a / 0.08) }}>{c.big}</div> : null}
+    {c.big ? <div style={{ position: 'absolute', left: 0, right: 0, bottom: H * 0.17, textAlign: 'center', fontFamily: HEI, fontSize: 118, color: '#fff', letterSpacing: 4, textShadow: `0 0 40px ${accent}, 0 8px 30px rgba(0,0,0,.8)`, transform: `scale(${1 + hit * 0.5})`, opacity: c01(a / 0.08) }}>{c.big}</div> : null}
   </AbsoluteFill>;
 };
 
 export const HudFilm: React.FC<HudPlan> = (plan) => {
-  const f = useCurrentFrame(), { fps } = useVideoConfig(), t = f / fps, footage = plan.footage !== false, tr = useAssets(plan.dir, footage);
+  const f = useCurrentFrame(), { fps, width: W, height: H } = useVideoConfig(), t = f / fps, footage = plan.footage !== false, tr = useAssets(plan.dir, footage);
   const accent = plan.accent ?? '#FFC83D', cool = plan.cool ?? '#3DD6FF', beat = 60 / plan.bpm, E = plan.hudEnd, inHud = t < E + 0.05;
   const smash = c01((t - (E - 0.2)) / 0.2), sm = smash * smash;                      // 最后 0.2 秒：整个画面往前冲、色散、过曝，砸进卡点段
   let acc = E; const cuts = plan.cuts.map((c) => { const s = acc, d = c.beats * beat; acc += d; return { c, s, d }; });
   const endAt = acc, endA = t - endAt;
-  return <Ctx.Provider value={{ t, f, accent, cool, tr }}><AbsoluteFill style={{ background: '#000' }}>
+  return <Ctx.Provider value={{ t, f, accent, cool, tr, W, H }}><AbsoluteFill style={{ background: '#000' }}>
     {inHud ? <AbsoluteFill style={{ transform: `scale(${1 + sm * 1.6})`, filter: `blur(${sm * 22}px) brightness(${1 + sm * 1.5}) saturate(${1 + sm})` }}>
-      {footage ? <OffthreadVideo src={staticFile(plan.dir + '/base.mp4')} volume={plan.keepSound ?? 0} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <Backdrop />}
+      {footage ? <OffthreadVideo src={staticFile(plan.dir + '/base.mp4')} volume={plan.keepSound ?? 0} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: plan.grade }} /> : <Backdrop />}
+      {footage && plan.grade ? <AbsoluteFill style={{ background: 'linear-gradient(180deg, rgba(10,30,60,.22), rgba(40,10,50,.14))', mixBlendMode: 'multiply' }} /> : null}
       {plan.items.map((it, i) => { const K = KINDS[it.type]; return K ? <K key={i} it={it} /> : null; })}
-      {footage && tr?.has_hands_layer !== false ? <OffthreadVideo transparent muted src={staticFile(plan.dir + '/hands.webm')} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} /> : null}
+      {footage && tr?.has_hands_layer !== false ? <OffthreadVideo transparent muted src={staticFile(plan.dir + '/hands.webm')} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', filter: plan.grade }} /> : null}
+      {plan.trails !== false && footage ? <Trails /> : null}
       <AbsoluteFill style={{ background: 'radial-gradient(ellipse at 50% 45%, transparent 55%, rgba(0,0,0,.45) 100%)' }} />
     </AbsoluteFill> : null}
     {cuts.map((x, i) => <Cut key={i} c={x.c} start={x.s} dur={x.d} beat={beat} i={i} />)}

@@ -1,0 +1,247 @@
+{
+ "说明": "宁少 · 手势全息风第一条（横屏）。时刻是裁过的原片里的秒（原片从 0.3 秒起裁）。",
+ "dir": "hud02",
+ "footage": true,
+ "hudEnd": 15.6,
+ "bpm": 123.08,
+ "accent": "#FFC83D",
+ "cool": "#3DD6FF",
+ "brand": "宁少 AI 进化论",
+ "grade": "brightness(.8) contrast(1.14) saturate(.92)",
+ "trails": true,
+ "items": [
+  {
+   "type": "pulse",
+   "at": 0.53,
+   "anchor": "screen",
+   "x": 1050,
+   "y": 251
+  },
+  {
+   "type": "avatar",
+   "at": 0.56,
+   "out": 3.0,
+   "anchor": "world",
+   "x": 1015,
+   "y": 420,
+   "size": 210,
+   "img": "hudme/me.jpg"
+  },
+  {
+   "type": "pulse",
+   "at": 2.1,
+   "anchor": "screen",
+   "x": 694,
+   "y": 659,
+   "cool": true,
+   "sfx": "none"
+  },
+  {
+   "type": "panel",
+   "at": 3.05,
+   "out": 15.35,
+   "anchor": "world",
+   "x": 1000,
+   "y": 290,
+   "w": 1000,
+   "h": 400,
+   "from": [
+    1015,
+    760
+   ],
+   "tilt": [
+    -8,
+    0
+   ],
+   "img": "hudme/me.jpg",
+   "title": "宁少",
+   "sub": "AI 进化论",
+   "slogan": "ONE TAKE · ONE CLICK · ONE FILM",
+   "tiles": [
+    {
+     "k": "剪辑风格",
+     "v": "6"
+    },
+    {
+     "k": "动效组件",
+     "v": "298"
+    },
+    {
+     "k": "可商用字体",
+     "v": "59"
+    },
+    {
+     "k": "今日",
+     "v": "GO",
+     "hot": true
+    }
+   ]
+  },
+  {
+   "type": "pulse",
+   "at": 3.97,
+   "anchor": "world",
+   "x": 1015,
+   "y": 785,
+   "r": 300
+  },
+  {
+   "type": "tag",
+   "at": 4.05,
+   "out": 5.1,
+   "anchor": "world",
+   "x": 1015,
+   "y": 540,
+   "text": "AI 剪辑工作流 · 已唤醒",
+   "hot": true,
+   "size": 50,
+   "sfx": "confirm"
+  },
+  {
+   "type": "ribbon",
+   "at": 5.2,
+   "out": 9.3,
+   "anchor": "screen",
+   "y": 470,
+   "amp": 70,
+   "speed": 520,
+   "gap": 330,
+   "label": "选 一 种 风 格",
+   "items": [
+    "知识科普",
+    "商业快节奏",
+    "访谈纪实",
+    "财经解读",
+    "相框老板",
+    "深度解读"
+   ],
+   "pick": 3,
+   "pickAt": 8.67
+  },
+  {
+   "type": "pulse",
+   "at": 8.67,
+   "anchor": "screen",
+   "x": 1310,
+   "y": 432,
+   "sfx": "none"
+  },
+  {
+   "type": "pick",
+   "at": 9.75,
+   "out": 12.9,
+   "anchor": "world",
+   "x": 1015,
+   "y": 800,
+   "r": 190,
+   "label": "财经解读风"
+  },
+  {
+   "type": "checks",
+   "at": 10.6,
+   "out": 12.6,
+   "anchor": "screen",
+   "x": 150,
+   "y": 560,
+   "items": [
+    {
+     "t": 10.95,
+     "text": "去口吃"
+    },
+    {
+     "t": 11.45,
+     "text": "降噪修音"
+    },
+    {
+     "t": 11.95,
+     "text": "自动配乐"
+    }
+   ]
+  },
+  {
+   "type": "pulse",
+   "at": 12.95,
+   "anchor": "world",
+   "x": 1015,
+   "y": 785,
+   "r": 340,
+   "cool": true,
+   "sfx": "none"
+  },
+  {
+   "type": "holo",
+   "at": 12.95,
+   "out": 15.6,
+   "anchor": "world",
+   "x": 1015,
+   "y": 800,
+   "w": 250,
+   "h": 430,
+   "t0": 13.3,
+   "t1": 15.2,
+   "src": "hudme/d1.mp4",
+   "srcFrom": 1
+  },
+  {
+   "type": "dial",
+   "at": 13.2,
+   "out": 15.5,
+   "anchor": "world",
+   "x": 1480,
+   "y": 640,
+   "r": 125,
+   "t0": 13.3,
+   "t1": 15.2,
+   "label": "剪辑中",
+   "done": "成片"
+  }
+ ],
+ "cuts": [
+  {
+   "src": "hudme/full.mp4",
+   "from": 1.3,
+   "beats": 4,
+   "fx": "punch"
+  },
+  {
+   "src": "hudme/full.mp4",
+   "from": 23.8,
+   "beats": 2,
+   "fx": "rgb"
+  },
+  {
+   "src": "hudme/full.mp4",
+   "from": 17.2,
+   "beats": 2,
+   "fx": "whip"
+  },
+  {
+   "src": "hudme/full.mp4",
+   "from": 20.7,
+   "beats": 2,
+   "fx": "iris"
+  },
+  {
+   "src": "hudme/full.mp4",
+   "from": 28.0,
+   "beats": 2,
+   "fx": "punch"
+  },
+  {
+   "src": "hudme/full.mp4",
+   "from": 11.6,
+   "beats": 2,
+   "fx": "whip"
+  },
+  {
+   "src": "hudme/full.mp4",
+   "from": 6.0,
+   "beats": 4,
+   "fx": "flash"
+  }
+ ],
+ "end": {
+  "title": "不用剪辑师\n也不用学剪辑",
+  "sub": "宁少 AI 进化论 · AI 剪辑工作流"
+ }
+}

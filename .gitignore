@@ -64,3 +64,4 @@ music/*/*.mp3
 # 手势全息风：每期的底片、手层、跟踪数据、配乐不进仓库；hudtest 是借参考片做的本机测试
 studio/public/hud*/
 episodes/hudtest/
+studio/public/hudme/

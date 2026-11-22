@@ -19,6 +19,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 W, H, FPS = 1080, 1920, 30
 MODEL = os.path.expanduser("~/.cache/video-studio/hand_landmarker.task")
 MODEL_URL = "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/latest/hand_landmarker.task"
+SEG = os.path.expanduser("~/.cache/video-studio/selfie_multiclass.tflite")
+SEG_URL = "https://storage.googleapis.com/mediapipe-models/image_segmenter/selfie_multiclass_256x256/float32/latest/selfie_multiclass_256x256.tflite"
 TIP = {"thumb": 4, "index": 8, "middle": 12, "ring": 16, "pinky": 20}
 
 
@@ -37,6 +39,35 @@ def landmarker():
     opt = V.HandLandmarkerOptions(base_options=P.BaseOptions(model_asset_path=MODEL), num_hands=2, running_mode=V.RunningMode.VIDEO,
                                   min_hand_detection_confidence=0.3, min_hand_presence_confidence=0.3, min_tracking_confidence=0.3)
     return mp, V.HandLandmarker.create_from_options(opt)
+
+
+def segmenter():
+    """人体分割模型（认皮肤和衣服），抠手和小臂用。下不下来就返回 None，退回按肤色抠。"""
+    try:
+        import mediapipe as mp
+        from mediapipe.tasks import python as P
+        from mediapipe.tasks.python import vision as V
+        if not os.path.exists(SEG): print("下载人体分割模型（16MB）…"); urllib.request.urlretrieve(SEG_URL, SEG)
+        return mp, V.ImageSegmenter.create_from_options(V.ImageSegmenterOptions(base_options=P.BaseOptions(model_asset_path=SEG), output_confidence_masks=True))
+    except Exception as e:
+        print("   分割模型用不了，退回按肤色抠：", e); return None, None
+
+
+def seg_mask(mp, seg, frame, hands):
+    """用分割模型抠：整个人体区域里，只留和手连着的那几块（旁边路过的人不要），再和关键点围出来的手并在一起。"""
+    r = seg.segment(mp.Image(image_format=mp.ImageFormat.SRGB, data=np.ascontiguousarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))))
+    fg = 1 - np.array(r.confidence_masks[0].numpy_view()).squeeze()
+    if fg.shape != (H, W): fg = cv2.resize(fg, (W, H))
+    hard = (fg > 0.3).astype(np.uint8); core = np.zeros((H, W), np.uint8)
+    for p in hands:
+        size = float(np.linalg.norm(p[0] - p[9])) + 1; cv2.fillConvexPoly(core, cv2.convexHull(p[[0, 1, 2, 5, 9, 13, 17]].astype(np.int32)), 255)
+        for a, b in [(0, 1), (1, 2), (2, 3), (3, 4), (5, 6), (6, 7), (7, 8), (9, 10), (10, 11), (11, 12), (13, 14), (14, 15), (15, 16), (17, 18), (18, 19), (19, 20)]:
+            cv2.line(core, tuple(p[a].astype(int)), tuple(p[b].astype(int)), 255, int(size * 0.3))
+    nlab, lab, stats, _ = cv2.connectedComponentsWithStats(hard)
+    if hands: keep = np.unique(lab[(cv2.dilate(core, np.ones((41, 41), np.uint8)) > 0) & (lab > 0)])
+    else: keep = [i for i in range(1, nlab) if stats[i, cv2.CC_STAT_TOP] + stats[i, cv2.CC_STAT_HEIGHT] >= H - 2 and stats[i, cv2.CC_STAT_AREA] > W * H * 0.004]
+    m = (np.isin(lab, keep) * fg * 255).astype(np.uint8) if len(keep) else np.zeros((H, W), np.uint8)
+    return np.maximum(m, cv2.GaussianBlur(core, (0, 0), 4))
 
 
 def read_frames(path):
@@ -112,7 +143,7 @@ def camera_track(base, tracks, anchor_i):
             p = tracks[s][i]
             if p is not None:
                 c = p.mean(0) * sc; r = float(np.linalg.norm(p[0] - p[9])) * sc * 2.6; cv2.circle(m, tuple(c.astype(int)), int(r), 0, -1)
-        m[int(m.shape[0] * 0.8):] = 0                   # 画面最底下是腿和小臂，不拿来算
+        if H > W: m[int(m.shape[0] * 0.8):] = 0        # 竖屏画面最底下是腿和小臂，不拿来算
         return m
 
     def step(a, b, mask):
@@ -185,8 +216,15 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("video"); ap.add_argument("--ep", required=True); ap.add_argument("--start", type=float, default=0); ap.add_argument("--end", type=float)
     ap.add_argument("--anchor", type=float, default=0.0, help="锚帧在第几秒（界面钉在这一帧看到的位置上），默认开头")
+    ap.add_argument("--size", default="auto", help="auto（按原片横竖）/ 1080x1920 / 1920x1080")
+    ap.add_argument("--matte", default="seg", choices=["seg", "skin"], help="抠手的办法：seg 用人体分割模型（默认，准）；skin 按肤色（不用下模型，桌面和肤色接近时会带碎块）")
     ap.add_argument("--no-hands-layer", action="store_true", help="不出手的那一层（手不会挡住界面）")
-    a = ap.parse_args()
+    a = ap.parse_args(); global W, H
+    if a.size == "auto":
+        pr = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height:stream_side_data=rotation", "-of", "json", a.video], capture_output=True, text=True); st = json.loads(pr.stdout)["streams"][0]
+        rot = abs(int(next((d.get("rotation", 0) for d in st.get("side_data_list", []) if "rotation" in d), 0))); vw, vh = (st["height"], st["width"]) if rot in (90, 270) else (st["width"], st["height"])
+        W, H = (1920, 1080) if vw > vh else (1080, 1920)
+    else: W, H = map(int, a.size.lower().split("x"))
     out = os.path.join(ROOT, "studio", "public", a.ep); os.makedirs(out, exist_ok=True); base = os.path.join(out, "base.mp4")
     cut = ["-ss", str(a.start)] + (["-to", str(a.end)] if a.end else [])
     ff(*cut, "-i", a.video, "-vf", f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},fps={FPS}", "-c:v", "libx264", "-crf", "16", "-pix_fmt", "yuv420p", "-g", "15", "-c:a", "aac", "-b:a", "192k", base)
@@ -196,13 +234,18 @@ def main():
     print(f"   {locked:.0%} 的帧能直接对上锚帧（越高，界面钉得越稳）")
     moments = find_moments(tracks, n)
     if not a.no_hands_layer:
-        print("③ 抠手…"); hw, hh = 720, 1280
+        print("③ 抠手…"); hw, hh = (W * 2 // 3) // 2 * 2, (H * 2 // 3) // 2 * 2
         p = subprocess.Popen(["ffmpeg", "-nostdin", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "bgra", "-s", f"{hw}x{hh}", "-r", str(FPS), "-i", "-", "-c:v", "libvpx-vp9", "-pix_fmt", "yuva420p", "-b:v", "0", "-crf", "24", "-row-mt", "1", "-cpu-used", "4", "-auto-alt-ref", "0", os.path.join(out, "hands.webm")], stdin=subprocess.PIPE)
+        mp_, seg = segmenter() if a.matte == "seg" else (None, None); prev = None
         for i, f in enumerate(read_frames(base)):
-            m = np.zeros((H, W), np.uint8)
-            for s in "LR":
-                if tracks[s][i] is not None: m = cv2.bitwise_or(m, hand_mask(f, tracks[s][i]))
-            m = cv2.GaussianBlur(cv2.erode(m, np.ones((3, 3), np.uint8)), (0, 0), 3)
+            hs = [tracks[s][i] for s in "LR" if tracks[s][i] is not None]
+            if seg is not None: m = seg_mask(mp_, seg, f, hs)
+            else:
+                m = np.zeros((H, W), np.uint8)
+                for p_ in hs: m = cv2.bitwise_or(m, hand_mask(f, p_))
+            m = cv2.GaussianBlur(cv2.erode(m, np.ones((3, 3), np.uint8)), (0, 0), 2.5)
+            if prev is not None: m = np.maximum(m, (prev * 0.35).astype(np.uint8))      # 前一帧留一点，边缘不闪
+            prev = m
             p.stdin.write(cv2.resize(np.dstack([f, m]), (hw, hh), interpolation=cv2.INTER_AREA).tobytes())
         p.stdin.close(); p.wait()
 
@@ -217,11 +260,12 @@ def main():
     tiles = []; fr = list(read_frames(base))
     for m in moments[:40]:
         f = fr[min(n - 1, int(m["t"] * FPS))].copy(); cv2.circle(f, (m["x"], m["y"]), 46, (60, 255, 214), 8)
-        f = cv2.resize(f, (270, 480)); cv2.rectangle(f, (0, 0), (270, 44), (0, 0, 0), -1)
+        f = cv2.resize(f, (270, 480) if H > W else (480, 270)); cv2.rectangle(f, (0, 0), (f.shape[1], 44), (0, 0, 0), -1)
         cv2.putText(f, f'{m["t"]:.2f}s {m["hand"]} {"tap swipe pinch open".split()[["点", "划", "捏", "张"].index(m["type"][0])]}{m["type"][1:].replace("→", ">").replace("←", "<")}', (6, 31), cv2.FONT_HERSHEY_SIMPLEX, 0.72, (60, 255, 214), 2); tiles.append(f)
     if tiles:
-        while len(tiles) % 8: tiles.append(np.zeros_like(tiles[0]))
-        cv2.imwrite(os.path.join(out, "moments.jpg"), np.vstack([np.hstack(tiles[i:i + 8]) for i in range(0, len(tiles), 8)]))
+        cols = 8 if H > W else 5
+        while len(tiles) % cols: tiles.append(np.zeros_like(tiles[0]))
+        cv2.imwrite(os.path.join(out, "moments.jpg"), np.vstack([np.hstack(tiles[i:i + cols]) for i in range(0, len(tiles), cols)]))
     print(f"好了：{out}\n   手势时刻 {len(moments)} 个，看 moments.jpg；下一步照着它写这一期的 plan.json")
     for m in moments: print(f'   {m["t"]:>6.2f}s  {m["hand"]:<2} {m["type"]}  ({m["x"]},{m["y"]})')
 

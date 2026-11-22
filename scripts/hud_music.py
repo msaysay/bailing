@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """手势全息风 · 配乐：现场合成一条「先铺垫、再蓄力、然后砸下去」的电子曲，音效按界面动作的时刻打进去。
 
-全部是程序合成的（鼓、808 低音、牛铃旋律、铺底、上升音、撞击、界面音效），没有采样别人的曲子，不用署名。
-速度自动按「砸」的那一刻算：全息段正好是 4 小节，转场落在第 5 小节第一拍，卡点段每一刀都踩在拍子上。
+全部是程序合成的（鼓、低音、拨弦、铺底、上升音、撞击、界面音效），没有采样别人的曲子，不用署名。
+速度自动按「砸」的那一刻算（120 拍/分上下）：全息段正好是整数个小节，转场落在下一小节第一拍，卡点段每一刀都踩在拍子上。
+曲风：小调、四拍底鼓、反拍滚动低音、拨弦琶音——结构是先铺垫、分三档加满、蓄力、砸下去、全开。
 
 用法：
   python3 scripts/hud_music.py --drop 11.8 --total 20 -o studio/public/hud01/music.wav [--sfx 0.2:pop,1.0:whoosh,5.6:confirm] [--seed 3] [--key 43]
@@ -62,51 +63,61 @@ def sfx(kind, rng):
     return np.zeros(1)
 
 
-def make(drop, total, sfx_list, seed=3, key=43, level=1.0):
-    """key 是根音的 MIDI 号（默认 G2）。返回 (立体声, 每拍的时刻, 速度)。"""
-    rng = np.random.default_rng(seed); beat = drop / 16; bpm = 60 / beat; n = int((total + 1.5) * SR); L = np.zeros(n); Rr = np.zeros(n)
+def pluck(m, d=0.18):
+    n = int(0.6 * SR); t = np.arange(n) / SR; f = hz(m); x = 2 * ((f * t) % 1) - 1 + 2 * ((f * 1.007 * t) % 1) - 1
+    return band(x, f * 0.8, f * 6) * env(n, 0.002, d) * 0.22
+
+
+def bars_of(drop): return max(4, int(round(drop / 2.0)))                  # 全息段几小节：让速度落在 120 拍/分上下
+
+
+def make(drop, total, sfx_list, seed=3, key=38, level=1.0):
+    """key 是根音的 MIDI 号（默认 D2，小调）。全息段 N 小节分四档，一档比一档满，最后一档蓄力；转场落在下一小节第一拍。
+    返回 (立体声, 每拍的时刻, 速度)。"""
+    rng = np.random.default_rng(seed); N = bars_of(drop); bar = drop / N; beat = bar / 4; s16 = beat / 4; bpm = 60 / beat; n = int((total + 1.5) * SR); L = np.zeros(n); Rr = np.zeros(n)
 
     def put(x, t, g=1.0, pan=0.0):
         i = int(t * SR)
-        if i >= n or i < 0: return
+        if i >= n or i < 0 or g <= 0: return
         x = x[: n - i] * g; L[i:i + len(x)] += x * (1 - max(0, pan)); Rr[i:i + len(x)] += x * (1 + min(0, pan))
-    scale = [0, 3, 5, 7, 10, 12]; prog = [0, 0, -4, -2]                          # 小调：i  i  VI  VII
+    scale = [0, 2, 3, 5, 7, 8, 10, 12]; prog = [0, 0, -4, -2]                    # 小调：i  i  VI  VII，两小节换一次
+    arp = [0, 4, 7, 4, 2, 4, 7, 6, 0, 4, 7, 4, 5, 4, 2, 4]                       # 拨弦走音阶的第几个音
     put(impact(rng), 0, 0.4)
-    for b in range(4): put(pad([key + 12 + prog[b], key + 19 + prog[b], key + 24 + prog[b]], beat * 4 + 0.3, rng), b * 4 * beat, (0.22, 0.3, 0.38, 0.3)[b])
-    s16 = beat / 4
-    for b in range(4):                                                              # 全息段：一小节比一小节满
-        t0 = b * 4 * beat
+    for b in range(N):                                                              # 全息段
+        t0 = b * bar; q = min(3, int(b * 4 / N)); root = key + prog[(b // 2) % 4]; last = b == N - 1
+        if b % 2 == 0: put(pad([root + 12, root + 19, root + 24], bar * 2 + 0.3, rng), t0, (0.22, 0.28, 0.34, 0.3)[q])
         for k in range(16):
-            if b >= 1 and k % 2 == 0: put(hat(rng, 0.02), t0 + k * s16, 0.12 + 0.08 * b, 0.3 if k % 4 else -0.3)
-            if b >= 2 and k % 4 == 2: put(hat(rng, 0.08), t0 + k * s16, 0.3)
-        if b >= 1:
-            for k in (0, 6, 10): put(bass(key + prog[b], beat * 1.2), t0 + k * s16, 0.16 + 0.12 * b)
-            put(kick(rng), t0, 0.2 + 0.12 * b); put(kick(rng), t0 + 10 * s16, 0.15 + 0.1 * b)
-        if b >= 2: put(clap(rng), t0 + 8 * s16, 0.4)
-        if b == 0:
-            for k in (0, 4, 8, 12): put(sfx("pop", rng), t0 + k * s16, 0.12)
-        if b == 3:                                                                  # 蓄力：军鼓越打越密 + 上升音
-            for j, k in enumerate([0, 4, 8, 10, 12, 13, 14, 15, 15.5]): put(clap(rng), t0 + k * s16, 0.25 + 0.05 * j)
-            put(riser(beat * 4, rng), t0, 0.9)
-    mel = [0, 3, 0, 5, 3, 0, 4, 2, 0, 3, 0, 5, 4, 3, 2, 0]                         # 牛铃旋律走音阶的第几个音
-    nb = int(np.ceil((total - drop) / (4 * beat))) + 1
-    put(impact(rng), drop, 1.0)
-    for b in range(nb):                                                             # 卡点段：全开
-        t0 = drop + b * 4 * beat; root = key + prog[b % 4]
+            t = t0 + k * s16
+            if q == 0 and k in (0, 6, 12): put(pluck(root + 24 + scale[arp[k]]), t, 0.5, 0.3)
+            if q >= 1 and not last:
+                if k % 4 == 0: put(kick(rng), t, 0.22 + 0.16 * q)
+                if k % 4 == 2: put(bass(root - 12, beat * 0.45), t, 0.12 + 0.14 * q); put(hat(rng, 0.05), t, 0.12 + 0.07 * q)
+                if k % 2 == 0: put(pluck(root + 24 + scale[arp[k]]), t, 0.3 + 0.12 * q, (rng.random() - 0.5) * 0.6)
+            if q >= 2 and not last:
+                if k in (4, 12): put(clap(rng), t, 0.3 + 0.1 * q)
+                if k % 2 == 1: put(hat(rng, 0.015), t, 0.14, 0.3 if k % 4 == 1 else -0.3); put(bass(root - 12, beat * 0.2), t, 0.1 * q)
+        if last:                                                                    # 蓄力：底鼓撤掉，军鼓越打越密 + 上升音
+            for j, k in enumerate([0, 4, 8, 10, 12, 13, 14, 14.5, 15, 15.5]): put(clap(rng), t0 + k * s16, 0.22 + 0.05 * j)
+            put(riser(bar, rng), t0, 1.0)
+    nb = int(np.ceil((total - drop) / bar)) + 1; put(impact(rng), drop, 1.0)
+    for b in range(nb):                                                             # 卡点段：四拍底鼓 + 反拍滚动低音，全开
+        t0 = drop + b * bar; root = key + prog[(b // 2) % 4]
         for k in range(16):
-            put(hat(rng, 0.018 if k % 2 else 0.03), t0 + k * s16, 0.42 if k % 2 == 0 else 0.26, 0.35 if k % 2 else -0.35)
-            if k in (0, 3, 6, 10, 11): put(kick(rng), t0 + k * s16, 1.0)
-            if k in (0, 3, 6, 10): put(bass(root, beat * 0.9), t0 + k * s16, 0.95)
-            if k in (4, 12): put(clap(rng), t0 + k * s16, 0.75)
-            if k == 14: put(hat(rng, 0.14), t0 + k * s16, 0.4)
-            put(bell(root + 36 + scale[mel[(k + b * 5) % 16]]), t0 + k * s16, 0.9 if k % 4 == 0 else 0.6, (rng.random() - 0.5) * 0.5)
+            t = t0 + k * s16
+            if k % 4 == 0: put(kick(rng), t, 1.0)
+            else: put(bass(root - 12, beat * (0.42 if k % 4 == 2 else 0.2)), t, 0.95 if k % 4 == 2 else 0.6)
+            if k % 4 == 2: put(hat(rng, 0.09), t, 0.5)
+            put(hat(rng, 0.015), t, 0.24, 0.35 if k % 2 else -0.35)
+            if k in (4, 12): put(clap(rng), t, 0.8)
+            put(pluck(root + 24 + scale[arp[(k + b * 3) % 16]], 0.12), t, 0.8 if k % 2 == 0 else 0.5, (rng.random() - 0.5) * 0.7)
+            if k in (0, 3, 6, 10): put(bell(root + 36 + scale[arp[(k * 5 + b) % 16] % 5], 0.1), t, 0.5)
+        if b % 4 == 3: put(riser(bar * 0.5, rng), t0 + bar * 0.5, 0.35)
     for t, kind in sfx_list: put(sfx(kind, rng), t, 0.9, (rng.random() - 0.5) * 0.6)
     st = np.stack([L, Rr], 1)[: int(total * SR)]
-    side = np.ones(len(st)); i0 = int(drop * SR)                                    # 卡点段：底鼓一响，其它声部让一下（抽吸感）
-    for b in range(nb * 16):
-        if b % 16 in (0, 3, 6, 10, 11):
-            i = i0 + int(b * s16 * SR); m = min(len(st) - i, int(0.22 * SR))
-            if m > 0: side[i:i + m] = np.minimum(side[i:i + m], 0.72 + 0.28 * np.linspace(0, 1, m))
+    side = np.ones(len(st)); i0 = int(drop * SR)                                    # 底鼓一响，其它声部让一下（抽吸感）
+    for b in range(nb * 4):
+        i = i0 + int(b * beat * SR); m = min(len(st) - i, int(0.2 * SR))
+        if m > 0: side[i:i + m] = np.minimum(side[i:i + m], 0.7 + 0.3 * np.linspace(0, 1, m))
     st *= side[:, None]
     fade = int(0.6 * SR); st[-fade:] *= np.linspace(1, 0, fade)[:, None]
     st = np.tanh(st * 0.95 * level) * 0.89
@@ -116,10 +127,10 @@ def make(drop, total, sfx_list, seed=3, key=43, level=1.0):
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--plan"); ap.add_argument("--drop", type=float); ap.add_argument("--total", type=float); ap.add_argument("-o", "--out")
-    ap.add_argument("--sfx", default=""); ap.add_argument("--seed", type=int, default=3); ap.add_argument("--key", type=int, default=43)
+    ap.add_argument("--sfx", default=""); ap.add_argument("--seed", type=int, default=3); ap.add_argument("--key", type=int, default=38)
     a = ap.parse_args(); sl = [(float(x.split(":")[0]), x.split(":")[1]) for x in a.sfx.split(",") if ":" in x]
     if a.plan:
-        p = json.load(open(a.plan)); a.drop = p["hudEnd"]; beat = a.drop / 16; a.total = a.total or a.drop + sum(c["beats"] for c in p["cuts"]) * beat + (2.5 if p.get("end") else 0)
+        p = json.load(open(a.plan)); a.drop = p["hudEnd"]; beat = a.drop / bars_of(a.drop) / 4; a.total = a.total or a.drop + sum(c["beats"] for c in p["cuts"]) * beat + (2.5 if p.get("end") else 0)
         a.out = a.out or os.path.join(ROOT, "studio", "public", p["dir"], "music.wav")
         for it in p["items"]:
             if it.get("sfx") != "none": sl.append((it["at"], it.get("sfx") or SFX_OF.get(it["type"], "pop")))
