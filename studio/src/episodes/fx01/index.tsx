@@ -1,9 +1,12 @@
-// 《今天我们来炫个技》横屏 1920×1080，约 36 秒。开场一句话 → 11 秒炫技段（10 个手势，每个手势一种特效，镜头卡在配乐半拍上）→ 说明、开源、关注 → 结尾卡。
-// 特效全部由手势驱动（kit/fx.tsx），不用素材。粗剪和配乐：同目录 prep.py；认手和抠人：scripts/hud_track.py --ep fx01。
+// 《今天我们来炫个技》横屏 1920×1080，约 32 秒。开场一句 → 6.5 秒「全息工作台」炫技段 → 说明、开源、关注 → 结尾卡。
+// 炫技段里手是在「操作」工作台：剑指 → 两侧面板从指尖展开；指枪拉开 → 时间线被拉长；蓄力举手 → 工作台铺满全屏；
+// 横扫 → 卡片跟着手滑；推掌 → 渲染进度；上挑 → 成片导出飞走。面板垫在人后面，跟手的小件画在人前面并躲开脸（face.json）。
+// 粗剪和配乐：同目录 prep.py；认手和抠人：scripts/hud_track.py --ep fx01。
 import React from 'react';
 import { AbsoluteFill, Audio, OffthreadVideo, continueRender, delayRender, staticFile } from 'remotion';
 import { ClockCtx, makeClock, Timing } from '../../kit/clock';
-import { Arc, Aura, Beam, Blade, Converge, FxDefs, FxProvider, FxTrack, Laser, Orb, Pt, Shield, Shockwave, Sparks, Trail, c01, handAt, mainSide, out3, out5, useFx } from '../../kit/fx';
+import { FxProvider, FxTrack, Pt, c01, handAt, mainSide, out3, out5, useFx } from '../../kit/fx';
+import { AMB, Box, FILL, Floor, HHEI, HandRig, ICE, ICE2, ICE3, Link, List, MONO, Monitor, Nodes, Panel, Progress, Readout, Ring, Ripple, Timeline, Wave, inBox, useMat } from '../../kit/holo';
 import timing from './timing.json';
 import plan from './shots.json';
 
@@ -13,157 +16,159 @@ export const FX1_FRAMES = Math.ceil((total + plan.tail) * 30);
 const SH = plan.shots as { fx: string; start: number; end: number }[];
 const S = (k: string) => SH.find((x) => x.fx === k)!;
 const MON0 = SH[0].start, MON1 = SH[SH.length - 1].end, MICRO = plan.micro as number[];
-const CY = '#3DF0FF', MG = '#FF3DCB', GD = '#FFC83D', VI = '#9B6BFF';
-const HEI = '"X Hei", "PingFang SC", sans-serif', DIN = '"X Din", "X Hei", sans-serif';
-const RELEASE = S('awaken').start + 2.25, BURST = S('burst').start + 0.08;
-const HITS = [RELEASE, BURST];
-const LABEL: Record<string, string> = { blade: '剑指 · 光刃', laser: '指向 · 激光', arc: '双剑指 · 闪电', charge: '聚能 · 甩出', beam: '指枪 · 等离子束', awaken: '蓄力 · 觉醒', sweep: '横扫 · 霓虹', burst: '举手 · 冲击波', shield: '推掌 · 护盾', flick: '上挑 · 火花' };
+const REL = S('expand').start + 1.22;                        // 举手的那一刻：工作台铺开
+const STYLES = ['财经解读风', '横屏深度解读风', '知识科普风', '商业快节奏风', '相框老板风', '访谈纪实风'];
 
 const useAssets = () => {
-  const [tr, setTr] = React.useState<FxTrack | null>(null), [h] = React.useState(() => delayRender('fx1'));
+  const [tr, setTr] = React.useState<FxTrack | null>(null), [face, setFace] = React.useState<number[][] | null>(null), [h] = React.useState(() => delayRender('fx1'));
   React.useEffect(() => {
-    const fonts = [['X Hei', 'HarmonyOS_Sans_SC_Black.ttf'], ['X Din', 'D-DIN-PRO-700-Bold.otf']].map(([fam, f]) => new FontFace(fam, `url(${staticFile('fonts/' + f)})`, { weight: '100 900' }).load().then((x) => document.fonts.add(x)).catch(() => undefined));
-    Promise.all([...fonts, fetch(staticFile('fx01/track.json')).then((r) => r.json()).then(setTr)]).then(() => continueRender(h));
+    const fonts = [['H Hei', 'HarmonyOS_Sans_SC_Bold.ttf'], ['H Din', 'D-DIN-PRO-700-Bold.otf']].map(([fam, f]) => new FontFace(fam, `url(${staticFile('fonts/' + f)})`, { weight: '100 900' }).load().then((x) => document.fonts.add(x)).catch(() => undefined));
+    Promise.all([...fonts, fetch(staticFile('fx01/track.json')).then((r) => r.json()).then(setTr), fetch(staticFile('fx01/face.json')).then((r) => r.json()).then(setFace)]).then(() => continueRender(h));
   }, [h]);
-  return tr;
+  return { tr, face };
 };
+const FaceCtx = React.createContext<number[][] | null>(null);
+/** 这一帧的人脸框（往外放一圈，前景的东西都躲开它）。 */
+const useFace = (): Box | null => { const fs = React.useContext(FaceCtx), { f } = useFx(); const b = fs?.[Math.min(f, (fs?.length ?? 1) - 1)]; return b ? { x: b[0] - 40, y: b[1] - 90, w: b[2] + 80, h: b[3] + 110 } : null; };
 
-/** 霓虹字：白芯 + 彩色辉光，出现时从放大、模糊、错位收回来。 */
-const Neon: React.FC<{ text: string; at: number; out?: number; x?: number; y: number; size: number; color?: string; align?: 'center' | 'left' }> = ({ text, at: a, out = 1e9, x = 960, y, size, color = CY, align = 'center' }) => {
-  const { t } = useFx(); if (t < a || t > out + 0.25) return null; const p = out5((t - a) / 0.35), q = out3((t - out) / 0.2), g = (1 - out3((t - a) / 0.25)) * 18;
-  const st: React.CSSProperties = { position: 'absolute', top: y, fontFamily: HEI, fontSize: size, letterSpacing: size * 0.04, whiteSpace: 'nowrap', lineHeight: 1, ...(align === 'center' ? { left: 0, right: 0, textAlign: 'center' } : { left: x }) };
-  return <div style={{ opacity: (1 - q) * c01((t - a) / 0.06), transform: `scale(${1.6 - 0.6 * p})`, transformOrigin: align === 'center' ? `${x}px ${y + size / 2}px` : `${x}px ${y}px`, filter: `blur(${(1 - p) * 10}px)`, position: 'absolute', inset: 0 }}>
-    <div style={{ ...st, color: MG, transform: `translate(${-g}px, 0)`, opacity: 0.8, mixBlendMode: 'screen' }}>{text}</div>
-    <div style={{ ...st, color: CY, transform: `translate(${g}px, 0)`, opacity: 0.8, mixBlendMode: 'screen' }}>{text}</div>
-    <div style={{ ...st, color: '#fff', textShadow: `0 0 18px ${color}, 0 0 50px ${color}, 0 0 100px ${color}, 0 6px 20px rgba(0,0,0,.6)` }}>{text}</div>
-  </div>;
-};
-/** 字幕：白字黑描边，底部居中。炫技段不出。 */
+/** 字幕：白字深色描边，底部居中，不发光。炫技段不出，最后两行有名牌就不出。 */
 const Subs: React.FC = () => {
-  const { t } = useFx(), { lines } = fx1Clock, l = lines.find((x) => t >= x.start - 0.03 && t < x.end + 0.05); if (!l || (t >= MON0 && t < MON1) || l.n >= 17) return null;
-  const p = out5((t - l.start) / 0.16);
-  return <div style={{ position: 'absolute', left: 0, right: 0, top: 930, textAlign: 'center', fontFamily: HEI, fontSize: 60, letterSpacing: 3, color: '#fff', transform: `translateY(${(1 - p) * 14}px)`, WebkitTextStroke: '8px rgba(5,8,14,.88)', paintOrder: 'stroke fill', textShadow: `0 0 24px rgba(61,240,255,.45)` }}>{l.text.replace('AI', ' AI ')}</div>;
+  const { t } = useFx(), l = fx1Clock.lines.find((x) => t >= x.start - 0.03 && t < x.end + 0.05); if (!l || (t >= MON0 && t < MON1) || l.n >= 17) return null;
+  return <div style={{ position: 'absolute', left: 0, right: 0, top: 952, textAlign: 'center', fontFamily: HHEI, fontSize: 54, letterSpacing: 2, color: '#fff', WebkitTextStroke: '7px rgba(4,8,14,.85)', paintOrder: 'stroke fill' }}>{l.text.replace('AI', ' AI ')}</div>;
 };
-/** 炫技段的取景框：四个角括号 + 左上角标签 + 底部节拍条。 */
-const HudFrame: React.FC = () => {
-  const { t } = useFx(); if (t < MON0 || t >= MON1) return null; const k = SH.findIndex((s) => t >= s.start && t < s.end), s = SH[k], a = t - s.start, p = out5(a / 0.25);
-  const corner = (x: number, y: number, sx: number, sy: number) => <path d={`M${x},${y + sy * 70} L${x},${y} L${x + sx * 70},${y}`} stroke={CY} strokeWidth={5} fill="none" style={{ filter: `drop-shadow(0 0 10px ${CY})` }} />;
-  const beats = Math.floor((t - MON0) / plan.beat);
-  return <AbsoluteFill>
-    <svg width={1920} height={1080} style={{ position: 'absolute', inset: 0 }}>{corner(50, 50, 1, 1)}{corner(1870, 50, -1, 1)}{corner(50, 1030, 1, -1)}{corner(1870, 1030, -1, -1)}</svg>
-    <div style={{ position: 'absolute', left: 90, top: 80, display: 'flex', alignItems: 'center', gap: 18, transform: `translateX(${(1 - p) * -60}px)`, opacity: p }}>
-      <span style={{ fontFamily: DIN, fontSize: 34, color: '#05070c', background: CY, padding: '2px 14px', borderRadius: 6, boxShadow: `0 0 24px ${CY}` }}>FX {String(k + 1).padStart(2, '0')}</span>
-      <span style={{ fontFamily: HEI, fontSize: 40, color: '#fff', textShadow: `0 0 20px ${CY}, 0 3px 10px rgba(0,0,0,.8)` }}>{LABEL[s.fx]}</span>
-    </div>
-    <div style={{ position: 'absolute', right: 90, top: 86, fontFamily: DIN, fontSize: 28, letterSpacing: 4, color: 'rgba(255,255,255,.8)' }}>GESTURE TRACKING · <span style={{ color: CY }}>LIVE</span></div>
-    <div style={{ position: 'absolute', left: 90, right: 90, bottom: 70, display: 'flex', gap: 6 }}>{Array.from({ length: 26 }).map((_, i) => <div key={i} style={{ flex: 1, height: 6, borderRadius: 3, background: i <= beats ? CY : 'rgba(255,255,255,.15)', boxShadow: i === beats ? `0 0 14px ${CY}` : 'none' }} />)}</div>
-  </AbsoluteFill>;
+/** 侧边关键词面板：说话时在人右边亮一块小全息牌，写这一句的重点。不压头。 */
+const KEYS: [number, number, string, string][] = [
+  [1, 2, 'TODAY', '炫个技'], [2, 3, 'AI EDIT', 'AI 一键剪辑'], [4, 5, 'LOOK', '像这样的动效'], [5, 7, 'BEFORE', '月薪几万的剪辑师'], [7, 9, 'NOW', '一键生成'],
+  [10, 12, 'OPEN SOURCE', '核心工作流 开源'], [12, 14, 'SHARE', '做出好作品 回来分享'], [14, 16, 'JOIN', '粉丝群'], [16, 17, 'COMMENT', '评论区打「工作流」'],
+];
+const KeyPanel: React.FC = () => {
+  const { t } = useFx(); const k = KEYS.find(([a, b]) => t >= at(a) - 0.05 && t < (b <= 18 ? at(b) : total) - 0.08); if (!k || (t >= MON0 && t < MON1)) return null;
+  const s = at(k[0]) - 0.05, e = (k[1] <= 18 ? at(k[1]) : total) - 0.08, big = Math.min(72, Math.floor(440 / k[3].length));
+  return <Panel b={{ x: 1400, y: 340, w: 490, h: 200 }} at={s} out={e} title={k[2]} code={`K-${String(KEYS.indexOf(k) + 1).padStart(2, '0')}`} tilt={-12} solid>
+    <div style={{ fontFamily: HHEI, fontSize: big, color: '#fff', lineHeight: 1.2, marginTop: 18, whiteSpace: 'nowrap' }}>{k[3]}</div>
+    <div style={{ position: 'absolute', left: 0, bottom: 0, width: `${c01((t - s) / Math.max(0.5, e - s)) * 100}%`, height: 3, background: ICE }} />
+  </Panel>;
 };
-/** 开场第二句：一道扫描线从上往下扫，右上角亮「AI 一键剪辑」。 */
-const Scan: React.FC = () => {
-  const { t } = useFx(), a = at(2) - 0.1; if (t < a || t > MON0) return null; const p = c01((t - a) / 1.4);
-  return <AbsoluteFill style={{ mixBlendMode: 'screen' }}>
-    <div style={{ position: 'absolute', left: 0, right: 0, top: p * 1080 - 4, height: 4, background: CY, boxShadow: `0 0 40px 12px ${CY}` }} />
-    <div style={{ position: 'absolute', left: 0, right: 0, top: 0, height: p * 1080, background: `linear-gradient(180deg, transparent 70%, rgba(61,240,255,.10))`, backgroundImage: 'repeating-linear-gradient(0deg, rgba(61,240,255,.07) 0 2px, transparent 2px 6px)' }} />
-  </AbsoluteFill>;
+/** 名牌：最后两句，左下角。 */
+const NamePlate: React.FC = () => {
+  const { t } = useFx(), s = at(17) - 0.05; if (t < s || t > total + 0.1) return null;
+  return <Panel b={{ x: 70, y: 740, w: 560, h: 180 }} at={s} out={total} title="CREATOR" code="ID-01" tilt={12} solid>
+    <div style={{ display: 'flex', alignItems: 'baseline', gap: 22 }}><span style={{ fontFamily: HHEI, fontSize: 62, color: '#fff' }}>宁少</span><span style={{ fontFamily: MONO, fontSize: 20, color: ICE2, letterSpacing: 3 }}>AI 进化论</span></div>
+    <div style={{ fontFamily: HHEI, fontSize: 28, color: ICE, marginTop: 4, opacity: c01((t - at(18)) / 0.3) }}>陪伴 AI 时代的超级个体</div>
+  </Panel>;
 };
 
-const Effects: React.FC<{ layer: 'back' | 'front' }> = ({ layer }) => {
-  const { t, tr, f } = useFx(), a = S('awaken'), c = S('charge'), b = S('burst'), fl = S('flick');
+/** 炫技段：全息工作台。 */
+const Workbench: React.FC<{ layer: 'back' | 'front' }> = ({ layer }) => {
+  const { t, f, tr } = useFx(), face = useFace(); if (t < MON0 - 0.1 || t > MON1 + 0.3) return null;
+  const sm = S('summon'), pi = S('pinch'), ex = S('expand'), sw = S('swipe'), pu = S('push'), fl = S('flick'), END = MON1 - 0.05;
+  const L = handAt(tr, 'L', f), R = handAt(tr, 'R', f), tipAt = (side: 'L' | 'R', time: number) => handAt(tr, side, Math.round(time * 30))?.index ?? ([960, 540] as Pt);
   if (layer === 'back') {
-    const aura = t >= a.start && t < a.end ? Math.min(0.9, out3((t - a.start) / 2.2) * 0.8 + (t >= RELEASE ? 0.3 * (1 - out3((t - RELEASE) / 0.7)) : 0)) * c01((a.end - t) / 0.2) : t >= c.start && t < c.end ? 0.45 * c01((c.end - t) / 0.2) : 0;
+    const C: Pt = [960, 470], st = (i: number) => REL + 0.04 * i;
     return <>
-      <Aura src="fx01/hands.webm" strength={aura} color={t >= c.start && t < c.end ? 'gold' : 'cyan'} />
-      <Shockwave at={[960, 330]} t0={RELEASE} color={CY} size={2100} />
+      <Floor at={REL} out={END} />
+      <Ring c={[960, 430]} r={500} at={ex.start + 0.1} out={END} />
+      {/* 剑指召出来的两块：风格列表、监视器 */}
+      <Panel b={{ x: 40, y: 60, w: 560, h: 300 }} at={sm.start + 0.05} out={END} title="STYLE · 风格" code="S-06" tilt={18} from={tipAt('L', sm.start + 0.1)}>
+        <List items={STYLES.slice(0, 5)} sel={Math.floor(Math.max(0, t - sm.start) * 3) % 5} size={24} />
+      </Panel>
+      <Panel b={{ x: 1320, y: 60, w: 560, h: 300 }} at={sm.start + 0.1} out={END} title="LIVE CAM" code="CAM-1" tilt={-18} from={tipAt('R', sm.start + 0.1)}>
+        <Monitor w={528} h={228} src="fx01/person.mp4" />
+      </Panel>
+      {/* 举手：其余的面板从身后飞出去铺满 */}
+      <Panel b={{ x: 40, y: 390, w: 560, h: 250 }} at={st(0)} out={END} title="PIPELINE · 流程" code="P-05" tilt={18} from={C}><Nodes w={528} h={170} p={c01((t - REL) / 2.2)} /></Panel>
+      <Panel b={{ x: 40, y: 670, w: 560, h: 200 }} at={st(1)} out={END} title="AUDIO · 降噪" code="A-48K" tilt={18} from={C}><Wave w={528} h={120} /></Panel>
+      <Panel b={{ x: 1320, y: 390, w: 560, h: 250 }} at={st(2)} out={END} title="TIMELINE · 时间线" code="T-30FPS" tilt={-18} from={C}><Timeline w={528} h={170} seed={3} /></Panel>
+      <Panel b={{ x: 1320, y: 670, w: 560, h: 200 }} at={st(3)} out={END} title="STATS" code="SYS" tilt={-18} from={C}>
+        <Readout rows={[['HAND TRACK', `${L && R ? 2 : L || R ? 1 : 0} / 2`], ['GESTURE', ['SUMMON', 'PINCH', 'EXPAND', 'SWIPE', 'PUSH', 'FLICK'][Math.max(0, SH.findIndex((s) => t >= s.start && t < s.end))]], ['LATENCY', `${(11 + (f % 7)).toFixed(0)} ms`], ['FPS', '30.00']]} />
+      </Panel>
+      <Panel b={{ x: 700, y: 24, w: 520, h: 96 }} at={st(4)} out={END} title="AI EDIT WORKSTATION" code="v2.6" from={C}>
+        <div style={{ fontFamily: MONO, fontSize: 18, color: ICE2, letterSpacing: 4 }}>NINGSHAO · ONE TAKE · ONE CLICK</div>
+      </Panel>
     </>;
   }
-  const one = (k: string) => mainSide(tr, S(k).start, S(k).end), tip1 = (k: string) => handAt(tr, one(k), f)?.index ?? null;
-  const tipL = handAt(tr, 'L', f)?.index ?? null, tipR = handAt(tr, 'R', f)?.index ?? null, palms = (() => { const L = handAt(tr, 'L', f), R = handAt(tr, 'R', f); return L && R ? ([(L.palm[0] + R.palm[0]) / 2, Math.min(L.palm[1], R.palm[1])] as Pt) : ([960, 200] as Pt); })();
+  // —— 前景：跟着手走的东西，躲开脸 ——
+  const rigOp = (t >= MON0 && t < MON1 ? 1 : 0);
+  const pinchY = (a: Pt, b: Pt) => Math.max((a[1] + b[1]) / 2 + 170, (face ? face.y + face.h : 700) + 30);
+  const swipeSide = mainSide(tr, sw.start, sw.end), flSide = mainSide(tr, fl.start, fl.end), H0 = handAt(tr, swipeSide, Math.round((sw.start + 0.05) * 30)), Hs = handAt(tr, swipeSide, f);
+  const mid: Pt | null = L && R ? [(L.palm[0] + R.palm[0]) / 2, (L.palm[1] + R.palm[1]) / 2] : null;
+  const flT = t - fl.start, flTip = handAt(tr, flSide, Math.round((fl.start + 0.2) * 30))?.index ?? [700, 560], dock: Pt = [1760, 110], fp = out5((flT - 0.2) / 0.45);
+  const flPos: Pt = flT < 0.2 ? (handAt(tr, flSide, f)?.index ?? flTip) : [flTip[0] + (dock[0] - flTip[0]) * fp, flTip[1] + (dock[1] - flTip[1]) * fp - Math.sin(fp * Math.PI) * 160];
   return <>
-    {/* 开场：「炫个技」两拳之间一团能量；第二句说话时双手张开也来一团 */}
-    <Orb from={at(1, '炫') - 0.05} to={MON0 - 0.05} color={GD} />
-    <Orb from={at(3) - 0.1} to={at(5)} color={CY} />
-    {/* 炫技段 */}
-    <Blade side={one('blade')} from={S('blade').start} to={S('blade').end} color={CY} />
-    <Sparks at={tip1('blade')} t0={S('blade').start + 0.05} dir={[0.2, -1]} color={CY} n={40} seed={1} />
-    <Laser side={one('laser')} from={S('laser').start} to={S('laser').end} color={MG} />
-    <Arc from={S('arc').start} to={S('arc').end} color="#9FDBFF" strands={3} />
-    <Orb mode={one('charge')} from={c.start} to={c.start + 1.2} color={GD} grow={1.0} />
-    <Converge at={tip1('charge')} from={c.start} to={c.start + 1.15} color={GD} />
-    <Trail side={one('charge')} from={c.start + 1.1} to={c.end} colors={[GD, '#FF7A1A']} width={80} />
-    <Sparks at={tip1('charge')} t0={c.start + 1.2} dir={[-0.5, -1]} color={GD} n={70} seed={4} />
-    <Beam from={S('beam').start} to={S('beam').end} color={VI} />
-    <Arc from={a.start + 0.1} to={RELEASE - 0.05} color={CY} strands={2} />
-    <Converge at={tipL} from={a.start} to={RELEASE} color={CY} n={50} radius={600} />
-    <Converge at={tipR} from={a.start} to={RELEASE} color={CY} n={50} radius={600} />
-    <Blade side="L" from={RELEASE} to={a.end} color={GD} length={1000} />
-    <Blade side="R" from={RELEASE} to={a.end} color={GD} length={1000} />
-    <Sparks at={tipL} t0={RELEASE} dir={[-0.3, -1]} color={GD} n={60} seed={5} speed={1800} />
-    <Sparks at={tipR} t0={RELEASE} dir={[0.3, -1]} color={GD} n={60} seed={6} speed={1800} />
-    <Trail side={one('sweep')} from={S('sweep').start} to={S('sweep').end} colors={[MG, CY]} width={110} frames={16} />
-    <Trail side={one('sweep')} from={S('sweep').start} to={S('sweep').end} colors={[CY, MG]} width={70} frames={12} key2="palm" />
-    <Shockwave at={palms} t0={BURST} color={GD} size={1800} />
-    <Sparks at={palms} t0={BURST} dir={[0, -1]} spread={6.28} color={GD} n={110} seed={8} speed={2000} />
-    <Shield from={S('shield').start} to={S('shield').end} color={CY} />
-    <Trail side={one('flick')} from={fl.start} to={fl.end} colors={[GD, '#fff']} width={70} />
-    <Sparks at={tip1('flick')} t0={fl.start + 0.25} dir={[0.3, -1]} color={GD} n={60} seed={9} />
-    <Shockwave at={tip1('flick') ?? [800, 500]} t0={fl.start + 0.25} color={GD} size={700} />
+    <HandRig h={L} face={face} label="L·IDX" op={rigOp} />
+    <HandRig h={R} face={face} label="R·IDX" op={rigOp} />
+    {/* 剑指：指尖连到面板 */}
+    <Link a={t >= sm.start && t < sm.end && L ? L.index : null} b={[600, 360]} op={c01((t - sm.start) / 0.1)} />
+    <Link a={t >= sm.start && t < sm.end && R ? R.index : null} b={[1320, 360]} op={c01((t - sm.start) / 0.1)} />
+    <Ripple at={L?.index ?? null} t0={sm.start + 0.05} /><Ripple at={R?.index ?? null} t0={sm.start + 0.08} />
+    {/* 指枪拉开：时间线跟着两指尖拉长 */}
+    {t >= pi.start && t < pi.end + 0.2 && L && R ? (() => { const y = pinchY(L.index, R.index), x0 = Math.min(L.index[0], R.index[0]), x1 = Math.max(L.index[0], R.index[0]), w = Math.max(120, x1 - x0), op = c01((t - pi.start) / 0.1) * c01((pi.end + 0.2 - t) / 0.2);
+      return <div style={{ position: 'absolute', inset: 0, opacity: op }}>
+        <Link a={L.index} b={[x0, y]} /><Link a={R.index} b={[x1, y]} />
+        <div style={{ position: 'absolute', left: x0, top: y, width: w, height: 120, background: FILL, border: `1px solid ${ICE2}`, filter: 'drop-shadow(0 0 4px rgba(140,220,255,.55))' }}>
+          <div style={{ position: 'absolute', left: 8, top: -26, fontFamily: MONO, fontSize: 16, color: ICE, letterSpacing: 3 }}>TIMELINE · {(w / 40).toFixed(1)}s</div>
+          <div style={{ position: 'absolute', left: 6, top: 6 }}><Timeline w={w - 12} h={106} seed={3} play={c01((t - pi.start) / (pi.end - pi.start))} /></div>
+        </div>
+      </div>; })() : null}
+    {/* 横扫：一排风格卡跟着手滑过 */}
+    {t >= sw.start && t < sw.end + 0.15 && H0 && Hs ? (() => { const dx = (Hs.palm[0] - H0.palm[0]) * 1.3, op = c01((t - sw.start) / 0.08) * c01((sw.end + 0.15 - t) / 0.15);
+      return <div style={{ position: 'absolute', inset: 0, opacity: op }}>{STYLES.map((s, i) => { const x = -300 + i * 330 + dx, y = 850; if (x < -320 || x > 1940) return null; const hot = Math.abs(x + 150 - 960) < 165;
+        return <div key={i} style={{ position: 'absolute', left: x, top: y, width: 300, height: 120, background: hot ? 'rgba(255,181,71,.18)' : FILL, border: `1.5px solid ${hot ? AMB : ICE2}`, filter: 'drop-shadow(0 0 4px rgba(140,220,255,.55))', transform: `perspective(900px) rotateY(${(x + 150 - 960) / -40}deg)` }}>
+          <div style={{ position: 'absolute', left: 14, top: 10, fontFamily: MONO, fontSize: 16, color: hot ? AMB : ICE2, letterSpacing: 2 }}>STYLE {String(i + 1).padStart(2, '0')}</div>
+          <div style={{ position: 'absolute', left: 14, bottom: 14, fontFamily: HHEI, fontSize: 34, color: '#fff' }}>{s}</div></div>; })}</div>; })() : null}
+    {/* 推掌：两掌之间撑开渲染面板 */}
+    {t >= pu.start && t < pu.end + 0.2 && mid ? (() => { const y = Math.max(mid[1] - 20, (face ? face.y + face.h : 700) + 20), w = 560, op = c01((t - pu.start) / 0.1) * c01((pu.end + 0.2 - t) / 0.2), p = c01((t - pu.start - 0.15) / (pu.end - pu.start - 0.3)), s = out5((t - pu.start) / 0.3);
+      return <div style={{ position: 'absolute', left: mid[0] - w / 2, top: Math.min(y, 860), width: w, height: 150, opacity: op, transform: `scale(${0.6 + 0.4 * s})`, background: 'rgba(20,40,60,.35)', border: `1.5px solid ${ICE}`, padding: '18px 24px', boxSizing: 'border-box', filter: 'drop-shadow(0 0 6px rgba(140,220,255,.6))' }}>
+        <Progress p={p} w={w - 48} label="RENDERING · 成片" />
+      </div>; })() : null}
+    <Ripple at={L?.palm ?? null} t0={pu.start + 0.05} r={200} /><Ripple at={R?.palm ?? null} t0={pu.start + 0.05} r={200} />
+    {/* 上挑：成片卡从指尖飞到左上角停靠 */}
+    {flT >= 0 && t < MON1 + 0.3 ? <div style={{ position: 'absolute', left: flPos[0] - 120, top: flPos[1] - 40, width: 240, height: 80, background: fp >= 1 ? 'rgba(255,181,71,.2)' : FILL, border: `1.5px solid ${fp >= 1 ? AMB : ICE}`, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, fontFamily: MONO, fontSize: 22, color: '#fff', letterSpacing: 2, filter: 'drop-shadow(0 0 6px rgba(140,220,255,.6))', opacity: c01(flT / 0.08) * c01((MON1 + 0.3 - t) / 0.3) }}>
+      {fp >= 1 ? <><span style={{ color: AMB }}>✓</span> EXPORTED</> : 'FINAL.MP4'}</div> : null}
+    <Ripple at={dock} t0={fl.start + 0.65} color={AMB} r={140} />
   </>;
 };
 
 const Stage: React.FC = () => {
-  const { t } = useFx(), inMon = t >= MON0 && t < MON1;
-  const k = SH.findIndex((s) => t >= s.start && t < s.end), cut = k >= 0 ? SH[k].start : -9, hit = 1 - out5((t - cut) / 0.25);
-  const hitAmp = Math.max(0, ...HITS.map((h) => (t >= h && t < h + 0.5 ? 1 - (t - h) / 0.5 : 0)));
-  const shake = hitAmp > 0 ? [Math.sin(t * 97) * 26 * hitAmp, Math.cos(t * 83) * 20 * hitAmp] : [0, 0];
-  const pre = c01((t - (MON0 - 0.45)) / 0.45) * (t < MON0 ? 1 : 0);                                     // 砸进炫技段前，画面往前冲
-  const microK = MICRO.filter((m) => m <= t).length, talkZoom = inMon ? 1 : (microK % 2 ? 1.07 : 1) * (1 + 0.012 * ((t % 6) / 6));
-  const zoom = (inMon ? 1.04 + hit * 0.08 : talkZoom) * (1 + pre * 0.25);
-  const grade = inMon ? 'brightness(.42) saturate(.65) contrast(1.15)' : t < MON0 ? `brightness(${0.95 - pre * 0.4}) contrast(1.06)` : 'brightness(.95) contrast(1.06) saturate(1.05)';
-  const ca = hitAmp * 14 + hit * (inMon ? 6 : 0);
-  return <AbsoluteFill style={{ transform: `translate(${shake[0]}px, ${shake[1]}px) scale(${zoom})` }}>
-    <OffthreadVideo src={staticFile('fx01/person.mp4')} muted style={{ width: '100%', height: '100%', filter: grade }} />
-    {inMon ? <AbsoluteFill style={{ background: 'radial-gradient(ellipse at 50% 40%, rgba(20,40,90,.25), rgba(4,6,16,.55))', mixBlendMode: 'multiply' }} /> : null}
-    <Effects layer="back" />
-    {inMon ? <OffthreadVideo transparent muted src={staticFile('fx01/hands.webm')} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', filter: `brightness(1.02) contrast(1.08) ${ca > 1 ? `drop-shadow(${ca}px 0 0 rgba(255,40,200,.6)) drop-shadow(${-ca}px 0 0 rgba(40,240,255,.6))` : ''}` }} /> : null}
-    <Effects layer="front" />
+  const { t } = useFx(), inMon = t >= MON0 && t < MON1, microK = MICRO.filter((m) => m <= t).length;
+  const zoom = inMon || t >= total ? 1 : microK % 2 ? 1.05 : 1;                                    // 收气口处推近一点，以画面顶边为准放大，头不会被裁
+  const dim = inMon ? (t < REL ? 0.62 : 0.5) : 1;
+  return <AbsoluteFill style={{ transform: `scale(${zoom})`, transformOrigin: '50% 0%' }}>
+    <OffthreadVideo src={staticFile('fx01/person.mp4')} muted style={{ width: '100%', height: '100%', filter: inMon ? `brightness(${dim}) saturate(.7) contrast(1.1)` : 'contrast(1.04)' }} />
+    {inMon ? <AbsoluteFill style={{ background: 'linear-gradient(180deg, rgba(10,30,60,.35), rgba(5,15,30,.25))', mixBlendMode: 'multiply' }} /> : null}
+    <Workbench layer="back" />
+    {inMon ? <OffthreadVideo transparent muted src={staticFile('fx01/hands.webm')} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', filter: 'contrast(1.05)' }} /> : null}
+    <Workbench layer="front" />
   </AbsoluteFill>;
 };
 
 export const FX01: React.FC = () => {
-  const tr = useAssets();
-  return <ClockCtx.Provider value={fx1Clock}><FxProvider tr={tr}><Inner /></FxProvider></ClockCtx.Provider>;
+  const { tr, face } = useAssets();
+  return <ClockCtx.Provider value={fx1Clock}><FxProvider tr={tr}><FaceCtx.Provider value={face}><Inner /></FaceCtx.Provider></FxProvider></ClockCtx.Provider>;
 };
 const Inner: React.FC = () => {
   const { t } = useFx(), inMon = t >= MON0 && t < MON1, k = SH.findIndex((s) => t >= s.start && t < s.end), cut = k >= 0 ? SH[k].start : -9;
-  const flash = Math.max(t >= MON0 && t < MON0 + 0.3 ? 1 - (t - MON0) / 0.3 : 0, inMon ? 0.55 * (1 - out3((t - cut) / 0.12)) : 0, ...HITS.map((h) => (t >= h && t < h + 0.18 ? 0.45 * (1 - (t - h) / 0.18) : 0)), t >= MON1 && t < MON1 + 0.2 ? 0.7 * (1 - (t - MON1) / 0.2) : 0);
-  const endA = t - total;
+  const flash = Math.max(t >= MON0 && t < MON0 + 0.2 ? 0.35 * (1 - (t - MON0) / 0.2) : 0, inMon ? 0.12 * (1 - out3((t - cut) / 0.1)) : 0, t >= REL && t < REL + 0.25 ? 0.3 * (1 - (t - REL) / 0.25) : 0);
+  const endA = t - total, endM = useMat(total, 1e9);
+  const corner = (x: number, y: number, sx: number, sy: number) => <path d={`M${x},${y + sy * 44} L${x},${y} L${x + sx * 44},${y}`} stroke={ICE2} strokeWidth={2} fill="none" />;
   return <AbsoluteFill style={{ background: '#000', overflow: 'hidden' }}>
-    <FxDefs />
     <Stage />
-    <Scan />
-    {/* 开场两句的字 */}
-    <Neon text="炫个技" at={at(1, '炫')} out={at(2) - 0.05} x={90} y={560} size={200} color={GD} align="left" />
-    <Neon text="AI 一键剪辑" at={at(2, 'AI')} out={MON0 - 0.05} y={150} size={150} color={CY} />
-    {/* 说明段：月薪几万 / 一键生成；开源；关注 */}
-    <Neon text="像这样的动效" at={at(4)} out={at(5) - 0.05} y={130} size={120} color={CY} />
-    <Neon text="月薪几万的剪辑师" at={at(5, '月')} out={at(7) - 0.05} y={130} size={120} color={MG} />
-    <Neon text="一键生成" at={at(8, '一键')} out={at(9) - 0.05} y={120} size={190} color={CY} />
-    <Neon text="核心工作流 · 开源" at={at(11, '开源')} out={at(12) - 0.05} y={130} size={120} color={GD} />
-    <Neon text="做出好作品 回来分享" at={at(13, '做出')} out={at(14) - 0.05} y={130} size={110} color={CY} />
-    <Neon text="评论区打「工作流」" at={at(16)} out={at(17) - 0.05} y={130} size={120} color={GD} />
-    <Neon text="宁少" at={at(17)} out={total} x={120} y={640} size={150} color={CY} align="left" />
-    <Neon text="陪伴 AI 时代的超级个体" at={at(18)} out={total} x={124} y={810} size={58} color={CY} align="left" />
-    <HudFrame />
+    {/* 全程的取景角 */}
+    <svg width={1920} height={1080} style={{ position: 'absolute', inset: 0, opacity: 0.8 }}>{corner(30, 30, 1, 1)}{corner(1890, 30, -1, 1)}{corner(30, 1050, 1, -1)}{corner(1890, 1050, -1, -1)}</svg>
+    <KeyPanel />
+    <NamePlate />
     <Subs />
-    <AbsoluteFill style={{ background: 'radial-gradient(ellipse at 50% 45%, transparent 55%, rgba(0,0,0,.55) 100%)', pointerEvents: 'none' }} />
-    <AbsoluteFill style={{ background: '#fff', opacity: flash, mixBlendMode: 'screen' }} />
-    {endA >= 0 ? <AbsoluteFill style={{ background: 'radial-gradient(900px 600px at 50% 45%, #0d2230, #03050a 70%)', opacity: c01(endA / 0.2) }}>
-      <Neon text="想要这套 AI 剪辑工作流" at={total + 0.1} y={330} size={64} color={CY} />
-      <Neon text="评论区打「工作流」" at={total + 0.35} y={450} size={150} color={GD} />
-      <Neon text="宁少 AI 进化论" at={total + 0.8} y={680} size={50} color={CY} />
+    <AbsoluteFill style={{ background: 'radial-gradient(ellipse at 50% 45%, transparent 60%, rgba(0,0,0,.4) 100%)', pointerEvents: 'none' }} />
+    <AbsoluteFill style={{ background: '#CFF6FF', opacity: flash, mixBlendMode: 'screen' }} />
+    {endA >= 0 && endM ? <AbsoluteFill style={{ background: '#03070d', opacity: c01(endA / 0.25) }}>
+      <Ring c={[960, 540]} r={330} at={total} />
+      <Panel b={{ x: 560, y: 410, w: 800, h: 260 }} at={total + 0.15} title="GET THE WORKFLOW" code="OPEN">
+        <div style={{ fontFamily: HHEI, fontSize: 30, color: ICE2 }}>想要这套 AI 剪辑工作流</div>
+        <div style={{ fontFamily: HHEI, fontSize: 76, color: '#fff', marginTop: 8 }}>评论区打<span style={{ color: AMB }}>「工作流」</span></div>
+        <div style={{ fontFamily: MONO, fontSize: 20, color: ICE2, letterSpacing: 4, marginTop: 6 }}>宁少 AI 进化论</div>
+      </Panel>
     </AbsoluteFill> : null}
-    <div style={{ position: 'absolute', right: 60, top: 40, fontFamily: HEI, fontSize: 26, letterSpacing: 3, color: 'rgba(255,255,255,.7)', display: inMon ? 'none' : 'block' }}>宁少 AI 进化论</div>
+    <div style={{ position: 'absolute', right: 70, top: 44, fontFamily: MONO, fontSize: 20, letterSpacing: 4, color: 'rgba(200,240,255,.7)', display: inMon || endA >= 0 ? 'none' : 'block' }}>宁少 AI 进化论</div>
     <Audio src={staticFile('fx01/voice.wav')} /><Audio src={staticFile('fx01/music.wav')} />
   </AbsoluteFill>;
 };

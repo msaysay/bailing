@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""《今天我们来炫个技》的粗剪：五段原片接成一条，说话的部分取最后一遍、收气口；中间没说话的手势段挑 10 个动作剪成炫技段，
+"""《今天我们来炫个技》的粗剪：五段原片接成一条，说话的部分取最后一遍、收气口；中间没说话的手势段挑 6 个最好看的动作剪成炫技段，
 每个镜头的长度卡在配乐的半拍上。配乐也在这里合成（开场两小节铺垫，炫技段第一帧砸下去）。
 用法：python3 studio/src/episodes/fx01/prep.py <接好的原片 all.mp4> <识别结果 all.json>
 产出：studio/public/fx01/person.mp4（1920×1080，30 帧，无声）、voice.wav、music.wav；studio/src/episodes/fx01/timing.json、shots.json。
@@ -12,16 +12,12 @@ sys.path.insert(0, os.path.join(R, "scripts")); import hud_music
 # 说话：("talk", 段名, 起, 止, [字幕])；炫技：("show", 特效名, 起, 拍数（半拍为单位）)
 PLAN = [
  ("talk", "开场", 8.45, 12.30, ["今天啊我们来炫个技", "这条视频是我的AI一键剪辑生成的"]),
- ("show", "blade", 15.95, 3),      # 剑指：指尖光刃
- ("show", "laser", 17.00, 4),      # 指向：激光
- ("show", "arc", 18.05, 4),        # 双手剑指：两指间闪电
- ("show", "charge", 25.55, 7),     # 指尖聚能，甩出去拖尾
- ("show", "beam", 28.80, 4),       # 双手指枪：等离子束
- ("show", "awaken", 29.95, 14),    # 太阳穴蓄力 → 举手释放
- ("show", "sweep", 36.90, 4),      # 横扫：霓虹拖尾
- ("show", "burst", 39.45, 3),      # 举过头顶：爆炸冲击波
- ("show", "shield", 40.15, 5),     # 掌心推向镜头：六边形护盾
- ("show", "flick", 42.50, 4),      # 上挑：火花
+ ("show", "summon", 18.05, 4),     # 双手剑指举到两边：两块侧面板从指尖展开
+ ("show", "pinch", 28.80, 4),      # 双手指枪拉开：时间线跟着拉长
+ ("show", "expand", 31.00, 9),     # 太阳穴蓄力再举手：工作台铺满全屏
+ ("show", "swipe", 36.90, 4),      # 横扫：卡片跟着手滑过
+ ("show", "push", 40.15, 5),       # 推掌：渲染面板
+ ("show", "flick", 42.50, 4),      # 上挑：成片导出
  ("talk", "说明", 48.40, 56.85, ["现在", "像这样的动效过去要", "一个月薪几万块钱的剪辑师", "才能做得出来", "现在用我的这套工作流", "你也可以一键生成"]),
  ("talk", "开源", 69.80, 71.98, ["而且不止这些", "我已经把我的核心工作流"]),
  ("talk", "开源", 73.20, 74.25, ["开源给到大家了"]),
@@ -96,8 +92,8 @@ sel = "+".join(f"between(n,{int(round(x * FR))},{int(round(y * FR)) - 1})" for x
 subprocess.run(["ffmpeg", "-nostdin", "-v", "error", "-y", "-i", src, "-an", "-vf", f"fps={FR},select='{sel}',setpts=N/{FR}/TB", "-r", str(FR), "-c:v", "libx264", "-crf", "15", "-g", "15", "-pix_fmt", "yuv420p", os.path.join(pub, "person.mp4")], check=True)
 for f_ in (raw, vraw): os.remove(f_)
 # 配乐：开场两小节铺垫，炫技段第一帧砸下去；每个炫技镜头一个音效；说话时压低，结尾推上来
-TAIL = 2.6; drop = shots[0]["start"]; SFX = {"blade": "shimmer", "laser": "zap", "arc": "zap", "charge": "rise", "beam": "zap", "awaken": "rise", "sweep": "whoosh", "burst": "boom", "shield": "glass", "flick": "pop"}
-sl = [(s["start"], SFX[s["fx"]]) for s in shots] + [(s["start"] + 2.3, "boom") for s in shots if s["fx"] == "awaken"]
+TAIL = 2.6; drop = shots[0]["start"]; SFX = {"summon": "shimmer", "pinch": "glass", "expand": "rise", "swipe": "whoosh", "push": "confirm", "flick": "pop"}
+sl = [(s["start"], SFX[s["fx"]]) for s in shots] + [(s["start"] + 1.2, "boom") for s in shots if s["fx"] == "expand"]
 st, _, bpm = hud_music.make(drop, total + TAIL, sl, seed=7, key=38, bars=2)
 t = np.arange(len(st)) / hud_music.SR; g = np.full(len(t), 0.12); g[t < drop] = 0.2; g[(t >= drop) & (t < shots[-1]["end"])] = 1.0; g[t >= total - 0.1] = 0.6
 k = int(0.12 * hud_music.SR); g = np.convolve(g, np.ones(k) / k, "same"); sf.write(os.path.join(pub, "music.wav"), st * g[:, None], hud_music.SR, subtype="PCM_16")
