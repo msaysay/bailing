@@ -1,5 +1,5 @@
-// 《短视频剪辑正式进入 AI 时代》第二版，横屏 1920×1080，约 56 秒。六段连续口播粗剪成 13 段，每段换一种版式盖住剪口：
-// s1–s2 电影分屏大字 → s3 质疑气泡 → s4 反问 + 三步流程 → s5 推近 → s6 一句一句提要求（对话框）→ s7 风格墙
+// 《短视频剪辑正式进入 AI 时代》第二版，横屏 1920×1080，约 48 秒。六段连续口播粗剪成 12 段（收过气口），每段换一种版式盖住剪口：
+// s1–s2 电影分屏大字 → s3 质疑气泡 → s4 反问 + 三步流程 → s6 一句一句提要求（对话框）→ s7 风格墙
 // → s8–s9 插入手势全息片（配乐在这里砸下去）→ s10 后续更新两张卡 → s11 评论区打「工作流」→ s12 名片 → 结尾卡。
 // 先跑同目录 prep.py：产出 studio/public/full02/main.mp4、main.wav、bed.wav 和 data.json。时刻都从 data.json 取。
 import React from 'react';
@@ -22,10 +22,12 @@ const useFontsG = () => {
   }, [h]);
 };
 const T = React.createContext(0); const useT = () => React.useContext(T);
+/** 收气口的位置（剪掉 0.15 秒以上的地方）：人物在这里推近或拉回，盖住跳帧。 */
+const MICRO = ((data as any).micro ?? []).map((m: number[]) => m[0]) as number[];
 const segAt = (t: number) => Object.keys(S).find((k) => t >= S[k].start && t < S[k].end) ?? 's12';
 /** 人物：把这一段的脸放到 (cx, cy)，脸宽 fw。 */
 const Person: React.FC<{ cx: number; cy: number; fw: number; style?: React.CSSProperties }> = ({ cx, cy, fw, style }) => {
-  const t = useT(), f = S[segAt(Math.min(t, data.total - 0.01))].face ?? [960, 455, 240], k = fw / f[2];
+  const t = useT(), sg = segAt(Math.min(t, data.total - 0.01)), f = S[sg].face ?? [960, 455, 240], z = MICRO.filter((m) => m <= t && m >= S[sg].start).length % 2 ? 1.07 : 1, k = (fw * z) / f[2];
   return <OffthreadVideo src={staticFile('full02/main.mp4')} muted style={{ filter: 'brightness(1.08) contrast(1.04) saturate(1.05)', position: 'absolute', left: cx - f[0] * k, top: cy - f[1] * k, width: 1920 * k, height: 1080 * k, maxWidth: 'none', ...style }} />;
 };
 const Rise: React.FC<{ at: number; out?: number; children: React.ReactNode; style?: React.CSSProperties }> = ({ at, out = 999, children, style }) => {
@@ -121,15 +123,6 @@ const Why: React.FC = () => {
         </Glass></Pop>)}
     </div>
     <Pop at={done + 0.25} style={{ position: 'absolute', left: 1330, top: 560 }}><div style={{ fontFamily: BT, fontSize: 210, color: INK, background: LIME, padding: '0 50px', borderRadius: 24, transform: 'rotate(-8deg)', boxShadow: '0 30px 80px rgba(0,0,0,.6), 0 0 80px rgba(214,255,61,.5)' }}>搞定</div></Pop>
-  </AbsoluteFill>;
-};
-
-/** s5 推近 */
-const Except: React.FC = () => {
-  const t = useT(), a = S.s5.start;
-  return <AbsoluteFill style={{ background: '#000' }}>
-    <Person cx={960} cy={430} fw={370 + (t - a) * 14} /><AbsoluteFill style={{ background: 'radial-gradient(ellipse at 50% 40%, transparent 40%, rgba(0,0,0,.6) 100%)' }} />
-    <Pop at={a + 0.3} from="left" style={{ position: 'absolute', left: 110, top: 120 }}><div style={{ fontFamily: HEI, fontSize: 44, color: '#fff', border: '3px solid rgba(255,255,255,.8)', padding: '10px 28px', borderRadius: 14, background: 'rgba(0,0,0,.45)' }}>专业剪辑师 <span style={{ color: GOLD }}>除外</span></div></Pop>
   </AbsoluteFill>;
 };
 
@@ -246,7 +239,7 @@ const Sign: React.FC = () => {
 export const FULL02: React.FC = () => {
   useFontsG();
   const f = useCurrentFrame(), t = f / FPS, at = (k: string) => S[k].start;
-  const scene = t < at('s3') ? <Hook /> : t < at('s4a') ? <Doubt /> : t < at('s5') ? <Why /> : t < at('s6') ? <Except /> : t < at('s7') ? <Chat /> : t < at('s8') ? <Wall /> : t < at('s10') ? <Holo /> : t < at('s11') ? <Next /> : t < at('s12') ? <Cta /> : <Sign />;
+  const scene = t < at('s3') ? <Hook /> : t < at('s4a') ? <Doubt /> : t < at('s6') ? <Why /> : t < at('s7') ? <Chat /> : t < at('s8') ? <Wall /> : t < at('s10') ? <Holo /> : t < at('s11') ? <Next /> : t < at('s12') ? <Cta /> : <Sign />;
   const cut = [...data.cuts].reverse().find((c) => t >= c) ?? -9, hit = 1 - out5((t - cut) / 0.22);
   return <T.Provider value={t}><AbsoluteFill style={{ background: '#000' }}>
     <AbsoluteFill style={{ transform: `scale(${1 + hit * 0.035})` }}>{scene}</AbsoluteFill>
