@@ -59,6 +59,10 @@ def sfx(kind, rng):
     if kind == "confirm": n = int(0.5 * SR); a = np.sin(2 * np.pi * 880 * np.arange(n) / SR) * env(n, 0.002, 0.09); b = np.sin(2 * np.pi * 1318 * np.arange(n) / SR) * env(n, 0.002, 0.16); return (a + np.roll(b, int(0.09 * SR)) * (np.arange(n) > 0.09 * SR)) * 0.4
     if kind == "shimmer": n = int(1.2 * SR); t = np.arange(n) / SR; return sum(np.sin(2 * np.pi * f * t + i) for i, f in enumerate((2093, 2637, 3136, 3951))) * np.sin(np.pi * t / 1.2) ** 2 * 0.07 + band(noise(n, rng), 5000, 14000) * np.sin(np.pi * t / 1.2) ** 2 * 0.12
     if kind == "glass": n = int(0.9 * SR); t = np.arange(n) / SR; return sum(np.sin(2 * np.pi * f * t) * np.exp(-t / (0.25 - i * 0.03)) for i, f in enumerate((1568, 2349, 3520, 4699))) * 0.1
+    if kind == "zap":                                                            # 电流：一串随机的高频噼啪
+        n = int(0.45 * SR); t = np.arange(n) / SR; x = band(noise(n, rng), 2500, 12000) * (rng.random(n) > 0.82) * 1.0; x += np.sign(np.sin(2 * np.pi * 95 * t)) * 0.15
+        return np.tanh(x * env(n, 0.002, 0.14) * 2.2) * 0.5
+    if kind == "boom": return impact(rng) * 0.8
     if kind == "rise": n = int(1.0 * SR); t = np.arange(n) / SR; return np.sin(2 * np.pi * np.cumsum(300 + 900 * t ** 2) / SR) * (t / 1.0) * 0.22
     return np.zeros(1)
 
@@ -71,10 +75,10 @@ def pluck(m, d=0.18):
 def bars_of(drop): return max(4, int(round(drop / 2.0)))                  # 全息段几小节：让速度落在 120 拍/分上下
 
 
-def make(drop, total, sfx_list, seed=3, key=38, level=1.0):
+def make(drop, total, sfx_list, seed=3, key=38, level=1.0, bars=None):
     """key 是根音的 MIDI 号（默认 D2，小调）。全息段 N 小节分四档，一档比一档满，最后一档蓄力；转场落在下一小节第一拍。
     返回 (立体声, 每拍的时刻, 速度)。"""
-    rng = np.random.default_rng(seed); N = bars_of(drop); bar = drop / N; beat = bar / 4; s16 = beat / 4; bpm = 60 / beat; n = int((total + 1.5) * SR); L = np.zeros(n); Rr = np.zeros(n)
+    rng = np.random.default_rng(seed); N = bars or bars_of(drop); bar = drop / N; beat = bar / 4; s16 = beat / 4; bpm = 60 / beat; n = int((total + 1.5) * SR); L = np.zeros(n); Rr = np.zeros(n)
 
     def put(x, t, g=1.0, pan=0.0):
         i = int(t * SR)

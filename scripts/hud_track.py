@@ -66,7 +66,7 @@ def seg_mask(mp, seg, frame, hands):
     nlab, lab, stats, _ = cv2.connectedComponentsWithStats(hard)
     if hands: keep = np.unique(lab[(cv2.dilate(core, np.ones((41, 41), np.uint8)) > 0) & (lab > 0)])
     else: keep = [i for i in range(1, nlab) if stats[i, cv2.CC_STAT_TOP] + stats[i, cv2.CC_STAT_HEIGHT] >= H - 2 and stats[i, cv2.CC_STAT_AREA] > W * H * 0.004]
-    m = (np.isin(lab, keep) * fg * 255).astype(np.uint8) if len(keep) else np.zeros((H, W), np.uint8)
+    m = (np.isin(lab, keep) * np.clip((fg - 0.25) / 0.3, 0, 1) * 255).astype(np.uint8) if len(keep) else np.zeros((H, W), np.uint8)   # 置信度过一道软阈值：人是实的，边缘才半透明
     return np.maximum(m, cv2.GaussianBlur(core, (0, 0), 4))
 
 
@@ -244,7 +244,7 @@ def main():
                 m = np.zeros((H, W), np.uint8)
                 for p_ in hs: m = cv2.bitwise_or(m, hand_mask(f, p_))
             m = cv2.GaussianBlur(cv2.erode(m, np.ones((3, 3), np.uint8)), (0, 0), 2.5)
-            if prev is not None: m = np.maximum(m, (prev * 0.35).astype(np.uint8))      # 前一帧留一点，边缘不闪
+            if prev is not None: m = np.maximum(m, (prev * 0.15).astype(np.uint8))      # 前一帧留一点，边缘不闪
             prev = m
             p.stdin.write(cv2.resize(np.dstack([f, m]), (hw, hh), interpolation=cv2.INTER_AREA).tobytes())
         p.stdin.close(); p.wait()
