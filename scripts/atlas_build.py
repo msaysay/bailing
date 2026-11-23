@@ -39,5 +39,9 @@ out = os.path.join(R, "site", "atlas-data.js")
 old = {}
 if os.path.exists(out): old = json.loads(open(out, encoding="utf8").read().split("=", 1)[1].rstrip(";\n"))
 data = {"terms": terms or old.get("terms", []), "packs": packs or old.get("packs", []), "mg": styles or old.get("mg", [])}
+# 风格配方（styles/atlas-styles.json）并进来：给 15 种外来风格补上参数，带上自己的和蒸馏的
+ST = json.load(open(os.path.join(R, "styles", "atlas-styles.json"), encoding="utf8"))
+for m in data["mg"]: k = m["id"][3:]; m["t"] = ST["mg"]["tokens"].get(k); m["fits"] = ST["mg"]["fits"].get(k, [])
+data["house"] = ST["house"]; data["distill"] = ST["distill"]
 open(out, "w", encoding="utf8").write("window.ATLAS_DATA = " + json.dumps(data, ensure_ascii=False) + ";\n")
-print(f"名词 {len(data['terms'])} 个（{len(data['packs'])} 包），风格 {len(data['mg'])} 种 → {out}")
+print(f"名词 {len(data['terms'])} 个（{len(data['packs'])} 包），风格 {len(data['house'])} + {len(data['mg'])} + {len(data['distill'])} 种 → {out}")

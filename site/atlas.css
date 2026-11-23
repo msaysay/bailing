@@ -141,3 +141,24 @@ img, video { display: block; max-width: 100%; }
 .say { font-size: 13.5px; background: rgba(244,242,236,.05); border-left: 3px solid var(--lime); padding: 8px 10px; margin-top: 10px; color: var(--paper); }
 @media (max-width: 900px) { .mixer { grid-template-columns: 1fr; } .mixer .out { position: static; } .arch .layer { grid-template-columns: 1fr; } .split4060 { grid-template-columns: 1fr; } .split4060 div:last-child { border-left: 1px solid var(--lime); } .tabs { top: 52px; } }
 @media (max-width: 560px) { .grid, .grid.wide { grid-template-columns: 1fr; } .sub-hero { padding-top: 100px; } .mixer .two { grid-template-columns: 1fr; } .tray span { display: none; } }
+
+/* 混搭器：实时预览、自动方案 */
+.mixer .pool-h { flex-basis: 100%; font-size: 12.5px; color: var(--mute); margin: 10px 0 2px; }
+.mixer .pool button u { text-decoration: none; font-size: 11px; font-weight: 900; margin-left: 6px; opacity: .8; }
+.mixer .check { display: flex; align-items: center; gap: 8px; color: var(--paper); font-size: 14px; } .mixer .check input { width: auto; }
+.bigpv { position: relative; aspect-ratio: 16 / 9; background: #000; border: 1px solid var(--line); overflow: hidden; } .bigpv canvas { width: 100%; height: 100%; display: block; }
+.bigpv .empty { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: var(--mute); font-size: 14px; background: var(--ink2); text-align: center; padding: 20px; }
+.strip { display: flex; gap: 8px; margin-top: 8px; } .strip .mini { flex: 1; min-width: 0; border: 1px solid var(--line); background: var(--ink2); }
+.strip .mini canvas { width: 100%; display: block; aspect-ratio: 16 / 9; } .strip .mini span { display: block; font-size: 12px; padding: 4px 8px; color: var(--mute); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .strip .mini span b { color: var(--lime); }
+.props { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.props .prop { border: 1px solid var(--line); background: var(--ink2); display: flex; flex-direction: column; } .props .prop canvas { width: 100%; display: block; aspect-ratio: 16 / 9; }
+.props .prop > div { padding: 12px 14px; flex: 1; } .props .prop b { font-weight: 900; } .props .prop p { font-size: 13px; color: var(--mute); margin-top: 4px; line-height: 1.55; }
+.props .prop button { font: inherit; font-weight: 900; font-size: 14px; margin: 0 14px 14px; padding: 9px; border: 1px solid var(--lime); background: transparent; color: var(--lime); cursor: pointer; } .props .prop button:hover { background: var(--lime); color: var(--ink); }
+.callout { border: 1px solid var(--gold); background: rgba(255,216,74,.06); padding: 18px 20px; margin-top: 26px; display: grid; grid-template-columns: auto 1fr; gap: 6px 18px; align-items: start; }
+.callout b { font-weight: 900; color: var(--gold); white-space: nowrap; } .callout p { font-size: 14.5px; color: var(--paper); } .callout p small { color: var(--mute); display: block; margin-top: 4px; }
+.qa { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; counter-reset: q; }
+.qa .q { border: 1px solid var(--line); background: var(--ink2); padding: 18px; } .qa .q::before { counter-increment: q; content: "问 " counter(q); font-family: var(--din); font-size: 13px; letter-spacing: 3px; color: var(--lime); }
+.qa .q b { display: block; font-size: 17px; font-weight: 900; margin: 6px 0 10px; } .qa .q span { display: block; font-size: 13.5px; color: var(--mute); border-left: 2px solid var(--line); padding-left: 10px; margin-top: 6px; }
+.qa .q span i { font-style: normal; font-family: var(--din); color: var(--paper); margin-right: 6px; }
+.covers { display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-end; } .covers img { height: 300px; width: auto; border: 1px solid var(--line); }
+@media (max-width: 900px) { .props { grid-template-columns: 1fr; } .callout { grid-template-columns: 1fr; } }

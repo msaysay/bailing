@@ -12,6 +12,8 @@ import { FULL02, FULL2_FPS, FULL2_FRAMES } from './episodes/full02';
 import { WIDE02, wide2Clock, WIDE2_TAIL } from './episodes/wide02';
 import { FX01, FX1_FRAMES } from './episodes/fx01';
 import { Cover06 } from './episodes/ep06/cover';
+import { SkinTalk, skinDefault } from './kit/skin';
+import { CoverKit, coverDefault } from './kit/coverkit';
 import { Cover01, Cover01V } from './episodes/cover01';
 import { PetDemo, PET_DEMO_SEC } from './episodes/petdemo';
 import { Gallery, GFPS } from './gallery';
@@ -39,6 +41,10 @@ registerRoot(() => (
     <Composition id="FX01" component={FX01} width={1920} height={1080} fps={30} durationInFrames={FX1_FRAMES} />
     <Still id="EP06-COVER-DOUYIN" component={Cover06} width={1080} height={1440} />
     <Still id="EP06-COVER-SHIPINHAO" component={Cover06} width={1080} height={1260} />
+    {/* 风格配方引擎：一个合成做所有风格。scripts/skin.py render 用 --props 传数据。 */}
+    <Composition id="SKIN" component={SkinTalk} width={1920} height={1080} fps={30} durationInFrames={90} defaultProps={skinDefault} calculateMetadata={({ props }) => ({ durationInFrames: Math.max(1, Math.round(props.total * 30)), width: props.w, height: props.h })} />
+    {/* 封面三件套：scripts/publish_kit.py 用 --props 传主图、文字、排法和尺寸。 */}
+    <Still id="COVERKIT" component={CoverKit} width={1080} height={1440} defaultProps={coverDefault} calculateMetadata={({ props }) => ({ width: props.w, height: props.h })} />
     <Still id="COVER01" component={Cover01} width={1920} height={1080} />
     <Still id="COVER01-V" component={Cover01V} width={1080} height={1440} />
     {/* 知识科普风（张展鹏式）：数据驱动，一个合成做所有期。scripts/zp.py render 用 --props 传每期的数据。相框老板风有自己的入口 src/yuedu/index.tsx。 */}

@@ -19,28 +19,65 @@
   <h1>工作流是毛坯房，<br><em>图鉴才是软装</em></h1>
   <p class="lead">工作流和技能包解决的是「能做出来」。做得好不好看，取决于两样东西：审美，和叫得出名字的专业认知。这一页把它们做成看得见的参考：每张卡都会动，底下都配好了可以直接发给 AI 的话。</p>
   <div class="stats">
-    <div><b id="n-style">0</b><span>种风格，带完整提示词</span></div>
+    <div><b id="n-style">0</b><span>种风格，带提示词</span></div>
     <div><b id="n-term">0</b><span>个专业名词，带动态示例</span></div>
     <div><b id="n-wm">0</b><span>个白模动效，一键换皮肤</span></div>
-    <div><b>1</b><span>个混搭器，带上你的个人指纹</span></div>
+    <div><b>298</b><span>个组件积木</span></div>
   </div>
 </section>
 
 <div class="tabs">
   <button class="on" data-pane="p-style"><i>01</i>风格库</button>
-  <button data-pane="p-term"><i>02</i>专业名词库</button>
-  <button data-pane="p-wm"><i>03</i>白模动效</button>
-  <button data-pane="p-mix"><i>04</i>风格混搭器</button>
+  <button data-pane="p-mix"><i>02</i>风格混搭器</button>
+  <button data-pane="p-term"><i>03</i>专业名词库</button>
+  <button data-pane="p-wm"><i>04</i>白模动效</button>
+  <button data-pane="p-blocks"><i>05</i>组件积木</button>
 </div>
 
 <section class="pane on" id="p-style">
   <h2>风格库：先定大方向</h2>
-  <p class="note">风格是给视频定调。想要哪种，点「复制提示词」直接发给 AI；想混搭，点「选它」攒到底部托盘里。</p>
-  <h3>我们工作流里现成的 <small>说一句话就能用，原片丢进去直接出片</small></h3>
+  <p class="note">风格是给视频定调。想要哪种，点「复制提示词」直接发给 AI；想混搭，点「选它」攒到底部托盘里，或者去第二个标签页直接看混出来的效果。</p>
+  <h3>工作流里现成的 <small>说一句话就能用，原片丢进去直接出片</small></h3>
   <div class="grid wide" id="g-house"></div>
+  <h3>蒸馏的大 V 剪辑风格 <small>把头部博主的剪法提炼成一组参数和做法；预览是按参数实时画出来的示意</small></h3>
+  <div class="grid wide" id="g-dist"></div>
+  <p class="credit">「蒸馏」的意思是提炼这类视频公开可见的剪辑特征（版式、配色、字幕、节奏），不使用任何人的画面、标志或素材。卡片上的「对标」只说明参考方向。其中财经解读风、横屏深度解读风是逐帧拆过真实成片的；这 14 种是按公开视频的常见特征整理的，没有逐帧拆解。</p>
   <h3>15 种动态设计风格 <small>每种一支 10 秒成片，全部由 Claude Opus 5.5 写代码做出来；提示词可以整段复制</small></h3>
   <div class="grid wide" id="g-mg"></div>
   <p class="credit">15 种动态设计风格来自开源项目 <a href="https://github.com/Vincentwei1021/mg-styles-15" target="_blank" rel="noopener">Vincentwei1021/mg-styles-15</a>（MIT 许可证）。这里放的是每支成片的 4 秒小样和原提示词，完整成片、源码和评审标准见原仓库。</p>
+</section>
+
+<section class="pane" id="p-mix">
+  <h2>风格混搭器：点一下就看到效果</h2>
+  <p class="note">攒下来的风格终究是别人的。拿两三种互相混搭，再叠上你不变的那几样东西，就能长出自己的风格。第一种定结构（版式、动效、字幕样式），第二种定皮肤（配色、纹理、字体），第三种点睛（强调色、强调形状）。</p>
+
+  <h3 style="margin-top:8px">不知道怎么选？帮我自动搭 <small>选一下你的内容讲什么，给你三个方案</small></h3>
+  <div class="chips" id="auto-types"></div>
+  <div class="props" id="auto-props"></div>
+  <button class="btn sm ghost" id="auto-more" style="margin-top:14px">换一批</button>
+
+  <h3>自己搭</h3>
+  <div class="mixer">
+    <div>
+      <div class="pool" id="mix-pool"></div>
+      <h3>你的个人指纹 <small>改了会记在这台电脑的浏览器里</small></h3>
+      <label class="check"><input type="checkbox" id="mix-fp" checked> 混搭时套上我的指纹（强调色换成我的主色）</label>
+      <div class="two"><div><label>署名</label><input id="fp-name"></div><div><label>一句话定位</label><input id="fp-slogan"></div></div>
+      <div class="two" style="grid-template-columns:1fr 1fr 1fr"><div><label>底色</label><input id="fp-c1"></div><div><label>主色</label><input id="fp-c2"></div><div><label>文字色</label><input id="fp-c3"></div></div>
+      <div class="swatches" id="fp-sw"></div>
+      <label>字体</label><input id="fp-font">
+      <label>动效习惯</label><input id="fp-motion">
+      <label>规矩</label><input id="fp-rules">
+      <label>这次用在哪</label><input id="fp-use" placeholder="例如：一条 60 秒的横屏口播，讲 AI 剪辑">
+    </div>
+    <div class="out">
+      <div class="bigpv" id="mix-big"><div class="empty" id="mix-empty">在左边点风格，这里实时显示混出来的样子</div></div>
+      <div class="strip" id="mix-strip"></div>
+      <div class="acts"><button class="btn sm lime" id="mix-copy">复制提示词</button><button class="btn sm ghost" id="mix-rand">随机混搭</button></div>
+      <pre id="mix-out"></pre>
+    </div>
+  </div>
+  <p class="credit">预览是按风格参数实时画的示意图（灰色人形代替真人），用来判断配色、字体气质、字幕样式和版式合不合适；最终成片以 AI 出的关键帧为准。</p>
 </section>
 
 <section class="pane" id="p-term">
@@ -61,27 +98,20 @@
   <p class="credit">白模动效是我们自己做的，每个都是从这套工作流已有的组件里抽出来的运动骨架。「白模化」的做法参考了一页枝鸥和光郡两位博主的分享。</p>
 </section>
 
-<section class="pane" id="p-mix">
-  <h2>风格混搭器：长出自己的风格</h2>
-  <p class="note">攒下来的风格终究是别人的。拿两三种基础风格互相混搭，再叠上你不变的那几样东西（配色、字体、署名、规矩），就能长出和别人不一样的风格。</p>
-  <div class="mixer">
-    <div>
-      <h3 style="margin-top:0">① 选 2 到 3 种风格 <small>虚线框的是工作流里现成的</small></h3>
-      <div class="pool" id="mix-pool"></div>
-      <h3>② 你的个人指纹 <small>改了会记在这台电脑的浏览器里</small></h3>
-      <div class="two"><div><label>署名</label><input id="fp-name"></div><div><label>一句话定位</label><input id="fp-slogan"></div></div>
-      <div class="two" style="grid-template-columns:1fr 1fr 1fr"><div><label>底色</label><input id="fp-c1"></div><div><label>主色</label><input id="fp-c2"></div><div><label>文字色</label><input id="fp-c3"></div></div>
-      <div class="swatches" id="fp-sw"></div>
-      <label>字体</label><input id="fp-font">
-      <label>动效习惯</label><input id="fp-motion">
-      <label>规矩</label><input id="fp-rules">
-      <label>这次用在哪</label><input id="fp-use" placeholder="例如：一条 60 秒的横屏口播，讲 AI 剪辑">
-    </div>
-    <div class="out">
-      <div class="acts"><button class="btn sm lime" id="mix-copy">复制混搭提示词</button><button class="btn sm ghost" id="mix-rand">随机混搭</button></div>
-      <pre id="mix-out"></pre>
-    </div>
+<section class="pane" id="p-blocks">
+  <h2>组件积木：298 个组件在哪一层</h2>
+  <p class="note">组件是「积木」：一个组件负责把一种信息摆上画面（一个大数字、一张图表、一段流程、一块视频窗）。它不决定片子的风格，也不是动作的名字。四样东西的关系是：<b>风格</b>定调 → <b>版式</b>定人和内容怎么摆 → <b>组件</b>把内容摆上去 → <b>白模</b>是组件的运动骨架 → <b>专业名词</b>是你跟 AI 描述这个动作时用的词。</p>
+  <div class="gap"><table>
+    <thead><tr><th style="width:17%">组件大类</th><th style="width:21%">包含哪些组</th><th style="width:21%">风格库怎么管它</th><th style="width:20%">对应的白模</th><th>对应的专业名词</th></tr></thead>
+    <tbody id="blocks"></tbody>
+  </table></div>
+  <div class="steps4" style="margin-top:34px">
+    <div><b>风格 = 皮肤</b><p>一组参数：底色、强调色、字体气质、圆角、纹理、字幕样式。换风格不用换组件。</p></div>
+    <div><b>组件 = 积木</b><p>298 个，按「要摆什么信息」分成 23 组。同一个组件套不同风格的参数，长相就不同。</p></div>
+    <div><b>白模 = 骨架</b><p>组件里「怎么动」的那部分，单独拎出来看。目前拎出了 24 个最常用的。</p></div>
+    <div><b>名词 = 语言</b><p>你说「遮罩显现」「交错动画」，AI 就知道用哪个组件、哪个骨架、多长时间。</p></div>
   </div>
+  <p class="credit">298 个组件的完整清单和小样在<a href="index.html#wall">官网首页的组件墙</a>。目前组件的颜色和字体大多还写在组件自己里面，只有新的「风格配方引擎」那条线是完全按参数换皮肤的；把老组件逐个改成读风格参数，是接下来要做的事。</p>
 </section>
 
 <div class="tray" id="tray"><b>0</b><span></span><button id="tray-copy">复制成发给 AI 的话</button><button class="x" id="tray-clear">清空</button></div>
@@ -98,6 +128,7 @@
 <script src="vendor/motion-prompt/packs/lp.js"></script>
 <script src="vendor/motion-prompt/packs/lp2.js"></script>
 <script src="atlas-data.js"></script>
+<script src="atlas-preview.js"></script>
 <script src="atlas.js"></script>
 </body>
 </html>

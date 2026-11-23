@@ -1,0 +1,953 @@
+{
+ "说明": "风格配方：每种风格用同一组参数描述。t 里：bg 底色 / panel 面板色 / fg 文字色 / hot 强调色 / hot2 第二强调色 / font 字体气质（hei 黑体、song 宋体、kai 楷体、round 圆体、thin 细体、mono 等宽、pixel 像素、hand 手写）/ radius 圆角 / stroke 描边粗细 / tex 纹理（none、grid、dots、paper、scan、grain、glow、halftone）/ cap 字幕样式（stroke 描边、bar 底条、box 底托、plain 素字、pop 花字）/ layout 版式（full 人全屏、split 左右分屏、card 人加卡片、pip 素材加小头像、board 板上贴人、letterbox 上下黑边）/ motion 动效（pop、rise、slam、type、glitch、fade、slide、draw）/ shape 强调形状（bar、tag、circle、brush、bracket、underline）。网页图鉴、自动混搭、出片引擎都读它。",
+ "house": [
+  {
+   "id": "h-xiaolin",
+   "name": "财经解读风",
+   "en": "TALK · XIAOLIN",
+   "ref": "对标小 Lin 说（逐帧拆解过两条真实成片）",
+   "fits": [
+    "财经",
+    "商业",
+    "知识"
+   ],
+   "t": {
+    "bg": "#0C1222",
+    "panel": "#17223B",
+    "fg": "#FFFFFF",
+    "hot": "#FFD84A",
+    "hot2": "#5B8CFF",
+    "font": "hei",
+    "radius": 18,
+    "stroke": 0,
+    "tex": "grid",
+    "cap": "stroke",
+    "layout": "pip",
+    "motion": "pop",
+    "shape": "bar"
+   }
+  },
+  {
+   "id": "h-danjie",
+   "name": "商业快节奏风",
+   "en": "TALK · DANJIE",
+   "ref": "对标蛋解创业（按客户交付的成片整理）",
+   "fits": [
+    "商业",
+    "财经",
+    "老板"
+   ],
+   "t": {
+    "bg": "#0B1430",
+    "panel": "#13204A",
+    "fg": "#FFFFFF",
+    "hot": "#E9C46A",
+    "hot2": "#FFFFFF",
+    "font": "hei",
+    "radius": 10,
+    "stroke": 0,
+    "tex": "none",
+    "cap": "stroke",
+    "layout": "full",
+    "motion": "slam",
+    "shape": "underline"
+   }
+  },
+  {
+   "id": "h-ziqi",
+   "name": "横屏深度解读风",
+   "en": "WIDE · ZIQI",
+   "ref": "对标子祺见微（逐帧拆解过两条真实成片）",
+   "fits": [
+    "新闻",
+    "财经",
+    "历史",
+    "知识"
+   ],
+   "t": {
+    "bg": "#0B0D12",
+    "panel": "#2A2317",
+    "fg": "#FFFFFF",
+    "hot": "#E9C46A",
+    "hot2": "#F7E3A1",
+    "font": "song",
+    "radius": 6,
+    "stroke": 0,
+    "tex": "none",
+    "cap": "stroke",
+    "layout": "card",
+    "motion": "fade",
+    "shape": "bar"
+   }
+  },
+  {
+   "id": "h-split",
+   "name": "电影分屏大字",
+   "en": "FILM · SPLIT TYPE",
+   "ref": "自己设计的",
+   "fits": [
+    "科技",
+    "商业",
+    "老板",
+    "知识"
+   ],
+   "t": {
+    "bg": "#0A0A0B",
+    "panel": "#111214",
+    "fg": "#F4F2EC",
+    "hot": "#D6FF3D",
+    "hot2": "#FFD84A",
+    "font": "hei",
+    "radius": 4,
+    "stroke": 0,
+    "tex": "none",
+    "cap": "stroke",
+    "layout": "split",
+    "motion": "rise",
+    "shape": "bar"
+   }
+  },
+  {
+   "id": "h-news",
+   "name": "横屏新闻解读",
+   "en": "NEWS · EXPLAINER",
+   "ref": "自己设计的",
+   "fits": [
+    "新闻",
+    "科技",
+    "财经"
+   ],
+   "t": {
+    "bg": "#0B0D11",
+    "panel": "#151920",
+    "fg": "#F2EFE8",
+    "hot": "#76B900",
+    "hot2": "#E5484D",
+    "font": "hei",
+    "radius": 0,
+    "stroke": 0,
+    "tex": "none",
+    "cap": "bar",
+    "layout": "full",
+    "motion": "rise",
+    "shape": "tag"
+   }
+  },
+  {
+   "id": "h-zhanpeng",
+   "name": "知识科普风",
+   "en": "TALK · KAI",
+   "ref": "对标张展鹏（按客户提供的对标片整理）",
+   "fits": [
+    "知识",
+    "健康",
+    "情感"
+   ],
+   "t": {
+    "bg": "#000000",
+    "panel": "#111111",
+    "fg": "#FFFFFF",
+    "hot": "#FFD84A",
+    "hot2": "#E5484D",
+    "font": "kai",
+    "radius": 0,
+    "stroke": 0,
+    "tex": "none",
+    "cap": "plain",
+    "layout": "full",
+    "motion": "fade",
+    "shape": "underline"
+   }
+  },
+  {
+   "id": "h-frame",
+   "name": "相框老板风",
+   "en": "TALK · FRAME",
+   "ref": "对标约读书房（按客户交付的成片整理）",
+   "fits": [
+    "老板",
+    "教育",
+    "情感"
+   ],
+   "t": {
+    "bg": "#EFE6D2",
+    "panel": "#FFFFFF",
+    "fg": "#2A2015",
+    "hot": "#B8894A",
+    "hot2": "#8E1B20",
+    "font": "song",
+    "radius": 8,
+    "stroke": 0,
+    "tex": "paper",
+    "cap": "box",
+    "layout": "board",
+    "motion": "fade",
+    "shape": "bar"
+   }
+  },
+  {
+   "id": "h-interview",
+   "name": "访谈纪实风",
+   "en": "TALK · INTERVIEW",
+   "ref": "对标天图通逊（按客户的剪辑规范整理）",
+   "fits": [
+    "访谈",
+    "老板",
+    "情感"
+   ],
+   "t": {
+    "bg": "#0E0E0E",
+    "panel": "#1A1A1A",
+    "fg": "#FFFFFF",
+    "hot": "#FFFFFF",
+    "hot2": "#C9A063",
+    "font": "song",
+    "radius": 0,
+    "stroke": 0,
+    "tex": "grain",
+    "cap": "plain",
+    "layout": "letterbox",
+    "motion": "fade",
+    "shape": "underline"
+   }
+  }
+ ],
+ "mg": {
+  "tokens": {
+   "01-flat-vector": {
+    "bg": "#2D4DE0",
+    "panel": "#FFD23F",
+    "fg": "#FFFFFF",
+    "hot": "#FF5A5F",
+    "hot2": "#FFD23F",
+    "font": "round",
+    "radius": 24,
+    "stroke": 0,
+    "tex": "none",
+    "cap": "box",
+    "layout": "card",
+    "motion": "pop",
+    "shape": "circle"
+   },
+   "02-line-art": {
+    "bg": "#0E1A2B",
+    "panel": "#16263D",
+    "fg": "#EAF2FF",
+    "hot": "#7FD1FF",
+    "hot2": "#EAF2FF",
+    "font": "thin",
+    "radius": 0,
+    "stroke": 2,
+    "tex": "none",
+    "cap": "plain",
+    "layout": "full",
+    "motion": "draw",
+    "shape": "underline"
+   },
+   "03-isometric": {
+    "bg": "#E9E4F5",
+    "panel": "#FFFFFF",
+    "fg": "#2B2350",
+    "hot": "#7C5CFF",
+    "hot2": "#FF8A5B",
+    "font": "round",
+    "radius": 14,
+    "stroke": 0,
+    "tex": "grid",
+    "cap": "box",
+    "layout": "card",
+    "motion": "rise",
+    "shape": "tag"
+   },
+   "04-3d-render": {
+    "bg": "#FFD9E2",
+    "panel": "#FFFFFF",
+    "fg": "#3A2A4D",
+    "hot": "#FF7AA2",
+    "hot2": "#8AD6FF",
+    "font": "round",
+    "radius": 40,
+    "stroke": 0,
+    "tex": "none",
+    "cap": "pop",
+    "layout": "card",
+    "motion": "pop",
+    "shape": "circle"
+   },
+   "05-cel-boil": {
+    "bg": "#F3EBDD",
+    "panel": "#FFFFFF",
+    "fg": "#1E1B18",
+    "hot": "#E4572E",
+    "hot2": "#1E1B18",
+    "font": "hand",
+    "radius": 6,
+    "stroke": 3,
+    "tex": "paper",
+    "cap": "plain",
+    "layout": "full",
+    "motion": "draw",
+    "shape": "brush"
+   },
+   "06-collage": {
+    "bg": "#EDE6D6",
+    "panel": "#FFFFFF",
+    "fg": "#111111",
+    "hot": "#E63946",
+    "hot2": "#2A6FDB",
+    "font": "song",
+    "radius": 0,
+    "stroke": 4,
+    "tex": "halftone",
+    "cap": "box",
+    "layout": "card",
+    "motion": "slam",
+    "shape": "tag"
+   },
+   "07-liquid": {
+    "bg": "#0B1B3A",
+    "panel": "#12306A",
+    "fg": "#FFFFFF",
+    "hot": "#2EE6C5",
+    "hot2": "#5B7CFF",
+    "font": "round",
+    "radius": 60,
+    "stroke": 0,
+    "tex": "none",
+    "cap": "plain",
+    "layout": "full",
+    "motion": "slide",
+    "shape": "circle"
+   },
+   "08-morph": {
+    "bg": "#111111",
+    "panel": "#1E1E1E",
+    "fg": "#FFFFFF",
+    "hot": "#FF6B3D",
+    "hot2": "#FFD23F",
+    "font": "hei",
+    "radius": 30,
+    "stroke": 0,
+    "tex": "none",
+    "cap": "plain",
+    "layout": "full",
+    "motion": "fade",
+    "shape": "circle"
+   },
+   "09-bauhaus": {
+    "bg": "#F2EDE1",
+    "panel": "#1F4FBF",
+    "fg": "#111111",
+    "hot": "#E63329",
+    "hot2": "#F4C20D",
+    "font": "hei",
+    "radius": 0,
+    "stroke": 0,
+    "tex": "none",
+    "cap": "box",
+    "layout": "split",
+    "motion": "slide",
+    "shape": "circle"
+   },
+   "10-synthwave": {
+    "bg": "#12042B",
+    "panel": "#24104F",
+    "fg": "#FFFFFF",
+    "hot": "#FF2E97",
+    "hot2": "#00E5FF",
+    "font": "hei",
+    "radius": 0,
+    "stroke": 0,
+    "tex": "scan",
+    "cap": "stroke",
+    "layout": "full",
+    "motion": "glitch",
+    "shape": "underline"
+   },
+   "12-aurora-glass": {
+    "bg": "#1B1440",
+    "panel": "rgba(255,255,255,.14)",
+    "fg": "#FFFFFF",
+    "hot": "#B79CFF",
+    "hot2": "#7FE3FF",
+    "font": "thin",
+    "radius": 28,
+    "stroke": 1,
+    "tex": "glow",
+    "cap": "box",
+    "layout": "card",
+    "motion": "fade",
+    "shape": "bar"
+   },
+   "18-hanazi": {
+    "bg": "#FFE14D",
+    "panel": "#FFFFFF",
+    "fg": "#FFFFFF",
+    "hot": "#FF4D8D",
+    "hot2": "#27C3FF",
+    "font": "round",
+    "radius": 20,
+    "stroke": 8,
+    "tex": "dots",
+    "cap": "pop",
+    "layout": "full",
+    "motion": "pop",
+    "shape": "tag"
+   },
+   "19-paperclip": {
+    "bg": "#E8EDF2",
+    "panel": "#FFFFFF",
+    "fg": "#1D2A3A",
+    "hot": "#2F6BFF",
+    "hot2": "#FF8A3D",
+    "font": "hei",
+    "radius": 10,
+    "stroke": 5,
+    "tex": "grid",
+    "cap": "box",
+    "layout": "board",
+    "motion": "rise",
+    "shape": "tag"
+   },
+   "20-pixel": {
+    "bg": "#1A1C2C",
+    "panel": "#29366F",
+    "fg": "#F4F4F4",
+    "hot": "#FFCD75",
+    "hot2": "#41A6F6",
+    "font": "pixel",
+    "radius": 0,
+    "stroke": 4,
+    "tex": "none",
+    "cap": "box",
+    "layout": "card",
+    "motion": "type",
+    "shape": "bracket"
+   },
+   "22-hud": {
+    "bg": "#04141A",
+    "panel": "#07232C",
+    "fg": "#CFFBFF",
+    "hot": "#00E5FF",
+    "hot2": "#FF6A00",
+    "font": "mono",
+    "radius": 0,
+    "stroke": 1.5,
+    "tex": "scan",
+    "cap": "plain",
+    "layout": "full",
+    "motion": "type",
+    "shape": "bracket"
+   }
+  },
+  "fits": {
+   "01-flat-vector": [
+    "知识",
+    "教育",
+    "科技"
+   ],
+   "02-line-art": [
+    "科技",
+    "知识",
+    "品牌"
+   ],
+   "03-isometric": [
+    "科技",
+    "商业",
+    "教育"
+   ],
+   "04-3d-render": [
+    "品牌",
+    "生活",
+    "情感"
+   ],
+   "05-cel-boil": [
+    "情感",
+    "生活",
+    "故事"
+   ],
+   "06-collage": [
+    "新闻",
+    "历史",
+    "故事"
+   ],
+   "07-liquid": [
+    "品牌",
+    "生活",
+    "科技"
+   ],
+   "08-morph": [
+    "品牌",
+    "知识",
+    "科技"
+   ],
+   "09-bauhaus": [
+    "品牌",
+    "知识",
+    "商业"
+   ],
+   "10-synthwave": [
+    "科技",
+    "游戏",
+    "生活"
+   ],
+   "12-aurora-glass": [
+    "科技",
+    "品牌",
+    "商业"
+   ],
+   "18-hanazi": [
+    "生活",
+    "情感",
+    "教育"
+   ],
+   "19-paperclip": [
+    "知识",
+    "科技",
+    "教育"
+   ],
+   "20-pixel": [
+    "游戏",
+    "科技",
+    "生活"
+   ],
+   "22-hud": [
+    "科技",
+    "游戏",
+    "新闻"
+   ]
+  }
+ },
+ "distill": [
+  {
+   "id": "d-minimal",
+   "name": "科技极简风",
+   "en": "TECH · MINIMAL",
+   "ref": "对标：何同学、MKBHD（按其公开视频的常见特征整理，没有逐帧拆解）",
+   "fits": [
+    "科技",
+    "品牌",
+    "知识"
+   ],
+   "intro": "大留白、细字、产品特写，一个画面只说一件事；镜头慢慢推，转场几乎不被察觉。",
+   "look": "大留白, 细体无衬线, 浅灰底, 一个强调色, 慢推镜头, 圆角玻璃卡",
+   "how": "标题用细体放大到占屏三成；每屏只放一个数字或一个词；镜头全程缓推，切换用 0.4 秒交叉溶解；配乐轻、无音效。",
+   "t": {
+    "bg": "#F3F4F6",
+    "panel": "#FFFFFF",
+    "fg": "#111418",
+    "hot": "#0A84FF",
+    "hot2": "#111418",
+    "font": "thin",
+    "radius": 22,
+    "stroke": 0,
+    "tex": "none",
+    "cap": "plain",
+    "layout": "full",
+    "motion": "fade",
+    "shape": "underline"
+   },
+   "prompt": "按「科技极简风」来做这条片子。\n特征：大留白, 细体无衬线, 浅灰底, 一个强调色, 慢推镜头, 圆角玻璃卡\n做法：标题用细体放大到占屏三成；每屏只放一个数字或一个词；镜头全程缓推，切换用 0.4 秒交叉溶解；配乐轻、无音效。\n我的个人指纹（配色、字体、署名、规矩）照常保留，冲突时以指纹为准。先出 3 张关键帧给我看。"
+  },
+  {
+   "id": "d-cine",
+   "name": "电影感纪录风",
+   "en": "DOC · CINEMATIC",
+   "ref": "对标：影视飓风、Johnny Harris（按其公开视频的常见特征整理，没有逐帧拆解）",
+   "fits": [
+    "历史",
+    "新闻",
+    "故事",
+    "访谈"
+   ],
+   "intro": "上下黑边、胶片颗粒、衬线大标题；地图和档案画面穿插，色调偏青橙。",
+   "look": "2.39 黑边, 胶片颗粒, 衬线标题, 青橙色调, 地图与档案, 章节黑场卡",
+   "how": "开头 3 秒冷开场再出片名；章节之间用黑场 + 衬线章节名；素材加轻微颗粒和暗角；字幕小、居中、不描边。",
+   "t": {
+    "bg": "#0C0E10",
+    "panel": "#16191C",
+    "fg": "#EDE6D8",
+    "hot": "#E0A458",
+    "hot2": "#4FB3BF",
+    "font": "song",
+    "radius": 0,
+    "stroke": 0,
+    "tex": "grain",
+    "cap": "plain",
+    "layout": "letterbox",
+    "motion": "fade",
+    "shape": "underline"
+   },
+   "prompt": "按「电影感纪录风」来做这条片子。\n特征：2.39 黑边, 胶片颗粒, 衬线标题, 青橙色调, 地图与档案, 章节黑场卡\n做法：开头 3 秒冷开场再出片名；章节之间用黑场 + 衬线章节名；素材加轻微颗粒和暗角；字幕小、居中、不描边。\n我的个人指纹（配色、字体、署名、规矩）照常保留，冲突时以指纹为准。先出 3 张关键帧给我看。"
+  },
+  {
+   "id": "d-paper",
+   "name": "纸感拼贴解说",
+   "en": "EXPLAINER · PAPER",
+   "ref": "对标：Vox、Johnny Harris 的拼贴段落（按其公开视频的常见特征整理，没有逐帧拆解）",
+   "fits": [
+    "新闻",
+    "历史",
+    "知识",
+    "财经"
+   ],
+   "intro": "牛皮纸底、剪下来的照片、荧光笔划重点、手画箭头，像把资料摊在桌上讲。",
+   "look": "纸纹底, 照片白边剪贴, 荧光笔高亮, 手画箭头圈注, 轻微投影, 定格式移动",
+   "how": "人物和素材都做成带白边的剪纸贴在纸上；重点词用荧光笔从左刷到右；箭头和圆圈是手画的、画出来的；移动用 12 帧/秒的定格感。",
+   "t": {
+    "bg": "#E9DFC9",
+    "panel": "#FFFFFF",
+    "fg": "#1C1A17",
+    "hot": "#F2C230",
+    "hot2": "#D7402B",
+    "font": "song",
+    "radius": 2,
+    "stroke": 4,
+    "tex": "paper",
+    "cap": "box",
+    "layout": "board",
+    "motion": "draw",
+    "shape": "brush"
+   },
+   "prompt": "按「纸感拼贴解说」来做这条片子。\n特征：纸纹底, 照片白边剪贴, 荧光笔高亮, 手画箭头圈注, 轻微投影, 定格式移动\n做法：人物和素材都做成带白边的剪纸贴在纸上；重点词用荧光笔从左刷到右；箭头和圆圈是手画的、画出来的；移动用 12 帧/秒的定格感。\n我的个人指纹（配色、字体、署名、规矩）照常保留，冲突时以指纹为准。先出 3 张关键帧给我看。"
+  },
+  {
+   "id": "d-flat",
+   "name": "扁平科普动画",
+   "en": "SCIENCE · FLAT",
+   "ref": "对标：Kurzgesagt、回形针（按其公开视频的常见特征整理，没有逐帧拆解）",
+   "fits": [
+    "知识",
+    "科技",
+    "教育",
+    "健康"
+   ],
+   "intro": "高饱和纯色、圆润图标、一切都用图形讲；镜头在一张大画布上平移缩放。",
+   "look": "高饱和纯色块, 圆角图标, 深蓝底, 一镜到底平移, 图标弹性出现, 数字精确",
+   "how": "不出真人或只出小圆头像；每个概念配一个图标，弹性入场；镜头在大画布上平移到下一个概念，不硬切；数字用等宽粗体。",
+   "t": {
+    "bg": "#101B4D",
+    "panel": "#1D2C73",
+    "fg": "#FFFFFF",
+    "hot": "#FFC233",
+    "hot2": "#FF5E7E",
+    "font": "round",
+    "radius": 26,
+    "stroke": 0,
+    "tex": "dots",
+    "cap": "box",
+    "layout": "card",
+    "motion": "pop",
+    "shape": "circle"
+   },
+   "prompt": "按「扁平科普动画」来做这条片子。\n特征：高饱和纯色块, 圆角图标, 深蓝底, 一镜到底平移, 图标弹性出现, 数字精确\n做法：不出真人或只出小圆头像；每个概念配一个图标，弹性入场；镜头在大画布上平移到下一个概念，不硬切；数字用等宽粗体。\n我的个人指纹（配色、字体、署名、规矩）照常保留，冲突时以指纹为准。先出 3 张关键帧给我看。"
+  },
+  {
+   "id": "d-meme",
+   "name": "快节奏梗图吐槽",
+   "en": "RANT · MEME",
+   "ref": "对标：半佛仙人（按其公开视频的常见特征整理，没有逐帧拆解）",
+   "fits": [
+    "商业",
+    "新闻",
+    "生活",
+    "财经"
+   ],
+   "intro": "语速快、一句一切，梗图和表情包怼上来；黄字黑边大字幕压在正中。",
+   "look": "一句一切, 表情包插入, 黄字黑边大字幕, 画面轻微放大抖动, 音效密集, 黑底白字过渡",
+   "how": "每句话配一张图，0.8 到 1.5 秒一换；字幕黄色粗体黑描边、放画面中下；强调词放大 1.3 倍抖一下；转折处一帧黑底白字。",
+   "t": {
+    "bg": "#111111",
+    "panel": "#1C1C1C",
+    "fg": "#FFFFFF",
+    "hot": "#FFE600",
+    "hot2": "#FF3B30",
+    "font": "hei",
+    "radius": 0,
+    "stroke": 7,
+    "tex": "none",
+    "cap": "pop",
+    "layout": "full",
+    "motion": "slam",
+    "shape": "tag"
+   },
+   "prompt": "按「快节奏梗图吐槽」来做这条片子。\n特征：一句一切, 表情包插入, 黄字黑边大字幕, 画面轻微放大抖动, 音效密集, 黑底白字过渡\n做法：每句话配一张图，0.8 到 1.5 秒一换；字幕黄色粗体黑描边、放画面中下；强调词放大 1.3 倍抖一下；转折处一帧黑底白字。\n我的个人指纹（配色、字体、署名、规矩）照常保留，冲突时以指纹为准。先出 3 张关键帧给我看。"
+  },
+  {
+   "id": "d-board",
+   "name": "白板框架讲解",
+   "en": "TEACH · WHITEBOARD",
+   "ref": "对标：所长林超、李永乐（按其公开视频的常见特征整理，没有逐帧拆解）",
+   "fits": [
+    "知识",
+    "教育",
+    "商业",
+    "财经"
+   ],
+   "intro": "白板或网格纸上手写框架图，一边讲一边画，关系用线连起来。",
+   "look": "白底网格, 马克笔手写, 框架图逐步画出, 红蓝黑三色笔, 人在一侧, 圈画强调",
+   "how": "人放左或右三分之一，另一侧是白板；框架图按讲的顺序一笔笔画出来；关键词用红笔圈；一条片子一张图，越画越满。",
+   "t": {
+    "bg": "#F7F7F2",
+    "panel": "#FFFFFF",
+    "fg": "#1B1F27",
+    "hot": "#E03131",
+    "hot2": "#1C5BD8",
+    "font": "hand",
+    "radius": 6,
+    "stroke": 3,
+    "tex": "grid",
+    "cap": "plain",
+    "layout": "split",
+    "motion": "draw",
+    "shape": "brush"
+   },
+   "prompt": "按「白板框架讲解」来做这条片子。\n特征：白底网格, 马克笔手写, 框架图逐步画出, 红蓝黑三色笔, 人在一侧, 圈画强调\n做法：人放左或右三分之一，另一侧是白板；框架图按讲的顺序一笔笔画出来；关键词用红笔圈；一条片子一张图，越画越满。\n我的个人指纹（配色、字体、署名、规矩）照常保留，冲突时以指纹为准。先出 3 张关键帧给我看。"
+  },
+  {
+   "id": "d-pastel",
+   "name": "效率博主清爽风",
+   "en": "LIFESTYLE · PASTEL",
+   "ref": "对标：Ali Abdaal（按其公开视频的常见特征整理，没有逐帧拆解）",
+   "fits": [
+    "知识",
+    "生活",
+    "教育",
+    "情感"
+   ],
+   "intro": "柔和的粉彩色、圆角卡片、清单一条条勾；轻松，不压迫。",
+   "look": "粉彩底色, 圆角卡片, 清单打勾, 小图标, 柔和弹出, 手写体点缀",
+   "how": "每个要点一张圆角卡，从下方柔和弹出；清单逐条打勾；重点词用彩色圆角底托住；配乐轻快的 lo-fi。",
+   "t": {
+    "bg": "#FFF4E6",
+    "panel": "#FFFFFF",
+    "fg": "#2B2B3A",
+    "hot": "#FF8FA3",
+    "hot2": "#7CC6FE",
+    "font": "round",
+    "radius": 26,
+    "stroke": 0,
+    "tex": "none",
+    "cap": "box",
+    "layout": "card",
+    "motion": "pop",
+    "shape": "tag"
+   },
+   "prompt": "按「效率博主清爽风」来做这条片子。\n特征：粉彩底色, 圆角卡片, 清单打勾, 小图标, 柔和弹出, 手写体点缀\n做法：每个要点一张圆角卡，从下方柔和弹出；清单逐条打勾；重点词用彩色圆角底托住；配乐轻快的 lo-fi。\n我的个人指纹（配色、字体、署名、规矩）照常保留，冲突时以指纹为准。先出 3 张关键帧给我看。"
+  },
+  {
+   "id": "d-code",
+   "name": "程序员极速风",
+   "en": "DEV · 100 SECONDS",
+   "ref": "对标：Fireship（按其公开视频的常见特征整理，没有逐帧拆解）",
+   "fits": [
+    "科技",
+    "知识",
+    "教育"
+   ],
+   "intro": "黑色编辑器底、等宽字、代码逐行打出来；梗图一闪而过，100 秒讲完一件事。",
+   "look": "深色编辑器底, 等宽字体, 语法高亮色, 代码逐行打出, 梗图快闪, 大号英文关键词",
+   "how": "画面主体是一块编辑器窗口；关键词用语法高亮的颜色；每句一个画面，0.6 到 1.2 秒；结尾直接停，不寒暄。",
+   "t": {
+    "bg": "#0D1117",
+    "panel": "#161B22",
+    "fg": "#E6EDF3",
+    "hot": "#F7B93E",
+    "hot2": "#58A6FF",
+    "font": "mono",
+    "radius": 10,
+    "stroke": 1,
+    "tex": "none",
+    "cap": "plain",
+    "layout": "card",
+    "motion": "type",
+    "shape": "bracket"
+   },
+   "prompt": "按「程序员极速风」来做这条片子。\n特征：深色编辑器底, 等宽字体, 语法高亮色, 代码逐行打出, 梗图快闪, 大号英文关键词\n做法：画面主体是一块编辑器窗口；关键词用语法高亮的颜色；每句一个画面，0.6 到 1.2 秒；结尾直接停，不寒暄。\n我的个人指纹（配色、字体、署名、规矩）照常保留，冲突时以指纹为准。先出 3 张关键帧给我看。"
+  },
+  {
+   "id": "d-variety",
+   "name": "综艺大字幕风",
+   "en": "VARIETY · BIG CAPTIONS",
+   "ref": "对标：MrBeast 式剪辑（按其公开视频的常见特征整理，没有逐帧拆解）",
+   "fits": [
+    "生活",
+    "挑战",
+    "情感",
+    "老板"
+   ],
+   "intro": "每句话都有彩色描边大字幕蹦出来，数字计数器一直在跳，镜头不停顶近。",
+   "look": "彩色粗描边大字, 逐词弹出, 计数器, 顶近镜头, 进度条, 高饱和",
+   "how": "字幕逐词弹出、当前词变色放大；数字用计数器滚；每 2 到 3 秒顶近一次；左上角常驻一条进度或倒计时。",
+   "t": {
+    "bg": "#101010",
+    "panel": "#1F1F1F",
+    "fg": "#FFFFFF",
+    "hot": "#FFD400",
+    "hot2": "#00D1FF",
+    "font": "round",
+    "radius": 16,
+    "stroke": 9,
+    "tex": "none",
+    "cap": "pop",
+    "layout": "full",
+    "motion": "slam",
+    "shape": "tag"
+   },
+   "prompt": "按「综艺大字幕风」来做这条片子。\n特征：彩色粗描边大字, 逐词弹出, 计数器, 顶近镜头, 进度条, 高饱和\n做法：字幕逐词弹出、当前词变色放大；数字用计数器滚；每 2 到 3 秒顶近一次；左上角常驻一条进度或倒计时。\n我的个人指纹（配色、字体、署名、规矩）照常保留，冲突时以指纹为准。先出 3 张关键帧给我看。"
+  },
+  {
+   "id": "d-editorial",
+   "name": "杂志编辑风",
+   "en": "EDITORIAL · SERIF",
+   "ref": "对标：一条、苹果发布会的版式感（按其公开视频的常见特征整理，没有逐帧拆解）",
+   "fits": [
+    "品牌",
+    "生活",
+    "访谈",
+    "情感"
+   ],
+   "intro": "大号衬线标题、严格的网格、大量留白；像翻一本杂志。",
+   "look": "衬线大标题, 网格对齐, 大留白, 细线分隔, 小号全大写英文, 慢速淡入",
+   "how": "标题衬线体占半屏；正文小而疏；用细线和页码一样的小字做装饰；转场只用淡入和缓慢上移。",
+   "t": {
+    "bg": "#F5F1EA",
+    "panel": "#FFFFFF",
+    "fg": "#141414",
+    "hot": "#B23A2E",
+    "hot2": "#141414",
+    "font": "song",
+    "radius": 0,
+    "stroke": 1,
+    "tex": "none",
+    "cap": "plain",
+    "layout": "split",
+    "motion": "fade",
+    "shape": "underline"
+   },
+   "prompt": "按「杂志编辑风」来做这条片子。\n特征：衬线大标题, 网格对齐, 大留白, 细线分隔, 小号全大写英文, 慢速淡入\n做法：标题衬线体占半屏；正文小而疏；用细线和页码一样的小字做装饰；转场只用淡入和缓慢上移。\n我的个人指纹（配色、字体、署名、规矩）照常保留，冲突时以指纹为准。先出 3 张关键帧给我看。"
+  },
+  {
+   "id": "d-breaking",
+   "name": "新闻快报红白风",
+   "en": "NEWS · BREAKING",
+   "ref": "对标：电视新闻快讯的版式（按其公开视频的常见特征整理，没有逐帧拆解）",
+   "fits": [
+    "新闻",
+    "财经",
+    "科技"
+   ],
+   "intro": "红白蓝的新闻条、滚动字幕、时间和地点角标，一眼就是「出事了」。",
+   "look": "红色快讯条, 白底黑字标题条, 滚动字幕带, 时间地点角标, 硬切, 地图定位",
+   "how": "底部一条红色快讯条从左推入；标题用白底黑字；右上角常驻时间；数据用大号数字 + 来源小字；全部硬切。",
+   "t": {
+    "bg": "#0A1A33",
+    "panel": "#FFFFFF",
+    "fg": "#FFFFFF",
+    "hot": "#E0131F",
+    "hot2": "#FFFFFF",
+    "font": "hei",
+    "radius": 0,
+    "stroke": 0,
+    "tex": "none",
+    "cap": "bar",
+    "layout": "full",
+    "motion": "slide",
+    "shape": "tag"
+   },
+   "prompt": "按「新闻快报红白风」来做这条片子。\n特征：红色快讯条, 白底黑字标题条, 滚动字幕带, 时间地点角标, 硬切, 地图定位\n做法：底部一条红色快讯条从左推入；标题用白底黑字；右上角常驻时间；数据用大号数字 + 来源小字；全部硬切。\n我的个人指纹（配色、字体、署名、规矩）照常保留，冲突时以指纹为准。先出 3 张关键帧给我看。"
+  },
+  {
+   "id": "d-ink",
+   "name": "国风水墨讲史",
+   "en": "HISTORY · INK",
+   "ref": "对标：讲历史、讲国学的头部账号（按其公开视频的常见特征整理，没有逐帧拆解）",
+   "fits": [
+    "历史",
+    "故事",
+    "情感",
+    "教育"
+   ],
+   "intro": "宣纸底、墨迹晕开、竖排标题、朱红印章；节奏慢，像翻一卷画。",
+   "look": "宣纸纹理, 水墨晕染转场, 竖排标题, 朱红印章, 楷体字幕, 慢速横移",
+   "how": "章节名竖排、配一方红印；转场用墨迹晕开；素材做旧并横向慢移；字幕用楷体、居中、不描边。",
+   "t": {
+    "bg": "#EFE7D6",
+    "panel": "#F8F3E6",
+    "fg": "#1F1A14",
+    "hot": "#B3261E",
+    "hot2": "#3D5A4C",
+    "font": "kai",
+    "radius": 0,
+    "stroke": 0,
+    "tex": "paper",
+    "cap": "plain",
+    "layout": "board",
+    "motion": "fade",
+    "shape": "brush"
+   },
+   "prompt": "按「国风水墨讲史」来做这条片子。\n特征：宣纸纹理, 水墨晕染转场, 竖排标题, 朱红印章, 楷体字幕, 慢速横移\n做法：章节名竖排、配一方红印；转场用墨迹晕开；素材做旧并横向慢移；字幕用楷体、居中、不描边。\n我的个人指纹（配色、字体、署名、规矩）照常保留，冲突时以指纹为准。先出 3 张关键帧给我看。"
+  },
+  {
+   "id": "d-case",
+   "name": "暗黑档案风",
+   "en": "CASE FILE · DARK",
+   "ref": "对标：悬疑、案件解读类账号（按其公开视频的常见特征整理，没有逐帧拆解）",
+   "fits": [
+    "故事",
+    "新闻",
+    "历史"
+   ],
+   "intro": "黑底、打字机字、涂黑的文件、红线把照片连起来；压低的色调。",
+   "look": "黑底暗角, 打字机字体, 文件涂黑条, 红线连接, 档案编号, 闪白切换",
+   "how": "每个线索是一张档案卡，带编号和日期；关键信息先被黑条盖住再揭开；人物关系用红线连；转场闪一下白。",
+   "t": {
+    "bg": "#0B0B0C",
+    "panel": "#17171A",
+    "fg": "#DAD6CC",
+    "hot": "#C1121F",
+    "hot2": "#DAD6CC",
+    "font": "mono",
+    "radius": 0,
+    "stroke": 1,
+    "tex": "grain",
+    "cap": "plain",
+    "layout": "card",
+    "motion": "type",
+    "shape": "bracket"
+   },
+   "prompt": "按「暗黑档案风」来做这条片子。\n特征：黑底暗角, 打字机字体, 文件涂黑条, 红线连接, 档案编号, 闪白切换\n做法：每个线索是一张档案卡，带编号和日期；关键信息先被黑条盖住再揭开；人物关系用红线连；转场闪一下白。\n我的个人指纹（配色、字体、署名、规矩）照常保留，冲突时以指纹为准。先出 3 张关键帧给我看。"
+  },
+  {
+   "id": "d-quote",
+   "name": "访谈金句卡",
+   "en": "INTERVIEW · QUOTE",
+   "ref": "对标：十三邀这类人物访谈（按其公开视频的常见特征整理，没有逐帧拆解）",
+   "fits": [
+    "访谈",
+    "情感",
+    "老板",
+    "故事"
+   ],
+   "intro": "黑底、衬线大字金句、人物特写；一句话停够时间。",
+   "look": "纯黑底, 衬线金句大字, 人物特写, 细线和署名, 极慢推近, 无音效",
+   "how": "金句单独一屏、黑底白字、停 2.5 秒以上；说话时用特写、极慢推近；人名和身份用小号细字；不加任何花哨转场。",
+   "t": {
+    "bg": "#000000",
+    "panel": "#0F0F0F",
+    "fg": "#F2EEE6",
+    "hot": "#C9A063",
+    "hot2": "#F2EEE6",
+    "font": "song",
+    "radius": 0,
+    "stroke": 0,
+    "tex": "none",
+    "cap": "plain",
+    "layout": "letterbox",
+    "motion": "fade",
+    "shape": "underline"
+   },
+   "prompt": "按「访谈金句卡」来做这条片子。\n特征：纯黑底, 衬线金句大字, 人物特写, 细线和署名, 极慢推近, 无音效\n做法：金句单独一屏、黑底白字、停 2.5 秒以上；说话时用特写、极慢推近；人名和身份用小号细字；不加任何花哨转场。\n我的个人指纹（配色、字体、署名、规矩）照常保留，冲突时以指纹为准。先出 3 张关键帧给我看。"
+  }
+ ]
+}
