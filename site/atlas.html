@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>视觉图鉴 · AI 剪辑工作流</title>
+<meta name="description" content="风格库、专业名词库、白模动效、风格混搭器：把审美和专业认知做成看得见、能直接发给 AI 的参考。">
+<link rel="stylesheet" href="atlas.css">
+</head>
+<body>
+<header class="nav stuck">
+  <a class="logo" href="index.html"><i></i><span>AI 剪辑工作流</span></a>
+  <nav><a href="index.html">首页</a><a href="workflow.html">工作流全景</a><a class="on" href="atlas.html">视觉图鉴</a><a href="index.html#get">下载</a><a href="index.html#join">社群</a></nav>
+  <a class="btn sm lime" href="index.html#get">免费下载</a>
+</header>
+
+<section class="sub-hero">
+  <div class="kicker">VISUAL ATLAS</div>
+  <h1>工作流是毛坯房，<br><em>图鉴才是软装</em></h1>
+  <p class="lead">工作流和技能包解决的是「能做出来」。做得好不好看，取决于两样东西：审美，和叫得出名字的专业认知。这一页把它们做成看得见的参考：每张卡都会动，底下都配好了可以直接发给 AI 的话。</p>
+  <div class="stats">
+    <div><b id="n-style">0</b><span>种风格，带完整提示词</span></div>
+    <div><b id="n-term">0</b><span>个专业名词，带动态示例</span></div>
+    <div><b id="n-wm">0</b><span>个白模动效，一键换皮肤</span></div>
+    <div><b>1</b><span>个混搭器，带上你的个人指纹</span></div>
+  </div>
+</section>
+
+<div class="tabs">
+  <button class="on" data-pane="p-style"><i>01</i>风格库</button>
+  <button data-pane="p-term"><i>02</i>专业名词库</button>
+  <button data-pane="p-wm"><i>03</i>白模动效</button>
+  <button data-pane="p-mix"><i>04</i>风格混搭器</button>
+</div>
+
+<section class="pane on" id="p-style">
+  <h2>风格库：先定大方向</h2>
+  <p class="note">风格是给视频定调。想要哪种，点「复制提示词」直接发给 AI；想混搭，点「选它」攒到底部托盘里。</p>
+  <h3>我们工作流里现成的 <small>说一句话就能用，原片丢进去直接出片</small></h3>
+  <div class="grid wide" id="g-house"></div>
+  <h3>15 种动态设计风格 <small>每种一支 10 秒成片，全部由 Claude Opus 5.5 写代码做出来；提示词可以整段复制</small></h3>
+  <div class="grid wide" id="g-mg"></div>
+  <p class="credit">15 种动态设计风格来自开源项目 <a href="https://github.com/Vincentwei1021/mg-styles-15" target="_blank" rel="noopener">Vincentwei1021/mg-styles-15</a>（MIT 许可证）。这里放的是每支成片的 4 秒小样和原提示词，完整成片、源码和评审标准见原仓库。</p>
+</section>
+
+<section class="pane" id="p-term">
+  <h2>专业名词库：叫得出名字，AI 才做得准</h2>
+  <p class="note">很多效果你见过、脑子里有，但叫不出名字，只能跟 AI 比划。这里每个名词都有一个会动的示例、一句大白话解释，和一句可以直接抄的问法。</p>
+  <input class="search" id="term-q" placeholder="搜名词：推近、遮罩、景深、柱状图…">
+  <div class="chips" id="term-chips"></div>
+  <p class="note" style="margin-bottom:14px">当前 <b id="term-count"></b></p>
+  <div class="grid" id="g-terms"></div>
+  <p class="credit">名词、解释、问法和所有动态示例来自开源项目 <a href="https://github.com/showheyohtaki/motion-prompt" target="_blank" rel="noopener">showheyohtaki/motion-prompt</a>（MIT 许可证，作者 Shohei Ohtaki）。编号和原项目一致，可以直接对 AI 说「用 motion-prompt 的 #012」。这里收了九个包；原项目还有一个「图像生成画风」包没有收进来。</p>
+</section>
+
+<section class="pane" id="p-wm">
+  <h2>白模动效：动作和风格分开</h2>
+  <p class="note">把动效的风格和质地剥掉，只留运动骨架。同一个动作，套上不同的皮肤就是不同的片子。下面每个白模都对应工作流里一个现成的组件。点上面的皮肤，整页一起换。</p>
+  <div class="skins" id="skins"><span>换皮肤：</span></div>
+  <div class="grid" id="g-wm"></div>
+  <p class="credit">白模动效是我们自己做的，每个都是从这套工作流已有的组件里抽出来的运动骨架。「白模化」的做法参考了一页枝鸥和光郡两位博主的分享。</p>
+</section>
+
+<section class="pane" id="p-mix">
+  <h2>风格混搭器：长出自己的风格</h2>
+  <p class="note">攒下来的风格终究是别人的。拿两三种基础风格互相混搭，再叠上你不变的那几样东西（配色、字体、署名、规矩），就能长出和别人不一样的风格。</p>
+  <div class="mixer">
+    <div>
+      <h3 style="margin-top:0">① 选 2 到 3 种风格 <small>虚线框的是工作流里现成的</small></h3>
+      <div class="pool" id="mix-pool"></div>
+      <h3>② 你的个人指纹 <small>改了会记在这台电脑的浏览器里</small></h3>
+      <div class="two"><div><label>署名</label><input id="fp-name"></div><div><label>一句话定位</label><input id="fp-slogan"></div></div>
+      <div class="two" style="grid-template-columns:1fr 1fr 1fr"><div><label>底色</label><input id="fp-c1"></div><div><label>主色</label><input id="fp-c2"></div><div><label>文字色</label><input id="fp-c3"></div></div>
+      <div class="swatches" id="fp-sw"></div>
+      <label>字体</label><input id="fp-font">
+      <label>动效习惯</label><input id="fp-motion">
+      <label>规矩</label><input id="fp-rules">
+      <label>这次用在哪</label><input id="fp-use" placeholder="例如：一条 60 秒的横屏口播，讲 AI 剪辑">
+    </div>
+    <div class="out">
+      <div class="acts"><button class="btn sm lime" id="mix-copy">复制混搭提示词</button><button class="btn sm ghost" id="mix-rand">随机混搭</button></div>
+      <pre id="mix-out"></pre>
+    </div>
+  </div>
+</section>
+
+<div class="tray" id="tray"><b>0</b><span></span><button id="tray-copy">复制成发给 AI 的话</button><button class="x" id="tray-clear">清空</button></div>
+<div class="toast" id="toast"></div>
+
+<script src="vendor/motion-prompt/runtime.js"></script>
+<script src="vendor/motion-prompt/packs/motion.js"></script>
+<script src="vendor/motion-prompt/packs/motion2.js"></script>
+<script src="vendor/motion-prompt/packs/camera.js"></script>
+<script src="vendor/motion-prompt/packs/camera2.js"></script>
+<script src="vendor/motion-prompt/packs/photo.js"></script>
+<script src="vendor/motion-prompt/packs/diagram.js"></script>
+<script src="vendor/motion-prompt/packs/ui.js"></script>
+<script src="vendor/motion-prompt/packs/lp.js"></script>
+<script src="vendor/motion-prompt/packs/lp2.js"></script>
+<script src="atlas-data.js"></script>
+<script src="atlas.js"></script>
+</body>
+</html>

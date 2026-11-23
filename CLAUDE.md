@@ -7,6 +7,7 @@
 - 流程总览：`docs/流程总览.md`（四个主技能：video-start、make-news、make-talk、pet）
 - 口播剪辑有六种风格可选（竖屏：财经解读、商业快节奏、知识科普、相框老板、访谈纪实；横屏长视频：深度解读），外加去口吃、降噪、调光、配乐、换字体这些可选功能：`make-talk` 负责带用户选，`python3 scripts/talk.py styles / options / new / recipe`；共用的做法见 `docs/口播剪辑-标准流程.md`
 - 手势全息风短片（第一人称拍手势，出悬浮界面 + 卡点快切，配乐现场合成）：技能 `hud-pov`，`python3 scripts/hud.py new / music / sheet / render`
+- 视觉图鉴（定风格、查专业名词、套白模动效、混搭出自己的风格）：技能 `style-atlas`，网页 `site/atlas.html`，命令行 `python3 scripts/atlas.py find / styles / style / mix`；整体结构见 `site/workflow.html`
 - 制作规则：`docs/aesthetic-rules.md`
 - 每一期的进度：`python3 scripts/episode.py status`
 - 环境自检：`python3 scripts/doctor.py --fix`
