@@ -162,3 +162,15 @@ img, video { display: block; max-width: 100%; }
 .qa .q span i { font-style: normal; font-family: var(--din); color: var(--paper); margin-right: 6px; }
 .covers { display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-end; } .covers img { height: 300px; width: auto; border: 1px solid var(--line); }
 @media (max-width: 900px) { .props { grid-template-columns: 1fr; } .callout { grid-template-columns: 1fr; } }
+
+/* 骨架库、选骨架 */
+.rules { margin: 10px 0 0 22px; color: var(--paper); font-size: 14.5px; line-height: 1.9; } .rules li::marker { color: var(--lime); font-family: var(--din); }
+.ql { display: block; font-weight: 900; font-size: 16px; margin: 22px 0 0; color: var(--paper); } .ql + .chips { margin: 10px 0 0; }
+.pk { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 26px; margin-top: 30px; border: 1px solid var(--lime); background: var(--ink2); padding: 20px; align-items: start; }
+.pk .pkm { position: relative; background: #000; aspect-ratio: 16 / 9; overflow: hidden; } .pk .pkm video, .pk .pkm img { width: 100%; height: 100%; object-fit: cover; display: block; } .pk .pkm.tall video, .pk .pkm.tall img { object-fit: contain; }
+.pk .pkm .ph { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 34px; letter-spacing: 6px; color: rgba(244,242,236,.8); }
+@media (max-width: 900px) { .pk { grid-template-columns: 1fr; } }
+#p-pick label:not(.ql) { display: block; font-size: 13px; color: var(--mute); margin: 14px 0 4px; }
+#p-pick input { width: 100%; font: inherit; font-size: 14px; color: var(--paper); background: var(--ink2); border: 1px solid var(--line); padding: 9px 12px; outline: none; } #p-pick input:focus { border-color: var(--lime); }
+#p-pick .two { display: grid; gap: 12px; } #p-pick .acts { display: flex; gap: 10px; margin: 14px 0; flex-wrap: wrap; }
+#p-pick pre { white-space: pre-wrap; word-break: break-word; font: 13.5px/1.7 var(--hei); color: var(--paper); background: #0d0e10; border: 1px solid var(--line); padding: 18px; }

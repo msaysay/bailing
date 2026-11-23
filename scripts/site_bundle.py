@@ -7,7 +7,7 @@ R = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); S = os.path.joi
 ap = argparse.ArgumentParser(); ap.add_argument("--out", default=os.path.join(R, "dist", "交付", "图鉴")); a = ap.parse_args(); os.makedirs(a.out, exist_ok=True)
 MIME = {".mp4": "video/mp4", ".jpg": "image/jpeg", ".png": "image/png", ".webp": "image/webp"}
 assets = {}
-for d in ("assets/showcase", "vendor/mg-styles-15/clips"):
+for d in ("assets/showcase", "vendor/mg-styles-15/clips", "assets/demos", "assets/thumbs"):
     for f in sorted(os.listdir(os.path.join(S, d))):
         ext = os.path.splitext(f)[1]
         if ext in MIME: assets[f"{d}/{f}"] = f"data:{MIME[ext]};base64," + base64.b64encode(open(os.path.join(S, d, f), "rb").read()).decode()

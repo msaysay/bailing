@@ -59,7 +59,7 @@ description: 做一条横屏解读片（人不出镜）：稿子 → 声音 → 
 
 ## 第 4 步 · 做片（要用户确认两次）
 
-1. **定方案**（用户没指定风格：`python3 scripts/skin.py auto --type <内容类型>` 取方案 1 的配色和字体当这一期的调子，告诉用户一句；他想自己挑就让他打开视觉图鉴）：逐段决定画面——垫哪个镜头、压哪个组件、哪句做成大字。组件从 `studio/out/组件包/组件说明.md`（298 个）里挑；**画面上的字不重复口播**，只放口播里没有的信息（数字出处、对比、标签）；组件不压人脸；4 到 6 秒换一次画面。
+1. **定方案**（这条线的骨架是 `news`：墨黑底、暖白字、一个主色。`python3 scripts/skeleton.py show news` 看锁死什么；组件只从 `skeleton.py blocks news` 里挑，改成这一期的主色）：逐段决定画面——垫哪个镜头、压哪个组件、哪句做成大字。组件从 `studio/out/组件包/组件说明.md`（298 个）里挑；**画面上的字不重复口播**，只放口播里没有的信息（数字出处、对比、标签）；组件不压人脸；4 到 6 秒换一次画面。
 2. **写代码**：在 `studio/src/episodes/<代号>/index.tsx` 里搭（`episode.py new` 已经生成了骨架，含字幕、配音、音乐、外框），时间一律用 `say('段名', '词')` 取，不手写秒数。
 3. **先出前 20 秒给用户看**（`npx remotion render src/index.tsx <代号> out/<代号>-前20秒.mp4 --frames=0-599`），问「方向可以吗？」。
 4. 用户点头后整片渲染，跑自查：`python3 scripts/qc.py studio/out/<代号>.mp4`，有人脸素材再跑 `scripts/facecheck.py`。不过关自己改。逐秒看 `studio/out/qc/sheet-1fps.jpg`。

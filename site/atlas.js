@@ -1,4 +1,4 @@
-// 视觉图鉴：风格库 / 名词库 / 白模动效 / 混搭器。数据：atlas-data.js（两个开源库整理出来的）+ 这里写的我们自己的风格和白模。
+// 视觉图鉴：骨架库 / 选骨架 / 组件积木 / 名词库 / 候选区。骨架和规矩来自 atlas-skel.js（styles/skeletons.json 生成），组件来自 data.js。数据：atlas-data.js（两个开源库整理出来的）+ 这里写的我们自己的风格和白模。
 // 所有会动的示例都只在滚到屏幕里时才画；一个统一的时钟驱动。选中的东西攒在底部托盘里，一键复制成发给 AI 的话。
 (function () {
   const D = window.ATLAS_DATA || { terms: [], packs: [], mg: [] };
@@ -7,24 +7,19 @@
   const A = (p) => (window.__ASSETS && window.__ASSETS[p]) || p;                     // 单文件版里，媒体文件都内嵌成了数据，按路径取
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
-  // —— 我们自己的风格（工作流里现成能用的）——
-  const HOUSE = [
-    { id: 'h-xiaolin', name: '财经解读风', en: 'TALK · XIAOLIN', clip: 'assets/showcase/xiaolin', tall: 1, intro: '人全屏和「素材 + 右上小圆头像」来回切，胸口压卡片。', look: '竖屏口播, 进度牌贯穿, 标题体白字幕, 数据卡', prompt: '用财经解读风把这条竖屏口播剪成成片。先告诉我剪掉了哪几句，再给我看版式表。' },
-    { id: 'h-danjie', name: '商业快节奏风', en: 'TALK · DANJIE', clip: 'assets/showcase/danjie', tall: 1, intro: '藏青底，金色重点词、清单、数据面板，信息密。', look: '竖屏口播, 近黑藏青, 金色关键词, 章节角标', prompt: '用商业快节奏风把这条口播剪成成片，重点词用金色，素材多放。' },
-    { id: 'h-ziqi', name: '横屏深度解读风', en: 'WIDE · ZIQI', clip: 'assets/showcase/ziqi', intro: '顶上章节导航条，主持人、素材窗、数据面板轮换，金色大字标题卡。', look: '3:2 横屏, 章节导航, 素材窗, 名片, 竖幅', prompt: '用横屏深度解读风把这条横屏口播剪成成片。原片是远景就放大到胸口以上，先做第一章给我看。' },
-    { id: 'h-split', name: '电影分屏大字', en: 'FILM · SPLIT TYPE', clip: 'assets/showcase/split', intro: '斜切黑板推进来，大字跟着声音一行行揭开；每段换一种版式盖住剪口。', look: '横屏, 斜切分屏, 荧光绿强调, 对话框, 风格墙', prompt: '把这几段口播剪成一条横屏整片：开头用电影分屏大字，后面每段换一种版式，整条收紧气口。' },
-    { id: 'h-news', name: '横屏新闻解读', en: 'NEWS · EXPLAINER', clip: 'assets/showcase/news', intro: '不出镜：录音 + 真实新闻画面 + 时间轴、引语卡、数据对比；每个数字标出处。', look: '墨黑底, 一个主色, 时间轴, 引语卡, 来源标注', prompt: '我发你一段录音，做成横屏新闻解读片。先核对稿子里的数字和引语，查不到出处的不要放上画面。' },
-    { id: 'h-zhanpeng', name: '知识科普风', en: 'TALK · KAI', img: 'assets/img/tpl5.jpg', intro: '全片一套楷体：白字幕、红色钩子、黄色关键词；插画、论文卡、黑底金句。', look: '竖屏口播, 楷体, 黑底金句, 论文卡', prompt: '用知识科普风剪这条口播，文案我一起发你。' },
-    { id: 'h-frame', name: '相框老板风', en: 'TALK · FRAME', ph: '相框', bg: 'linear-gradient(135deg,#3a2a14,#c9a063)', intro: '固定品牌相框（纸纹底、三行标题、署名条），中间画面窗里换内容。', look: '横拍出竖屏, 品牌相框, 十三种卡片', prompt: '用相框老板风剪这条老板口播，相框上的标题和署名我来给。' },
-    { id: 'h-interview', name: '访谈纪实风', en: 'TALK · INTERVIEW', ph: '访谈', bg: 'linear-gradient(135deg,#12202e,#2f6d7a)', intro: '口播和满屏空镜交替，全部硬切，宋体小标题，品牌片尾。', look: '竖屏, 满屏空镜, 硬切, 关键词放大', prompt: '用访谈纪实风把这条访谈剪成 60 秒竖版。' },
+  // —— 骨架：一条片子的审美底子（styles/skeletons.json）——
+  const SKEL = window.ATLAS_SKEL || { skeletons: [], rules: [], gate: [] }, SK = SKEL.skeletons;
+  const COMPS = ((window.SITE_DATA && window.SITE_DATA.components) || []);
+  // 候选区里真渲过的样片：同一段原片，风格皮肤引擎（第一版）出的
+  const LAB = [
+    { id: 'lab-paper', name: '纸感拼贴解说', clip: 'assets/showcase/sk-paper', intro: '卡片版式、宋体、红色涂抹。', look: '候选, 还没拆过对标片', prompt: '我想要纸感拼贴那种解说风格，我发你两三条对标视频，你先逐段拆，再做成骨架。' },
+    { id: 'lab-meme', name: '快节奏梗图吐槽', clip: 'assets/showcase/sk-meme', intro: '全屏、粗黑体、大黄字。', look: '候选, 还没拆过对标片', prompt: '我想要快节奏吐槽那种风格，我发你两三条对标视频，你先逐段拆，再做成骨架。' },
+    { id: 'lab-cine', name: '电影感纪录风', clip: 'assets/showcase/sk-cine', intro: '上下黑边、宋体、金色下划线。', look: '候选, 还没拆过对标片', prompt: '我想要电影感纪录片那种风格，我发你两三条对标视频，你先逐段拆，再做成骨架。' },
+    { id: 'lab-variety', name: '综艺大字幕风', clip: 'assets/showcase/sk-variety', intro: '全屏、圆体、弹出。', look: '候选, 还没拆过对标片', prompt: '我想要综艺大字幕那种风格，我发你两三条对标视频，你先逐段拆，再做成骨架。' },
+    { id: 'lab-ink', name: '国风水墨', clip: 'assets/showcase/sk-ink', intro: '分屏、楷体、朱红。', look: '候选, 还没拆过对标片', prompt: '我想要国风水墨讲史那种风格，我发你两三条对标视频，你先逐段拆，再做成骨架。' },
+    { id: 'lab-code', name: '程序员极速风', clip: 'assets/showcase/sk-code', intro: '小圆头像加要点板、等宽字。', look: '候选, 还没拆过对标片', prompt: '我想要程序员极速讲解那种风格，我发你两三条对标视频，你先逐段拆，再做成骨架。' },
   ];
-
-  const PV = window.AtlasPreview;
-  HOUSE.forEach((h) => { const d = (D.house || []).find((x) => x.id === h.id); if (d) Object.assign(h, { t: d.t, fits: d.fits, ref: d.ref }); h.kind = 'house'; });
-  (D.mg || []).forEach((m) => { m.kind = 'mg'; }); const DIST = (D.distill || []).map((x) => Object.assign(x, { kind: 'distill' }));
-  const ALL = () => [...HOUSE, ...DIST, ...D.mg].filter((x) => x.t);
-  /** 一块会动的风格预览。get() 返回当前要画的参数（混搭器里会变）。 */
-  const pvCanvas = (get, brand) => { const cv = el('canvas'); cv.width = PV.W; cv.height = PV.H; cv._draw = (now) => { const T = get(); if (T) PV.draw(cv.getContext('2d'), T, now, brand); }; watch(cv); return cv; };
+  (D.mg || []).forEach((m) => { m.kind = 'mg'; });
 
   // —— 白模动效：每个都是时间的纯函数，颜色全部来自皮肤 ——
   const SKINS = {
@@ -76,7 +71,8 @@
   const copy = (s, msg) => { const done = () => toast(msg || '已复制'); if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(s).then(done, () => fallback()); else fallback(); function fallback() { const ta = el('textarea'); ta.value = s; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); done(); } catch (e) { toast('复制失败，请手动选中'); } ta.remove(); } };
   const refreshTray = () => { const t = $('#tray'); t.classList.toggle('show', picks.size > 0); $('#tray b').textContent = picks.size; $('#tray span').textContent = Array.from(picks.values()).map((p) => p.name).join('、'); };
   const togglePick = (id, item, btn, card) => { if (picks.has(id)) picks.delete(id); else picks.set(id, item); btn.classList.toggle('on', picks.has(id)); btn.textContent = picks.has(id) ? '已选' : '选它'; card.classList.toggle('picked', picks.has(id)); refreshTray(); };
-  const picksText = () => { const by = { style: [], term: [], wm: [] }; picks.forEach((p) => by[p.kind].push(p)); let s = '我从视觉图鉴里选了这些，请按它们来做：\n';
+  const picksText = () => { const by = { style: [], term: [], wm: [], comp: [] }; picks.forEach((p) => by[p.kind].push(p)); let s = '我从视觉图鉴里选了这些，请按它们来做：\n';
+    if (by.comp && by.comp.length) s += '\n【组件】（用之前改成骨架的颜色和字体）\n' + by.comp.map((p) => `- ${p.no} ${p.name}：${p.use}`).join('\n');
     if (by.style.length) s += '\n【风格】\n' + by.style.map((p) => `- ${p.name}：${p.look || p.intro}`).join('\n');
     if (by.term.length) s += '\n\n【专业名词】（motion-prompt 编号）\n' + by.term.map((p) => `- #${p.no} ${p.name}（${p.en}）：${p.ask}`).join('\n');
     if (by.wm.length) s += '\n\n【动效骨架】（只要这个动作，风格按上面的来）\n' + by.wm.map((p) => `- ${p.name}：${p.ask}`).join('\n');
@@ -86,7 +82,7 @@
   const live = new Set();                                       // 屏幕里的 canvas
   const io2 = 'IntersectionObserver' in window ? new IntersectionObserver((es) => es.forEach((e) => { const t = e.target; if (t.tagName === 'VIDEO') { if (e.isIntersecting) { const p = t.play(); if (p && p.catch) p.catch(() => {}); } else t.pause(); } else { if (e.isIntersecting) live.add(t); else live.delete(t); } }), { rootMargin: '120px' }) : null;
   const watch = (n) => { if (io2) io2.observe(n); else if (n.tagName !== 'VIDEO') live.add(n); };
-  const media = (s) => { const m = el('div', 'media' + (s.tall ? ' tall' : '')); if (s.kind === 'distill') { m.appendChild(pvCanvas(() => s.t)); return m; } if (s.clip) { const src = /\.mp4$/.test(s.clip) ? s.clip : s.clip + '.mp4', poster = s.poster || s.clip.replace(/\.mp4$/, '') + '.jpg'; const v = el('video'); v.muted = true; v.loop = true; v.playsInline = true; v.preload = 'none'; v.poster = A(poster); v.src = A(src); m.appendChild(v); watch(v); } else if (s.img) { const i = el('img'); i.loading = 'lazy'; i.src = A(s.img); m.appendChild(i); } else { m.style.background = s.bg; m.appendChild(el('div', 'ph', esc(s.ph))); } return m; };
+  const media = (s) => { const m = el('div', 'media' + (s.tall ? ' tall' : '')); if (s.clip) { const src = /\.mp4$/.test(s.clip) ? s.clip : s.clip + '.mp4', poster = s.poster || s.clip.replace(/\.mp4$/, '') + '.jpg'; const v = el('video'); v.muted = true; v.loop = true; v.playsInline = true; v.preload = 'none'; v.poster = A(poster); v.src = A(src); m.appendChild(v); watch(v); } else if (s.img) { const i = el('img'); i.loading = 'lazy'; i.src = A(s.img); m.appendChild(i); } else { m.style.background = s.bg; m.appendChild(el('div', 'ph', esc(s.ph))); } return m; };
   const styleCard = (s, no, tag) => { const c = el('div', 'card'), m = media(s); m.appendChild(el('div', 'no', no)); if (tag) m.appendChild(el('div', 'src', tag)); c.appendChild(m);
     const b = el('div', 'body', `<b>${esc(s.name)}<small>${esc(s.en || '')}</small></b><p>${esc(s.intro || '')}</p>${s.ref ? `<p style="font-size:12px;opacity:.8">${esc(s.ref)}</p>` : ''}<div class="tags">${(s.look || '').split(/[,，]\s*/).filter(Boolean).slice(0, 6).map((x) => `<span>${esc(x)}</span>`).join('')}</div>`);
     const row = el('div', 'row'), cp = el('button', '', '复制提示词'), pk = el('button', 'pick', '选它'); cp.onclick = () => copy(s.prompt, '提示词已复制'); pk.onclick = () => togglePick(s.id, { kind: 'style', name: s.name, look: s.look, intro: s.intro }, pk, c); row.append(cp, pk);
@@ -102,8 +98,11 @@
     cp.onclick = () => copy(w.ask, '问法已复制'); pk.onclick = () => togglePick('w' + i, { kind: 'wm', name: w.name, ask: w.ask }, pk, c); row.append(cp, pk); b.appendChild(row); c.appendChild(b); return c; };
 
   const build = () => {
-    $('#n-style').textContent = HOUSE.length + DIST.length + D.mg.length; const gd = $('#g-dist'); DIST.forEach((s, i) => gd.appendChild(styleCard(s, 'D' + String(i + 1).padStart(2, '0'), '蒸馏'))); buildBlocks(); $('#n-term').textContent = D.terms.length; $('#n-wm').textContent = WM.length;
-    const gh = $('#g-house'), gm = $('#g-mg'); HOUSE.forEach((s, i) => gh.appendChild(styleCard(s, 'H' + String(i + 1).padStart(2, '0'), '工作流里现成的'))); D.mg.forEach((s, i) => gm.appendChild(styleCard(s, 'S' + String(i + 1).padStart(2, '0'), 'mg-styles-15')));
+    $('#n-style').textContent = SK.length; $('#n-comp').textContent = COMPS.length; $('#n-term').textContent = D.terms.length;
+    const gs = $('#g-skel'); SK.forEach((k, i) => gs.appendChild(skelCard(k, i)));
+    $('#skel-rules').innerHTML = SKEL.rules.map((x) => `<li>${esc(x)}</li>`).join(''); $('#skel-gate').innerHTML = SKEL.gate.map((x) => `<li>${esc(x)}</li>`).join('');
+    const gl = $('#g-lab'), gm = $('#g-mg'); LAB.forEach((x, i) => gl.appendChild(styleCard(x, 'L' + String(i + 1).padStart(2, '0'), '候选 · 真渲样片'))); D.mg.forEach((x, i) => gm.appendChild(styleCard(x, 'S' + String(i + 1).padStart(2, '0'), 'mg-styles-15')));
+    buildBlocks();
     // 名词：按包筛选 + 搜索
     const chips = $('#term-chips'), gt = $('#g-terms'); let pack = 'all', q = '';
     const draw = () => { gt.innerHTML = ''; live.forEach((c) => { if (c.closest && c.closest('#g-terms')) live.delete(c); }); D.terms.filter((t) => (pack === 'all' || t.pack === pack) && (!q || (t.name + t.en + t.mean + t.cat).toLowerCase().includes(q))).forEach((t) => gt.appendChild(termCard(t))); $('#term-count').textContent = gt.children.length + ' 个'; };
@@ -112,54 +111,57 @@
     // 白模 + 皮肤
     const gw = $('#g-wm'), sk = $('#skins'); WM.forEach((w, i) => gw.appendChild(wmCard(w, i)));
     Object.entries(SKINS).forEach(([id, S]) => { const b = el('button', id === skin ? 'on' : '', `<i style="background:${S.hot};box-shadow:inset 0 0 0 4px ${S.bg}"></i>${esc(S.name)}`); b.onclick = () => { skin = id; $$('button', sk).forEach((x) => x.classList.remove('on')); b.classList.add('on'); }; sk.appendChild(b); });
-    buildMixer();
+    buildPicker();
     // 标签页
     $$('.tabs button').forEach((b) => b.onclick = () => { $$('.tabs button').forEach((x) => x.classList.toggle('on', x === b)); $$('.pane').forEach((p) => p.classList.toggle('on', p.id === b.dataset.pane)); window.scrollTo({ top: $('.tabs').offsetTop - 56, behavior: 'smooth' }); });
     $('#tray-copy').onclick = () => copy(picksText(), '已复制，去粘贴给 AI'); $('#tray-clear').onclick = () => { picks.clear(); $$('.card.picked').forEach((c) => c.classList.remove('picked')); $$('button.pick.on').forEach((b) => { b.classList.remove('on'); b.textContent = '选它'; }); refreshTray(); };
     const t0 = performance.now(); const frame = (now) => { const s = (now - t0) / 1000; if (!document.hidden) live.forEach((c) => c._draw && c._draw(s)); requestAnimationFrame(frame); }; requestAnimationFrame(frame);
   };
 
-  // —— 混搭器 ——
-  const FP = { name: '宁少 AI 进化论', slogan: '陪伴 AI 时代的超级个体', c1: '#0A0A0B', c2: '#D6FF3D', c3: '#F4F2EC', font: '思源黑体 Heavy（标题）、D-DIN Bold（数字）', motion: '出现用回弹，消失要快；切镜头时轻推近一下；全片只用一种缓动', rules: '字不压人脸；一屏只有一个重点；数字要有出处才上画面；全片最多三种颜色' };
+  // —— 骨架卡片 ——
+  const tagRow = (title, arr, cls) => `<p style="font-size:12.5px;margin-top:2px"><span style="color:var(--paper);font-weight:700">${title}</span>　${arr.map(esc).join('；')}</p>`;
+  const skelCard = (k, i) => { const c = el('div', 'card'), m = media(k); m.appendChild(el('div', 'no', 'K' + String(i + 1).padStart(2, '0'))); m.appendChild(el('div', 'src', (k.face ? '出镜' : '不出镜') + ' · ' + k.orient + (k.clip ? ' · 真实成片' : k.img ? ' · 成片截图' : ' · 还没有用我们的原片出过样片'))); c.appendChild(m);
+    const b = el('div', 'body', `<b>${esc(k.name)}</b><p style="color:var(--lime);font-size:12.5px">${esc(k.ref)}</p><p>${esc(k.look)}</p>${tagRow('锁死不换', k.lock)}${tagRow('可以换', k.swap)}<div class="tags">${k.fits.map((x) => `<span>${esc(x)}</span>`).join('')}</div>`);
+    const row = el('div', 'row'), cp = el('button', '', '就用它，复制给 AI'), go = el('button', '', '看它能用的组件'); cp.onclick = () => copy(skelPrompt(k), '已复制，去粘贴给 AI'); go.onclick = () => { bkSkel(k.id); $('.tabs button[data-pane="p-blocks"]').click(); }; row.append(cp, go); b.appendChild(row); c.appendChild(b); return c; };
+
+  // —— 个人指纹 + 发给 AI 的话 ——
+  const FP = { name: '宁少 AI 进化论', c2: '#D6FF3D' };
+  try { Object.assign(FP, JSON.parse(localStorage.getItem('atlas-fp2') || '{}')); } catch (e) { /* 存不了就用默认 */ }
+  const skelPrompt = (k) => { const canHot = k.swap.some((x) => /强调色|主色|配色/.test(x)), cs = Array.from(picks.values()).filter((x) => x.kind === 'comp');
+    return `请用「${k.name}」这个骨架来做这条片子（${k.ref}）。读 styles/skeletons.json 里它的规定。\n\n` +
+      `骨架里锁死的不要动：${k.lock.join('；')}。\n` +
+      `只换这几样：${k.swap.join('；')}。\n` +
+      `我的署名：${FP.name || '不写'}。` + (canHot ? `强调色换成我的主色 ${FP.c2}。` : `这个骨架的配色不换，我的主色 ${FP.c2} 只用在署名和片尾。`) + `\n\n` +
+      `组件只从这几组里挑：${k.blocks.join('、')}；不要用：${k.avoid.join('、')}。用之前把组件的底色、强调色、字体改成骨架的。每分钟最多三种组件。` +
+      (cs.length ? `\n我点名要用的组件：${cs.map((x) => x.no + ' ' + x.name).join('、')}。` : '') +
+      `\n\n先出 3 张关键帧给我看（开头、中段、结尾各一张），我点头后再做整条。`; };
+
+  // —— 帮我选骨架：三个选择题，固定规则 ——
   const TYPES = ['财经', '商业', '科技', '知识', '新闻', '历史', '故事', '情感', '生活', '老板', '访谈', '教育', '品牌', '健康'];
-  const buildMixer = () => {
-    const all = ALL(), pool = $('#mix-pool'), out = $('#mix-out'), order = []; let useFp = true, T = null;
-    try { Object.assign(FP, JSON.parse(localStorage.getItem('atlas-fp') || '{}')); } catch (e) { /* 存不了就用默认 */ }
-    const ids = ['name', 'slogan', 'c1', 'c2', 'c3', 'font', 'motion', 'rules', 'use'], by = (id) => all.find((x) => x.id === id);
-    const big = $('#mix-big'); big.appendChild(pvCanvas(() => T, null));
-    const render = () => { const pick = order.map(by); ids.forEach((k) => { const i = $('#fp-' + k); if (i) FP[k] = i.value; }); try { localStorage.setItem('atlas-fp', JSON.stringify(FP)); } catch (e) { /* 忽略 */ }
-      $('#fp-sw').innerHTML = [FP.c1, FP.c2, FP.c3].map((c) => `<i style="background:${esc(c)}"></i>`).join('');
-      $$('button', pool).forEach((b) => { const k = order.indexOf(b.dataset.id); b.classList.toggle('on', k >= 0); b.querySelector('u').textContent = k >= 0 ? ['结构', '皮肤', '点睛'][k] : ''; });
-      const strip = $('#mix-strip'); strip.innerHTML = ''; pick.forEach((s2, i) => { const d = el('div', 'mini'); d.appendChild(pvCanvas(() => s2.t)); d.appendChild(el('span', '', `<b>${['结构', '皮肤', '点睛'][i]}</b> ${esc(s2.name)}`)); strip.appendChild(d); });
-      T = pick.length ? PV.mix(pick[0].t, (pick[1] || pick[0]).t, pick[2] && pick[2].t, useFp ? FP : null) : null; $('#mix-empty').style.display = pick.length ? 'none' : 'flex';
-      if (!pick.length) { out.textContent = '在左边点 1 到 3 种风格，上面立刻能看到混出来的样子，这里会生成一段可以直接发给 AI 的提示词。\n\n不知道怎么选，就点「帮我自动搭」。'; return; }
-      const roles = ['版式、节奏和字幕样式（结构）', '配色、纹理和字体气质（皮肤）', '强调色和强调形状（点睛）'];
-      out.textContent = (pick.length > 1 ? `请把下面 ${pick.length} 种风格混搭成一种属于我自己的新风格` : `请按「${pick[0].name}」的风格来做`) + `，用在：${FP.use || '一条 60 秒的口播'}。\n\n` +
-        pick.map((s2, i) => `【${s2.name}】取它的${roles[i]}\n  特征：${s2.look || s2.intro}` + (s2.how ? `\n  做法：${s2.how}` : '')).join('\n') +
-        `\n\n混出来的参数（可以直接用）：\n${JSON.stringify(T)}` +
-        (useFp ? `\n\n我的个人指纹（必须保留，和上面冲突时以这里为准）：\n- 署名：${FP.name}｜${FP.slogan}\n- 配色：底色 ${FP.c1}，主色 ${FP.c2}，文字 ${FP.c3}\n- 字体：${FP.font}\n- 动效习惯：${FP.motion}\n- 规矩：${FP.rules}` : '') +
-        `\n\n先出 3 张关键帧给我看（开头、中段、结尾各一张），我点头后再做整条。`; };
-    const group = (title, arr) => { pool.appendChild(el('div', 'pool-h', title)); arr.forEach((s2) => { const b = el('button', s2.kind === 'house' ? 'house' : '', `${esc(s2.name)}<u></u>`); b.dataset.id = s2.id; b.onclick = () => { const k = order.indexOf(s2.id); if (k >= 0) order.splice(k, 1); else { if (order.length >= 3) { toast('最多选 3 种'); return; } order.push(s2.id); } render(); }; pool.appendChild(b); }); };
-    group('工作流里现成的（最适合当「结构」）', all.filter((x) => x.kind === 'house')); group('蒸馏的大 V 风格', all.filter((x) => x.kind === 'distill')); group('动态设计风格', all.filter((x) => x.kind === 'mg'));
-    ids.forEach((k) => { const i = $('#fp-' + k); if (i) { if (FP[k] != null) i.value = FP[k]; i.oninput = render; } });
-    $('#mix-fp').onchange = (e) => { useFp = e.target.checked; render(); };
-    // 帮我自动搭：按内容类型出三个方案
-    const tc = $('#auto-types'), ap = $('#auto-props'); let seed = 1;
-    const propose = (type) => { ap.innerHTML = ''; PV.auto(all, type, type + seed).forEach((o, i) => { const Tm = PV.mix(o.A.t, o.B.t, o.C && o.C.t, useFp ? FP : null), d = el('div', 'prop'); d.appendChild(pvCanvas(() => Tm)); d.appendChild(el('div', '', `<b>方案 ${'一二三'[i]}</b><p>${esc(o.why)}</p>`)); const b = el('button', '', '就用这个'); b.onclick = () => { order.length = 0; order.push(o.A.id, o.B.id); if (o.C) order.push(o.C.id); render(); toast('已选上，下面是效果'); window.scrollTo({ top: $('#mix-big').getBoundingClientRect().top + window.scrollY - 140, behavior: 'smooth' }); }; d.appendChild(b); ap.appendChild(d); }); };
-    TYPES.forEach((ty, i) => { const b = el('button', i ? '' : 'on', ty); b.onclick = () => { $$('button', tc).forEach((x) => x.classList.remove('on')); b.classList.add('on'); seed = 1; propose(ty); }; tc.appendChild(b); });
-    $('#auto-more').onclick = () => { seed++; propose($('button.on', tc).textContent); }; propose(TYPES[0]);
-    $('#mix-rand').onclick = () => { order.length = 0; const n = 2 + (Math.random() < .4 ? 1 : 0); order.push(all.filter((x) => x.kind === 'house').sort(() => Math.random() - .5)[0].id, ...all.filter((x) => x.kind !== 'house').sort(() => Math.random() - .5).slice(0, n - 1).map((x) => x.id)); render(); };
-    $('#mix-copy').onclick = () => copy(out.textContent, '混搭提示词已复制'); render();
-  };
-  // —— 组件积木：298 个组件按类分，和图鉴的四样东西怎么对上 ——
-  const BLOCKS = [
-    ['结构', '章节页、标题卡、结尾卡', '结构 · 广播风系统与文字', '风格库定它长什么样', '砸字、遮罩上滑、描边展开', '标题动画、遮罩显现'],
-    ['文字与强调', '大字、金句、花字、打字、划重点', '文字与强调 · 纸面风 · 口播叠加 · 竖屏播报', '字体气质、字幕样式、强调形状都来自风格配方', '回弹入场、逐字打出、划线强调', '动态排版、打字机、高亮扫过'],
-    ['数字与图表', '大数字、柱状、折线、对比、进度', '数据图表 · 数字 · 对比 · 市场', '强调色用在最重要的那根柱子上', '数字滚动、柱状生长、对比条、进度环', '数字递增；名词库「图解与图表」一整包'],
-    ['关系与流程', '流程、时间线、组织、关系图', '关系与流程 · 时间 · 组织与人 · 流程与政策', '线和节点的粗细、圆角跟着风格走', '流程点亮、时间轴推进、天平倾斜', '线条描绘、交错动画'],
-    ['画面与素材', '视频窗、图片墙、录屏、网页、设备', '视频与图片 · 网页与文档 · 录屏与设备', '版式（人全屏、分屏、小头像）决定它放哪', '卡片墙飞入、镜头缓推、圆洞穿越', '名词库「镜头运动与转场」两包、「UI 组件」'],
-    ['转场与特效', '切镜头的冲击、粒子、故障、光效', '画面效果 · 炫技动效 · 运动手感 · 广播风粒子与终端', '纹理（颗粒、扫描线、辉光）来自风格配方', '顶一下、色散切、甩切、冲击波', '故障效果、冲击震动、遮罩转场'],
-  ];
-  const buildBlocks = () => { const tb = $('#blocks'); if (!tb) return; BLOCKS.forEach((r) => { tb.appendChild(el('tr', '', `<td><b>${r[0]}</b><small>${r[1]}</small></td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td><td>${r[5]}</td>`)); }); };
+  const buildPicker = () => { const st = { face: true, wide: false, type: '科技' };
+    const chips = (id, opts, key) => { const box = $(id); opts.forEach(([lab, val]) => { const b = el('button', st[key] === val ? 'on' : '', lab); b.onclick = () => { st[key] = val; $$('button', box).forEach((x) => x.classList.remove('on')); b.classList.add('on'); run(); }; box.appendChild(b); }); };
+    const rank = () => { let pool = SK.filter((k) => k.face === st.face && (!st.face || (k.orient === '横屏') === st.wide)); if (!pool.length) pool = SK.filter((k) => k.face === st.face); return pool.slice().sort((a, b) => (a.fits.indexOf(st.type) < 0 ? 99 : a.fits.indexOf(st.type)) - (b.fits.indexOf(st.type) < 0 ? 99 : b.fits.indexOf(st.type))); };
+    let cur = null;
+    const showK = (k, r) => { cur = k; const out = $('#pk-out'); out.innerHTML = ''; const m = media(k); m.classList.add('pkm'); out.appendChild(m);
+      const hit = k.fits.indexOf(st.type) >= 0, d = el('div', 'pkd', `<div class="kicker">${hit ? '推荐这个骨架' : '没有专门给「' + esc(st.type) + '」的骨架，这是最稳的一个'}</div><h3 style="margin:6px 0 4px">${esc(k.name)}</h3><p style="color:var(--lime);font-size:13px">${esc(k.ref)}</p><p class="note" style="margin:10px 0">${esc(k.look)}</p>${tagRow('锁死不换', k.lock)}${tagRow('可以换', k.swap)}${tagRow('能用的组件', k.blocks)}${tagRow('不要用', k.avoid)}`);
+      if (r.length > 1) { const alt = el('div', 'chips'); alt.style.margin = '14px 0 0'; alt.appendChild(el('span', '', '<small style="color:var(--mute);align-self:center">备选：</small>')); r.filter((x) => x !== k).slice(0, 3).forEach((x) => { const b = el('button', '', esc(x.name)); b.onclick = () => showK(x, r); alt.appendChild(b); }); d.appendChild(alt); }
+      out.appendChild(d); $('#pk-pre').textContent = skelPrompt(k); };
+    const run = () => { $('#pk-orient').parentNode.style.display = st.face ? '' : 'none'; const r = rank(); showK(r[0], r); };
+    chips('#pk-face', [['出镜（我拍了口播）', true], ['不出镜（录音或题目）', false]], 'face'); chips('#pk-orient', [['竖屏（抖音、视频号、小红书）', false], ['横屏（B 站、公众号）', true]], 'wide'); chips('#pk-type', TYPES.map((x) => [x, x]), 'type');
+    ['name', 'c2'].forEach((f) => { const i = $('#fp-' + f); i.value = FP[f]; i.oninput = () => { FP[f] = i.value; try { localStorage.setItem('atlas-fp2', JSON.stringify(FP)); } catch (e) { /* 忽略 */ } $('#fp-sw').style.background = FP.c2; if (cur) $('#pk-pre').textContent = skelPrompt(cur); }; }); $('#fp-sw').style.background = FP.c2;
+    $('#pk-copy').onclick = () => copy($('#pk-pre').textContent, '已复制，去粘贴给 AI'); $('#pk-blocks').onclick = () => { bkSkel(cur.id); $('.tabs button[data-pane="p-blocks"]').click(); }; run(); };
+
+  // —— 组件积木：每个都是真渲出来的小样；选了骨架就只看它能用的 ——
+  let bkSkel = () => {};
+  const buildBlocks = () => { const gb = $('#g-blocks'), cs = $('#bk-skel'), cg = $('#bk-groups'); let sk = 'all', grp = 'all';
+    const groups = []; COMPS.forEach((c) => { if (groups.indexOf(c.group) < 0) groups.push(c.group); });
+    const okGroups = () => sk === 'all' ? groups : groups.filter((g) => SK.find((k) => k.id === sk).blocks.indexOf(g) >= 0);
+    const draw = () => { const ok = okGroups(); if (grp !== 'all' && ok.indexOf(grp) < 0) grp = 'all'; cg.innerHTML = '';
+      [['all', '全部']].concat(ok.map((g) => [g, g])).forEach(([id, lab]) => { const n = COMPS.filter((c) => id === 'all' ? ok.indexOf(c.group) >= 0 : c.group === id).length, b = el('button', id === grp ? 'on' : '', `${esc(lab)} <small>${n}</small>`); b.onclick = () => { grp = id; draw(); }; cg.appendChild(b); });
+      gb.innerHTML = ''; const list = COMPS.filter((c) => grp === 'all' ? ok.indexOf(c.group) >= 0 : c.group === grp); $('#bk-count').textContent = list.length + ' 个' + (sk === 'all' ? '' : '（「' + SK.find((k) => k.id === sk).name + '」能用的）');
+      list.forEach((c) => { const card = el('div', 'card'), m = el('div', 'media'), v = el('video'); v.muted = true; v.loop = true; v.playsInline = true; v.preload = 'none'; v.poster = A('assets/thumbs/' + c.id + '.jpg'); v.src = A('assets/demos/' + c.id + '.mp4'); m.appendChild(v); watch(v); m.appendChild(el('div', 'no', c.id)); m.appendChild(el('div', 'src', esc(c.group))); card.appendChild(m);
+        const b = el('div', 'body', `<b>${esc(c.name)}</b><p>${esc(c.use)}</p><p style="font-size:12px;opacity:.75">别用在：${esc(c.avoid)}</p>`), row = el('div', 'row'), pk = el('button', 'pick' + (picks.has('c' + c.id) ? ' on' : ''), picks.has('c' + c.id) ? '已选' : '选它'); pk.onclick = () => togglePick('c' + c.id, { kind: 'comp', name: c.name, no: c.id, use: c.use }, pk, card); row.appendChild(pk); b.appendChild(row); card.appendChild(b); gb.appendChild(card); }); };
+    [['all', '全部骨架']].concat(SK.map((k) => [k.id, k.name])).forEach(([id, lab]) => { const b = el('button', id === 'all' ? 'on' : '', esc(lab)); b.dataset.id = id; b.onclick = () => bkSkel(id); cs.appendChild(b); });
+    bkSkel = (id) => { sk = id; $$('button', cs).forEach((x) => x.classList.toggle('on', x.dataset.id === id)); draw(); }; draw(); };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', build); else build();
 })();
