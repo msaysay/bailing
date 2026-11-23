@@ -1,0 +1,49 @@
+{
+ "name": "06_黄仁勋回归",
+ "line": "news",
+ "slug": "ep06",
+ "created": "2026-11-23 16:32",
+ "steps": [
+  {
+   "no": "1",
+   "name": "稿子",
+   "skill": "make-news",
+   "ask": "讲什么、给谁看、大概多长",
+   "confirm": "稿子，和查到的跟传闻不一样的地方",
+   "done": false
+  },
+  {
+   "no": "2",
+   "name": "声音",
+   "skill": "make-news",
+   "ask": "一条录音；或者说「用 AI 配音」",
+   "confirm": "",
+   "done": false
+  },
+  {
+   "no": "3",
+   "name": "画面素材",
+   "skill": "make-news",
+   "ask": "（可选）你想用的视频链接或文件",
+   "confirm": "",
+   "done": false
+  },
+  {
+   "no": "4",
+   "name": "做片",
+   "skill": "make-news",
+   "ask": "",
+   "confirm": "前 20 秒小样，然后是成片",
+   "done": false
+  },
+  {
+   "no": "5",
+   "name": "封面发布",
+   "skill": "make-news",
+   "ask": "",
+   "confirm": "封面和标题",
+   "done": false
+  }
+ ],
+ "voice": "录音"
+}
