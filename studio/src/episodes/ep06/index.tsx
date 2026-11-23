@@ -37,9 +37,9 @@ const Full: React.FC<{ src: string; from: number; to: number; credit: string; di
   </AbsoluteFill>;
 };
 /** 小窗：带细边框和来源的一块画面。 */
-const Window: React.FC<{ src: string; at: number; x: number; y: number; w: number; h: number; credit: string; out?: number; from?: number; contain?: boolean }> = ({ src, at: a, x, y, w, h, credit, out, from = 0, contain }) => (
+const Window: React.FC<{ src: string; at: number; x: number; y: number; w: number; h: number; credit: string; out?: number; from?: number; contain?: boolean; rate?: number }> = ({ src, at: a, x, y, w, h, credit, out, from = 0, contain, rate }) => (
   <In at={a} out={out} dy={30} style={{ position: 'absolute', left: x, top: y }}>
-    <div style={{ width: w, height: h, overflow: 'hidden', background: '#000', border: `1px solid ${LINE}`, boxShadow: '0 30px 80px rgba(0,0,0,.55)' }}><Clip src={src} at={a} from={from} style={contain ? { objectFit: 'contain' } : undefined} /></div>
+    <div style={{ width: w, height: h, overflow: 'hidden', background: '#000', border: `1px solid ${LINE}`, boxShadow: '0 30px 80px rgba(0,0,0,.55)' }}><Clip src={src} at={a} from={from} rate={rate} style={contain ? { objectFit: 'contain' } : undefined} /></div>
     <Src style={{ marginTop: 10 }}>画面：{credit}</Src>
   </In>
 );
@@ -124,6 +124,7 @@ const Timeline: React.FC = () => {
   const k = EVENTS.reduce((a, e, i) => (t >= at(e.n) - 0.1 ? i : a), -1), six = t >= at(19);
   const X = (i: number) => 160 + i * 400;
   return <AbsoluteFill style={{ background: INK }}>
+    {k < 0 ? <AbsoluteFill style={{ justifyContent: 'center', paddingLeft: 160 }}><In at={s.start + 0.1}><Tag size={28}>TIMELINE · 11.12 → 11.23</Tag></In><In at={s.start + 0.3}><Big size={110} style={{ marginTop: 20 }}>五个节点</Big></In></AbsoluteFill> : null}
     {/* 下半部分：每个节点的画面 */}
     {k === 0 ? <>
       <Window src="mics" at={at(9)} x={110} y={330} w={800} h={450} credit="路透（资料画面）" />
@@ -229,7 +230,7 @@ const Money: React.FC = () => {
       </div>
     </AbsoluteFill> : null}
     {t >= at(33) && t < at(35) ? <AbsoluteFill style={{ background: INK }}>
-      <Window src="revenue" at={at(33)} x={110} y={230} w={1000} h={562} credit="CNBC" />
+      <Window src="revenue" at={at(33)} x={110} y={230} w={1000} h={562} credit="CNBC" rate={0.4} />
       <div style={{ position: 'absolute', left: 1200, top: 300 }}>
         <In at={at(33) + 0.3}><Tag>EARNINGS</Tag><Big size={80} color={NV} style={{ marginTop: 12 }}>业绩：超预期</Big></In>
         <In at={at(34)}><Tag color={RED} style={{ marginTop: 60 }}>VALUATION</Tag><Big size={80} color={RED} style={{ marginTop: 12 }}>股价：崩</Big></In>
