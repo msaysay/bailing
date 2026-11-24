@@ -1,0 +1,347 @@
+{
+ "finance": {
+  "videos": 3,
+  "with_music": 3,
+  "creators": [
+   "小Lin说"
+  ],
+  "metrics": {
+   "music_coverage": {
+    "p25": 0.83,
+    "median": 0.86,
+    "p75": 0.91,
+    "n": 3
+   },
+   "under_speech_db": {
+    "p25": -19.2,
+    "median": -18.4,
+    "p75": -17.15,
+    "n": 3
+   },
+   "open_db": {
+    "p25": -4.1,
+    "median": -1.6,
+    "p75": 0.1,
+    "n": 3
+   },
+   "gap_lift_db": {
+    "p25": 13.85,
+    "median": 18.4,
+    "p75": 19.3,
+    "n": 3
+   },
+   "music_in_s": {
+    "p25": 1.5,
+    "median": 2.9,
+    "p75": 2.9,
+    "n": 3
+   },
+   "music_ends_before_end_s": {
+    "p25": 0.7,
+    "median": 1.2,
+    "p75": 1.25,
+    "n": 3
+   },
+   "level_sd_db": {
+    "p25": 9.75,
+    "median": 10.1,
+    "p75": 10.4,
+    "n": 3
+   },
+   "breaks_per_min": {
+    "p25": 1.34,
+    "median": 1.38,
+    "p75": 2.5,
+    "n": 3
+   },
+   "bpm": {
+    "p25": 112.3,
+    "median": 112.3,
+    "p75": 124.15,
+    "n": 3
+   },
+   "onset_rate": {
+    "p25": 1.61,
+    "median": 1.63,
+    "p75": 1.98,
+    "n": 3
+   },
+   "punch": {
+    "p25": 0.18,
+    "median": 0.23,
+    "p75": 0.3,
+    "n": 3
+   },
+   "speech_band": {
+    "p25": 0.06,
+    "median": 0.07,
+    "p75": 0.14,
+    "n": 3
+   }
+  },
+  "ending": {
+   "fade": 3
+  }
+ },
+ "talk": {
+  "videos": 3,
+  "with_music": 3,
+  "creators": [
+   "蛋解创业"
+  ],
+  "metrics": {
+   "music_coverage": {
+    "p25": 0.78,
+    "median": 1.0,
+    "p75": 1.0,
+    "n": 3
+   },
+   "under_speech_db": {
+    "p25": -22.2,
+    "median": -19.0,
+    "p75": -17.65,
+    "n": 3
+   },
+   "hook_db": {
+    "p25": -21.05,
+    "median": -19.3,
+    "p75": -13.7,
+    "n": 3
+   },
+   "music_in_s": {
+    "p25": 0.35,
+    "median": 0.6,
+    "p75": 0.85,
+    "n": 3
+   },
+   "music_ends_before_end_s": {
+    "p25": 0.0,
+    "median": 0.0,
+    "p75": 0.0,
+    "n": 3
+   },
+   "level_sd_db": {
+    "p25": 5.85,
+    "median": 5.9,
+    "p75": 6.3,
+    "n": 3
+   },
+   "breaks_per_min": {
+    "p25": 0.0,
+    "median": 0.0,
+    "p75": 0.51,
+    "n": 3
+   },
+   "bpm": {
+    "p25": 126.1,
+    "median": 129.2,
+    "p75": 129.2,
+    "n": 3
+   },
+   "onset_rate": {
+    "p25": 1.33,
+    "median": 2.27,
+    "p75": 3.24,
+    "n": 3
+   },
+   "punch": {
+    "p25": 0.21,
+    "median": 0.33,
+    "p75": 0.35,
+    "n": 3
+   },
+   "speech_band": {
+    "p25": 0.03,
+    "median": 0.03,
+    "p75": 0.1,
+    "n": 3
+   }
+  },
+  "ending": {
+   "cut": 3
+  }
+ },
+ "knowledge": {
+  "videos": 6,
+  "with_music": 6,
+  "creators": [
+   "无穷小亮的科普日常",
+   "毕导"
+  ],
+  "metrics": {
+   "music_coverage": {
+    "p25": 0.74,
+    "median": 0.96,
+    "p75": 0.98,
+    "n": 6
+   },
+   "under_speech_db": {
+    "p25": -37.77,
+    "median": -27.65,
+    "p75": -17.6,
+    "n": 6
+   },
+   "open_db": {
+    "p25": -24.68,
+    "median": -17.45,
+    "p75": -15.03,
+    "n": 6
+   },
+   "gap_lift_db": {
+    "p25": 3.02,
+    "median": 4.55,
+    "p75": 10.2,
+    "n": 6
+   },
+   "hook_db": {
+    "p25": -3.0,
+    "median": -1.35,
+    "p75": 2.25,
+    "n": 6
+   },
+   "music_in_s": {
+    "p25": 0.1,
+    "median": 0.1,
+    "p75": 0.1,
+    "n": 6
+   },
+   "music_ends_before_end_s": {
+    "p25": 0.0,
+    "median": 0.25,
+    "p75": 0.73,
+    "n": 6
+   },
+   "level_sd_db": {
+    "p25": 5.75,
+    "median": 6.05,
+    "p75": 6.8,
+    "n": 6
+   },
+   "breaks_per_min": {
+    "p25": 0.18,
+    "median": 0.81,
+    "p75": 5.23,
+    "n": 6
+   },
+   "bpm": {
+    "p25": 117.5,
+    "median": 120.25,
+    "p75": 123.0,
+    "n": 6
+   },
+   "onset_rate": {
+    "p25": 1.69,
+    "median": 2.75,
+    "p75": 3.14,
+    "n": 6
+   },
+   "punch": {
+    "p25": 0.32,
+    "median": 0.39,
+    "p75": 0.47,
+    "n": 6
+   },
+   "speech_band": {
+    "p25": 0.12,
+    "median": 0.15,
+    "p75": 0.17,
+    "n": 6
+   }
+  },
+  "ending": {
+   "button": 2,
+   "cut": 4
+  }
+ },
+ "vlog": {
+  "videos": 3,
+  "with_music": 3,
+  "creators": [
+   "房琪kiki"
+  ],
+  "metrics": {
+   "music_coverage": {
+    "p25": 0.96,
+    "median": 0.99,
+    "p75": 0.99,
+    "n": 3
+   },
+   "under_speech_db": {
+    "p25": -12.7,
+    "median": -12.0,
+    "p75": -10.55,
+    "n": 3
+   },
+   "open_db": {
+    "p25": -10.4,
+    "median": -10.0,
+    "p75": -8.0,
+    "n": 3
+   },
+   "gap_lift_db": {
+    "p25": 2.3,
+    "median": 2.6,
+    "p75": 2.85,
+    "n": 3
+   },
+   "hook_db": {
+    "p25": -14.3,
+    "median": -2.3,
+    "p75": 2.6,
+    "n": 3
+   },
+   "music_in_s": {
+    "p25": 0.15,
+    "median": 0.2,
+    "p75": 0.25,
+    "n": 3
+   },
+   "music_ends_before_end_s": {
+    "p25": 0.05,
+    "median": 0.1,
+    "p75": 0.1,
+    "n": 3
+   },
+   "level_sd_db": {
+    "p25": 4.05,
+    "median": 4.7,
+    "p75": 6.6,
+    "n": 3
+   },
+   "breaks_per_min": {
+    "p25": 0.0,
+    "median": 0.0,
+    "p75": 0.26,
+    "n": 3
+   },
+   "bpm": {
+    "p25": 120.25,
+    "median": 123.0,
+    "p75": 126.1,
+    "n": 3
+   },
+   "onset_rate": {
+    "p25": 1.2,
+    "median": 1.45,
+    "p75": 2.73,
+    "n": 3
+   },
+   "punch": {
+    "p25": 0.1,
+    "median": 0.12,
+    "p75": 0.16,
+    "n": 3
+   },
+   "speech_band": {
+    "p25": 0.07,
+    "median": 0.07,
+    "p75": 0.11,
+    "n": 3
+   }
+  },
+  "ending": {
+   "cut": 2,
+   "fade": 1
+  }
+ }
+}

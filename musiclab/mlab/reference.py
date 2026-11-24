@@ -185,7 +185,7 @@ def compare(m, prof):
     """我们的一条成片对照参考画像：每项落在大 V 的中间一半范围内算合格。返回 (合格比例, 明细)。"""
     rows, ok = [], 0
     for k, ref in prof["metrics"].items():
-        if m.get(k) is None or k == "bpm":
+        if m.get(k) is None or k in ("bpm", "hook_db"):      # 速度量不准；开头那项会被「先说一句再进音乐」的开场带偏
             continue
         span = max(ref["p75"] - ref["p25"], 1e-6)
         pad = 0.25 * span
