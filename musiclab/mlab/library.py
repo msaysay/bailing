@@ -26,7 +26,7 @@ INST = [("synth", {"tech": .5}), ("electric piano", {"warm": .3}), ("piano", {"w
 VOCAL = ["voice", "vocal", "choir", "singer"]
 ODD_INST = ["accordion", "banjo", "kazoo", "tuba", "bagpipe", "organ", "sax", "trumpet", "trombone", "harpsichord", "theremin", "whistle", "ukulele", "recorder", "lute", "sitar", "didgeridoo"]
 ODD_WORD = ["christmas", "halloween", "horror", "circus", "polka", "funny", "silly", "comedy", "cartoon", "spooky", "medieval", "western", "ragtime", "tango", "waltz", "march", "8-bit", "chiptune",
-            "tavern", "pirate", "celtic", "reggae", "carol", "santa", "jingle", "ren faire", "klezmer", "wedding", "anthem", "hymn", "bach", "mozart", "beethoven", "satie", "tchaikovsky", "silent film"]
+            "disco", "funk", "jazz", "blues", "latin", "metal", "bossa", "swing", "holiday", "tavern", "pirate", "celtic", "reggae", "carol", "santa", "jingle", "ren faire", "klezmer", "wedding", "anthem", "hymn", "bach", "mozart", "beethoven", "satie", "tchaikovsky", "silent film"]
 
 
 def load():
