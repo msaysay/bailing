@@ -198,6 +198,7 @@ def build_profiles():
     by = {}
     for r in data.values():
         by.setdefault(r["type"], []).append(r)
+        by.setdefault("@" + r["creator"], []).append(r)        # 每个博主单独一份：对标要落到具体的人
     prof = {}
     for t, rows in by.items():
         used = [r for r in rows if "under_speech_db" in r["m"]]

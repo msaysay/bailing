@@ -34,7 +34,7 @@ def main():
     p = sub.add_parser("match"); p.add_argument("brief"); p.add_argument("-n", type=int, default=3); p.add_argument("--pool", type=int, default=10)
     p.add_argument("--no-credit", action="store_true"); p.add_argument("--track"); p.add_argument("-o", "--out")
     p = sub.add_parser("rate"); p.add_argument("dir"); p.add_argument("rank", type=int); p.add_argument("verdict", choices=["good", "bad"]); p.add_argument("--note", default="")
-    p = sub.add_parser("ref"); p.add_argument("action", choices=["add", "profile", "check"]); p.add_argument("target", nargs="?"); p.add_argument("--type", choices=TYPES); p.add_argument("-n", type=int, default=3)
+    p = sub.add_parser("ref"); p.add_argument("action", choices=["add", "profile", "check"]); p.add_argument("target", nargs="?"); p.add_argument("--type", choices=TYPES); p.add_argument("-n", type=int, default=3); p.add_argument("--like", help="ref check 时对照某一位博主，而不是整个方向")
     a = ap.parse_args()
     cat = library.load()
 
@@ -112,12 +112,12 @@ def main():
             print(f"量完 {R.run_creator(a.type, a.target, a.n)} 条。汇总：python3 musiclab/ml.py ref profile")
         elif a.action == "profile":
             for t, p in R.build_profiles().items():
-                print(f"\n{RULES['types'][t]['name']}　{p['videos']} 条，其中 {p['with_music']} 条有配乐　博主：{'、'.join(p['creators'])}　收尾：{p.get('ending')}")
+                print(f"\n{t[1:] if t[0] == '@' else RULES['types'][t]['name']}　{p['videos']} 条，其中 {p['with_music']} 条有配乐　博主：{'、'.join(p['creators'])}　收尾：{p.get('ending')}")
                 for k, m in p["metrics"].items():
                     print(f"  {LABEL.get(k, k):26s} 中位 {m['median']:>7}　中间一半 {m['p25']} ~ {m['p75']}")
         elif a.action == "check":                  # ref check 输出目录：我们的方案对照大 V
             b = json.load(open(os.path.join(a.target, "brief.json"), encoding="utf-8"))
-            prof = R._load(R.PROFILES, {}).get(b["type"])
+            prof = R._load(R.PROFILES, {}).get("@" + a.like if a.like else b["type"])
             if not prof or not b.get("voice"):
                 sys.exit("这个类型还没有参考画像，或这条片子没有人声。")
             for f in sorted(x for x in os.listdir(a.target) if x.endswith("_bed.wav")):
