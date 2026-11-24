@@ -34,6 +34,7 @@ def main():
     p = sub.add_parser("match"); p.add_argument("brief"); p.add_argument("-n", type=int, default=3); p.add_argument("--pool", type=int, default=10)
     p.add_argument("--no-credit", action="store_true"); p.add_argument("--track"); p.add_argument("-o", "--out")
     p = sub.add_parser("rate"); p.add_argument("dir"); p.add_argument("rank", type=int); p.add_argument("verdict", choices=["good", "bad"]); p.add_argument("--note", default="")
+    p = sub.add_parser("ref"); p.add_argument("action", choices=["add", "profile", "check"]); p.add_argument("target", nargs="?"); p.add_argument("--type", choices=TYPES); p.add_argument("-n", type=int, default=3)
     a = ap.parse_args()
     cat = library.load()
 
@@ -99,6 +100,31 @@ def main():
         page = render.audition(b, prof, res, out, cat)
         json.dump({"brief": os.path.abspath(a.brief), "type": b["type"], "ranked": [p["track"] for p, _, _ in res]}, open(os.path.join(out, "match.json"), "w"), ensure_ascii=False)
         print(f"试听页：{page}")
+    elif a.cmd == "ref":
+        from mlab import reference as R
+        LABEL = {"music_coverage": "配乐覆盖全片的比例", "under_speech_db": "说话时配乐比人声低（分贝）", "open_db": "没人说话时比人声低", "gap_lift_db": "停顿处抬起多少", "hook_db": "开头 3 秒比正文响",
+                 "music_in_s": "配乐第几秒进", "music_ends_before_end_s": "配乐比片尾早停几秒", "level_sd_db": "配乐音量起伏", "breaks_per_min": "每分钟留白次数", "bpm": "速度（量不准，仅参考）",
+                 "onset_rate": "每秒音头数（忙不忙）", "punch": "鼓点占比", "speech_band": "人声频段占比"}
+        if a.action == "add":                      # ref add 博主名 --type finance -n 3
+            if not a.target or not a.type:
+                sys.exit("用法：ml.py ref add 博主名 --type 内容类型 [-n 3]")
+            print(f"抓 {a.target} 点赞最高的 {a.n} 条，每条拆分加测量约等于片长…")
+            print(f"量完 {R.run_creator(a.type, a.target, a.n)} 条。汇总：python3 musiclab/ml.py ref profile")
+        elif a.action == "profile":
+            for t, p in R.build_profiles().items():
+                print(f"\n{RULES['types'][t]['name']}　{p['videos']} 条，其中 {p['with_music']} 条有配乐　博主：{'、'.join(p['creators'])}　收尾：{p.get('ending')}")
+                for k, m in p["metrics"].items():
+                    print(f"  {LABEL.get(k, k):26s} 中位 {m['median']:>7}　中间一半 {m['p25']} ~ {m['p75']}")
+        elif a.action == "check":                  # ref check 输出目录：我们的方案对照大 V
+            b = json.load(open(os.path.join(a.target, "brief.json"), encoding="utf-8"))
+            prof = R._load(R.PROFILES, {}).get(b["type"])
+            if not prof or not b.get("voice"):
+                sys.exit("这个类型还没有参考画像，或这条片子没有人声。")
+            for f in sorted(x for x in os.listdir(a.target) if x.endswith("_bed.wav")):
+                rate, rows = R.compare(R.measure(b["voice"], os.path.join(a.target, f)), prof)
+                print(f"\n{f[:-8]}　和大 V 做法一致的项：{rate:.0%}")
+                for r in rows:
+                    print(f"  {'合' if r['ok'] else '偏'}  {LABEL.get(r['metric'], r['metric']):26s} 我们 {r['ours']:>7}　大 V {r['ref_range'][0]} ~ {r['ref_range'][1]}")
     elif a.cmd == "rate":
         m = json.load(open(os.path.join(a.dir, "match.json")))
         tid = m["ranked"][a.rank - 1]
