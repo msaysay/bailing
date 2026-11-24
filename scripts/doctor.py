@@ -37,14 +37,29 @@ def talkfont_ok():
         sys.path.insert(0, os.path.join(R, "scripts")); import fontlib
         return all(fontlib.installed(i) for i in fontlib.pack_fonts(fontlib.active()["xiaolin"]))
     except Exception: return False
+def fix_sys(tool):
+    """用这台电脑的包管理器装 ffmpeg / Node.js。装不上就返回 False，由助手照「怎么办」里的命令接着装（不要让用户去装）。"""
+    import platform
+    pk = {"ffmpeg": {"brew": "ffmpeg", "winget": "Gyan.FFmpeg", "apt": ["ffmpeg"], "dnf": ["ffmpeg"]}, "node": {"brew": "node@22", "winget": "OpenJS.NodeJS.LTS", "apt": ["nodejs", "npm"], "dnf": ["nodejs"]}}[tool]
+    run = lambda c: subprocess.run(c).returncode == 0; sudo = [] if (hasattr(os, "geteuid") and os.geteuid() == 0) else ["sudo", "-n"]; sysn = platform.system()
+    if sysn == "Darwin" and shutil.which("brew"): ok = run(["brew", "install", pk["brew"]]) and (tool != "node" or run(["brew", "link", "--overwrite", "--force", pk["brew"]]))
+    elif sysn == "Windows" and shutil.which("winget"): ok = run(["winget", "install", "-e", "--id", pk["winget"], "--accept-source-agreements", "--accept-package-agreements", "--silent"])
+    elif shutil.which("apt-get"): ok = run([*sudo, "apt-get", "update", "-qq"]) and run([*sudo, "apt-get", "install", "-y", "-qq", *pk["apt"]])
+    elif shutil.which("dnf"): ok = run([*sudo, "dnf", "install", "-y", *pk["dnf"]])
+    else: ok = False
+    if not ok: return False
+    if tool == "ffmpeg": return bool(shutil.which("ffmpeg")) or sysn == "Windows"       # Windows 装完要开一个新终端才认得到
+    v = (ver(["node", "-v"]) or "v0").lstrip("v").split(".")[0]; return (v.isdigit() and int(v) >= 22) or sysn == "Windows"
+NODE_HOW = "助手来装，不要让用户装。Mac：brew install node@22 && brew link --overwrite --force node@22（没有 brew 就用不需要密码的办法：curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash，开一个新终端后 nvm install 22）；Windows：winget install -e --id OpenJS.NodeJS.LTS，装完开一个新终端；Linux：用 nvm 同上。只有系统弹密码框时才请用户输一下"
+FF_HOW = "助手来装，不要让用户装。Mac：brew install ffmpeg（没有 brew 先装 brew：/bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\"，这一步会要开机密码，请用户在终端里输一下）；Windows：winget install -e --id Gyan.FFmpeg，装完开一个新终端；Linux：sudo apt-get install -y ffmpeg"
 def fix_yunet(): os.makedirs(CACHE, exist_ok=True); urllib.request.urlretrieve(YUNET_URL, os.path.join(CACHE, "yunet.onnx")); return True
 fonts = os.path.join(R, "studio", "public", "fonts"); need_fonts = ["MiSans-Regular.otf", "MiSans-Semibold.otf", "MiSans-Heavy.otf"]
 blend = os.path.join(R, "pet", "assets", "QuietCompanions.blend")
 # 每项：名字、属于哪几条线、是否通过、缺了怎么办、能否自动补
 C = [
- ("Node.js 22 以上", "news talk pet", (ver(["node", "-v"]) or "v0").lstrip("v").split(".")[0].isdigit() and int((ver(["node", "-v"]) or "v0").lstrip("v").split(".")[0]) >= 22, "去 nodejs.org 装 22 版（LTS）", None),
- ("ffmpeg", "news talk pet", bool(shutil.which("ffmpeg")), "Mac：brew install ffmpeg；Windows：winget install ffmpeg；Linux：apt install ffmpeg", None),
- ("Python 3.10 以上", "news talk pet", sys.version_info >= (3, 10), "去 python.org 装 3.10 以上", None),
+ ("Node.js 22 以上", "news talk pet", (ver(["node", "-v"]) or "v0").lstrip("v").split(".")[0].isdigit() and int((ver(["node", "-v"]) or "v0").lstrip("v").split(".")[0]) >= 22, NODE_HOW, lambda: fix_sys("node")),
+ ("ffmpeg", "news talk pet", bool(shutil.which("ffmpeg")), FF_HOW, lambda: fix_sys("ffmpeg")),
+ ("Python 3.10 以上", "news talk pet", sys.version_info >= (3, 10), "助手来装，不要让用户装。Mac：brew install python@3.12；Windows：winget install -e --id Python.Python.3.12；Linux：sudo apt-get install -y python3.12。装完用新的 python3 再跑这个脚本", None),
  ("工程依赖（studio/node_modules）", "news talk pet", os.path.isdir(os.path.join(R, "studio", "node_modules", "remotion")), "cd studio && npm install", fix_npm),
  ("Python 包：语音识别", "news talk", has_mod("sherpa_onnx") and has_mod("soundfile") and has_mod("numpy"), "pip install sherpa-onnx soundfile numpy", lambda: fix_pip(["sherpa-onnx", "soundfile", "numpy"])),
  ("Python 包：人脸检测", "news talk", has_mod("cv2"), "pip install opencv-python-headless", lambda: fix_pip(["opencv-python-headless"])),
@@ -64,9 +79,9 @@ for name, lines, ok, how, fixer in C:
     if not ok and a.fix and fixer:
         try: ok = bool(fixer())
         except Exception as e: how = f"自动补失败（{str(e)[:60]}）。手动：{how}"
-    rows.append({"item": name, "ok": bool(ok), "how": "" if ok else how, "auto": bool(fixer), "optional": name.startswith("TikHub")})
+    rows.append({"item": name, "ok": bool(ok), "how": "" if ok else how, "auto": bool(fixer), "optional": name.startswith(("TikHub", "Blender", "海豹"))})
 if a.json: print(json.dumps(rows, ensure_ascii=False, indent=1)); sys.exit(0)
 for r in rows: print(("✓ " if r["ok"] else ("· " if r["optional"] else "✗ ")) + r["item"] + ("" if r["ok"] else "  →  " + r["how"] + ("（加 --fix 可自动补）" if r["auto"] and not a.fix else "")))
 bad = [r for r in rows if not r["ok"] and not r["optional"]]
-print("\n全部就绪。" if not bad else f"\n还差 {len(bad)} 项。")
+print("\n全部就绪。" if not bad else f"\n还差 {len(bad)} 项。" + ("这几项自动装没装上：助手照上面「→」后面的命令接着装，装完再跑一遍；不要把命令丢给用户。" if a.fix else "助手先跑 python3 scripts/doctor.py --fix 自动装。"))
 sys.exit(1 if bad else 0)

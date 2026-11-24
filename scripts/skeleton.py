@@ -43,6 +43,30 @@ def show(s):
     print(f"  怎么做：技能 {s['skill']}" + (f"（python3 scripts/talk.py new <期名> --style {s['style']} …）" if s["style"] else ""))
 
 
+PV = os.path.join(R, "styles", "previews")
+
+
+def sheet():
+    """把每个骨架的样图拼成一张总览，方便在聊天里一次发给用户看。"""
+    try: from PIL import Image, ImageDraw, ImageFont
+    except ImportError: print("没装 Pillow，跳过总览图（pip install pillow）"); return
+    ft = next((f for f in (os.path.join(R, "studio", "public", "fonts", n) for n in ("SourceHanSansSC-Heavy.otf", "MiSans-Heavy.otf")) if os.path.exists(f)), None)
+    if not ft: print("没找到中文字体，跳过总览图（先跑 python3 scripts/doctor.py --fix）"); return
+    f = lambda z: ImageFont.truetype(ft, z); cw, ch, cols = 440, 330, 4; rows = (len(SK) + cols - 1) // cols
+    S = Image.new("RGB", (cols * cw + 20, rows * (ch + 100) + 70), "#0A0A0B"); d = ImageDraw.Draw(S); d.text((20, 16), f"{len(SK)} 个骨架 · 回编号选一个", font=f(28), fill="#F4F2EC")
+    for n, k in enumerate(SK):
+        x = 20 + (n % cols) * cw; y = 66 + (n // cols) * (ch + 100); S.paste("#15161a", (x, y, x + cw - 20, y + ch)); pf = os.path.join(PV, k["id"] + ".jpg")
+        if os.path.exists(pf): im = Image.open(pf).convert("RGB"); im.thumbnail((cw - 20, ch)); S.paste(im, (x + (cw - 20 - im.width) // 2, y + (ch - im.height) // 2))
+        d.text((x, y + ch + 8), f"{n + 1}  {k['name']}", font=f(26), fill="#D6FF3D"); d.text((x, y + ch + 46), ("出镜" if k["face"] else "不出镜") + " · " + k["orient"] + " · " + k["ref"][:16], font=f(18), fill="#9a9a9a")
+    o = os.path.join(PV, "总览.jpg"); S.save(o, quality=88); print(o)
+
+
+def form():
+    """开工单：一页点完所有问题（带每个骨架的样图），复制一段话发给 AI。"""
+    t = open(os.path.join(R, "styles", "开工单-模板.html"), encoding="utf8").read().replace("/*SKEL*/[]", json.dumps(SK, ensure_ascii=False))
+    o = os.path.join(R, "开工单.html"); open(o, "w", encoding="utf8").write(t); print(o)
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter); sub = ap.add_subparsers(dest="cmd", required=True)
     sub.add_parser("list"); sub.add_parser("rules"); sub.add_parser("build")
@@ -66,6 +90,8 @@ def main():
             if c["group"] in ok: print(f"  {c['id']:<5}{c['name']}　[{c['group']}]　{c['use']}")
     elif a.cmd == "build":
         json.dump([{k: c[k] for k in ("id", "name", "export", "file", "group", "use", "avoid", "props")} for c in comps()], open(CJ, "w", encoding="utf8"), ensure_ascii=False, indent=0); print(CJ)
+        sheet(); form()
+        if not os.path.isdir(os.path.join(R, "site")): return
         o = os.path.join(R, "site", "atlas-skel.js"); open(o, "w", encoding="utf8").write("window.ATLAS_SKEL = " + json.dumps({"rules": D["总规矩"], "gate": D["入库门槛"], "skeletons": SK}, ensure_ascii=False) + ";\n"); print(o)
 
 

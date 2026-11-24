@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>开工单 · 一页点完</title>
+<style>
+  :root { --ink: #0A0A0B; --ink2: #131417; --line: #2a2c31; --paper: #F4F2EC; --mute: #9b9b9b; --lime: #D6FF3D; --gold: #FFD84A; }
+  * { box-sizing: border-box; margin: 0; }
+  body { background: var(--ink); color: var(--paper); font: 16px/1.6 "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif; padding: 0 16px 140px; }
+  main { max-width: 980px; margin: 0 auto; }
+  header { padding: 44px 0 10px; }
+  h1 { font-size: 34px; font-weight: 900; line-height: 1.25; text-wrap: balance; } h1 em { font-style: normal; color: var(--lime); }
+  header p { color: var(--mute); margin-top: 10px; max-width: 62ch; }
+  section { border-top: 1px solid var(--line); margin-top: 34px; padding-top: 26px; }
+  h2 { font-size: 21px; font-weight: 900; display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; } h2 i { font-style: normal; color: var(--lime); font-variant-numeric: tabular-nums; } h2 small { font-weight: 400; font-size: 13.5px; color: var(--mute); }
+  .opts { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+  .opts button { font: inherit; color: var(--paper); background: var(--ink2); border: 1px solid var(--line); padding: 10px 16px; cursor: pointer; text-align: left; }
+  .opts button small { display: block; color: var(--mute); font-size: 12.5px; }
+  .opts button.on { background: var(--lime); border-color: var(--lime); color: #111; font-weight: 800; } .opts button.on small { color: #333; }
+  .opts button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid var(--lime); outline-offset: 2px; }
+  .skels { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; margin-top: 16px; }
+  .skel { border: 1px solid var(--line); background: var(--ink2); cursor: pointer; padding: 0; color: inherit; font: inherit; text-align: left; display: flex; flex-direction: column; position: relative; }
+  .skel img { width: 100%; aspect-ratio: 16 / 10; object-fit: contain; background: #000; display: block; }
+  .skel div { padding: 12px 14px 14px; } .skel b { font-size: 17px; font-weight: 900; display: block; } .skel u { text-decoration: none; color: var(--lime); font-size: 12.5px; display: block; } .skel p { color: var(--mute); font-size: 13px; margin-top: 6px; line-height: 1.55; }
+  .skel.on { border-color: var(--lime); box-shadow: 0 0 0 2px var(--lime); } .skel .rec { position: absolute; left: 8px; top: 8px; background: var(--gold); color: #111; font-size: 12px; font-weight: 900; padding: 2px 8px; }
+  .skel.dim { opacity: .38; }
+  .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px 18px; margin-top: 14px; }
+  label { display: block; font-size: 13.5px; color: var(--mute); margin-bottom: 4px; } label b { color: var(--paper); }
+  input[type=text], textarea { width: 100%; font: inherit; color: var(--paper); background: var(--ink2); border: 1px solid var(--line); padding: 10px 12px; }
+  textarea { resize: vertical; min-height: 64px; }
+  .mock { margin-top: 18px; display: grid; grid-template-columns: 200px 1fr; gap: 18px; align-items: start; } .mock .ph { aspect-ratio: 9 / 16; background: linear-gradient(180deg, #3a3f4a, #1b1d22); position: relative; overflow: hidden; font-size: 11px; }
+  .mock .ph .a { position: absolute; left: 10px; top: 24px; border-left: 3px solid var(--lime); background: rgba(0,0,0,.55); padding: 3px 8px; } .mock .ph .a b { display: block; font-size: 14px; } .mock .ph .b { position: absolute; left: 0; right: 0; bottom: 12px; text-align: center; } .mock .ph .b span { background: var(--lime); color: #111; font-weight: 900; padding: 2px 10px; border-radius: 5px; display: inline-block; transform: skewX(-7deg); }
+  .mock .ph .c { position: absolute; left: 10px; right: 10px; bottom: 44px; color: #fff; opacity: .9; white-space: pre-line; } .mock ol { color: var(--mute); font-size: 14px; padding-left: 20px; } .mock ol b { color: var(--paper); }
+  .bar { position: fixed; left: 0; right: 0; bottom: 0; background: rgba(10,10,11,.96); border-top: 1px solid var(--line); padding: 12px 16px; }
+  .bar div { max-width: 980px; margin: 0 auto; display: flex; gap: 14px; align-items: center; flex-wrap: wrap; } .bar span { color: var(--mute); font-size: 14px; flex: 1; min-width: 200px; }
+  .bar button { font: inherit; font-weight: 900; background: var(--lime); color: #111; border: 0; padding: 12px 26px; cursor: pointer; }
+  pre { white-space: pre-wrap; word-break: break-word; background: #0d0e10; border: 1px solid var(--line); padding: 16px; margin-top: 14px; font: 14px/1.7 inherit; }
+  @media (max-width: 560px) { .mock { grid-template-columns: 1fr; } .mock .ph { max-width: 200px; } h1 { font-size: 27px; } }
+</style>
+</head>
+<body>
+<main>
+<header>
+  <h1>开工单：<em>一页点完，发给 AI</em></h1>
+  <p>不用一问一答。把下面几项点一遍（不确定的可以不动，都有默认），点底部的「复制给 AI」，粘贴到聊天里，它就直接开工。</p>
+</header>
+
+<section><h2><i>1</i>这条视频你本人出不出镜？</h2><div class="opts" id="q-face"></div></section>
+<section id="s-orient"><h2><i>2</i>发在哪？</h2><div class="opts" id="q-orient"></div></section>
+<section><h2><i>3</i>主要讲什么？</h2><div class="opts" id="q-type"></div></section>
+
+<section>
+  <h2><i>4</i>挑一个样子 <small>按上面三项给你推荐了一个（黄色角标）；想换就点别的。灰掉的是和你的选择对不上的</small></h2>
+  <div class="skels" id="skels"></div>
+</section>
+
+<section>
+  <h2><i>5</i>署名 <small>三样东西，都不是全程挂着</small></h2>
+  <div class="grid2">
+    <div><label><b>角标</b>（底部小牌子，像「小 Lin 说」，2 到 6 个字）</label><input type="text" id="s-badge" maxlength="6" placeholder="例如：宁少说"></div>
+    <div><label><b>称呼</b>（上方个人介绍第一行，2 到 6 个字）</label><input type="text" id="s-name" maxlength="6" placeholder="例如：宁少"></div>
+    <div><label><b>身份</b>（称呼下面一行，不超过 14 个字）</label><input type="text" id="s-title" maxlength="14" placeholder="例如：十年财经记者"></div>
+    <div><label><b>简介</b>（结尾才出，最多两行，每行不超过 18 个字）</label><textarea id="s-bio" placeholder="例如：每周讲一个 AI 获客的真实案例"></textarea></div>
+  </div>
+  <div class="mock">
+    <div class="ph"><div class="a"><b id="m-name">称呼</b><span id="m-title">一行身份</span></div><div class="c" id="m-bio">简介</div><div class="b"><span id="m-badge">角标</span></div></div>
+    <ol>
+      <li><b>个人介绍（上方）</b>：开头那句话说完、你第一次全屏出现时出一次，停 4 秒就走。长视频每隔两分钟以上、新一章开头再出一次。</li>
+      <li><b>角标（底部）</b>：只在你全屏出镜时在；切到素材、卡片、大字时收起来。</li>
+      <li><b>简介（底部）</b>：只在最后几秒出，和称呼一起当片尾。</li>
+      <li>不想要哪样就留空。</li>
+    </ol>
+  </div>
+</section>
+
+<section><h2><i>6</i>要不要这些处理？<small>可多选；不选也会去重录、去口吃、收紧停顿</small></h2><div class="opts" id="q-opts"></div></section>
+<section><h2><i>7</i>片子里要用网上的画面吗？<small>新闻画面、案例画面这类</small></h2><div class="opts" id="q-tik"></div></section>
+<section><h2><i>8</i>怎么跟你确认？</h2><div class="opts" id="q-mode"></div></section>
+
+<section><h2>发给 AI 的话 <small>点底部按钮复制</small></h2><pre id="out"></pre></section>
+</main>
+<div class="bar"><div><span id="hint">点完了就复制，粘贴给 AI。</span><button id="copy">复制给 AI</button></div></div>
+
+<script>
+(function () {
+  var SK = [{"id": "xiaolin", "name": "财经解读风", "ref": "对标小 Lin 说的竖屏口播", "face": true, "orient": "竖屏", "fits": ["财经", "商业", "科技", "知识"], "skill": "xiaolin-talk", "style": "xiaolin", "clip": "assets/showcase/xiaolin", "tall": 1, "look": "人全屏和「素材带 + 右上小圆头像」来回切；胸口压卡片；进度牌贯穿全片；标题体白字幕。", "lock": ["两种版式来回切的节奏", "进度牌的位置和样子", "白色标题体字幕", "卡片压在胸口、不压脸"], "swap": ["署名", "强调色（默认黄）", "配乐", "卡片里放什么组件"], "blocks": ["数据图表", "数字", "对比", "市场", "关系与流程", "时间", "口播叠加", "竖屏播报"], "avoid": ["纸面风 · 手机大字", "广播风 · 粒子与终端", "炫技动效"]}, {"id": "danjie", "name": "商业快节奏风", "ref": "对标蛋解创业", "face": true, "orient": "竖屏", "fits": ["商业", "财经", "老板", "生活"], "skill": "danjie-cut", "style": "danjie", "clip": "assets/showcase/danjie", "tall": 1, "look": "近黑藏青底；口播全屏和素材版式快切，素材两三秒一换；金色重点词、清单、章节角标、数据面板；结尾毛笔金句。", "lock": ["藏青底配金色", "两三秒一换的节奏", "章节角标", "结尾毛笔金句"], "swap": ["署名", "配乐", "素材", "数据面板里放什么"], "blocks": ["文字与强调", "数字", "数据图表", "对比", "口播叠加", "竖屏播报", "视频与图片"], "avoid": ["纸面风 · 手机大字", "广播风 · 人物与图解", "广播风 · 粒子与终端"]}, {"id": "zhanpeng", "name": "知识科普风", "ref": "对标张展鹏", "face": true, "orient": "竖屏", "fits": ["知识", "健康", "教育", "情感"], "skill": "zhanpeng-talk", "style": "zhanpeng", "img": "assets/img/tpl5.jpg", "tall": 1, "look": "全片一套楷体：白字幕、红色钩子、黄色关键词；切插画时带跟着头走的羽化头像；论文卡、黑底金句、墨迹转场。", "lock": ["全片楷体", "白字幕、红钩子、黄关键词三色", "羽化头像", "黑底金句"], "swap": ["署名", "插画和空镜", "配乐"], "blocks": ["内容与引用", "关系与流程", "视频与图片", "数字"], "avoid": ["广播风 · 系统与文字", "广播风 · 粒子与终端", "炫技动效", "数据图表"]}, {"id": "frame", "name": "相框老板风", "ref": "对标约读书房", "face": true, "orient": "竖屏", "fits": ["老板", "品牌", "教育"], "skill": "frame-talk", "style": "frame", "ph": "相框", "bg": "linear-gradient(135deg,#3a2a14,#c9a063)", "look": "固定相框：纸纹底、三行大标题、署名条、品牌标志；中间一个画面窗，人、素材、贴纸、十三种生成卡片都在窗里。", "lock": ["相框的结构", "三行标题的字号关系", "所有内容都在画面窗里"], "swap": ["整套品牌包（底图、标志、署名、配色）", "标题文字", "配乐"], "blocks": ["口播叠加", "内容与引用", "数字", "组织与人"], "avoid": ["炫技动效", "广播风 · 粒子与终端", "画面效果"]}, {"id": "interview", "name": "访谈纪实风", "ref": "对标天图通逊的访谈成片", "face": true, "orient": "竖屏", "fits": ["访谈", "品牌", "故事", "老板"], "skill": "tiantu-interview-cut", "style": "interview", "ph": "访谈", "bg": "linear-gradient(135deg,#12202e,#2f6d7a)", "look": "口播和满屏空镜交替，全部硬切；白色粗黑字幕，关键词只放大不变色；细宋体小标题；左上角标志；四五秒品牌片尾。", "lock": ["全部硬切，没有转场", "关键词只放大不变色", "不上图表和卡片"], "swap": ["标志", "片尾", "空镜", "配乐"], "blocks": ["视频与图片"], "avoid": ["数据图表", "炫技动效", "广播风 · 系统与文字", "广播风 · 粒子与终端", "纸面风 · 手机大字"]}, {"id": "ziqi", "name": "横屏深度解读风", "ref": "对标子祺见微", "face": true, "orient": "横屏", "fits": ["新闻", "财经", "历史", "科技", "商业"], "skill": "ziqi-wide", "style": "ziqi", "clip": "assets/showcase/ziqi", "look": "顶上章节导航条、底下频道标志条；主持人全景、右侧素材窗、名片、圆头像和满屏素材来回切；金色大字标题卡、玻璃数据面板。", "lock": ["章节导航条和频道条", "金色标题卡", "3:2 画幅", "素材带画框"], "swap": ["署名和频道标志", "章节名", "素材", "数据面板里放什么"], "blocks": ["结构", "数据图表", "数字", "对比", "时间", "关系与流程", "组织与人", "流程与政策", "市场", "视频与图片", "网页与文档"], "avoid": ["纸面风 · 手机大字", "竖屏播报", "炫技动效"]}, {"id": "split", "name": "电影分屏大字", "ref": "自己定的：给「一个人讲清一件事」的横屏短片", "face": true, "orient": "横屏", "fits": ["科技", "知识", "生活", "教育"], "skill": "make-talk", "style": "", "clip": "assets/showcase/split", "look": "斜切黑板推进来，大字跟着声音一行行揭开；每段换一种版式盖住剪口；黑底、暖白字、一个荧光强调色。", "lock": ["黑、暖白、一个强调色", "大字跟着声音揭开", "每个剪口换版式"], "swap": ["署名", "强调色（默认荧光绿）", "配乐"], "blocks": ["文字与强调", "录屏与设备", "网页与文档", "关系与流程", "运动手感", "画面效果"], "avoid": ["纸面风 · 手机大字", "竖屏播报"]}, {"id": "news", "name": "横屏新闻解读", "ref": "自己定的：不出镜，录音加真实画面", "face": false, "orient": "横屏", "fits": ["新闻", "财经", "科技", "商业", "历史", "知识", "故事"], "skill": "make-news", "style": "", "clip": "assets/showcase/news", "look": "墨黑底、暖白字、一个主色；真实新闻画面垫底，上面压时间轴、引语卡、数据对比；每个数字标出处。", "lock": ["墨黑、暖白、一个主色", "画面上的字不重复口播", "数字必须带出处", "四到六秒换一次画面"], "swap": ["署名", "主色", "配音（真人或 AI）", "配乐"], "blocks": ["结构", "广播风 · 系统与文字", "广播风 · 人物与图解", "广播风 · 粒子与终端", "数据图表", "数字", "时间", "对比", "组织与人", "市场", "流程与政策", "内容与引用", "视频与图片", "画面效果"], "avoid": ["纸面风 · 手机大字", "竖屏播报", "口播叠加"]}];
+  var $ = function (s) { return document.querySelector(s); };
+  var st = { face: true, wide: false, type: '科技', skel: null, picked: false, opts: {}, tik: 'link', mode: 'step' };
+  var TYPES = ['财经', '商业', '科技', '知识', '新闻', '历史', '故事', '情感', '生活', '老板', '访谈', '教育', '品牌', '健康'];
+  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  function chips(id, list, key, multi) { var box = $(id); list.forEach(function (o) { var b = document.createElement('button'); b.type = 'button'; b.innerHTML = esc(o[0]) + (o[2] ? '<small>' + esc(o[2]) + '</small>' : ''); b.onclick = function () { if (multi) st.opts[o[1]] = !st.opts[o[1]]; else { st[key] = o[1]; if (key !== 'tik' && key !== 'mode') st.picked = false; } draw(); }; b._v = o[1]; box.appendChild(b); }); box._key = key; box._multi = multi; }
+  function rank() { var pool = SK.filter(function (k) { return k.face === st.face && (!st.face || (k.orient === '横屏') === st.wide); }); if (!pool.length) pool = SK.filter(function (k) { return k.face === st.face; }); var r = function (k) { var i = k.fits.indexOf(st.type); return i < 0 ? 99 : i; }; return pool.slice().sort(function (a, b) { return r(a) - r(b); }); }
+  function draw() {
+    ['#q-face', '#q-orient', '#q-type', '#q-opts', '#q-tik', '#q-mode'].forEach(function (id) { var box = $(id); [].forEach.call(box.children, function (b) { b.classList.toggle('on', box._multi ? !!st.opts[b._v] : st[box._key] === b._v); }); });
+    $('#s-orient').style.display = st.face ? '' : 'none';
+    var r = rank(), rec = r[0]; if (!st.picked || !st.skel) st.skel = rec.id;
+    [].forEach.call($('#skels').children, function (c) { c.classList.toggle('on', c._id === st.skel); c.classList.toggle('dim', r.every(function (k) { return k.id !== c._id; })); var t = c.querySelector('.rec'); if (t) t.remove(); if (c._id === rec.id) { var e = document.createElement('span'); e.className = 'rec'; e.textContent = '推荐'; c.appendChild(e); } });
+    var v = function (id) { return $(id).value.trim(); }, s = { badge: v('#s-badge'), name: v('#s-name'), title: v('#s-title'), bio: v('#s-bio') };
+    $('#m-name').textContent = s.name || '称呼'; $('#m-title').textContent = s.title || '一行身份'; $('#m-bio').textContent = s.bio || '简介（结尾才出）'; $('#m-badge').textContent = s.badge || '角标';
+    var k = SK.filter(function (x) { return x.id === st.skel; })[0], on = Object.keys(st.opts).filter(function (x) { return st.opts[x]; }), N = { denoise: '降噪', grade: '调光', beauty: '轻磨皮', music: '配乐', font: '换字体（先出样张给我挑）' };
+    $('#out').textContent = '这是我填好的开工单，请照它直接开工，这些不用再问我：\n\n' +
+      '1. 出镜：' + (st.face ? '出镜，我有（或会给你）口播原片' : '不出镜，我给录音或题目') + '\n' +
+      '2. 画幅：' + (!st.face ? '横屏' : st.wide ? '横屏（B 站、公众号）' : '竖屏（抖音、视频号、小红书）') + '\n' +
+      '3. 内容：' + st.type + '\n' +
+      '4. 骨架：' + k.name + '（' + k.id + '，' + k.ref + '）' + (st.picked ? '，我自己挑的' : '，按推荐') + '\n' +
+      '5. 署名：角标「' + (s.badge || '不要') + '」；称呼「' + (s.name || '不要') + '」；身份「' + (s.title || '不要') + '」；简介「' + (s.bio.replace(/\n/g, ' / ') || '不要') + '」\n' +
+      '   （存进 brands 里：python3 scripts/sign.py set；出现时机按 docs/署名规则.md）\n' +
+      '6. 处理：' + (on.length ? on.map(function (x) { return N[x]; }).join('、') : '只要默认的（去重录、去口吃、收紧停顿）') + '\n' +
+      '7. 网上的画面：' + ({ tik: '要用，我去接 TikHub（请告诉我怎么接）', link: '要用的话我自己给你链接或文件', none: '不用' }[st.tik]) + '\n' +
+      '8. 确认方式：' + (st.mode === 'step' ? '每做完一步给我看一眼再往下' : '不用问我，一路做到底，最后告诉我剪掉了什么、哪些要我看') + '\n\n' +
+      '环境你来查、你来装，不要让我装东西。然后告诉我下一步要我给你什么' + (st.face ? '（应该是原片）。' : '（应该是录音或题目）。');
+  }
+  chips('#q-face', [['出镜', true, '我拍了口播，或者准备拍'], ['不出镜', false, '我有录音，或者只有一个题目']], 'face');
+  chips('#q-orient', [['竖屏', false, '抖音、视频号、小红书'], ['横屏', true, 'B 站、公众号、YouTube']], 'wide');
+  chips('#q-type', TYPES.map(function (x) { return [x, x]; }), 'type');
+  chips('#q-opts', [['降噪', 'denoise', '录的地方吵'], ['调光', 'grade', '脸偏暗'], ['轻磨皮', 'beauty'], ['配乐', 'music'], ['换字体', 'font', '先出样张']], 'opts', true);
+  chips('#q-tik', [['我自己给链接或文件', 'link'], ['帮我接 TikHub，自动找', 'tik', '按次计费，一条片子几毛到几块'], ['不用网上的画面', 'none']], 'tik');
+  chips('#q-mode', [['每一步给我看一眼', 'step', '稳，推荐第一次用'], ['一路做到底', 'auto', '快，最后一起看']], 'mode');
+  SK.forEach(function (k) { var c = document.createElement('button'); c.type = 'button'; c.className = 'skel'; c._id = k.id; c.innerHTML = '<img loading="lazy" alt="' + esc(k.name) + ' 样图" src="styles/previews/' + k.id + '.jpg"><div><b>' + esc(k.name) + '</b><u>' + esc(k.ref) + ' · ' + (k.face ? '出镜' : '不出镜') + ' · ' + k.orient + '</u><p>' + esc(k.look) + '</p></div>'; c.onclick = function () { st.skel = k.id; st.picked = true; if (k.face !== st.face) st.face = k.face; if (k.face) st.wide = k.orient === '横屏'; draw(); }; $('#skels').appendChild(c); });
+  ['#s-badge', '#s-name', '#s-title', '#s-bio'].forEach(function (id) { $(id).oninput = draw; });
+  $('#copy').onclick = function () { var t = $('#out').textContent, ok = function () { $('#hint').textContent = '已复制。回到聊天窗口粘贴发送。'; }; if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(t).then(ok, fb); else fb(); function fb() { var a = document.createElement('textarea'); a.value = t; document.body.appendChild(a); a.select(); try { document.execCommand('copy'); ok(); } catch (e) { $('#hint').textContent = '复制不了，请手动选中上面那段话。'; } a.remove(); } };
+  draw();
+})();
+</script>
+</body>
+</html>
