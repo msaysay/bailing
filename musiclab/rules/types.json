@@ -1,0 +1,36 @@
+{
+ "_说明": "每种内容类型的配乐规矩。want/avoid 是情绪维度的权重（0–1），bed_db 是说话时配乐比人声低多少（响度单位），open_db 是没人说话时比人声低多少。改这里就能调整每类视频的默认做法，需求单里写了同名字段会盖过这里。",
+ "dims": {"bright": "明亮", "warm": "温暖", "calm": "平静", "drive": "推进", "playful": "俏皮", "tense": "紧张", "serious": "严肃厚重", "epic": "宏大", "dark": "阴暗", "curious": "好奇悬念", "tech": "科技感"},
+ "types": {
+  "talk": {
+   "name": "口播",
+   "want": {"bright": 0.6, "drive": 0.5, "warm": 0.4}, "avoid": {"dark": 1, "epic": 0.6, "playful": 0.4, "tense": 0.5},
+   "bpm": [88, 128], "bed_db": -20, "open_db": -15, "min_gap": 1.0, "max_punch": 0.35, "max_steadiness": 2.5, "hook_s": 3, "hook_db": 3,
+   "nodes": ["开头钩子：音乐从第一帧就在，前 3 秒比正文响 3 分贝，第一个重拍对齐开口", "正文：平稳铺底，不换歌，不要大起伏", "转折或金句前：音乐收 0.4 秒再回来，给这句话留空", "停顿超过 1 秒：音乐自动抬起来填空", "结尾：落在乐句的终点，不是硬淡出"]
+  },
+  "vlog": {
+   "name": "生活 vlog",
+   "want": {"warm": 0.7, "bright": 0.6, "playful": 0.3, "calm": 0.3}, "avoid": {"dark": 1, "tense": 0.8, "serious": 0.5, "epic": 0.3},
+   "bpm": [80, 124], "bed_db": -16, "open_db": -7, "min_gap": 0.8, "max_punch": 0.5, "max_steadiness": 6, "hook_s": 0, "hook_db": 0,
+   "nodes": ["没人说话的空镜和转场：音乐是主角，抬到前景", "有人说话：压下去但听得见", "换场景或换章节：对齐音乐的段落交界，长片可以换歌", "最出片的那段画面：对齐音乐抬起来的段落", "画面切点尽量落在重拍上（方案里给出重拍时间表）"]
+  },
+  "teach": {
+   "name": "老师分享",
+   "want": {"warm": 0.7, "calm": 0.7, "bright": 0.3}, "avoid": {"dark": 1, "tense": 1, "drive": 0.4, "playful": 0.6, "epic": 0.8},
+   "bpm": [60, 100], "bed_db": -24, "open_db": -18, "min_gap": 1.5, "max_punch": 0.2, "max_steadiness": 2.0, "hook_s": 0, "hook_db": 0,
+   "nodes": ["全程很低，听众几乎不注意到音乐，只是不干", "不要鼓点，钢琴、吉他、铺底音色为主", "讲到重点：音乐收掉半秒到一秒，重点说完再回来", "章节之间：停顿处音乐略抬，起到翻页的作用", "长视频：同一首循环会腻，按章节换歌或留一段无音乐"]
+  },
+  "finance": {
+   "name": "新闻财经",
+   "want": {"serious": 0.7, "drive": 0.7, "tech": 0.5, "tense": 0.3}, "avoid": {"playful": 1, "warm": 0.3, "dark": 0.5, "calm": 0.3},
+   "bpm": [96, 132], "bed_db": -21, "open_db": -15, "min_gap": 1.0, "max_punch": 0.4, "max_steadiness": 3.0, "hook_s": 4, "hook_db": 3,
+   "nodes": ["开头：有脉冲感的音乐配新闻标题，前 4 秒略响", "摆事实和数据：稳定的推进感，不抢话", "关键数字或反转：对齐音乐的段落交界或抬升", "分析和判断：可以降一档能量，让人听观点", "结尾：干净收住，不拖尾"]
+  },
+  "knowledge": {
+   "name": "知识类",
+   "want": {"curious": 0.6, "bright": 0.5, "tech": 0.4, "calm": 0.3}, "avoid": {"dark": 0.8, "epic": 0.5, "tense": 0.5, "playful": 0.3},
+   "bpm": [84, 122], "bed_db": -21, "open_db": -15, "min_gap": 1.0, "max_punch": 0.35, "max_steadiness": 3.0, "hook_s": 3, "hook_db": 2,
+   "nodes": ["开头抛问题：带一点悬念感，前 3 秒略响", "讲解：轻、稳、不抢话", "每个知识点切换：对齐音乐段落交界", "揭晓答案：对齐音乐抬起来的段落", "结尾：落在乐句终点"]
+  }
+ }
+}

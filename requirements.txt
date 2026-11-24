@@ -10,3 +10,5 @@ yt-dlp
 faster-whisper
 # 可选：知识科普风论文卡的人物抠像。装不上也能出片。
 mediapipe
+# 音乐工具 musiclab（选曲、对齐、试听）
+librosa
