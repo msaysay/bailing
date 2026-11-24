@@ -60,6 +60,40 @@ def search(creator, pages=2, dur="1-5"):
     return sorted(rows.values(), key=lambda r: -r["likes"])
 
 
+POSTS = "https://api.tikhub.io/api/v1/douyin/app/v3/fetch_user_post_videos"
+
+
+def user_posts(creator, pages=3):
+    """博主主页的作品列表（搜索每次只给几条，不够用）。先用搜索拿到博主的编号，再翻主页。每翻一页计一次费。"""
+    import urllib.parse
+    h = dict(UA)
+    if os.environ.get("TIKHUB_TOKEN"):
+        h["Authorization"] = "Bearer " + os.environ["TIKHUB_TOKEN"]
+    body = {"keyword": creator, "cursor": 0, "sort_type": "0", "publish_time": "0", "filter_duration": "0", "content_type": "1", "search_id": "", "backtrace": ""}
+    with urllib.request.urlopen(urllib.request.Request(SEARCH, json.dumps(body).encode(), dict(h, **{"Content-Type": "application/json"})), timeout=120) as r:
+        sec = next((a["author"].get("sec_uid") for a in _walk(json.load(r)) if a["author"].get("nickname") == creator), None)
+    if not sec:
+        return []
+    rows, cur = {}, 0
+    for _ in range(pages):
+        q = urllib.parse.urlencode({"sec_user_id": sec, "max_cursor": cur, "count": 20})
+        try:
+            with urllib.request.urlopen(urllib.request.Request(POSTS + "?" + q, headers=h), timeout=120) as r:
+                d = (json.load(r).get("data") or {})
+        except Exception:
+            break                                   # 后面的页偶尔取不到：有多少用多少
+        for a in d.get("aweme_list") or []:
+            v = a.get("video") or {}
+            urls = ((v.get("play_addr") or {}).get("url_list")) or []
+            if urls:
+                rows[a["aweme_id"]] = {"id": a["aweme_id"], "creator": creator, "desc": (a.get("desc") or "")[:60], "likes": (a.get("statistics") or {}).get("digg_count", 0),
+                                       "dur": round((v.get("duration") or 0) / 1000), "music_title": (a.get("music") or {}).get("title"), "urls": urls}
+        cur = d.get("max_cursor")
+        if not d.get("has_more") or not cur:
+            break
+    return sorted(rows.values(), key=lambda r: -r["likes"])
+
+
 def fetch_audio(row):
     """只留声音：下视频、抽出音轨、删掉视频。"""
     os.makedirs(CACHE, exist_ok=True)
@@ -198,7 +232,7 @@ def compare(m, prof):
 def run_creator(vtype, creator, n=3, log=print):
     """抓一个博主点赞最高的 n 条，拆分、测量、记下来。量过的不重复量。"""
     data = _load(DATA, {})
-    rows = [r for r in search(creator) if 45 <= r["dur"] <= 300]
+    rows = [r for r in (user_posts(creator) or search(creator)) if 45 <= r["dur"] <= 420]
     done = 0
     for r in rows:
         if done >= n:
