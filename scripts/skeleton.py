@@ -26,9 +26,14 @@ def pick(typ, face=True, wide=False):
     return sorted(pool, key=lambda s: s["fits"].index(typ) if typ in s["fits"] else 99)
 
 
+CJ = os.path.join(R, "styles", "components.json")   # 组件清单的副本：包里不带官网目录时用它
+
+
 def comps():
-    s = open(os.path.join(R, "site", "data.js"), encoding="utf8").read()
-    return json.loads(s[s.index("{"): s.rindex("}") + 1])["components"]
+    f = os.path.join(R, "site", "data.js")
+    if os.path.exists(f):
+        s = open(f, encoding="utf8").read(); return json.loads(s[s.index("{"): s.rindex("}") + 1])["components"]
+    return json.load(open(CJ, encoding="utf8"))
 
 
 def show(s):
@@ -60,6 +65,7 @@ def main():
         for c in comps():
             if c["group"] in ok: print(f"  {c['id']:<5}{c['name']}　[{c['group']}]　{c['use']}")
     elif a.cmd == "build":
+        json.dump([{k: c[k] for k in ("id", "name", "export", "file", "group", "use", "avoid", "props")} for c in comps()], open(CJ, "w", encoding="utf8"), ensure_ascii=False, indent=0); print(CJ)
         o = os.path.join(R, "site", "atlas-skel.js"); open(o, "w", encoding="utf8").write("window.ATLAS_SKEL = " + json.dumps({"rules": D["总规矩"], "gate": D["入库门槛"], "skeletons": SK}, ensure_ascii=False) + ";\n"); print(o)
 
 

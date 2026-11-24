@@ -23,6 +23,40 @@ dflt = {f for s in L["styles"].values() for f in L["packs"][s["default"]]["roles
 have = lambda ids: [FD + L["fonts"][i]["file"] for i in ids if fl.installed(i)]
 if a.fonts != "none": files = sorted(set(files) | set(have(dflt if a.fonts == "default" else L["fonts"])))
 os.makedirs(os.path.dirname(os.path.abspath(a.out)), exist_ok=True); top = "video-studio/"; by = {}
+README = """# AI 剪辑工作流 · 先读我（给人看的）
+
+这是一个交给 AI 助手的文件夹，不是点开就用的软件。
+
+## 怎么用
+
+1. 解压。电脑上要有 Python 3.10 以上、Node.js 18 以上、ffmpeg。没有也行，让 AI 帮你装。
+2. 用能读文件、能跑命令的 AI 助手打开这个 `video-studio` 文件夹：Claude Code、Codex、Cursor、Trae、Windsurf 都可以。
+3. 对它说这一句：
+
+   > 读 AGENTS.md，我想做一条视频。
+
+   它会先查环境，然后一次问你一个选择题（出不出镜、发在哪、讲什么……），你回数字就行。
+4. 做完它会一起交：成片、三版封面、三个标题、简介、话题。
+
+## 想一步到位
+
+> 读 AGENTS.md，把这条口播剪成成片。不用问我，一路做到底，最后告诉我剪掉了什么、哪些要我看一眼。
+
+## 找网上的画面
+
+要用新闻画面、案例画面时，它会提醒你接 TikHub（tikhub.io，按次计费）。把那串 Token 存进这个文件夹最外层的「钥匙.txt」，不要发在聊天里。不接也行，自己给视频链接或文件。
+
+## 字体
+
+这个包带了每个骨架原配的字体，解压就能出片。想换别的字体，把「字体扩展包」解压到同一个位置（合并 `video-studio` 文件夹）。
+
+## 文件夹里有什么
+
+- `AGENTS.md` / `CLAUDE.md`：写给 AI 看的总说明（内容一样）
+- `.claude/skills/`：每一步的详细做法（这个文件夹名字以点开头，有的系统默认隐藏）
+- `scripts/`：工具　`studio/`：出画面的工程　`styles/`：骨架和组合规矩　`fonts/` `music/`：字体目录和配乐库
+- `docs/`：流程说明和对标拆解
+"""
 if a.fonts_only_rest:
     rest = have([i for i in L["fonts"] if i not in dflt])
     with zipfile.ZipFile(a.fonts_only_rest, "w", zipfile.ZIP_DEFLATED) as z:
@@ -31,5 +65,6 @@ if a.fonts_only_rest:
     print(f"字体扩展包：{len(rest)} 款 → {a.fonts_only_rest}（{os.path.getsize(a.fonts_only_rest) / 1e6:.1f} MB）")
 with zipfile.ZipFile(a.out, "w", zipfile.ZIP_DEFLATED) as z:
     for f in sorted(files): z.write(os.path.join(R, f), top + f); k = f.split("/")[0]; by[k] = by.get(k, 0) + 1
+    z.writestr(top + "先读我.md", README)
 print(f"{len(files)} 个文件 → {a.out}（{os.path.getsize(a.out) / 1e6:.1f} MB）")
 print("  " + "，".join(f"{k} {v}" for k, v in sorted(by.items(), key=lambda x: -x[1])[:12]))

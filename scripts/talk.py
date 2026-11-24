@@ -160,6 +160,7 @@ def recipe(ep, st):
         add(("备空镜" + ("、配乐" if has("music") else ""), "tikhub_broll.py / still_to_clip.py" + ("；bgm_match.py -o bgm --mood light -n 3" if has("music") else "")))
         add(("写分镜 plan.json（" + ("降噪默认 auto" if has("denoise") else "\"audio\": {\"denoise\": \"off\"}") + ("" if has("music") else "；不写 bgm") + "）", "qc.py plan.json → render.py plan.json -o out/final.mp4 → qc.py plan.json out/final.mp4"))
         if has("music"): add(("出配乐备选", "swap_bgm.py plan.json out/final.mp4 --all bgm/candidates.json；swap_bgm.py … --none"))
+    add(("发布包（成片用户点头后主动做：三版封面、三个标题、简介、话题）", f"python3 scripts/publish_kit.py init {q(ep)} → 填 {ed}/发布.json → python3 scripts/publish_kit.py build {q(ep)}"))
     for i, (what, cmd) in enumerate(L, 1): print(f"{i:2d}. {what}\n      {cmd}")
     nxt = next((s for s in st["steps"] if not s["done"]), None)
     print("\n" + (f"现在在第 {nxt['no']} 步「{nxt['name']}」。" + ("需要用户给：" + nxt["ask"] + "。" if nxt["ask"] else "") + ("做完要用户确认：" + nxt["confirm"] + "。" if nxt["confirm"] else "") if nxt else "这一期全部完成。"))

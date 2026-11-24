@@ -19,7 +19,9 @@ raw = os.path.join(E, "01_输入素材", "口播原片.mp4"); work = os.path.joi
 if not os.path.exists(raw): sys.exit("找不到口播原片：" + raw)
 fps = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v", "-show_entries", "stream=r_frame_rate", "-of", "csv=p=0", raw], capture_output=True, text=True).stdout.strip().split("/")
 fps = round(int(fps[0]) / int(fps[1])) if len(fps) == 2 else 30
-def wav(src, out): subprocess.run(["ffmpeg", "-nostdin", "-v", "error", "-y", "-i", src, "-vn", "-ac", "1", "-ar", "16000", out], check=True)
+def wav(src, out):
+    if not subprocess.run(["ffprobe", "-v", "error", "-select_streams", "a", "-show_entries", "stream=index", "-of", "csv=p=0", src], capture_output=True, text=True).stdout.strip(): sys.exit(f"这条视频里没有声音：{src}\n口播剪辑要靠声音来对字幕和剪口。请换一条带原声的原片；如果声音是单独录的，先合到视频里（ffmpeg -i 视频 -i 录音 -map 0:v -map 1:a -c:v copy 合好.mp4）。")
+    subprocess.run(["ffmpeg", "-nostdin", "-v", "error", "-y", "-i", src, "-vn", "-ac", "1", "-ar", "16000", out], check=True)
 if a.cmd == "transcribe":
     wav(raw, os.path.join(tmp, "raw.wav")); subprocess.run([PY, os.path.join(R, "scripts", "asr.py"), os.path.join(tmp, "raw.wav"), os.path.join(work, "asr-原片.json")], check=True, capture_output=True)
     tk = json.load(open(os.path.join(work, "asr-原片.json")))["tokens"]; line, t0 = [], None

@@ -16,7 +16,7 @@
 <header class="nav" id="nav">
   <a class="logo" href="#top"><i></i><span data-brand>AI 剪辑工作流</span></a>
   <nav>
-    <a href="workflow.html" style="color:var(--lime)">全景</a><a href="atlas.html" style="color:var(--lime)">图鉴</a><a href="#proof">成片</a><a href="#lines">两条流程</a><a href="#styles">风格</a><a href="#calc">算账</a><a href="#wall">组件</a><a href="#get">下载</a><a href="#join">社群</a><a href="#train">培训</a><a href="#bench">工作台</a><a href="#faq">问题</a>
+    <a href="workflow.html" style="color:var(--lime)">工作流全景</a><a href="atlas.html" style="color:var(--lime)">视觉图鉴</a><a href="#proof">成片</a><a href="#lines">两条流程</a><a href="#styles">骨架</a><a href="#calc">算账</a><a href="#wall">组件</a><a href="#get">下载</a><a href="#join">社群</a><a href="#train">培训</a><a href="#bench">工作台</a><a href="#faq">问题</a>
   </nav>
   <a class="btn sm lime" href="#get">免费下载</a>
 </header>
@@ -39,7 +39,7 @@
         <a class="btn ghost magnet" href="#join">加入社群 <b data-price></b> <i>→</i></a>
       </div>
       <ul class="stats">
-        <li><b data-count="6">0</b><span>套剪辑风格</span></li>
+        <li><b data-count="8">0</b><span>个大 V 骨架</span></li>
         <li><b data-count="298">0</b><span>个动效组件</span></li>
         <li><b data-count="59">0</b><span>款可商用字体</span></li>
         <li><b data-count="2">0</b><span>条生产线</span></li>
@@ -80,6 +80,16 @@
   </div>
 </section>
 
+<!-- 三个页面怎么看 -->
+<section class="sec" id="map">
+  <div class="head rv"><span class="no">→</span><h2>这个站一共三页，<em>各管一件事</em></h2><p>这一页是门面：看成片、算账、下载、进社群。想弄明白它到底是什么，看全景；真动手做片子的时候，开图鉴。</p></div>
+  <div class="steps3">
+    <div class="rv"><b>1</b><h4>首页 · 你在这</h4><p>它能做出什么、省多少钱、免费拿什么、社群多给什么。</p></div>
+    <div class="rv" style="border-color:var(--lime);cursor:pointer" onclick="location.href=this.querySelector('a').href"><b>2</b><h4><a href="workflow.html" style="color:inherit;text-decoration:none">工作流全景 →</a></h4><p>五层结构、适合谁、它怎么一步步问你、真实成片、怎么组合才越做越好看。给别人介绍这套东西时用这一页。</p></div>
+    <div class="rv" style="border-color:var(--lime);cursor:pointer" onclick="location.href=this.querySelector('a').href"><b>3</b><h4><a href="atlas.html" style="color:inherit;text-decoration:none">视觉图鉴 →</a></h4><p>做片时开着的工具页：选一个大 V 骨架、挑它能用的组件、查专业名词，一键复制成发给 AI 的话。</p></div>
+  </div>
+</section>
+
 <!-- ③ 两条流程 -->
 <section class="sec" id="lines">
   <div class="head rv"><span class="no">02</span><h2>两条生产线，<em>录或不录都能出片</em></h2><p>每一步背后是一个 Skill：写给 AI 助手看的操作说明。你把文件夹交给它，它照着一步步做。</p></div>
@@ -91,8 +101,9 @@
 
 <!-- ④ 风格 -->
 <section class="sec" id="styles">
-  <div class="head rv"><span class="no">03</span><h2>六套风格，<em>都是拆头部博主拆出来的</em></h2><p>逐帧量过：多久换一次画面、字幕在哪、人什么时候出镜。量出来的数写进模板，AI 照着剪。</p></div>
+  <div class="head rv"><span class="no">03</span><h2>审美听骨架的，<em>骨架是拆头部博主拆出来的</em></h2><p>逐帧量过：多久换一次画面、字幕在哪、人什么时候出镜。量出来的数写进模板，AI 照着剪。一条片子只用一个骨架，不乱拼；你只换署名、颜色、素材，再往里填组件。</p></div>
   <div class="grid6" id="styles-grid"></div>
+  <p class="enough rv"><b>不知道选哪个？</b>答三个问题（出不出镜、发在哪、讲什么），它替你选。<a href="atlas.html" style="color:var(--lime)">打开视觉图鉴，看每个骨架的真实成片 →</a></p>
 </section>
 
 <!-- ⑤ 算账 -->
@@ -205,7 +216,7 @@
   <div class="steps3">
     <div class="rv"><b>1</b><h4>下载，解压</h4><p>电脑上装好 Python、Node.js、ffmpeg。不会装也可以让 AI 助手帮你装。</p></div>
     <div class="rv"><b>2</b><h4>把文件夹交给 AI 助手</h4><p>Claude Code、Codex、Cursor 这类能读文件、跑命令的助手都行。</p></div>
-    <div class="rv"><b>3</b><h4>说一句话</h4><div class="term"><span class="p">›</span> <span id="typed"></span><i>▍</i></div></div>
+    <div class="rv"><b>3</b><h4>说一句话，然后它问你答</h4><p>它一次只问一个选择题，你回数字就行；最后一起交成片、三版封面、标题、简介和话题。</p><div class="term"><span class="p">›</span> <span id="typed"></span><i>▍</i></div></div>
   </div>
 </section>
 
