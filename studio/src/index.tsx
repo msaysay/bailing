@@ -15,6 +15,7 @@ import { Cover06 } from './episodes/ep06/cover';
 import { SkinTalk, skinDefault } from './kit/skin';
 import { CoverKit, coverDefault } from './kit/coverkit';
 import { SignDemo, signDemoDefault } from './kit/sign';
+import { Talk3Demo, TALK3_DEMO_SEC } from './kit/talk3';
 import { Cover01, Cover01V } from './episodes/cover01';
 import { PetDemo, PET_DEMO_SEC } from './episodes/petdemo';
 import { Gallery, GFPS } from './gallery';
@@ -45,6 +46,7 @@ registerRoot(() => (
     {/* 风格配方引擎：一个合成做所有风格。scripts/skin.py render 用 --props 传数据。 */}
     <Composition id="SKIN" component={SkinTalk} width={1920} height={1080} fps={30} durationInFrames={90} defaultProps={skinDefault} calculateMetadata={({ props }) => ({ durationInFrames: Math.max(1, Math.round(props.total * 30)), width: props.w, height: props.h })} />
     {/* 封面三件套：scripts/publish_kit.py 用 --props 传主图、文字、排法和尺寸。 */}
+    <Composition id="TALK3-DEMO" component={Talk3Demo} width={1080} height={1920} fps={30} durationInFrames={TALK3_DEMO_SEC * 30} defaultProps={{}} />
     <Composition id="SIGN-DEMO" component={SignDemo} width={1080} height={1920} fps={30} durationInFrames={900} defaultProps={signDemoDefault} calculateMetadata={({ props }) => ({ width: props.w, height: props.h, durationInFrames: Math.round(props.total * 30) })} />
     <Still id="COVERKIT" component={CoverKit} width={1080} height={1440} defaultProps={coverDefault} calculateMetadata={({ props }) => ({ width: props.w, height: props.h })} />
     <Still id="COVER01" component={Cover01} width={1920} height={1080} />

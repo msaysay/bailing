@@ -40,6 +40,7 @@ def show(s):
     print(f"【{s['name']}】（{s['id']}）{s['ref']}\n  {'出镜' if s['face'] else '不出镜'} · {s['orient']} · 适合：{'、'.join(s['fits'])}\n  长什么样：{s['look']}")
     print("  锁死不换：" + "；".join(s["lock"])); print("  可以换：" + "；".join(s["swap"]))
     print("  能用的组件：" + "、".join(s["blocks"])); print("  不要用：" + "、".join(s["avoid"]))
+    if s.get("own"): print("  这个骨架专属的组件（优先用）：" + "、".join(s["own"]) + "\n    在 " + s["own_from"])
     print(f"  怎么做：技能 {s['skill']}" + (f"（python3 scripts/talk.py new <期名> --style {s['style']} …）" if s["style"] else ""))
 
 
