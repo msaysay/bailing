@@ -43,7 +43,8 @@
     "署名",
     "强调色（默认黄）",
     "配乐",
-    "卡片里放什么组件"
+    "卡片里放什么组件",
+    "面板的主题色（每期按题材定一个）"
    ],
    "blocks": [
     "数据图表",
@@ -70,7 +71,11 @@
     "两柱对比 StackBars",
     "选择题 QuizBoard",
     "虚字 GhostWord",
-    "胸口大数 ChestNumber"
+    "胸口大数 ChestNumber",
+    "走势图面板 LineBoard",
+    "步骤清单 StepList",
+    "层级链路 ChainCards",
+    "格子占比 Waffle"
    ],
    "own_from": "studio/src/kit/talk3.tsx（拆解见 docs/对标拆解-小Lin口播-第三批.md）"
   },
