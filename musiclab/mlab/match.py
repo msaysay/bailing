@@ -12,6 +12,10 @@ W = {"mood": 0.45, "bpm": 0.12, "speech": 0.18, "struct": 0.25}
 
 def profile(brief):
     p = dict(RULES["types"][brief["type"]])
+    st = RULES.get("styles", {}).get(brief.get("style") or "")
+    if st:                                             # 对标某位博主：在这类视频的规矩上盖一层他的做法
+        p.update({k: v for k, v in st.items() if k not in ("name", "base", "measured")})
+        p["style_name"] = st["name"]
     for k in ("want", "avoid", "bpm", "bed_db", "open_db", "min_gap", "hook_s", "hook_db", "max_punch", "max_steadiness"):
         if k in brief:
             p[k] = brief[k]
@@ -258,7 +262,9 @@ def envelope(brief, prof, arr, mask=None, hop=0.02, rate=100):
     fin = 0.25 if abs(arr["offset"] - 0) < 0.05 else 0.5
     g += 20 * np.log10(np.clip(t / fin, 1e-3, 1))
     end = arr["ending"]
-    if end["type"] == "fade":
+    if end["type"] == "none":
+        pass
+    elif end["type"] == "fade":
         g += 20 * np.log10(np.clip((T - t) / end["dur"], 1e-3, 1)); events.append({"t": round(T - end["dur"], 2), "to": T, "do": "淡出"})
     elif end["type"] == "button":
         g[t > end["at"]] = -90; events.append({"t": end["at"], "do": "落在曲子自己的结尾"})
@@ -271,7 +277,8 @@ def score(t, brief, prof, arr, adj):
     bpm = bpm_score(t.get("bpm_tag") or a["bpm"], prof["bpm"])
     if brief.get("voice"):
         sp = np.mean([1 - np.clip((a["speech_band"] - 0.30) / 0.3, 0, 1), 1 - np.clip((a["punch"] - prof["max_punch"]) / 0.3, 0, 1),
-                      1 - np.clip((a["steadiness_db"] - prof["max_steadiness"]) / 4, 0, 1)])
+                      1 - np.clip((a["steadiness_db"] - prof["max_steadiness"]) / 4, 0, 1),
+                      1 - np.clip((a.get("onset_rate", 0) - prof.get("max_onset", 9)) / 2, 0, 1)])
     else:
         sp = 1.0
     parts = {"mood": round(mood, 3), "bpm": round(bpm, 3), "speech": round(float(sp), 3), "struct": arr["struct"], "adjust": round(adj, 3)}
@@ -300,3 +307,99 @@ def run(cat, brief, n=3, pool=10, need_free=False, only=None, log=print):
     library.save(cat)
     out.sort(key=lambda r: -r["score"])
     return out[:n], prof
+
+
+# ---------- 分段配乐（小 Lin 式）：每个内容段落一首不同的曲子，段落之间留白 ----------
+
+def cue_windows(brief, cfg):
+    """把需求单的分段并成一个个配乐段：太短的并到前一段。返回 [{start, end, energy, want, name}]。"""
+    out = []
+    for s in brief["segments"]:
+        if out and (out[-1]["end"] - out[-1]["start"] < cfg["min_len"] or s["end"] - s["start"] < cfg["min_len"] / 2):
+            w = out[-1]
+            n1, n2 = w["end"] - w["start"], s["end"] - s["start"]
+            w["energy"] = (w["energy"] * n1 + s.get("energy", 0.5) * n2) / (n1 + n2)
+            w["end"] = s["end"]; w["name"] = w["name"] or s.get("name", "")
+        else:
+            out.append({"start": s["start"], "end": s["end"], "energy": s.get("energy", 0.5), "want": s.get("want"), "avoid": s.get("avoid"), "name": s.get("name", "")})
+    for k, w in enumerate(out):
+        w["v0"] = round(w["start"] + (cfg["in_delay"] if k == 0 else cfg["gap_s"]), 2)   # 上一首停在段落交界，这一首隔一会儿再进
+        w["v1"] = round(w["end"], 2)
+    return [w for w in out if w["v1"] - w["v0"] >= 6]
+
+
+def cue_want(w, prof):
+    """这一段想要的情绪：需求单里写了就用写的；没写就在全片的基础上按能量偏一点。"""
+    if w.get("want"):
+        return w["want"], w.get("avoid") or prof["avoid"]
+    want = dict(prof["want"])
+    e = w["energy"]
+    if e >= 0.6:
+        want["drive"] = max(want.get("drive", 0), 0.6); want["bright"] = max(want.get("bright", 0), 0.5); want["calm"] = min(want.get("calm", 0), 0.2)
+    elif e <= 0.42:
+        want["calm"] = max(want.get("calm", 0), 0.6); want["drive"] = min(want.get("drive", 0), 0.2); want["serious"] = max(want.get("serious", 0), 0.5)
+    return want, prof["avoid"]
+
+
+def cue_start(a, L, energy):
+    """这一段从曲子的哪里开始：从某个段落的开头起，后面够长、不用循环，能量和这段想要的接近。"""
+    en = np.array(a["energy"]) / 100.0
+    cands = [s["start"] for s in a["sections"]] + [a["body_in"]] + [d for d in a["downbeats"] if d < a["out"] - L - 1][::4]
+    best = None
+    for c in cands:
+        if c < a["in"] - 0.05 or c + L > a["out"] - 0.5:
+            continue
+        seg = en[int(c): int(c + L) + 1]
+        head = float(en[int(c): int(c) + 3].mean())                    # 进来的头几秒要有东西，不要慢慢渐入
+        sc = 0.5 * head + 0.3 * (1 - abs(float(seg.mean()) - (0.55 + 0.4 * energy)) ) + 0.2 * (c in [s["start"] for s in a["sections"]])
+        if not best or sc > best[0]:
+            best = (sc, c)
+    return best
+
+
+def run_cues(cat, brief, variants=3, pool=8, need_free=False, log=print):
+    prof = profile(brief)
+    cfg = prof["cues"]
+    fb, use = _history()
+    wins = cue_windows(brief, cfg)
+    table = []                                                          # 每段的候选：[(分, 曲目, 起点)]
+    for w in wins:
+        want, avoid = cue_want(w, prof)
+        p2 = dict(prof, want=want, avoid=avoid)
+        L = w["v1"] - w["v0"]
+        rows = []
+        heard = {k: v for k, v in cat["tracks"].items() if v.get("analysis")}          # 已经听过的曲子全部参加，不占下载名额
+        ids = prefilter(cat, dict(brief, duration=L), p2, need_free, pool)
+        ids += [i for i in prefilter({"tracks": heard}, dict(brief, duration=L), p2, need_free, 60) if i not in ids]
+        for tid in ids:
+            t = cat["tracks"][tid]
+            try:
+                a = library.ensure_analysis(cat, tid)
+            except Exception as e:
+                log(f"  跳过 {t['title']}：取不到音频"); continue
+            if not a or not a["sections"]:
+                continue
+            st = cue_start(a, L, w["energy"])
+            if not st:
+                continue
+            off = 0.15 * (a.get("onset_rate", 0) > prof.get("max_onset", 9) + 1.0) + 0.15 * (a["punch"] < prof.get("min_punch", 0))   # 太忙的、太软的扣分
+            total, parts = score(t, brief, p2, {"struct": round(st[0], 3)}, adjust(tid, brief["type"], fb, use) - off)
+            rows.append((total, tid, st[1], parts))
+        rows.sort(reverse=True)
+        table.append(rows)
+        log(f"  第 {len(table)} 段 {w['v0']:.0f}–{w['v1']:.0f} 秒：" + "、".join(f"{cat['tracks'][r[1]]['title']}({r[0]:.2f})" for r in rows[:4]))
+    library.save(cat)
+    out, banned = [], set()
+    for v in range(variants):                                           # 每个方案里各段不重复用曲；下一个方案尽量换一批曲子
+        used, cues = set(), []
+        for w, rows in zip(wins, table):
+            pick = next((r for r in rows if r[1] not in used and r[1] not in banned), None) or next((r for r in rows if r[1] not in used), None)
+            if not pick:
+                continue
+            used.add(pick[1])
+            cues.append({"track": pick[1], "v0": w["v0"], "v1": w["v1"], "s0": round(pick[2], 3), "score": pick[0], "parts": pick[3], "name": w["name"]})
+        if not cues or any({c["track"] for c in cues} == {c["track"] for c in o["cues"]} for o in out):
+            break
+        banned |= used
+        out.append({"cues": cues, "score": round(float(np.mean([c["score"] for c in cues])), 4)})
+    return out, prof

@@ -252,3 +252,26 @@ def run_creator(vtype, creator, n=3, log=print):
         _save(DATA, data); done += 1
         log(f"  {creator} {r['id']} {met.get('duration')}秒 覆盖{met.get('music_coverage')} 说话时{met.get('under_speech_db')} 空档{met.get('open_db')} 收尾{met.get('ending')} {met.get('note','')}")
     return done
+
+
+def download_videos(creator, out, n=10, min_s=45, max_s=420, log=print):
+    """把一位博主点赞最高的 n 条整条视频下到 out（带画面，给拆版式、拆组件用）。播放地址几小时就过期，所以每次现取。"""
+    os.makedirs(out, exist_ok=True)
+    got = 0
+    for r in user_posts(creator):
+        if got >= n:
+            break
+        if not min_s <= r["dur"] <= max_s:
+            continue
+        dst = os.path.join(out, r["id"] + ".mp4")
+        if os.path.exists(dst) and os.path.getsize(dst) > 50000:
+            got += 1; continue
+        for u in r["urls"]:
+            try:
+                with urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent": "Mozilla/5.0", "Referer": "https://www.douyin.com/"}), timeout=180) as resp, open(dst, "wb") as fh:
+                    fh.write(resp.read())
+                if os.path.getsize(dst) > 50000:
+                    got += 1; log(f"  {r['id']} {r['dur']}秒 {r['desc'][:30]}"); break
+            except Exception:
+                continue
+    return got

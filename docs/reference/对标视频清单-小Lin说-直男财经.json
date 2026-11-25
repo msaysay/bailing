@@ -1,0 +1,1397 @@
+{
+ "说明": "小Lin说、直男财经主页作品清单（按点赞排），取于 2026-11-25。播放地址会过期，所以这里只留作品编号和页面链接；要整条视频用 python3 musiclab/ml.py ref download 博主名 -o 目录 -n 条数 现取。music 是已经量过配乐的那些条的结果（单位见 musiclab/README.md）。这些是别人的公开作品，只用来学做法，不要把画面或声音用进成片。",
+ "creators": {
+  "小Lin说": [
+   {
+    "id": "7672313492216548651",
+    "page": "https://www.douyin.com/video/7672313492216548651",
+    "desc": "王健林现在怎么样了? 万达什么情况? #真财实学计划 #万达 #王健林 #抖音创作者大会",
+    "likes": 1503294,
+    "seconds": 1359
+   },
+   {
+    "id": "7683791890935827718",
+    "page": "https://www.douyin.com/video/7683791890935827718",
+    "desc": "我来接受中国朋友们的挑战啦！ Hi中国的朋友们，这是我首次和中国博主们一起拍视频！但是跟以往不同的是，这次是我来接受你们",
+    "likes": 1157451,
+    "seconds": 871
+   },
+   {
+    "id": "7700132354437745954",
+    "page": "https://www.douyin.com/video/7700132354437745954",
+    "desc": "你需要多少钱，才能财富自由？ #财富自由#真财实学计划#零距离看懂财经",
+    "likes": 632708,
+    "seconds": 720
+   },
+   {
+    "id": "7589125613068291370",
+    "page": "https://www.douyin.com/video/7589125613068291370",
+    "desc": "【年度总结】一口气了解过去一年的全球经济｜关税战新格局 #零距离看懂财经 #燃起来了大国重器 #千问 #千问APP",
+    "likes": 591273,
+    "seconds": 2598
+   },
+   {
+    "id": "7629193962019966271",
+    "page": "https://www.douyin.com/video/7629193962019966271",
+    "desc": "【抖音独家】探秘海底6000米天然气田，我发现.... #展望十五五  #燃起来了大国重器 #创作阶梯计划 #共画十五五",
+    "likes": 529316,
+    "seconds": 454
+   },
+   {
+    "id": "7694586117093444890",
+    "page": "https://www.douyin.com/video/7694586117093444890",
+    "desc": "史上最大现金收购案 富二代如何正确拼爹 #真财实学计划  #零距离看懂财经 #华纳",
+    "likes": 499254,
+    "seconds": 834
+   },
+   {
+    "id": "7667800493925600518",
+    "page": "https://www.douyin.com/video/7667800493925600518",
+    "desc": "华尔街大战迪士尼，看来资本的世界真的没有童话… #真财实学计划 #零距离看懂财经 #迪士尼  #华尔街",
+    "likes": 466387,
+    "seconds": 601
+   },
+   {
+    "id": "7680801661580741926",
+    "page": "https://www.douyin.com/video/7680801661580741926",
+    "desc": "Deepseek突然连融两轮500亿，梁文锋到底想干嘛？ #抖音创作者大会#零距离看懂财经#DeepSeek#梁文锋",
+    "likes": 375131,
+    "seconds": 387,
+    "music": {
+     "duration": 386.8,
+     "speech_ratio": 0.89,
+     "music_coverage": 0.69,
+     "under_speech_db": -23.1,
+     "open_db": -6.1,
+     "gap_lift_db": 17.0,
+     "hook_db": -2.0,
+     "music_in_s": 0.2,
+     "music_ends_before_end_s": 0.0,
+     "level_sd_db": 8.5,
+     "breaks_per_min": 5.12,
+     "break_total_s": 104.5,
+     "ending": "fade",
+     "bpm": 117.5,
+     "onset_rate": 1.54,
+     "punch": 0.176,
+     "brightness": 1887.0,
+     "mode": "minor",
+     "speech_band": 0.026,
+     "sections_per_min": 1.6
+    }
+   },
+   {
+    "id": "7686345802621996339",
+    "page": "https://www.douyin.com/video/7686345802621996339",
+    "desc": "你的旧手机，越来越值钱了？ #旧手机  #京东苹果以旧换新更便宜 #爱回收",
+    "likes": 355019,
+    "seconds": 189,
+    "music": {
+     "duration": 188.6,
+     "speech_ratio": 0.9,
+     "music_coverage": 0.94,
+     "under_speech_db": -16.0,
+     "open_db": -3.3,
+     "gap_lift_db": 12.7,
+     "hook_db": -14.6,
+     "music_in_s": 1.2,
+     "music_ends_before_end_s": 0.0,
+     "level_sd_db": 7.4,
+     "breaks_per_min": 1.59,
+     "break_total_s": 8.0,
+     "ending": "cut",
+     "bpm": 117.5,
+     "onset_rate": 2.93,
+     "punch": 0.339,
+     "brightness": 1883.0,
+     "mode": "minor",
+     "speech_band": 0.021,
+     "sections_per_min": 2.5
+    }
+   },
+   {
+    "id": "7707606110403956019",
+    "page": "https://www.douyin.com/video/7707606110403956019",
+    "desc": "我闯进了东南亚一个神秘的园区... #燃起来了大国重器#奋进十五五#抖音精选app#创作阶梯计划#燃起来了奇迹深圳",
+    "likes": 351498,
+    "seconds": 401,
+    "music": {
+     "duration": 401.0,
+     "speech_ratio": 0.88,
+     "music_coverage": 0.87,
+     "under_speech_db": -17.2,
+     "open_db": -5.9,
+     "gap_lift_db": 11.3,
+     "hook_db": -18.9,
+     "music_in_s": 1.2,
+     "music_ends_before_end_s": 1.2,
+     "level_sd_db": 7.9,
+     "breaks_per_min": 2.1,
+     "break_total_s": 41.2,
+     "ending": "fade",
+     "bpm": 117.5,
+     "onset_rate": 2.13,
+     "punch": 0.169,
+     "brightness": 1888.0,
+     "mode": "major",
+     "speech_band": 0.062,
+     "sections_per_min": 1.8
+    }
+   },
+   {
+    "id": "7687819237229939983",
+    "page": "https://www.douyin.com/video/7687819237229939983",
+    "desc": "【硬核】俄乌打了四年多，到底谁在买单？ #真财实学计划  #零距离看懂财经 #俄罗斯",
+    "likes": 321815,
+    "seconds": 1744
+   },
+   {
+    "id": "7701959338339880211",
+    "page": "https://www.douyin.com/video/7701959338339880211",
+    "desc": "我们常说的\"免税\"，到底免的什么税？ #免税  #关税  #进口",
+    "likes": 318009,
+    "seconds": 378,
+    "music": {
+     "duration": 378.4,
+     "speech_ratio": 0.91,
+     "music_coverage": 0.67,
+     "under_speech_db": -26.4,
+     "open_db": -14.6,
+     "gap_lift_db": 11.8,
+     "hook_db": -7.3,
+     "music_in_s": 0.7,
+     "music_ends_before_end_s": 0.1,
+     "level_sd_db": 7.2,
+     "breaks_per_min": 5.71,
+     "break_total_s": 114.8,
+     "ending": "fade",
+     "bpm": 112.3,
+     "onset_rate": 1.62,
+     "punch": 0.503,
+     "brightness": 2575.0,
+     "mode": "minor",
+     "speech_band": 0.128,
+     "sections_per_min": 1.7
+    }
+   },
+   {
+    "id": "7675746980802383145",
+    "page": "https://www.douyin.com/video/7675746980802383145",
+    "desc": "韩股腰斩崩盘，背后的\"推手\"是…？ #韩国股市#TraeWork",
+    "likes": 304680,
+    "seconds": 362,
+    "music": {
+     "duration": 362.7,
+     "speech_ratio": 0.89,
+     "music_coverage": 0.82,
+     "under_speech_db": -22.5,
+     "open_db": -6.4,
+     "gap_lift_db": 16.1,
+     "hook_db": 18.4,
+     "music_in_s": 0.1,
+     "music_ends_before_end_s": 0.9,
+     "level_sd_db": 8.9,
+     "breaks_per_min": 3.47,
+     "break_total_s": 55.4,
+     "ending": "button",
+     "bpm": 123.0,
+     "onset_rate": 0.91,
+     "punch": 0.254,
+     "brightness": 1376.0,
+     "mode": "major",
+     "speech_band": 0.021,
+     "sections_per_min": 1.8
+    }
+   },
+   {
+    "id": "7660817965343870248",
+    "page": "https://www.douyin.com/video/7660817965343870248",
+    "desc": "电，怎么卡住了AI的脖子？ #AI#电力#ABB#EngineeredtoOutrun#工诚臻远",
+    "likes": 300825,
+    "seconds": 341,
+    "music": {
+     "duration": 341.4,
+     "speech_ratio": 0.91,
+     "music_coverage": 0.89,
+     "under_speech_db": -20.1,
+     "open_db": -8.0,
+     "gap_lift_db": 12.1,
+     "hook_db": 7.4,
+     "music_in_s": 0.8,
+     "music_ends_before_end_s": 0.0,
+     "level_sd_db": 6.8,
+     "breaks_per_min": 2.28,
+     "break_total_s": 34.0,
+     "ending": "cut",
+     "bpm": 161.5,
+     "onset_rate": 2.84,
+     "punch": 0.388,
+     "brightness": 2454.0,
+     "mode": "minor",
+     "speech_band": 0.053,
+     "sections_per_min": 2.1
+    }
+   },
+   {
+    "id": "7674134024641727787",
+    "page": "https://www.douyin.com/video/7674134024641727787",
+    "desc": "养猫一年花1500亿，年轻人怎么想的？ #渴望猫粮#渴望狗粮#抖音商城超级品牌日#没有猫咪地球不会转",
+    "likes": 278010,
+    "seconds": 322,
+    "music": {
+     "duration": 322.5,
+     "speech_ratio": 0.9,
+     "music_coverage": 0.79,
+     "under_speech_db": -23.6,
+     "open_db": -10.5,
+     "gap_lift_db": 13.1,
+     "hook_db": -2.1,
+     "music_in_s": 0.4,
+     "music_ends_before_end_s": 0.0,
+     "level_sd_db": 7.2,
+     "breaks_per_min": 5.02,
+     "break_total_s": 59.9,
+     "ending": "cut",
+     "bpm": 112.3,
+     "onset_rate": 1.8,
+     "punch": 0.118,
+     "brightness": 2213.0,
+     "mode": "major",
+     "speech_band": 0.167,
+     "sections_per_min": 2.0
+    }
+   },
+   {
+    "id": "7665673237698743593",
+    "page": "https://www.douyin.com/video/7665673237698743593",
+    "desc": "特朗普收入曝光，一年狂揽XX亿，竟然是靠… #真财实学计划#零距离看懂财经#特朗普",
+    "likes": 253518,
+    "seconds": 1254
+   },
+   {
+    "id": "7709798103544597811",
+    "page": "https://www.douyin.com/video/7709798103544597811",
+    "desc": "GTA背后的千亿豪赌 #GTA#真财实学计划#零距离看懂财经",
+    "likes": 222890,
+    "seconds": 764
+   },
+   {
+    "id": "7674833800311885094",
+    "page": "https://www.douyin.com/video/7674833800311885094",
+    "desc": "明星富豪们的婚前协议，到底都签了啥？ #真财实学计划#零距离看懂财经#抖音创作者大会 #taylorswift",
+    "likes": 208349,
+    "seconds": 355,
+    "music": {
+     "duration": 355.2,
+     "speech_ratio": 0.87,
+     "music_coverage": 0.73,
+     "under_speech_db": -27.6,
+     "open_db": -9.5,
+     "gap_lift_db": 18.1,
+     "hook_db": 1.3,
+     "music_in_s": 0.6,
+     "music_ends_before_end_s": 0.2,
+     "level_sd_db": 8.8,
+     "breaks_per_min": 5.91,
+     "break_total_s": 88.2,
+     "ending": "cut",
+     "bpm": 129.2,
+     "onset_rate": 1.3,
+     "punch": 0.196,
+     "brightness": 1863.0,
+     "mode": "major",
+     "speech_band": 0.035,
+     "sections_per_min": 1.9
+    }
+   },
+   {
+    "id": "7704878567586352420",
+    "page": "https://www.douyin.com/video/7704878567586352420",
+    "desc": "从影视飓风那侥幸赢得10万奖金，给粉丝们抽了10根金条~~ ",
+    "likes": 207809,
+    "seconds": 50,
+    "music": {
+     "duration": 49.6,
+     "speech_ratio": 0.87,
+     "music_coverage": 0.83,
+     "under_speech_db": -18.8,
+     "hook_db": -23.0,
+     "music_in_s": 0.5,
+     "music_ends_before_end_s": 0.0,
+     "level_sd_db": 10.0,
+     "breaks_per_min": 3.63,
+     "break_total_s": 6.1,
+     "ending": "cut",
+     "bpm": 107.7,
+     "onset_rate": 2.42,
+     "punch": 0.176,
+     "brightness": 1610.0,
+     "mode": "major",
+     "speech_band": 0.029,
+     "sections_per_min": 3.6
+    }
+   },
+   {
+    "id": "7645505408425004329",
+    "page": "https://www.douyin.com/video/7645505408425004329",
+    "desc": "内存暴涨，谁在哭？谁在笑？ #真财实学计划#零距离看懂财经 #内存 #芯片#黑白调X7",
+    "likes": 201581,
+    "seconds": 1316
+   },
+   {
+    "id": "7650453175333342470",
+    "page": "https://www.douyin.com/video/7650453175333342470",
+    "desc": "SpaceX上市，背后在玩什么资本游戏? #真财实学计划  #零距离看懂财经 #SpaceX #马斯克",
+    "likes": 200514,
+    "seconds": 1328
+   },
+   {
+    "id": "7653300567527197987",
+    "page": "https://www.douyin.com/video/7653300567527197987",
+    "desc": "大佬变老赖，60万都拿不出来，华谊兄弟怎么了？ #真财实学计划#零距离看懂财经 #华谊",
+    "likes": 189891,
+    "seconds": 355,
+    "music": {
+     "duration": 355.4,
+     "speech_ratio": 0.91,
+     "music_coverage": 0.93,
+     "under_speech_db": -19.4,
+     "open_db": -7.4,
+     "gap_lift_db": 12.0,
+     "hook_db": -6.0,
+     "music_in_s": 0.5,
+     "music_ends_before_end_s": 0.0,
+     "level_sd_db": 7.1,
+     "breaks_per_min": 2.03,
+     "break_total_s": 22.2,
+     "ending": "fade",
+     "bpm": 95.7,
+     "onset_rate": 1.4,
+     "punch": 0.398,
+     "brightness": 1564.0,
+     "mode": "major",
+     "speech_band": 0.061,
+     "sections_per_min": 2.0
+    }
+   },
+   {
+    "id": "7678969660380843304",
+    "page": "https://www.douyin.com/video/7678969660380843304",
+    "desc": "日元创40年新低，美国突然出手，怎么回事儿？ #日元#抖音创作者大会#真财实学计划 #零距离看懂财经",
+    "likes": 183020,
+    "seconds": 943
+   },
+   {
+    "id": "7684053557896645888",
+    "page": "https://www.douyin.com/video/7684053557896645888",
+    "desc": "第一次参加Apple发布会，我都经历了什么... ",
+    "likes": 167755,
+    "seconds": 138,
+    "music": {
+     "duration": 138.4,
+     "speech_ratio": 0.88,
+     "music_coverage": 0.86,
+     "under_speech_db": -15.9,
+     "open_db": -6.6,
+     "gap_lift_db": 9.3,
+     "music_in_s": 2.9,
+     "music_ends_before_end_s": 1.2,
+     "level_sd_db": 10.7,
+     "breaks_per_min": 1.3,
+     "break_total_s": 12.0,
+     "ending": "fade",
+     "bpm": 112.3,
+     "onset_rate": 2.33,
+     "punch": 0.235,
+     "brightness": 2245.0,
+     "mode": "minor",
+     "speech_band": 0.055,
+     "sections_per_min": 2.6
+    }
+   },
+   {
+    "id": "7639678777034870054",
+    "page": "https://www.douyin.com/video/7639678777034870054",
+    "desc": "一口气了解亚洲金融危机 #零距离看懂财经 #亚洲金融危机",
+    "likes": 167264,
+    "seconds": 1674
+   },
+   {
+    "id": "7659248751990656306",
+    "page": "https://www.douyin.com/video/7659248751990656306",
+    "desc": "顶级球星，原来是这么赚钱的... #世界杯花式看球指南 #真财实学计划#零距离看懂财经#世界杯",
+    "likes": 164218,
+    "seconds": 249,
+    "music": {
+     "duration": 248.8,
+     "speech_ratio": 0.89,
+     "music_coverage": 0.82,
+     "under_speech_db": -20.4,
+     "open_db": -4.0,
+     "gap_lift_db": 16.4,
+     "hook_db": 9.6,
+     "music_in_s": 2.1,
+     "music_ends_before_end_s": 0.0,
+     "level_sd_db": 7.4,
+     "breaks_per_min": 2.89,
+     "break_total_s": 36.7,
+     "ending": "cut",
+     "bpm": 112.3,
+     "onset_rate": 2.32,
+     "punch": 0.266,
+     "brightness": 2299.0,
+     "mode": "minor",
+     "speech_band": 0.087,
+     "sections_per_min": 2.7
+    }
+   },
+   {
+    "id": "7660177158400216347",
+    "page": "https://www.douyin.com/video/7660177158400216347",
+    "desc": "港股自动驾驶or物理AI IPO？揭开了它赚钱的商业机密.. .#自动驾驶",
+    "likes": 161911,
+    "seconds": 354
+   },
+   {
+    "id": "7627418347633741090",
+    "page": "https://www.douyin.com/video/7627418347633741090",
+    "desc": "对话多邻国创始人 | 大佬也要向华尔街低头? #零距离看懂财经 #多邻国",
+    "likes": 155617,
+    "seconds": 2750
+   },
+   {
+    "id": "7657092804652371242",
+    "page": "https://www.douyin.com/video/7657092804652371242",
+    "desc": "在自家的百亿企业上班，是一种什么样的体验？ #对谈#特步#索康尼",
+    "likes": 155140,
+    "seconds": 503
+   },
+   {
+    "id": "7645142738215652644",
+    "page": "https://www.douyin.com/video/7645142738215652644",
+    "desc": "老乡鸡\"自曝\"，太敢玩了吧？ #老乡鸡#老乡鸡溯源报告",
+    "likes": 151131,
+    "seconds": 330
+   },
+   {
+    "id": "7624539825743416576",
+    "page": "https://www.douyin.com/video/7624539825743416576",
+    "desc": "全球最大并购案，背后是马斯克的什么顶级\"阳谋\"？ #零距离看懂财经 #马斯克",
+    "likes": 149556,
+    "seconds": 395
+   },
+   {
+    "id": "7664748624454192393",
+    "page": "https://www.douyin.com/video/7664748624454192393",
+    "desc": "大家看的是比赛，FIFA看的是生意 #世界杯花式看球指南#真财实学计划#零距离看懂财经#世界杯",
+    "likes": 147001,
+    "seconds": 174,
+    "music": {
+     "duration": 173.8,
+     "speech_ratio": 0.9,
+     "music_coverage": 0.95,
+     "under_speech_db": -18.4,
+     "open_db": 1.8,
+     "gap_lift_db": 20.2,
+     "hook_db": 10.5,
+     "music_in_s": 0.1,
+     "music_ends_before_end_s": 1.3,
+     "level_sd_db": 10.1,
+     "breaks_per_min": 1.38,
+     "break_total_s": 6.2,
+     "ending": "fade",
+     "bpm": 136.0,
+     "onset_rate": 1.63,
+     "punch": 0.375,
+     "brightness": 2299.0,
+     "mode": "minor",
+     "speech_band": 0.072,
+     "sections_per_min": 2.8
+    }
+   },
+   {
+    "id": "7704566463461461289",
+    "page": "https://www.douyin.com/video/7704566463461461289",
+    "desc": "最亏钱的车，为什么活了30年...？ #真财实学计划#零距离看懂财经#smart",
+    "likes": 146977,
+    "seconds": 324
+   },
+   {
+    "id": "7657395802351979803",
+    "page": "https://www.douyin.com/video/7657395802351979803",
+    "desc": "AI巨头们之间的资本混战，到底是个什么情况？ #真财实学计划 #零距离看懂财经 #AI",
+    "likes": 146501,
+    "seconds": 1168
+   },
+   {
+    "id": "7638509483882237220",
+    "page": "https://www.douyin.com/video/7638509483882237220",
+    "desc": "药价，背后的谈判... #零距离看懂财经 #药价",
+    "likes": 143365,
+    "seconds": 683
+   },
+   {
+    "id": "7691233779049975078",
+    "page": "https://www.douyin.com/video/7691233779049975078",
+    "desc": "我去法国公爵家主持了一场发布会 #vlog#真财实学计划 #AIVAME7全球首秀#巴黎时装周#AI汽车",
+    "likes": 142997,
+    "seconds": 315
+   },
+   {
+    "id": "7652730305270385920",
+    "page": "https://www.douyin.com/video/7652730305270385920",
+    "desc": "为什么洗衣粉越来越少？ #洗衣粉#洗衣液#汰渍洗衣免搓粉#碧浪洗衣免搓粉#为什么洗衣粉越来越少",
+    "likes": 142796,
+    "seconds": 293
+   },
+   {
+    "id": "7689479084992253225",
+    "page": "https://www.douyin.com/video/7689479084992253225",
+    "desc": "黄金今年跌跌撞撞... 为什么打仗了黄金不涨反跌？ #真财实学计划#零距离看懂财经#黄金",
+    "likes": 135234,
+    "seconds": 316
+   },
+   {
+    "id": "7708612874351987994",
+    "page": "https://www.douyin.com/video/7708612874351987994",
+    "desc": "现在的00后，都已经开始这么工作了？！ #vibecoding#编程",
+    "likes": 125922,
+    "seconds": 252
+   },
+   {
+    "id": "7704643609869585706",
+    "page": "https://www.douyin.com/video/7704643609869585706",
+    "desc": "510万就玩几分钟，大佬们疯狂砸钱到底图啥？ #火箭#商业航天#真财实学计划#欧莱雅男士淡纹套装#欧莱雅男士",
+    "likes": 122247,
+    "seconds": 462
+   },
+   {
+    "id": "7711195138747338035",
+    "page": "https://www.douyin.com/video/7711195138747338035",
+    "desc": "\"小县城\"靠AI拿到\"大结果\"，它凭什么？ #AI#算力#乌兰察布#全球100个产业揭秘",
+    "likes": 116836,
+    "seconds": 435
+   },
+   {
+    "id": "7709856245569555766",
+    "page": "https://www.douyin.com/video/7709856245569555766",
+    "desc": "国产芯片，走到哪一步了？ #芯片#算力#AI#华为Mate90",
+    "likes": 113593,
+    "seconds": 349
+   },
+   {
+    "id": "7634082287675657523",
+    "page": "https://www.douyin.com/video/7634082287675657523",
+    "desc": "【抖音独家】一口气了解黄金，金价受什么影响？ #真财实学计划  #抖音精选公开课 @抖音精选官方账号 @抖音投教基地",
+    "likes": 113132,
+    "seconds": 651
+   },
+   {
+    "id": "7698360820694060328",
+    "page": "https://www.douyin.com/video/7698360820694060328",
+    "desc": "从夯到\"拉\"，Hyrox背后的资本游戏... #真财实学计划#零距离看懂财经#hyrox",
+    "likes": 103919,
+    "seconds": 369
+   },
+   {
+    "id": "7631441410851360041",
+    "page": "https://www.douyin.com/video/7631441410851360041",
+    "desc": "私募信贷接连暴雷，释放了什么信号？ #零距离看懂财经 #抖音精选让我装到了 #抖音精选",
+    "likes": 98010,
+    "seconds": 396
+   },
+   {
+    "id": "7632518301003828507",
+    "page": "https://www.douyin.com/video/7632518301003828507",
+    "desc": "不想卖枕头的酒店，不是好图书馆？ #商业分析 #亚朵",
+    "likes": 93261,
+    "seconds": 366
+   },
+   {
+    "id": "7644774425983864070",
+    "page": "https://www.douyin.com/video/7644774425983864070",
+    "desc": "AI短剧野蛮疯长，谁吃到了这波红利？抢了谁的饭碗？ #商业分析#小云雀AI#小云雀短剧Agent2全面升级",
+    "likes": 92920,
+    "seconds": 313
+   },
+   {
+    "id": "7626651499015261478",
+    "page": "https://www.douyin.com/video/7626651499015261478",
+    "desc": "美国的无人驾驶出租车，体验如何？（非广告 放心看） #零距离看懂财经 #无人驾驶",
+    "likes": 92910,
+    "seconds": 250
+   },
+   {
+    "id": "7680467510671576370",
+    "page": "https://www.douyin.com/video/7680467510671576370",
+    "desc": "沙特2030愿景，现在怎么样了？ #沙特阿美#低碳强度原油#沙特#石油",
+    "likes": 84580,
+    "seconds": 666
+   },
+   {
+    "id": "7633235465029684526",
+    "page": "https://www.douyin.com/video/7633235465029684526",
+    "desc": "集体被罚35亿，大厂们对外卖做了什么…？ #零距离看懂财经",
+    "likes": 83839,
+    "seconds": 281
+   },
+   {
+    "id": "7659728419487337747",
+    "page": "https://www.douyin.com/video/7659728419487337747",
+    "desc": "美国AI资本牌桌上的斗争，你觉得我这么说合理吗？ #真财实学计划#零距离看懂财经#AI",
+    "likes": 77153,
+    "seconds": 233
+   },
+   {
+    "id": "7642726635032055083",
+    "page": "https://www.douyin.com/video/7642726635032055083",
+    "desc": "美国政府破天荒入股民企，是要密谋什么大业...? #真财实学计划 #零距离看懂财经",
+    "likes": 76075,
+    "seconds": 458
+   },
+   {
+    "id": "7688201595577797926",
+    "page": "https://www.douyin.com/video/7688201595577797926",
+    "desc": "科技大战，打到鼻梁上了？ #AI #AI眼镜",
+    "likes": 73672,
+    "seconds": 324
+   },
+   {
+    "id": "7651930379812670770",
+    "page": "https://www.douyin.com/video/7651930379812670770",
+    "desc": "SpaceX上市背后，马斯克为了守住控制权，他竟然... （震惊）#真财实学计划  #零距离看懂财 #马斯克#Space",
+    "likes": 71458,
+    "seconds": 356
+   },
+   {
+    "id": "7630120594146676014",
+    "page": "https://www.douyin.com/video/7630120594146676014",
+    "desc": "两个CEO都来了，大众中国3年憋了什么大招？ #商业分析  #见证大众时刻  #2026大众汽车集团媒体之夜",
+    "likes": 66882,
+    "seconds": 728
+   },
+   {
+    "id": "7658150885339565321",
+    "page": "https://www.douyin.com/video/7658150885339565321",
+    "desc": "这届世界杯的隐藏黑马，原来是...? #世界杯 #滴滴",
+    "likes": 66376,
+    "seconds": 331
+   },
+   {
+    "id": "7696784810194504995",
+    "page": "https://www.douyin.com/video/7696784810194504995",
+    "desc": "小Lin的第二本书来啦~ 这本《钱图》祝你有前途又有钱途！ #新书出版#钱图",
+    "likes": 64395,
+    "seconds": 135
+   },
+   {
+    "id": "7652635899850755366",
+    "page": "https://www.douyin.com/video/7652635899850755366",
+    "desc": "2026了，鸿蒙到底走到哪了？ #HDC2026  #华为开发者大会2026",
+    "likes": 54872,
+    "seconds": 602
+   },
+   {
+    "id": "7682725299976441142",
+    "page": "https://www.douyin.com/video/7682725299976441142",
+    "desc": "特朗普关税被判违法，这一整年白忙了? 现在关税什么情况? @元祖食品GANSO#关税#零距离看懂财经#冰凉好个秋元祖雪月",
+    "likes": 48932,
+    "seconds": 673
+   },
+   {
+    "id": "7683010915217739027",
+    "page": "https://www.douyin.com/video/7683010915217739027",
+    "desc": "真正干活的机器人，到底都在干嘛？ #机器人 #AI",
+    "likes": 48868,
+    "seconds": 266
+   },
+   {
+    "id": "7687476518003526966",
+    "page": "https://www.douyin.com/video/7687476518003526966",
+    "desc": "把热量\"扔进宇宙\"，这是什么黑科技？ #辐射致冷 #立邦",
+    "likes": 48215,
+    "seconds": 327
+   }
+  ],
+  "直男财经": [
+   {
+    "id": "7701340939951951119",
+    "page": "https://www.douyin.com/video/7701340939951951119",
+    "desc": "直男财经深入探访白鹤滩水电站！ 当年红军长征强渡的天堑，如何筑起震撼世界的国之重器？\n#抖音精选App  #创作阶梯计划",
+    "likes": 1277039,
+    "seconds": 661
+   },
+   {
+    "id": "7691310362133548323",
+    "page": "https://www.douyin.com/video/7691310362133548323",
+    "desc": "畸形的商K经济，大崩盘？ #燃起来了大国重器#真财实学计划",
+    "likes": 1243241,
+    "seconds": 629
+   },
+   {
+    "id": "7703958433602587930",
+    "page": "https://www.douyin.com/video/7703958433602587930",
+    "desc": "探访割脸人俱乐部：被槟榔毁掉的人生 #抖音精选App #创作阶梯计划#燃起来了大国重器#真财实学计划#零距离看懂财经",
+    "likes": 1052062,
+    "seconds": 1236
+   },
+   {
+    "id": "7708694825494793472",
+    "page": "https://www.douyin.com/video/7708694825494793472",
+    "desc": "卧底快递王国：谁抢走了快递员的奶酪？ #抖音精选App #创作阶梯计划 #燃起来了大国重器 #全球100个产业揭秘 #零",
+    "likes": 973149,
+    "seconds": 1347
+   },
+   {
+    "id": "7681568129197083955",
+    "page": "https://www.douyin.com/video/7681568129197083955",
+    "desc": "震撼拆解！内娱偶像工业最强王者，时代峰峻的商业模式有多牛？ #真财实学计划#燃起来了大国重器",
+    "likes": 853250,
+    "seconds": 853
+   },
+   {
+    "id": "7685970267847298346",
+    "page": "https://www.douyin.com/video/7685970267847298346",
+    "desc": "世纪工程平陆运河，将如何改变广西的命运？ #燃起来了大国重器  #真财实学计划",
+    "likes": 791474,
+    "seconds": 441
+   },
+   {
+    "id": "7682306878184951074",
+    "page": "https://www.douyin.com/video/7682306878184951074",
+    "desc": "深扒亲子鉴定：一门关于“真相”的生意 #抖音精选App #创作阶梯计划#燃起来了大国重器",
+    "likes": 631213,
+    "seconds": 527
+   },
+   {
+    "id": "7693195377784196390",
+    "page": "https://www.douyin.com/video/7693195377784196390",
+    "desc": "为什么国内的景区，不是纯属雷同，就是丑得一言难尽？ #燃起来了大国重器#真财实学计划",
+    "likes": 615532,
+    "seconds": 382,
+    "music": {
+     "duration": 382.0,
+     "speech_ratio": 0.94,
+     "music_coverage": 1.0,
+     "under_speech_db": -19.6,
+     "open_db": -35.6,
+     "gap_lift_db": -16.0,
+     "hook_db": -3.7,
+     "music_in_s": 0.1,
+     "music_ends_before_end_s": 0.0,
+     "level_sd_db": 7.6,
+     "breaks_per_min": 0.0,
+     "break_total_s": 0.0,
+     "ending": "cut",
+     "bpm": 129.2,
+     "onset_rate": 2.32,
+     "punch": 0.454,
+     "brightness": 2015.0,
+     "mode": "minor",
+     "speech_band": 0.101,
+     "sections_per_min": 1.9
+    }
+   },
+   {
+    "id": "7698579578175982857",
+    "page": "https://www.douyin.com/video/7698579578175982857",
+    "desc": "倒反天罡！以前疯抢 LV，现在老外疯抢中国包？ #山下有松 #Songmont #国货#山下有松发声明否认日本品牌说法",
+    "likes": 572499,
+    "seconds": 332,
+    "music": {
+     "duration": 332.0,
+     "speech_ratio": 0.92,
+     "music_coverage": 0.99,
+     "under_speech_db": -24.0,
+     "open_db": -25.0,
+     "gap_lift_db": -1.0,
+     "hook_db": -11.6,
+     "music_in_s": 0.6,
+     "music_ends_before_end_s": 1.0,
+     "level_sd_db": 6.5,
+     "breaks_per_min": 0.36,
+     "break_total_s": 2.7,
+     "ending": "fade",
+     "bpm": 123.0,
+     "onset_rate": 2.05,
+     "punch": 0.837,
+     "brightness": 2137.0,
+     "mode": "major",
+     "speech_band": 0.197,
+     "sections_per_min": 1.8
+    }
+   },
+   {
+    "id": "7683104315476544810",
+    "page": "https://www.douyin.com/video/7683104315476544810",
+    "desc": "欧洲人，为啥开始对中国品牌有好感了？ #IFA2026 #TCL西游记",
+    "likes": 542345,
+    "seconds": 324,
+    "music": {
+     "duration": 323.7,
+     "speech_ratio": 0.95,
+     "music_coverage": 0.98,
+     "under_speech_db": -21.9,
+     "open_db": -12.2,
+     "gap_lift_db": 9.7,
+     "hook_db": -4.2,
+     "music_in_s": 0.4,
+     "music_ends_before_end_s": 5.1,
+     "level_sd_db": 5.4,
+     "breaks_per_min": 0.0,
+     "break_total_s": 0.0,
+     "ending": "fade",
+     "bpm": 172.3,
+     "onset_rate": 2.21,
+     "punch": 0.463,
+     "brightness": 2155.0,
+     "mode": "minor",
+     "speech_band": 0.122,
+     "sections_per_min": 2.2
+    }
+   },
+   {
+    "id": "7707389387303519330",
+    "page": "https://www.douyin.com/video/7707389387303519330",
+    "desc": "黄仁勋辞职，显卡江湖没了销冠，AI产业要变个天？#零距离看懂财经#燃起来了大国重器#全球100个产业揭秘",
+    "likes": 458676,
+    "seconds": 194,
+    "music": {
+     "duration": 194.0,
+     "speech_ratio": 0.98,
+     "music_coverage": 0.92,
+     "under_speech_db": -23.3,
+     "hook_db": 8.9,
+     "music_in_s": 0.2,
+     "music_ends_before_end_s": 1.7,
+     "level_sd_db": 5.9,
+     "breaks_per_min": 0.93,
+     "break_total_s": 10.4,
+     "ending": "fade",
+     "bpm": 129.2,
+     "onset_rate": 2.24,
+     "punch": 0.728,
+     "brightness": 1852.0,
+     "mode": "minor",
+     "speech_band": 0.219,
+     "sections_per_min": 2.5
+    }
+   },
+   {
+    "id": "7677659914994453803",
+    "page": "https://www.douyin.com/video/7677659914994453803",
+    "desc": "年销 20 亿说关就关！硬刚房东的胖东来有多强？ #真财实学计划 #燃起来了大国重器",
+    "likes": 442352,
+    "seconds": 513
+   },
+   {
+    "id": "7688663374585941282",
+    "page": "https://www.douyin.com/video/7688663374585941282",
+    "desc": "被德国品牌放鸽子后，我傻眼了 #户外#骑行#vaude巍德#vaude棉服#帕苏户外棉服",
+    "likes": 428999,
+    "seconds": 222,
+    "music": {
+     "duration": 221.6,
+     "speech_ratio": 0.96,
+     "music_coverage": 0.87,
+     "under_speech_db": -24.5,
+     "open_db": -12.0,
+     "gap_lift_db": 12.5,
+     "hook_db": 3.6,
+     "music_in_s": 0.1,
+     "music_ends_before_end_s": 0.2,
+     "level_sd_db": 6.2,
+     "breaks_per_min": 0.81,
+     "break_total_s": 25.0,
+     "ending": "cut",
+     "bpm": 112.3,
+     "onset_rate": 3.51,
+     "punch": 0.443,
+     "brightness": 2568.0,
+     "mode": "minor",
+     "speech_band": 0.295,
+     "sections_per_min": 2.7
+    }
+   },
+   {
+    "id": "7699894413937462555",
+    "page": "https://www.douyin.com/video/7699894413937462555",
+    "desc": "双汇的资本游戏与父子宫斗 #燃起来了大国重器 #真财实学计划",
+    "likes": 417347,
+    "seconds": 642
+   },
+   {
+    "id": "7697233191878397234",
+    "page": "https://www.douyin.com/video/7697233191878397234",
+    "desc": "【限流重发】揭秘缅北电诈王国 #燃起来了大国重器#真财实学计划",
+    "likes": 394262,
+    "seconds": 479
+   },
+   {
+    "id": "7677486604537040162",
+    "page": "https://www.douyin.com/video/7677486604537040162",
+    "desc": "【抖音独家】万箭穿星：一口气说清卫星互联网背后的太空圈地战争 #抖音精选app #创作阶梯计划 #燃起来了大国重器",
+    "likes": 389839,
+    "seconds": 857
+   },
+   {
+    "id": "7681594379294821684",
+    "page": "https://www.douyin.com/video/7681594379294821684",
+    "desc": "5000亿砸向乌兰察布！AI时代，这些西北小城要大翻身？ #真财实学计划#燃起来了大国重器",
+    "likes": 372127,
+    "seconds": 367,
+    "music": {
+     "duration": 367.2,
+     "speech_ratio": 0.92,
+     "music_coverage": 1.0,
+     "under_speech_db": -12.5,
+     "open_db": -2.8,
+     "gap_lift_db": 9.7,
+     "hook_db": -5.7,
+     "music_in_s": 0.1,
+     "music_ends_before_end_s": 0.0,
+     "level_sd_db": 7.1,
+     "breaks_per_min": 0.0,
+     "break_total_s": 0.0,
+     "ending": "cut",
+     "bpm": 117.5,
+     "onset_rate": 3.6,
+     "punch": 0.21,
+     "brightness": 2139.0,
+     "mode": "major",
+     "speech_band": 0.023,
+     "sections_per_min": 2.0
+    }
+   },
+   {
+    "id": "7703507609491442963",
+    "page": "https://www.douyin.com/video/7703507609491442963",
+    "desc": "爱优腾溃不成军？观众真的不爱看长视频了吗？ #燃起来了大国重器 #真财实学计划",
+    "likes": 320752,
+    "seconds": 688
+   },
+   {
+    "id": "7700261571703885106",
+    "page": "https://www.douyin.com/video/7700261571703885106",
+    "desc": "俄乌要停火了？到底谁赢了？又是谁买单？ #燃起来了大国重器 #真财实学计划",
+    "likes": 262944,
+    "seconds": 433
+   },
+   {
+    "id": "7683520934916934966",
+    "page": "https://www.douyin.com/video/7683520934916934966",
+    "desc": "”0票影帝”沈腾的资本博弈 #燃起来了大国重器  #真财实学计划",
+    "likes": 245676,
+    "seconds": 660
+   },
+   {
+    "id": "7689493775776828718",
+    "page": "https://www.douyin.com/video/7689493775776828718",
+    "desc": "拉完了的Hyrox，如何成为中产收割机，装X新赛道？ #燃起来了大国重器#真财实学计划",
+    "likes": 244240,
+    "seconds": 297,
+    "music": {
+     "duration": 297.6,
+     "speech_ratio": 0.93,
+     "music_coverage": 0.93,
+     "under_speech_db": -25.1,
+     "open_db": -15.6,
+     "gap_lift_db": 9.5,
+     "hook_db": -7.5,
+     "music_in_s": 0.2,
+     "music_ends_before_end_s": 0.4,
+     "level_sd_db": 6.4,
+     "breaks_per_min": 0.81,
+     "break_total_s": 14.4,
+     "ending": "fade",
+     "bpm": 123.0,
+     "onset_rate": 2.58,
+     "punch": 0.479,
+     "brightness": 2413.0,
+     "mode": "major",
+     "speech_band": 0.334,
+     "sections_per_min": 2.2
+    }
+   },
+   {
+    "id": "7689171466650193161",
+    "page": "https://www.douyin.com/video/7689171466650193161",
+    "desc": "美国经济，到底怎样？ #燃起来了大国重器  #真财实学计划",
+    "likes": 232791,
+    "seconds": 664
+   },
+   {
+    "id": "7702103956637453619",
+    "page": "https://www.douyin.com/video/7702103956637453619",
+    "desc": "一场争夺中国新能源“权力之柄”的战争 #燃起来了大国重器 #真财实学计划",
+    "likes": 231795,
+    "seconds": 931
+   },
+   {
+    "id": "7686489855253089551",
+    "page": "https://www.douyin.com/video/7686489855253089551",
+    "desc": "铭记历史，看清近邻：日本到底还剩多少实力？#燃起来了大国重器 #真财实学计划",
+    "likes": 215974,
+    "seconds": 548
+   },
+   {
+    "id": "7696731707025722624",
+    "page": "https://www.douyin.com/video/7696731707025722624",
+    "desc": "韩国股市再次跌熔断。为啥股民注定伤痕累累？钱到底被谁赚走？来，带你一口气看懂韩国（上）#最好的夏天#抖音精选App  #",
+    "likes": 192006,
+    "seconds": 1353
+   },
+   {
+    "id": "7684667404693048639",
+    "page": "https://www.douyin.com/video/7684667404693048639",
+    "desc": "小米，螺蛳壳里做创新 #小米澎程 #小米18Fold",
+    "likes": 188793,
+    "seconds": 252,
+    "music": {
+     "duration": 252.2,
+     "speech_ratio": 0.94,
+     "music_coverage": 0.97,
+     "under_speech_db": -24.9,
+     "hook_db": 2.1,
+     "music_in_s": 0.2,
+     "music_ends_before_end_s": 0.3,
+     "level_sd_db": 7.3,
+     "breaks_per_min": 0.48,
+     "break_total_s": 4.4,
+     "ending": "fade",
+     "bpm": 123.0,
+     "onset_rate": 2.09,
+     "punch": 0.551,
+     "brightness": 2208.0,
+     "mode": "major",
+     "speech_band": 0.407,
+     "sections_per_min": 2.1
+    }
+   },
+   {
+    "id": "7684488993160973614",
+    "page": "https://www.douyin.com/video/7684488993160973614",
+    "desc": "年轻人集体涌向AI减肥，第一波网友竟然瘦了500万斤 #蚂蚁阿福 #2026外滩大会",
+    "likes": 183822,
+    "seconds": 316,
+    "music": {
+     "duration": 315.9,
+     "speech_ratio": 0.93,
+     "music_coverage": 0.98,
+     "under_speech_db": -18.0,
+     "open_db": -4.6,
+     "gap_lift_db": 13.4,
+     "hook_db": -4.4,
+     "music_in_s": 0.2,
+     "music_ends_before_end_s": 5.8,
+     "level_sd_db": 5.6,
+     "breaks_per_min": 0.0,
+     "break_total_s": 0.0,
+     "ending": "button",
+     "bpm": 107.7,
+     "onset_rate": 2.38,
+     "punch": 0.463,
+     "brightness": 1854.0,
+     "mode": "major",
+     "speech_band": 0.212,
+     "sections_per_min": 2.3
+    }
+   },
+   {
+    "id": "7699487638214036746",
+    "page": "https://www.douyin.com/video/7699487638214036746",
+    "desc": "人均赌徒的国家长啥样？为什么普通人想翻身非要押注股市？十年来最惨烈的散户收割大戏究竟是如何开场的？来，带你一口气看懂韩国",
+    "likes": 178518,
+    "seconds": 1757
+   },
+   {
+    "id": "7679494494189817130",
+    "page": "https://www.douyin.com/video/7679494494189817130",
+    "desc": "中国消费电子迎来名场面 #小米首发长鑫LPDDR6内存 #雷军说长鑫非常了不起",
+    "likes": 170626,
+    "seconds": 304,
+    "music": {
+     "duration": 303.7,
+     "speech_ratio": 0.94,
+     "music_coverage": 0.99,
+     "under_speech_db": -20.1,
+     "hook_db": 2.7,
+     "music_in_s": 0.1,
+     "music_ends_before_end_s": 0.0,
+     "level_sd_db": 5.5,
+     "breaks_per_min": 0.2,
+     "break_total_s": 1.3,
+     "ending": "cut",
+     "bpm": 112.3,
+     "onset_rate": 1.69,
+     "punch": 0.305,
+     "brightness": 1881.0,
+     "mode": "minor",
+     "speech_band": 0.161,
+     "sections_per_min": 2.4
+    }
+   },
+   {
+    "id": "7688746041235098914",
+    "page": "https://www.douyin.com/video/7688746041235098914",
+    "desc": "硬核老板，长什么样？ #每个努力的人都是世界第一等#大秀#卡宾风涌无界大秀#卡宾把秀场搬到海上三年了",
+    "likes": 169088,
+    "seconds": 349,
+    "music": {
+     "duration": 348.9,
+     "speech_ratio": 0.91,
+     "music_coverage": 0.9,
+     "under_speech_db": -28.1,
+     "open_db": -12.9,
+     "gap_lift_db": 15.2,
+     "hook_db": 9.4,
+     "music_in_s": 0.2,
+     "music_ends_before_end_s": 0.7,
+     "level_sd_db": 8.5,
+     "breaks_per_min": 1.72,
+     "break_total_s": 28.7,
+     "ending": "fade",
+     "bpm": 117.5,
+     "onset_rate": 1.26,
+     "punch": 0.657,
+     "brightness": 2333.0,
+     "mode": "major",
+     "speech_band": 0.123,
+     "sections_per_min": 2.1
+    }
+   },
+   {
+    "id": "7689889632716164415",
+    "page": "https://www.douyin.com/video/7689889632716164415",
+    "desc": "印度天团进驻缅北，美国人被割麻了。。。 #燃起来了大国重器 #真财实学计划",
+    "likes": 161734,
+    "seconds": 389,
+    "music": {
+     "duration": 389.5,
+     "speech_ratio": 0.93,
+     "music_coverage": 0.89,
+     "under_speech_db": -21.2,
+     "open_db": -13.5,
+     "gap_lift_db": 7.7,
+     "hook_db": 3.8,
+     "music_in_s": 0.2,
+     "music_ends_before_end_s": 1.0,
+     "level_sd_db": 7.8,
+     "breaks_per_min": 2.0,
+     "break_total_s": 37.5,
+     "ending": "button",
+     "bpm": 123.0,
+     "onset_rate": 2.4,
+     "punch": 0.26,
+     "brightness": 2893.0,
+     "mode": "minor",
+     "speech_band": 0.28,
+     "sections_per_min": 1.7
+    }
+   },
+   {
+    "id": "7683860916458261779",
+    "page": "https://www.douyin.com/video/7683860916458261779",
+    "desc": "质疑、理解、成为，苹果怎么就活成了自己最讨厌的样子？ #燃起来了大国重器 #真财实学计划",
+    "likes": 158015,
+    "seconds": 481
+   },
+   {
+    "id": "7711521951080058122",
+    "page": "https://www.douyin.com/video/7711521951080058122",
+    "desc": "龙王归位！黄仁勋11天极限反转，他为什么必须回来？ #零距离看懂财经 #燃起来了大国重器 #真财实学计划",
+    "likes": 152371,
+    "seconds": 450
+   },
+   {
+    "id": "7709920917404568872",
+    "page": "https://www.douyin.com/video/7709920917404568872",
+    "desc": "一口气看懂AI大模型之王， Anthropic在垄断什么？又会改变什么？#零距离看懂财经#燃起来了大国重器#真财实学计划",
+    "likes": 148833,
+    "seconds": 768
+   },
+   {
+    "id": "7705748946106191138",
+    "page": "https://www.douyin.com/video/7705748946106191138",
+    "desc": "谁吹爆了山姆（一）：商超集体遇冷，山姆为何逆势崛起？ #抖音精选App#创作阶梯计划#燃起来了大国重器#零距离看懂财经#",
+    "likes": 140460,
+    "seconds": 1092
+   },
+   {
+    "id": "7698688877527092534",
+    "page": "https://www.douyin.com/video/7698688877527092534",
+    "desc": "法国为啥又在燃烧？ #燃起来了大国重器 #真财实学计划",
+    "likes": 138251,
+    "seconds": 406
+   },
+   {
+    "id": "7702351434662169866",
+    "page": "https://www.douyin.com/video/7702351434662169866",
+    "desc": "百万悬赏背后，跨境报复链 #燃起来了大国重器 #真财实学计划",
+    "likes": 136944,
+    "seconds": 441
+   },
+   {
+    "id": "7705751379628936489",
+    "page": "https://www.douyin.com/video/7705751379628936489",
+    "desc": "谁吹爆了山姆（二）：从山姆帝国到走下神坛，我们何时能拥有本土版山姆？#抖音精选App#创作阶梯计划#燃起来了大国重器#零",
+    "likes": 135036,
+    "seconds": 1031
+   },
+   {
+    "id": "7680516684033084724",
+    "page": "https://www.douyin.com/video/7680516684033084724",
+    "desc": "白酒，拥抱年轻人 #如果酒桌有弹幕#舍得自在",
+    "likes": 117494,
+    "seconds": 266
+   },
+   {
+    "id": "7687526491365641526",
+    "page": "https://www.douyin.com/video/7687526491365641526",
+    "desc": "西贝，生死存亡时刻？ #燃起来了大国重器 #真财实学计划",
+    "likes": 113784,
+    "seconds": 211
+   },
+   {
+    "id": "7701256438924004646",
+    "page": "https://www.douyin.com/video/7701256438924004646",
+    "desc": "AI改变双十一？电商卖家和买家魔法对轰 #会过日子的人先问豆包  #豆包",
+    "likes": 113534,
+    "seconds": 285
+   },
+   {
+    "id": "7686209037456756020",
+    "page": "https://www.douyin.com/video/7686209037456756020",
+    "desc": "天下苦校服久矣！同样是校服，深圳凭什么做到便宜又好买？ #燃起来了大国重器  #真财实学计划",
+    "likes": 112105,
+    "seconds": 349
+   },
+   {
+    "id": "7699462159335492891",
+    "page": "https://www.douyin.com/video/7699462159335492891",
+    "desc": "明星富豪扎堆的“神药”，究竟靠不靠谱？ #凌博士多糖细胞技术 #燃起来了大国重器 #真财实学计划",
+    "likes": 109565,
+    "seconds": 241
+   },
+   {
+    "id": "7696473462486912275",
+    "page": "https://www.douyin.com/video/7696473462486912275",
+    "desc": "花388，去横店拍短剧啥体验？ #燃起来了大国重器 #真财实学计划",
+    "likes": 107990,
+    "seconds": 455
+   },
+   {
+    "id": "7679455073801489674",
+    "page": "https://www.douyin.com/video/7679455073801489674",
+    "desc": "孙割，体面在哪？ #真财实学计划 #燃起来了大国重器",
+    "likes": 101905,
+    "seconds": 393
+   },
+   {
+    "id": "7686443535368834304",
+    "page": "https://www.douyin.com/video/7686443535368834304",
+    "desc": "一种很新的省钱方式：消费降代#闲鱼价",
+    "likes": 87405,
+    "seconds": 223
+   },
+   {
+    "id": "7690875066703187235",
+    "page": "https://www.douyin.com/video/7690875066703187235",
+    "desc": "让外卖骑手敢等红灯，到底有多难？ #红灯停表",
+    "likes": 85456,
+    "seconds": 299
+   },
+   {
+    "id": "7699031540826639652",
+    "page": "https://www.douyin.com/video/7699031540826639652",
+    "desc": "出国抢马桶圈的时代结束，现在老外来中国反向代购？ #亚朵星球深睡控温被冬季Pro3#亚朵星球深睡控温冬被pro3",
+    "likes": 85337,
+    "seconds": 240
+   },
+   {
+    "id": "7689740873982053672",
+    "page": "https://www.douyin.com/video/7689740873982053672",
+    "desc": "深扒拍片这门生意：AI能让你更自由，还是换个方式打工？ #LibTV#LibTV创作者成长计划",
+    "likes": 84606,
+    "seconds": 319
+   },
+   {
+    "id": "7690940498579655963",
+    "page": "https://www.douyin.com/video/7690940498579655963",
+    "desc": "居民房贷贴息来了，最高补5万！ #燃起来了大国重器 #真财实学计划",
+    "likes": 81866,
+    "seconds": 153
+   },
+   {
+    "id": "7682745954478361865",
+    "page": "https://www.douyin.com/video/7682745954478361865",
+    "desc": "中国机器人占领欧洲，但是家庭服务版！ #IFA2026#科沃斯#家用机器人#中国智造#国货出海",
+    "likes": 81428,
+    "seconds": 352
+   },
+   {
+    "id": "7687162144349048079",
+    "page": "https://www.douyin.com/video/7687162144349048079",
+    "desc": "低空载人飞行器，来了！#华羽先翔全倾转旋翼eVTOL亮相#鸿鹄eVTOL#燃起来了大国重器#真财实学计划",
+    "likes": 77152,
+    "seconds": 370
+   },
+   {
+    "id": "7684967490413186304",
+    "page": "https://www.douyin.com/video/7684967490413186304",
+    "desc": "广汽本田续约至2038，下一个“雅阁”还有多久？ #造更懂中国的好车 #广汽本田合资续约",
+    "likes": 77071,
+    "seconds": 434
+   },
+   {
+    "id": "7676136936028769578",
+    "page": "https://www.douyin.com/video/7676136936028769578",
+    "desc": "许家印，大结局！ #真财实学计划#燃起来了大国重器",
+    "likes": 73115,
+    "seconds": 146
+   },
+   {
+    "id": "7678280282356616489",
+    "page": "https://www.douyin.com/video/7678280282356616489",
+    "desc": "一场5个亿的全球生意，中国AI接住高光 #EWC2026 #obsbot寻影 #ag超玩会 #电竞",
+    "likes": 71158,
+    "seconds": 420
+   },
+   {
+    "id": "7700816705894829322",
+    "page": "https://www.douyin.com/video/7700816705894829322",
+    "desc": "AI越强，打工人越累？ #科大讯飞智能办公本X5",
+    "likes": 66767,
+    "seconds": 301
+   },
+   {
+    "id": "7677790931831049487",
+    "page": "https://www.douyin.com/video/7677790931831049487",
+    "desc": "二刷《欢迎来龙餐馆》：紧急情况，车是第二条命 #华境S累计交付超2万辆 #华境S超国标真实场景连环测试全通过",
+    "likes": 50673,
+    "seconds": 280
+   },
+   {
+    "id": "7685735297480477962",
+    "page": "https://www.douyin.com/video/7685735297480477962",
+    "desc": "飞书+豆包工作合体，这回AI真能帮你办公了！#2026飞书未来无限大会 #豆包工作  #飞书",
+    "likes": 48644,
+    "seconds": 233
+   },
+   {
+    "id": "7694589164947295539",
+    "page": "https://www.douyin.com/video/7694589164947295539",
+    "desc": "中国男人，有多不容易？#豪华智慧全地形SUV猛士X700 #猛士X700搭载全栈华为乾崑 #猛士X700",
+    "likes": 36885,
+    "seconds": 258
+   },
+   {
+    "id": "7680494501927849257",
+    "page": "https://www.douyin.com/video/7680494501927849257",
+    "desc": "亲身体验：把豪华体验的价格打下来，中国品牌怎么做的？ #新能源汽车#内卷#出海#看小鹏G9L如何打破内卷困局",
+    "likes": 35071,
+    "seconds": 376
+   }
+  ]
+ }
+}

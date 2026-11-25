@@ -42,7 +42,7 @@ def bed(track, arr, gain_db, ref_lufs, T, speech):
 def render(cat, brief, cand, prof, out_dir, name):
     from .match import envelope
     T = brief["duration"]
-    track = cat["tracks"][cand["track"]]
+    track = cat["tracks"][cand["track"]] if "track" in cand else None
     mask = hop = None
     voice = None
     if brief.get("voice"):
@@ -51,6 +51,8 @@ def render(cat, brief, cand, prof, out_dir, name):
         ref = audio.lufs(brief["voice"]) or -16.0
     else:
         ref = -16.0
+    if cand.get("cues"):
+        return render_cues(cat, brief, cand, prof, out_dir, name, voice, mask, hop, ref)
     g, events = envelope(brief, prof, cand["arrangement"], mask, hop or 0.02)
     b = bed(track, cand["arrangement"], g, ref, T, bool(voice is not None))
     n = len(b)
@@ -77,6 +79,56 @@ def render(cat, brief, cand, prof, out_dir, name):
             "offset": arr["offset"], "pieces": arr["pieces"], "ending": arr["ending"], "hits": arr["hits"], "events": events,
             "downbeats_in_video": beat_v, "gain_db_10hz": [round(float(x), 1) for x in g[::10]],
             "files": {"bed": os.path.basename(bed_wav), "final": os.path.basename(final)}}
+    json.dump(plan, open(os.path.join(out_dir, f"{name}_plan.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    return plan, (mask, hop)
+
+
+def _finish(brief, b, voice, out_dir, name):
+    mix = b.copy()
+    if voice is not None:
+        m = min(len(b), len(voice)); mix[:m] += voice[:m]
+    peak = float(np.abs(mix).max())
+    if peak > 0.97:
+        mix = np.tanh(mix / peak * 1.5) / np.tanh(1.5) * 0.97
+    bed_wav = os.path.join(out_dir, f"{name}_bed.wav"); mix_wav = os.path.join(out_dir, f"{name}_mix.wav")
+    sf.write(bed_wav, b, SR); sf.write(mix_wav, mix, SR)
+    if brief.get("video"):
+        final = os.path.join(out_dir, f"{name}.mp4")
+        _ff("-i", brief["video"], "-i", mix_wav, "-map", "0:v:0", "-map", "1:a:0", "-c:v", "copy", "-c:a", "aac", "-b:a", "160k", "-shortest", final)
+    else:
+        final = os.path.join(out_dir, f"{name}.mp3")
+        _ff("-i", mix_wav, "-b:a", "160k", final)
+    os.remove(mix_wav)
+    return bed_wav, final
+
+
+def render_cues(cat, brief, cand, prof, out_dir, name, voice, mask, hop, ref):
+    """分段配乐：每段一首曲子，各自套上同一条随人声起伏的音量曲线，再各自开窗（进、出、留白）。"""
+    from .match import envelope
+    T = brief["duration"]
+    cfg = prof["cues"]
+    g, events = envelope(brief, prof, {"offset": 1.0, "ending": {"type": "none"}}, mask, hop or 0.02)
+    t = np.arange(len(g)) / 100.0
+    b = np.zeros((int(T * SR), 2), np.float32)
+    total = np.full(len(g), -90.0)
+    cues = []
+    for k, c in enumerate(cand["cues"]):
+        tr = cat["tracks"][c["track"]]
+        last = k == len(cand["cues"]) - 1
+        fo = prof.get("ending_fade", 2.0) if last else cfg["fade_out"]
+        win = np.clip((t - c["v0"]) / 0.25, 0, 1) * np.clip((c["v1"] - t) / fo, 0, 1)
+        seg_e = np.mean([x.get("energy", 0.5) for x in brief["segments"] if x["start"] < c["v1"] and x["end"] > c["v0"]] or [0.5])
+        gk = g + 20 * np.log10(np.maximum(win, 1e-5)) + (seg_e - 0.5) * (prof.get("cue_level_span_db", 4) - 4)   # 各段音量拉开一点：她各段之间差得不小
+        b += bed(tr, {"pieces": [[c["v0"], c["v1"], c["s0"]]]}, gk, ref, T, voice is not None)
+        total = np.maximum(total, gk)
+        cues.append({"from": c["v0"], "to": c["v1"], "segment": c["name"], "track": c["track"], "title": tr["title"], "track_from": c["s0"],
+                     "bpm": tr.get("bpm_tag") or tr["analysis"]["bpm"], "feel": tr.get("feel"), "score": c["score"], "parts": c["parts"], "license": tr["license"]})
+        events.append({"t": c["v0"], "to": c["v1"], "do": f"第 {k + 1} 段：{tr['title']}"})
+    bed_wav, final = _finish(brief, b, voice, out_dir, name)
+    credits = sorted({c["license"]["credit"] for c in cues if c["license"].get("credit")})
+    plan = {"style": prof.get("style_name"), "score": cand["score"], "cues": cues, "credits": credits, "ref_voice_lufs": ref,
+            "events": sorted(events, key=lambda e: e["t"]), "gain_db_10hz": [round(float(x), 1) for x in total[::10]],
+            "pieces": [[c["from"], c["to"], c["track_from"]] for c in cues], "hits": [], "files": {"bed": os.path.basename(bed_wav), "final": os.path.basename(final)}}
     json.dump(plan, open(os.path.join(out_dir, f"{name}_plan.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     return plan, (mask, hop)
 
@@ -108,6 +160,16 @@ def audition(brief, prof, results, out_dir, cat):
     kinds = {"climax": "高点", "turn": "转折", "chapter": "换章节", "segment": "换段"}
     cards = []
     for i, (plan, (mask, hop), cand) in enumerate(results, 1):
+        if plan.get("cues"):
+            f = plan["files"]["final"]
+            media = f'<video controls preload="metadata" src="{f}"></video>' if f.endswith(".mp4") else f'<audio controls src="{f}"></audio>'
+            rows = "".join(f'<tr><td>{c["from"]:.0f}–{c["to"]:.0f} 秒</td><td>{html.escape(c["segment"] or "")}</td><td><b>{html.escape(c["title"])}</b></td><td>{c["bpm"]:.0f} 拍</td><td>{"、".join(c.get("feel") or [])}</td><td>{c["score"]:.2f}</td></tr>' for c in plan["cues"])
+            cr = "".join(f"<p class='credit'>署名：{html.escape(x)}</p>" for x in plan["credits"])
+            cards.append(f'''<section><h2>方案 {i}　分段配乐（{html.escape(plan.get("style") or "")}式）</h2><p class="meta">{len(plan["cues"])} 段、{len(plan["cues"])} 首不同的曲子，段落之间留白</p>
+<div class="row">{media}<div class="side"><table class="cues"><tr><th>时间</th><th>段落</th><th>曲子</th><th>速度</th><th>标签</th><th>分</th></tr>{rows}</table></div></div>
+{_svg(brief, plan, mask, hop, [])}
+<p class="legend"><i style="background:var(--seg)"></i>视频分段<i style="background:var(--voice)"></i>有人说话<i style="background:var(--music)"></i>配乐实际音量（竖线是换曲处）</p>{cr}</section>''')
+            continue
         t = cat["tracks"][plan["track"]]
         f = plan["files"]["final"]
         media = f'<video controls preload="metadata" src="{f}"></video>' if f.endswith(".mp4") else f'<audio controls src="{f}"></audio>'
@@ -132,7 +194,7 @@ body{{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 system-ui,"Pi
 h1{{font-size:22px;margin:0 0 4px}}h2{{font-size:17px;margin:0}}section{{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin:16px 0}}
 .meta,.legend,.credit{{color:var(--ink2);font-size:13px;margin:2px 0 10px}}.row{{display:flex;gap:16px;flex-wrap:wrap}}video{{max-height:420px;max-width:100%;border-radius:6px;background:#000}}audio{{width:100%}}
 .side{{flex:1;min-width:240px}}table{{border-collapse:collapse}}th{{text-align:left;font-weight:400;color:var(--ink2);padding:1px 14px 1px 0}}ul{{margin:6px 0;padding-left:18px;font-size:13px}}
-.tl{{width:100%;height:150px;margin-top:12px;border-top:1px solid var(--line)}}.legend i{{display:inline-block;width:14px;height:8px;margin:0 5px 0 14px;border-radius:2px}}.legend i:first-child{{margin-left:0}}.legend .dash{{border-top:1px dashed var(--ink2);height:0;vertical-align:middle}}</style>
+.tl{{width:100%;height:150px;margin-top:12px;border-top:1px solid var(--line)}}.legend i{{display:inline-block;width:14px;height:8px;margin:0 5px 0 14px;border-radius:2px}}.legend i:first-child{{margin-left:0}}.cues td,.cues th{{padding:2px 12px 2px 0;font-size:13px}}.legend .dash{{border-top:1px dashed var(--ink2);height:0;vertical-align:middle}}</style>
 <main><h1>配乐试听　{html.escape(brief["type_name"])} · {brief["duration"]:.0f} 秒</h1>
 <p class="meta">想要：{"、".join(library.RULES["dims"][k] for k in prof["want"])}　不要：{"、".join(library.RULES["dims"][k] for k in prof["avoid"])}　速度 {prof["bpm"][0]}–{prof["bpm"][1]} 拍/分</p>
 <section><h2>这类视频的配乐规矩</h2><ul>{nodes}</ul></section>{"".join(cards)}</main></html>'''

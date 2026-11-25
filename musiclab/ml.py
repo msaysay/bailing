@@ -30,11 +30,11 @@ def main():
     p = sub.add_parser("warm"); p.add_argument("--type", choices=TYPES); p.add_argument("-n", type=int, default=12)
     p = sub.add_parser("list"); p.add_argument("--analyzed", action="store_true")
     sub.add_parser("types")
-    p = sub.add_parser("brief"); p.add_argument("src"); p.add_argument("--type", required=True, choices=TYPES); p.add_argument("--timing"); p.add_argument("-o", "--out", required=True)
+    p = sub.add_parser("brief"); p.add_argument("src"); p.add_argument("--type", required=True, choices=TYPES); p.add_argument("--timing"); p.add_argument("--style", choices=[k for k in RULES.get("styles", {}) if k[0] != "_"]); p.add_argument("-o", "--out", required=True)
     p = sub.add_parser("match"); p.add_argument("brief"); p.add_argument("-n", type=int, default=3); p.add_argument("--pool", type=int, default=10)
     p.add_argument("--no-credit", action="store_true"); p.add_argument("--track"); p.add_argument("-o", "--out")
     p = sub.add_parser("rate"); p.add_argument("dir"); p.add_argument("rank", type=int); p.add_argument("verdict", choices=["good", "bad"]); p.add_argument("--note", default="")
-    p = sub.add_parser("ref"); p.add_argument("action", choices=["add", "profile", "check"]); p.add_argument("target", nargs="?"); p.add_argument("--type", choices=TYPES); p.add_argument("-n", type=int, default=3); p.add_argument("--like", help="ref check 时对照某一位博主，而不是整个方向")
+    p = sub.add_parser("ref"); p.add_argument("action", choices=["add", "profile", "check", "download"]); p.add_argument("target", nargs="?"); p.add_argument("--type", choices=TYPES); p.add_argument("-n", type=int, default=3); p.add_argument("-o", "--out"); p.add_argument("--like", help="ref check 时对照某一位博主，而不是整个方向")
     a = ap.parse_args()
     cat = library.load()
 
@@ -79,6 +79,8 @@ def main():
     elif a.cmd == "brief":
         from mlab import brief
         out, b = brief.draft(a.src, a.type, a.out, a.timing)
+        if a.style:
+            b["style"] = a.style; json.dump(b, open(out, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
         print(f"需求单初稿：{out}\n{b['duration']:.0f} 秒，{len(b['segments'])} 段，说话占 {b['speech_ratio']:.0%}，{len(b['pauses'])} 处长停顿。")
         print("下一步：按内容改 want/avoid、每段 energy，补上 moments（高点、转折、重点句），然后跑 match。")
     elif a.cmd == "match":
@@ -89,16 +91,20 @@ def main():
         if not cat["tracks"]:
             sys.exit("曲库是空的，先跑：python3 musiclab/ml.py sync")
         print("选曲中（没听过的曲子要先下载再听，每首十几秒）…")
-        cands, prof = match.run(cat, b, a.n, a.pool, a.no_credit, a.track)
+        cued = bool(match.profile(b).get("cues"))
+        cands, prof = match.run_cues(cat, b, a.n, a.pool, a.no_credit) if cued else match.run(cat, b, a.n, a.pool, a.no_credit, a.track)
         if not cands:
             sys.exit("没有合适的曲子。放宽条件或往库里加曲子。")
         res = []
         for i, c in enumerate(cands, 1):
             plan, mk = render.render(cat, b, c, prof, out, f"方案{i}")
             res.append((plan, mk, c))
+            if cued:
+                print(f"方案{i}　分段配乐　均分 {plan['score']:.2f}　" + " | ".join(f"{q['from']:.0f}–{q['to']:.0f}秒 {q['title']}" for q in plan["cues"]))
+                continue
             print(f"方案{i}　{plan['title']}　总分 {plan['score']:.2f}　从 {plan['offset']:.1f} 秒起　结尾：{plan['ending']['type']}　对上 {len(plan['hits'])} 个节点")
         page = render.audition(b, prof, res, out, cat)
-        json.dump({"brief": os.path.abspath(a.brief), "type": b["type"], "ranked": [p["track"] for p, _, _ in res]}, open(os.path.join(out, "match.json"), "w"), ensure_ascii=False)
+        json.dump({"brief": os.path.abspath(a.brief), "type": b["type"], "ranked": [p.get("track") or [q["track"] for q in p["cues"]] for p, _, _ in res]}, open(os.path.join(out, "match.json"), "w"), ensure_ascii=False)
         print(f"试听页：{page}")
     elif a.cmd == "ref":
         from mlab import reference as R
@@ -110,6 +116,8 @@ def main():
                 sys.exit("用法：ml.py ref add 博主名 --type 内容类型 [-n 3]")
             print(f"抓 {a.target} 点赞最高的 {a.n} 条，每条拆分加测量约等于片长…")
             print(f"量完 {R.run_creator(a.type, a.target, a.n)} 条。汇总：python3 musiclab/ml.py ref profile")
+        elif a.action == "download":               # ref download 博主名 -o 目录 -n 10：整条视频（带画面）
+            print(f"下好 {R.download_videos(a.target, a.out or 'ref_videos', a.n)} 条 → {a.out or 'ref_videos'}")
         elif a.action == "profile":
             for t, p in R.build_profiles().items():
                 print(f"\n{t[1:] if t[0] == '@' else RULES['types'][t]['name']}　{p['videos']} 条，其中 {p['with_music']} 条有配乐　博主：{'、'.join(p['creators'])}　收尾：{p.get('ending')}")
@@ -128,6 +136,8 @@ def main():
     elif a.cmd == "rate":
         m = json.load(open(os.path.join(a.dir, "match.json")))
         tid = m["ranked"][a.rank - 1]
+        if isinstance(tid, list):
+            sys.exit("分段配乐的方案暂时不能整体打分：告诉助手哪一段的曲子好或不好。")
         with open(match.FEEDBACK, "a", encoding="utf-8") as fh:
             fh.write(json.dumps({"track": tid, "type": m["type"], "verdict": a.verdict, "note": a.note, "at": time.strftime("%Y-%m-%d")}, ensure_ascii=False) + "\n")
         if a.verdict == "good":
