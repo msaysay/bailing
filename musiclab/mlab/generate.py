@@ -26,6 +26,9 @@ STYLE = {
     "xiaolin-beat": {"yes": ["laid-back lo-fi beat underscore for voiceover", "steady soft drum loop: kick on one and three, rim click on two and four, closed hi-hats, clearly audible throughout",
                              "sparse chords, one chord per bar", "lots of space", "even level from the first beat", "instrumental"],
                      "no": ["vocals", "lead melody", "fast arpeggios", "heavy or loud drums", "big drum fills", "risers and impacts", "cinematic build-up", "slow fade-in intro", "distortion", "no drums", "ambient only"]},
+    "talkbed": {"yes": ["continuous instrumental music bed for a knowledge explainer voiceover", "warm and light", "soft felt piano and gentle electric piano", "subtle soft drums and warm bass", "steady and loop-friendly",
+                        "low melodic activity", "consistent energy with no drop", "starts immediately", "clear musical ending on the last bar"],
+                "no": ["vocals", "prominent lead melody", "harsh high frequencies", "big drop", "risers and impacts", "dramatic build-up", "slow fade-in intro", "tempo changes"]},
     None: {"yes": ["instrumental background music for a spoken-word video", "steady and unobtrusive"], "no": ["vocals", "lead melody that competes with speech"]},
 }
 

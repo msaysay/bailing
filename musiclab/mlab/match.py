@@ -16,7 +16,7 @@ def profile(brief):
     if st:                                             # 对标某位博主：在这类视频的规矩上盖一层他的做法
         p.update({k: v for k, v in st.items() if k not in ("name", "base", "measured")})
         p["style_name"] = st["name"]
-    for k in ("want", "avoid", "bpm", "bed_db", "open_db", "min_gap", "hook_s", "hook_db", "max_punch", "max_steadiness"):
+    for k in ("want", "avoid", "bpm", "bed_db", "open_db", "min_gap", "hook_s", "hook_db", "max_punch", "max_steadiness", "break_at", "break_s"):
         if k in brief:
             p[k] = brief[k]
     return p
@@ -249,6 +249,10 @@ def envelope(brief, prof, arr, mask=None, hop=0.02, rate=100):
         return np.clip((t - t0) / max(r_in, 1e-3) + 1, 0, 1) * np.clip((t1 - t) / max(r_out, 1e-3) + 1, 0, 1)
     for mo in brief.get("moments", []):
         k, mt, d = mo["kind"], mo["t"], mo.get("dur", 0)
+        if k in prof.get("break_at", ()):                                  # 留白：转折、换章节处音乐停一两秒再续（同一首接着放）
+            bs = prof.get("break_s", 1.5)
+            g -= 70 * ramp(mt, mt + bs, 0.25, 0.12); events.append({"t": mt, "to": round(mt + bs, 2), "do": "留白，只有人声"})
+            continue
         if k == "point":
             d = d or 2.0
             g -= 14 * ramp(mt, mt + d, 0.3, 0.6); events.append({"t": mt, "to": mt + d, "do": "重点句，音乐让开", "db": -14})

@@ -7,6 +7,7 @@ from . import audio, library
 
 SR = 44100
 XF = 0.06
+MASTER = "loudnorm=I=-14:TP=-1.5:LRA=11"      # 成片响度：各平台通行的 -14 LUFS，真峰值 -1.5
 
 
 def _ff(*a):
@@ -66,10 +67,10 @@ def render(cat, brief, cand, prof, out_dir, name):
     sf.write(bed_wav, b, SR); sf.write(mix_wav, mix, SR)
     if brief.get("video"):
         final = os.path.join(out_dir, f"{name}.mp4")
-        _ff("-i", brief["video"], "-i", mix_wav, "-map", "0:v:0", "-map", "1:a:0", "-c:v", "copy", "-c:a", "aac", "-b:a", "160k", "-shortest", final)
+        _ff("-i", brief["video"], "-i", mix_wav, "-map", "0:v:0", "-map", "1:a:0", "-c:v", "copy", "-af", MASTER, "-c:a", "aac", "-b:a", "160k", "-shortest", final)
     else:
         final = os.path.join(out_dir, f"{name}.mp3")
-        _ff("-i", mix_wav, "-b:a", "160k", final)
+        _ff("-i", mix_wav, "-af", MASTER, "-b:a", "160k", final)
     os.remove(mix_wav)
     a = track["analysis"]
     arr = cand["arrangement"]
@@ -94,10 +95,10 @@ def _finish(brief, b, voice, out_dir, name):
     sf.write(bed_wav, b, SR); sf.write(mix_wav, mix, SR)
     if brief.get("video"):
         final = os.path.join(out_dir, f"{name}.mp4")
-        _ff("-i", brief["video"], "-i", mix_wav, "-map", "0:v:0", "-map", "1:a:0", "-c:v", "copy", "-c:a", "aac", "-b:a", "160k", "-shortest", final)
+        _ff("-i", brief["video"], "-i", mix_wav, "-map", "0:v:0", "-map", "1:a:0", "-c:v", "copy", "-af", MASTER, "-c:a", "aac", "-b:a", "160k", "-shortest", final)
     else:
         final = os.path.join(out_dir, f"{name}.mp3")
-        _ff("-i", mix_wav, "-b:a", "160k", final)
+        _ff("-i", mix_wav, "-af", MASTER, "-b:a", "160k", final)
     os.remove(mix_wav)
     return bed_wav, final
 
