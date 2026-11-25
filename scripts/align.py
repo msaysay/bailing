@@ -20,7 +20,9 @@ for ln in open(a.script, encoding="utf-8"):
     ln = ln.strip()
     if not ln or (ln.startswith("#") and not ln.startswith("##")): continue
     if ln.startswith("##"): cur = {"name": ln[2:].strip(), "text": ""}; segs.append(cur)
-    else: cur["text"] += ln
+    else:
+        if cur is None: cur = {"name": "全文", "text": ""}; segs.append(cur)     # 稿子没写「## 段名」也能用
+        cur["text"] += ln
 def split_lines(text, mx):
     """先按句末标点切句，长句再按逗号顿号切，仍超长的在中间硬切。显示时去掉句读，停顿处留空格。"""
     out = []

@@ -1,0 +1,73 @@
+{
+ "name": "07_超级个体试片",
+ "line": "talk",
+ "slug": "ep07",
+ "created": "2026-11-25 13:06",
+ "steps": [
+  {
+   "no": "1",
+   "name": "收原片或写稿",
+   "skill": "xiaolin-talk",
+   "ask": "一条拍好的竖屏口播视频；还没拍就说讲什么",
+   "confirm": "稿子（已经拍好就跳过）",
+   "done": true,
+   "note": "试片",
+   "at": "2026-11-25 13:12"
+  },
+  {
+   "no": "2",
+   "name": "粗剪",
+   "skill": "xiaolin-talk",
+   "ask": "",
+   "confirm": "剪掉了哪几句",
+   "done": true,
+   "note": "试片",
+   "at": "2026-11-25 13:12"
+  },
+  {
+   "no": "3",
+   "name": "版式表",
+   "skill": "xiaolin-talk",
+   "ask": "",
+   "confirm": "版式表和素材清单",
+   "done": true,
+   "note": "试片",
+   "at": "2026-11-25 13:12"
+  },
+  {
+   "no": "4",
+   "name": "备素材",
+   "skill": "xiaolin-talk",
+   "ask": "（可选）你想用的画面、截图",
+   "confirm": "",
+   "done": true,
+   "note": "试片",
+   "at": "2026-11-25 13:12"
+  },
+  {
+   "no": "5",
+   "name": "搭画面出片",
+   "skill": "xiaolin-talk",
+   "ask": "",
+   "confirm": "关键帧，然后是成片",
+   "done": true,
+   "note": "试片",
+   "at": "2026-11-25 13:12"
+  },
+  {
+   "no": "6",
+   "name": "发布包",
+   "skill": "make-talk",
+   "ask": "",
+   "confirm": "三版封面挑一版、三个标题挑一个，简介和话题",
+   "done": false
+  }
+ ],
+ "style": "xiaolin",
+ "options": [
+  "retake",
+  "stutter",
+  "pause",
+  "cover"
+ ]
+}
