@@ -24,9 +24,9 @@ FEEL = {
 INST = [("synth", {"tech": .5}), ("electric piano", {"warm": .3}), ("piano", {"warm": .3}), ("guitar", {"warm": .3}), ("strings", {"serious": .3}), ("cello", {"serious": .3}),
         ("violin", {"serious": .2}), ("brass", {"epic": .3}), ("timpani", {"epic": .3}), ("horn", {"epic": .2}), ("marimba", {"playful": .2, "bright": .2}), ("glock", {"bright": .2}), ("bells", {"bright": .2})]
 VOCAL = ["voice", "vocal", "choir", "singer"]
-ODD_INST = ["accordion", "banjo", "kazoo", "tuba", "bagpipe", "organ", "sax", "trumpet", "trombone", "harpsichord", "theremin", "whistle", "ukulele", "recorder", "lute", "sitar", "didgeridoo"]
+ODD_INST = ["accordion", "banjo", "kazoo", "tuba", "bagpipe", "organ", "sax", "trumpet", "trombone", "harpsichord", "theremin", "whistle", "ukulele", "recorder", "lute", "sitar", "didgeridoo", "guzheng", "koto", "zither", "autoharp", "music box", "dhol"]
 ODD_WORD = ["christmas", "halloween", "horror", "circus", "polka", "funny", "silly", "comedy", "cartoon", "spooky", "medieval", "western", "ragtime", "tango", "waltz", "march", "8-bit", "chiptune",
-            "disco", "funk", "jazz", "blues", "latin", "metal", "bossa", "swing", "holiday", "tavern", "pirate", "celtic", "reggae", "carol", "santa", "jingle", "ren faire", "klezmer", "wedding", "anthem", "hymn", "bach", "mozart", "beethoven", "satie", "tchaikovsky", "silent film"]
+            "disco", "funk", "jazz", "blues", "latin", "metal", "bossa", "swing", "holiday", "tavern", "pirate", "celtic", "reggae", "carol", "santa", "jingle", "ren faire", "klezmer", "wedding", "anthem", "hymn", "bach", "mozart", "beethoven", "satie", "tchaikovsky", "canon in d", "pachelbel", "silent film"]
 
 
 def load():
