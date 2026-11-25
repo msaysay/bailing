@@ -403,3 +403,43 @@ def run_cues(cat, brief, variants=3, pool=8, need_free=False, log=print):
         banned |= used
         out.append({"cues": cues, "score": round(float(np.mean([c["score"] for c in cues])), 4)})
     return out, prof
+
+
+def run_cues_generated(cat, brief, variants=2, takes=3, log=print):
+    """分段配乐，每段的曲子现做：每段生成 takes 个备选，量过，按像不像对标博主排。"""
+    from . import generate
+    prof = profile(brief)
+    wins = cue_windows(brief, prof["cues"])
+    style = brief.get("gen_style") or brief.get("style")          # gen_style：同一种配法下换一种生成要求（如带鼓点的版本）
+    table = []
+    for k, w in enumerate(wins):
+        want, _ = cue_want(w, prof)
+        L = w["v1"] - w["v0"]
+        rows = []
+        for j in range(takes):
+            pl = generate.plan_for(want, w["energy"], k + j * 2, style, max(L + 4, 20))   # 每个备选换一套乐器；太短的曲子量不准，至少做 20 秒
+            try:
+                tid = generate.make(cat, pl, f"现做·{w['name'] or '第%d段' % (k + 1)}·{j + 1}")
+            except Exception as e:
+                log(f"  第 {k + 1} 段备选 {j + 1} 生成失败：{str(e)[:120]}"); continue
+            a = cat["tracks"][tid].get("analysis")
+            if not a:
+                log(f"  第 {k + 1} 段备选 {j + 1}：生成出来的曲子量不了，跳过"); continue
+            c = generate.closeness(a, prof)
+            rows.append((round(c, 3), tid))
+            library.save(cat)
+            log(f"  第 {k + 1} 段备选 {j + 1}：像 {c:.2f}　每秒 {a['onset_rate']} 个音头，鼓点 {a['punch']}，人声频段 {a['speech_band']}")
+        rows.sort(reverse=True)
+        table.append(rows)
+    out = []
+    for v in range(variants):
+        cues = []
+        for w, rows in zip(wins, table):
+            if not rows:
+                continue
+            sc, tid = rows[min(v, len(rows) - 1)]
+            cues.append({"track": tid, "v0": w["v0"], "v1": w["v1"], "s0": cat["tracks"][tid]["analysis"]["in"], "score": sc,
+                         "parts": {"mood": 0, "bpm": 0, "speech": 0, "struct": 0, "adjust": 0}, "name": w["name"]})
+        if cues:
+            out.append({"cues": cues, "score": round(float(np.mean([c["score"] for c in cues])), 4)})
+    return out, prof

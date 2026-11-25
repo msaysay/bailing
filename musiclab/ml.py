@@ -33,6 +33,7 @@ def main():
     p = sub.add_parser("brief"); p.add_argument("src"); p.add_argument("--type", required=True, choices=TYPES); p.add_argument("--timing"); p.add_argument("--style", choices=[k for k in RULES.get("styles", {}) if k[0] != "_"]); p.add_argument("-o", "--out", required=True)
     p = sub.add_parser("match"); p.add_argument("brief"); p.add_argument("-n", type=int, default=3); p.add_argument("--pool", type=int, default=10)
     p.add_argument("--no-credit", action="store_true"); p.add_argument("--track"); p.add_argument("-o", "--out")
+    p.add_argument("--generate", action="store_true", help="曲子用 AI 现做（要 ElevenLabs 付费档），只对分段配乐的风格有效"); p.add_argument("--takes", type=int, default=3)
     p = sub.add_parser("rate"); p.add_argument("dir"); p.add_argument("rank", type=int); p.add_argument("verdict", choices=["good", "bad"]); p.add_argument("--note", default="")
     p = sub.add_parser("ref"); p.add_argument("action", choices=["add", "profile", "check", "download"]); p.add_argument("target", nargs="?"); p.add_argument("--type", choices=TYPES); p.add_argument("-n", type=int, default=3); p.add_argument("-o", "--out"); p.add_argument("--like", help="ref check 时对照某一位博主，而不是整个方向")
     a = ap.parse_args()
@@ -92,7 +93,9 @@ def main():
             sys.exit("曲库是空的，先跑：python3 musiclab/ml.py sync")
         print("选曲中（没听过的曲子要先下载再听，每首十几秒）…")
         cued = bool(match.profile(b).get("cues"))
-        cands, prof = match.run_cues(cat, b, a.n, a.pool, a.no_credit) if cued else match.run(cat, b, a.n, a.pool, a.no_credit, a.track)
+        if a.generate and not cued:
+            sys.exit("--generate 目前只支持分段配乐的风格（需求单里写 style）。")
+        cands, prof = match.run_cues_generated(cat, b, min(a.n, a.takes), a.takes) if a.generate else match.run_cues(cat, b, a.n, a.pool, a.no_credit) if cued else match.run(cat, b, a.n, a.pool, a.no_credit, a.track)
         if not cands:
             sys.exit("没有合适的曲子。放宽条件或往库里加曲子。")
         res = []
