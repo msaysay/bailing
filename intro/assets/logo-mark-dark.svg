@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="宁序科技">
+  <rect width="120" height="120" rx="26" fill="#0A0A0B"/>
+  <rect x="27" y="28" width="16" height="64" fill="#F4F2EC"/>
+  <rect x="77" y="28" width="16" height="64" fill="#F4F2EC"/>
+  <polygon points="48,28 63,28 72,92 57,92" fill="#D6FF3D"/>
+</svg>
