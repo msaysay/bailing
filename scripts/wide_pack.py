@@ -2,7 +2,7 @@
 """把「横屏深度解读风（子祺见微式）」这条线打成一个可以单独交给别的 AI 助手用的压缩包（不含视频、字体、模型、node_modules）。
 用法：python3 scripts/talk_pack.py [--out dist/ziqi-wide-kit.zip] [--reference 目录]
   --reference  对标片的联系表、并排对比图所在的目录，放进包里的 reference/，助手开工前先看。默认 docs/reference/ 下对应的目录。
-  --components free（默认，56 个基础组件）或 all（全部 298 个，社群版）。
+  --components free（默认，56 个基础组件）或 all（全部 311 个，社群版）。
 包里有：技能 ziqi-wide、对标拆解、粗剪和声音脚本、横屏版式引擎和组件库、演示工程 wide01、共用字体库目录。
 对方解压后让助手先读 AGENTS.md。"""
 import argparse, os, zipfile
@@ -20,7 +20,7 @@ def one(*paths):
 tree(".claude/skills/ziqi-wide"); tree("studio/src/kit"); tree("studio/src/episodes/wide01"); tree("studio/templates"); tree("studio/public/sfx")
 one(*[f"scripts/{s}.py" for s in ("doctor", "episode", "talk_prep", "asr", "align", "roughcut", "retakes", "grade", "polish", "soundlib", "fonts", "fontlib", "qc", "wide_check", "faces", "facecheck", "tikhub", "wide_pack")])
 one("docs/对标拆解-子祺见微.md", "docs/aesthetic-rules.md", "fonts/library.json", "fonts/字体包样张.jpg", "requirements.txt", "studio/package.json", "studio/package-lock.json", "studio/tsconfig.json", "studio/public/fonts/MiSans-License.txt")
-# 组件库：免费包带 56 个基础组件（图表、文字、流程、图片视频四组）；--components all 带全部 298 个（社群版）
+# 组件库：免费包带 56 个基础组件（图表、文字、流程、图片视频四组）；--components all 带全部 311 个（社群版）
 if a.components == "all": tree("studio/src/components")
 else: one(*[f"studio/src/components/{f}.tsx" for f in ("charts", "type", "flow", "media")])
 files = {k: v for k, v in files.items() if os.path.exists(v)}
@@ -95,7 +95,7 @@ AGENTS.md / CLAUDE.md      给 AI 助手的入口说明
 .claude/skills/ziqi-wide/  操作说明（六步）
 docs/                      对标拆解、制作规则
 scripts/                   环境自检、粗剪、重录检测、降噪调光配乐、版式自查、字体
-studio/                    Remotion 工程：版式引擎 src/kit/wide.tsx、基础组件 src/components（免费版 56 个，全部 298 个在社群）、演示 src/episodes/wide01
+studio/                    Remotion 工程：版式引擎 src/kit/wide.tsx、基础组件 src/components（免费版 56 个，全部 311 个在社群）、演示 src/episodes/wide01
 fonts/                     字体库目录和样张（字体文件用到时自动下载）
 reference/                 对标片的联系表（如果带了）
 ```

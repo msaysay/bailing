@@ -1,5 +1,5 @@
 {
- "说明": "积木清单：整套工作流拆成三类包。改拆法就改这个文件，然后 python3 scripts/blocks_pack.py 重新打包。每一项是仓库里的文件或文件夹（文件夹整个带上）；fonts 写字体库里的风格名，会带上那套默认字体的文件；所有包解压到同一个 video-studio 文件夹里合并。",
+ "说明": "积木清单：整套工作流拆成三类包。改拆法就改这个文件，然后 python3 scripts/blocks_pack.py 重新打包。每一项是仓库里的文件或文件夹（文件夹整个带上）；fonts 写字体库里的风格名，会带上那套默认字体的文件；所有包解压到同一个 video-studio 文件夹里合并。 fonts_to 把字体放到别的文件夹（有的风格有自己的字体目录），font_rename 是放过去时改的文件名。",
  "base": {
   "name": "底层包",
   "file": "1-底层包.zip",
@@ -37,7 +37,11 @@
     "music/CREDITS.txt"
    ],
    "找素材": [
-    "scripts/tikhub.py"
+    "scripts/footage.py",
+    "scripts/tikhub.py",
+    "scripts/commons.py",
+    ".claude/skills/footage-guide",
+    "docs/素材规则.md"
    ],
    "署名和发布包": [
     "scripts/sign.py",
@@ -80,7 +84,7 @@
   "needs": [
    "base"
   ],
-  "intro": "298 个动效组件的源码、目录和演示工程。不出镜解读片必须装；口播风格用到图表、流程、对比这些时也从这里取。",
+  "intro": "311 个动效组件的源码、目录和演示工程。不出镜解读片必须装；口播风格用到图表、流程、对比这些时也从这里取。",
   "files": [
    "studio/src/components",
    "studio/src/gallery",
@@ -195,7 +199,16 @@
     "studio/tools/yuedu_stills.cjs",
     "brands/yuedu",
     "docs/约读书房-口播成片工作流设计.md",
-    "styles/previews/frame.jpg"
+    "styles/previews/frame.jpg",
+    "episodes/14_约读书房_样片/03_制作过程",
+    "episodes/14_约读书房_样片/04_成片/关键帧.jpg",
+    "studio/public/yuedu-demo/clips/library.json",
+    "studio/public/yuedu-demo/clips/backend.jpg",
+    "studio/public/yuedu-demo/clips/联系表.jpg"
+   ],
+   "font_files": [
+    "SourceHanSerifSC-Medium.otf",
+    "SourceHanSerifSC-Heavy.otf"
    ]
   },
   {
@@ -210,7 +223,11 @@
     "cutflow",
     "brands/danjie",
     "styles/previews/danjie.jpg"
-   ]
+   ],
+   "fonts_to": "cutflow/fonts",
+   "font_rename": {
+    "MaShanZheng-Regular.ttf": "MaShanZheng.ttf"
+   }
   },
   {
    "id": "interview",
@@ -222,7 +239,8 @@
    "files": [
     ".claude/skills/tiantu-interview-cut",
     "styles/previews/interview.jpg"
-   ]
+   ],
+   "fonts_to": ".claude/skills/tiantu-interview-cut/assets/fonts"
   },
   {
    "id": "news",
@@ -235,7 +253,6 @@
     ".claude/skills/make-news",
     "scripts/voice.py",
     "scripts/tts.py",
-    "scripts/commons.py",
     "studio/templates/news.tsx",
     "studio/tools/prep_footage.sh",
     "docs/steps/video-01-script.md",

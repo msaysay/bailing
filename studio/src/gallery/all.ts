@@ -13,6 +13,7 @@ import { BCAST } from './catalog-k-bc';
 import { SERIES } from './catalog-l-series';
 import { TFX_TYPE } from './catalog-m-tfx-type';
 import { TFX_MEDIA } from './catalog-n-tfx-media';
+import { X2026 } from './catalog-o-x2026';
 export { SLOT, KLINE } from './catalog';
 export type { Item } from './catalog';
-export const CATALOG = [...BASE, ...WEB, ...SCREEN, ...MEDIA, ...CHARTS, ...TYPE, ...FLOW, ...TALK, ...FX, ...EFFECTS, ...BCAST, ...SERIES, ...TFX_TYPE, ...TFX_MEDIA];
+export const CATALOG = [...BASE, ...WEB, ...SCREEN, ...MEDIA, ...CHARTS, ...TYPE, ...FLOW, ...TALK, ...FX, ...EFFECTS, ...BCAST, ...SERIES, ...TFX_TYPE, ...TFX_MEDIA, ...X2026];

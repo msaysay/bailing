@@ -144,6 +144,10 @@ python3 scripts/wide_check.py studio/out/<代号>.mp4 --full-w <主持人全景�
 
 横屏，和成片同尺寸：主持人全景里挑一帧，压题眼的金色大字（不超过 8 个字），可以再加一行小字。给两版让用户选。
 
+## 找素材（要用口播以外的画面时）
+
+读技能 `footage-guide`：先用没风险的（用户自己的、组件画的、免费素材库），不够再引导用户接 TikHub（第三方、收费、和这套工具没关系）。下回来的每一条：`python3 scripts/footage.py check <文件>` 查水印台标 → `python3 scripts/footage.py fit <文件> --slot ziqi-window --out … --level <档位> --who <谁的>` 裁进素材框并登记来源 → 交片前 `python3 scripts/footage.py ledger <素材目录>`。
+
 ## 不能破的规矩
 
 1. **不改出镜人的意思和用词**。只删重录、口误、长停顿；删掉的每一句都告诉用户。

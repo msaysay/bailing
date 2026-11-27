@@ -130,14 +130,10 @@ python3 scripts/talk_prep.py <期名> cut --drop "你补的时间段" --auto-dro
 ## 第 4 步 · 备素材
 
 放进 `studio/public/<代号>/footage/`，图片视频都行，横的最好（素材带是 1080×842，接近 4:3）。来源按顺序：
-**接 TikHub（自动找素材用）**：`python3 scripts/doctor.py --line news` 里 TikHub 那行是「·」说明没接。片子要用网上的画面而用户在开工单里选了「帮我接」时，把这段原样发给他，等他回「接好了」：
-
-> 接 TikHub 三步：1. 打开 tikhub.io 注册，充一点钱（按次计费，一条片子几毛到几块）；2. 在后台复制 API Token 那串字符；3. 在这个文件夹最外层新建一个文本文件，起名「钥匙.txt」，把那串字符贴进去保存。**不要把那串字符发在聊天里。** 好了回我「接好了」。
-
-接好后：`python3 scripts/tikhub.py search "<关键词>"` 搜抖音、`xsearch` 搜海外，`get` / `xget` / `url <链接>` 下载（`python3 scripts/tikhub.py -h`）。他不想接：请他把视频链接或文件直接发来。**搜来的都是别人的公开内容，没有授权，交片时要告诉用户，发不发他自己定。**
+**找素材先读技能 `footage-guide`**（`python3 scripts/footage.py ladder`）：先用没风险的，不够再引导用户接 TikHub（第三方、收费、和这套工具没关系）。下回来的每一条：`footage.py check` 查水印台标 → `footage.py fit <文件> --slot xiaolin-band …` 裁进素材带 → 自动登记来源。
 
 1. **用户给的**。
-2. **搜来的**：`python3 scripts/tikhub.py`（要 TikHub 钥匙，接法见上），或用户发链接。每条都要登记来源，在 `Band` 的 `credit` 里写「画面：谁 · 日期」。有别人字幕、水印、贴纸的不用。
+2. **搜来的**：`python3 scripts/footage.py find "关键词"`（先搜明确授权的；要新闻画面再加 `--level 4`，先问过用户），或用户发链接。每条都要登记来源，在 `Band` 的 `credit` 里写「画面：谁 · 日期」。有别人字幕、水印、贴纸的不用。
 3. **截图**：新闻页、公告、帖子、应用页面，用 `fit: 'contain'` 完整放进去。**必须真实存在**，不编造。
 4. **自己画**：数据用组件库的图表（`studio/src/components/`），放在素材带的位置。
 

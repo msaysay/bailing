@@ -79,6 +79,10 @@ python3 scripts/publish_kit.py build <期名>    # 三版封面 × 两个尺寸 
 
 不出镜的片子，封面主图用一段干净的素材：`build <期名> --video <素材> --clean`。写法上的讲究（标题怎么起、什么不能写）见 `docs/steps/video-08-cover.md`。`warn` 里写清：哪些画面没授权、哪些说法没查到出处。
 
+## 找素材（要用口播以外的画面时）
+
+读技能 `footage-guide`：先用没风险的（用户自己的、组件画的、免费素材库），不够再引导用户接 TikHub（第三方、收费、和这套工具没关系）。下回来的每一条：`python3 scripts/footage.py check <文件>` 查水印台标 → `python3 scripts/footage.py fit <文件> --slot news-full --out … --level <档位> --who <谁的>` 裁进素材框并登记来源 → 交片前 `python3 scripts/footage.py ledger <素材目录>`。
+
 ## 底线（不管多赶都要守）
 
 - 数字有出处才写，有出处才标来源；查不到的不编。

@@ -101,7 +101,7 @@ async function newPage(browser) {
 (async () => {
   validate();
   const host = probe(P(tl.host.src));
-  const browser = await playwright.chromium.launch();
+  const browser = await require('./util').launch(playwright);
   // --still：只出某一时刻的合成静帧（排版自检用，秒出）
   if (opt('still', false) !== false) {
     const t = +opt('still'), idx = tl.scenes.findIndex(s => t >= s.start && t < s.end), out = P(opt('out', `work/still_${t}.png`));

@@ -10,7 +10,7 @@
 3. **说到风格就给图**：提到哪个骨架就把 `styles/previews/<骨架>.jpg` 发给他，让他挑时发 `styles/previews/总览.jpg`；粗剪后用他自己的原片出一张关键帧再确认。
 4. **审美听骨架的**：一条片子只用一个骨架（对标大 V 的整套模板；不出镜用我们自己定的那套）。用户不选就 `python3 scripts/skeleton.py pick --type <内容类型> [--no-face] [--wide]` 替他选。不要自己混搭风格；组件只从 `skeleton.py blocks <骨架>` 里挑，改成骨架的颜色和字体。
 5. **署名是三样东西，都不全程挂着**：角标（底部小牌子）、个人介绍（上方：称呼 + 身份）、简介（结尾）。内容用户填，`python3 scripts/sign.py set / show / demo`；出现时机见 `docs/署名规则.md`，画面里用 `studio/src/kit/sign.tsx` 的 `<Sign>`。不替用户编身份和简介。
-6. **收尾必出发布包**：成片点头后主动跑 `python3 scripts/publish_kit.py init / build <期名>`，交三版封面（各两个尺寸）、三个标题、简介、话题、署名和提醒。找素材要用网上的画面而用户选了接 TikHub 时，把接法发给他（话术在 `video-start` 里）。
+6. **收尾必出发布包**：成片点头后主动跑 `python3 scripts/publish_kit.py init / build <期名>`，交三版封面（各两个尺寸）、三个标题、简介、话题、署名和提醒。**找素材先用没风险的**：用户自己的、组件画的、明确授权的免费素材库；不够才引导接 TikHub（第三方、收费、和这套工具没关系，话术在 `footage-guide` 里），下回来的每条都要查水印、标来源（`python3 scripts/footage.py`，规则见 `docs/素材规则.md`）。
 
 **这个文件夹是按积木拼的**：底层包必装，风格包装了几种就有几种。下表里文件不存在的那一行，就是没装那个风格，不要用，也不要向用户推荐。看现在装了哪些：`python3 scripts/skeleton.py list`。装了、卸了风格包之后跑一次 `python3 scripts/doctor.py --fix`，开工单会自动跟上。每个包带了哪些文件：`packs/清单/`；整体怎么拆的：`packs/blocks.json`。
 
@@ -28,6 +28,7 @@
 | `tiantu-interview-cut` | 骨架：访谈纪实风（竖屏） | `.claude/skills/tiantu-interview-cut/SKILL.md` |
 | `ziqi-wide` | 骨架：横屏深度解读风（长视频） | `.claude/skills/ziqi-wide/SKILL.md` |
 | `redtop-talk` | 骨架：红顶双标题口播风（竖屏；丢一条原片就出片，不用写画面代码） | `.claude/skills/redtop-talk/SKILL.md` |
+| `footage-guide` | 找素材：先用没风险的，不够再引导接 TikHub；查水印、裁进素材框、记来源 | `.claude/skills/footage-guide/SKILL.md` |
 | `style-atlas` | 选骨架、挑组件、查专业名词、把新风格拆成新骨架 | `.claude/skills/style-atlas/SKILL.md` |
 | `pet` | 频道宠物（用户提到才做） | `.claude/skills/pet/SKILL.md` |
 

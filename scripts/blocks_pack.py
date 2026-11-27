@@ -22,7 +22,8 @@ def expand(items):
     return out
 def style_fonts(st):
     ids = set(L["packs"][L["styles"][st["fonts"]]["default"]]["roles"].values()) if st.get("fonts") else set(); fs = [L["fonts"][i]["file"] for i in ids] + st.get("font_files", [])
-    return {FD + f: os.path.join(R, FD + f) for f in fs if os.path.exists(os.path.join(R, FD + f))}
+    dst = (st.get("fonts_to") or FD.rstrip("/")) + "/"; rn = st.get("font_rename", {})
+    return {dst + rn.get(f, f): os.path.join(R, FD + f) for f in fs if os.path.exists(os.path.join(R, FD + f))}
 def write(path, files, texts, pack_id, title):
     listing = f"# {title}\n# 这个包带的文件（相对 video-studio 文件夹）。卸掉这个包 = 删掉这些文件。\n" + "\n".join(sorted(list(files) + list(texts))) + "\n"
     with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as z:
@@ -46,7 +47,7 @@ n, mb = write(os.path.join(a.out, base["file"]), files, texts, "底层包", base
 c = B["components"]; n, mb = write(os.path.join(a.out, c["file"]), expand(c["files"]), {}, "组件包", c["name"]); rows.append((c["file"], c["name"], "不出镜解读片必装，其余按需", c["intro"], n, mb))
 # —— 3 风格包 ——
 for st in B["styles"]:
-    files = expand(st["files"]); ff = style_fonts(st); files.update(ff); used_fonts |= set(ff); fn = f"3-风格包/风格-{st['name']}.zip"; need = "、".join({"base": "底层包", "components": "组件包"}[x] for x in st["needs"])
+    files = expand(st["files"]); ff = style_fonts(st); files.update(ff); used_fonts |= {FD + os.path.basename(v) for v in ff.values()}; fn = f"3-风格包/风格-{st['name']}.zip"; need = "、".join({"base": "底层包", "components": "组件包"}[x] for x in st["needs"])
     n, mb = write(os.path.join(a.out, fn), files, {}, "风格-" + st["id"], st["name"]); rows.append((fn, st["name"], "要先装：" + need, f"带字体 {len(ff)} 款" if ff else "不带字体（用底层的 MiSans）", n, mb))
 # —— 4 可选扩展 ——
 for ex in B["extras"]:

@@ -382,6 +382,9 @@ if not a.no_verify and not a.no_asr and cues:
         x = env(c["src"])[0]
         out.append(x[int(c["in"] * 16000): int(c["out"] * 16000)])
     audio = np.concatenate(out)
+    if MODEL is None:      # 前面没有需要复听的地方时模型还没加载；这里不加载的话校验会误报 0%
+        from faster_whisper import WhisperModel
+        MODEL = WhisperModel(a.model, device="cpu", compute_type="int8", cpu_threads=os.cpu_count() or 4)
     segs, _ = MODEL.transcribe(audio, language="zh", vad_filter=False, condition_on_previous_text=False,
                                initial_prompt="以下是普通话口语的逐字记录，保留口吃和重复：我、我们这个，这个这个。") if MODEL else ([], None)
     D = "零一二三四五六七八九"

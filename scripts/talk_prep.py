@@ -50,6 +50,7 @@ if a.cmd == "transcribe":
         if fs is not None:
             x, y, fw, fh = [int(v) for v in max(fs, key=lambda f: f[2] * f[3])[:4]]; k = 1920 / w
             print(f"横屏原片。人脸：中心 ({x + fw // 2}, {y + fh // 2})，宽 {fw}（占画面宽 {fw / w:.0%}）；转成 1920×1080 后是 FACE = {{ x: {int((x + fw / 2) * k)}, y: {int((y + fh / 2) * k)}, w: {int(fw * k)} }}")
+            json.dump({"vf": "scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080", "landscape": True}, open(autof, "w", encoding="utf-8"), ensure_ascii=False)        # cut 不写 --vf 就用它
         else: print("横屏原片，没找到人脸，请看截图手动定。")
         print("粗剪时加：--vf \"scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080\"")
     elif fs is not None:

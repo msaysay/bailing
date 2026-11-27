@@ -107,6 +107,10 @@ python3 scripts/redtop.py publish <期名>     # 第一次会生成 发布.json�
 ```
 用看图工具看「封面总览.jpg」，发给用户：「封面回 A、B 或 C；标题回 1、2 或 3。」
 
+## 找素材（要用口播以外的画面时）
+
+读技能 `footage-guide`：先用没风险的（用户自己的、组件画的、免费素材库），不够再引导用户接 TikHub（第三方、收费、和这套工具没关系）。下回来的每一条：`python3 scripts/footage.py check <文件>` 查水印台标 → `python3 scripts/footage.py fit <文件> --slot redtop-phone --out … --level <档位> --who <谁的>` 裁进素材框并登记来源 → 交片前 `python3 scripts/footage.py ledger <素材目录>`。
+
 ## 不能破的规矩
 
 1. 不改出镜人的意思和用词，只删重录、口误、长停顿；删了什么要告诉用户。

@@ -22,7 +22,7 @@ const tryRun = (name, cmd, a, fix) => { try { execFileSync(cmd, a, { stdio: 'ign
   tryRun('ffprobe', 'ffprobe', ['-version'], '随 ffmpeg 一起安装');
   let py; try { py = require('../src/util').python(); ok.push('Python（' + py + '）'); } catch (e) { bad.push('Python 3.9+ —— 安装后重试，或用环境变量 PYTHON 指定'); }
   if (py) { tryRun('Python 依赖', py, ['-c', 'import numpy, sherpa_onnx, cv2; assert hasattr(cv2, "CascadeClassifier")'], `${py} -m pip install -r requirements.txt`); }
-  try { const pw = require('../src/util').playwright(); const b = await pw.chromium.launch(); await b.close(); ok.push('Playwright + Chromium'); } catch (e) { bad.push('Playwright 浏览器 —— 在本目录执行 npm install && npx playwright install chromium'); }
+  try { const u = require('../src/util'), pw = u.playwright(); const b = await u.launch(pw); await b.close(); ok.push('Playwright + Chromium'); } catch (e) { bad.push('Playwright 浏览器 —— 在本目录执行 npm install && npx playwright install chromium'); }
   ok.forEach(x => console.log('  ✓ ' + x)); bad.forEach(x => console.log('  ✗ ' + x));
   console.log(bad.length ? `\n还差 ${bad.length} 项，装好后再跑一次本脚本。` : '\n环境就绪。');
   process.exit(bad.length ? 1 : 0);
