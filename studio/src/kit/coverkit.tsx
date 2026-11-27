@@ -3,13 +3,13 @@
 import React from 'react';
 import { AbsoluteFill, Img, continueRender, delayRender, staticFile, useVideoConfig } from 'remotion';
 
-export type CoverProps = { img: string; layout: 'A' | 'B' | 'C'; w: number; h: number; tag?: string; l1: string; l2: string; chips?: string[][]; brand?: string; bg?: string; hot?: string; fg?: string; faceY?: number; faceX?: number };
+export type CoverProps = { img: string; layout: 'A' | 'B' | 'C'; w: number; h: number; tag?: string; l1: string; l2: string; chips?: string[][]; brand?: string; bg?: string; hot?: string; fg?: string; faceY?: number; faceX?: number; font?: string };
 export const coverDefault: CoverProps = { img: '', layout: 'A', w: 1080, h: 1440, l1: '第一行', l2: '第二行' };
 const lum = (c: string) => { const m = /^#?([0-9a-f]{6})$/i.exec(c.trim()); if (!m) return 0.5; const n = parseInt(m[1], 16); return (0.299 * (n >> 16) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255; };
 export const CoverKit: React.FC<CoverProps> = (P) => {
   const { width: W, height: H } = useVideoConfig(), wide = W > H, U = Math.min(W, H) / 1080, bg = P.bg ?? '#0A0A0B', hot = P.hot ?? '#D6FF3D', fg = P.fg ?? '#F4F2EC', onHot = lum(hot) > 0.55 ? '#111' : '#fff';
   const [h] = React.useState(() => delayRender('cover-font'));
-  React.useEffect(() => { new FontFace('C Hei', `url(${staticFile('fonts/SourceHanSansSC-Heavy.otf')})`, { weight: '100 900' }).load().then((f) => document.fonts.add(f)).catch(() => undefined).then(() => continueRender(h)); }, [h]);
+  React.useEffect(() => { new FontFace('C Hei', `url(${staticFile('fonts/' + (P.font || 'SourceHanSansSC-Heavy.otf'))})`, { weight: '100 900' }).load().then((f) => document.fonts.add(f)).catch(() => undefined).then(() => continueRender(h)); }, [h, P.font]);
   const F = '"C Hei", "PingFang SC", sans-serif', n = Math.max(P.l1.length, P.l2.length, 4), size = Math.min(wide ? 150 : 170, ((wide ? W * 0.5 : W - 128 * U) / n) * 0.98) * (wide ? 1 : 1), pos = `${(P.faceX ?? 0.5) * 100}% ${(P.faceY ?? 0.3) * 100}%`;
   const Tag = P.tag ? <div style={{ position: 'absolute', left: 64 * U, top: 64 * U, background: hot, color: onHot, fontFamily: F, fontWeight: 900, fontSize: 40 * U, padding: `${8 * U}px ${22 * U}px` }}>{P.tag}</div> : null;
   const Chips = (P.chips ?? []).length ? <div style={{ display: 'flex', gap: 20 * U, marginTop: 36 * U, flexWrap: 'wrap' }}>{(P.chips ?? []).slice(0, 3).map(([a, b]) => <div key={a} style={{ border: `2px solid rgba(255,255,255,.32)`, padding: `${10 * U}px ${24 * U}px`, background: 'rgba(0,0,0,.25)' }}><div style={{ fontFamily: F, fontWeight: 900, fontSize: 50 * U, color: '#fff' }}>{a}</div><div style={{ fontFamily: F, fontSize: 25 * U, color: 'rgba(255,255,255,.65)' }}>{b}</div></div>)}</div> : null;

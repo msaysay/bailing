@@ -25,6 +25,7 @@
 | `frame-talk` | 骨架：相框老板风（竖屏） | `.claude/skills/frame-talk/SKILL.md` |
 | `tiantu-interview-cut` | 骨架：访谈纪实风（竖屏） | `.claude/skills/tiantu-interview-cut/SKILL.md` |
 | `ziqi-wide` | 骨架：横屏深度解读风（长视频） | `.claude/skills/ziqi-wide/SKILL.md` |
+| `redtop-talk` | 骨架：红顶双标题口播风（竖屏；丢一条原片就出片，不用写画面代码） | `.claude/skills/redtop-talk/SKILL.md` |
 | `style-atlas` | 选骨架、挑组件、查专业名词、把新风格拆成新骨架 | `.claude/skills/style-atlas/SKILL.md` |
 | `pet` | 频道宠物（用户提到才做） | `.claude/skills/pet/SKILL.md` |
 | `hud-pov` | 试验功能，不主动用 | `.claude/skills/hud-pov/SKILL.md` |

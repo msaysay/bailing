@@ -53,7 +53,7 @@ def best_frame(video, out, at=None, crop_subs=False):
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter); sub = ap.add_subparsers(dest="cmd", required=True)
     p = sub.add_parser("init"); p.add_argument("ep")
-    p = sub.add_parser("build"); p.add_argument("ep"); p.add_argument("--video"); p.add_argument("--at", type=float); p.add_argument("--wide", action="store_true"); p.add_argument("--clean", action="store_true", help="--video 给的是没有字幕的干净画面，不用裁"); p.add_argument("--brand", default="ningshao")
+    p = sub.add_parser("build"); p.add_argument("ep"); p.add_argument("--video"); p.add_argument("--at", type=float); p.add_argument("--wide", action="store_true"); p.add_argument("--clean", action="store_true", help="--video 给的是没有字幕的干净画面，不用裁"); p.add_argument("--brand", default="ningshao"); p.add_argument("--max-title", type=int, default=12, help="封面两行字合起来最多几个字")
     a = ap.parse_args(); ed = os.path.join(R, "episodes", a.ep); pj = os.path.join(ed, "发布.json")
     if a.cmd == "init":
         os.makedirs(ed, exist_ok=True)
@@ -62,7 +62,7 @@ def main():
     if not os.path.exists(pj): sys.exit(f"还没有 {pj}。先 python3 scripts/publish_kit.py init {a.ep}，把封面两行字、三个标题、简介、话题填进去")
     d = json.load(open(pj, encoding="utf8")); c = d["cover"]; bad = []
     if not c.get("l1") or not c.get("l2"): bad.append("cover.l1 / l2 还空着")
-    if len(c.get("l1", "") + c.get("l2", "")) > 12: bad.append(f"封面标题 {len(c['l1'] + c['l2'])} 个字，太长（两行合起来不超过 10 个字）")
+    if len(c.get("l1", "") + c.get("l2", "")) > a.max_title: bad.append(f"封面标题 {len(c['l1'] + c['l2'])} 个字，太长（两行合起来不超过 {a.max_title - 2} 个字）")
     if len([t for t in d.get("titles", []) if t]) < 3: bad.append("titles 要三个")
     if not d.get("desc"): bad.append("desc 还空着")
     if not d.get("topics"): bad.append("topics 还空着")
@@ -83,7 +83,7 @@ def main():
     if a.wide: sizes["横版-1920x1080"] = (1920, 1080)
     for lk, lname in LAYOUTS.items():
         for sname, (w, h) in sizes.items():
-            props = {"img": f"{slug}/cover.jpg", "layout": lk, "w": w, "h": h, "tag": c.get("tag", ""), "l1": c["l1"], "l2": c["l2"], "chips": c.get("chips", []), "brand": fp.get("name", ""), "bg": col.get("底色", "#0A0A0B"), "hot": col.get("主色", "#D6FF3D"), "fg": col.get("辅色", "#F4F2EC"),
+            props = {"img": f"{slug}/cover.jpg", "layout": lk, "w": w, "h": h, "tag": c.get("tag", ""), "l1": c["l1"], "l2": c["l2"], "chips": c.get("chips", []), "brand": fp.get("name", ""), "bg": col.get("底色", "#0A0A0B"), "hot": col.get("主色", "#D6FF3D"), "fg": col.get("辅色", "#F4F2EC"), "font": fp.get("font", ""),
                      "faceX": face[0] if face else 0.5, "faceY": face[1] if face else 0.3}
             pf = os.path.join(PUB, slug, "props.json"); json.dump(props, open(pf, "w", encoding="utf8"), ensure_ascii=False); o = os.path.join(out, f"封面-{lname}-{sname}.png")
             subprocess.run(["npx", "remotion", "still", "src/index.tsx", "COVERKIT", o, "--props", pf, "--log", "error", *browser()], cwd=STUDIO, check=True); made.append(o)

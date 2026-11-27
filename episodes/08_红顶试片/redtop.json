@@ -1,0 +1,36 @@
+{
+ "slug": "rt01",
+ "style": "redtop",
+ "transcribed": true,
+ "raw": {
+  "w": 1920,
+  "h": 1080,
+  "fps": 24,
+  "dur": 70.1
+ },
+ "cut": true,
+ "face": {
+  "x": 537,
+  "y": 824,
+  "w": 420
+ },
+ "hook": {
+  "text": "我们为什么还需要一个剪映",
+  "dur": 4.05
+ },
+ "total": 39.168,
+ "planned": true,
+ "hook_end": 4.28,
+ "key_ranges": [
+  [
+   27.42,
+   31.26
+  ]
+ ],
+ "speech_total": 39.168,
+ "music": {
+  "music": "合成 · 钢琴轻快",
+  "credit": null,
+  "licence": "代码合成，没有版权问题，不用署名"
+ }
+}
