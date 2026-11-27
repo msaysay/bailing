@@ -2658,5 +2658,135 @@
 "use": "片尾关注：名字加一颗红色关注按钮，到点被点一下变成已关注",
 "avoid": "名字超过五个字",
 "props": "name · at · clickAt"
+},
+{
+"id": "U01",
+"name": "滚轮数字",
+"export": "RollingNumber",
+"file": "components/x-2026.tsx",
+"group": "数字",
+"use": "金额、播放量、人数这类大数：像里程表一样每一位各自滚到位",
+"avoid": "带小数的数；一屏同时滚两个以上",
+"props": "to 目标数 · at · dur 滚多久 · prefix 前缀 · unit 单位 · label 上方小字 · size · color"
+},
+{
+"id": "U02",
+"name": "总数拆分",
+"export": "NumberSplit",
+"file": "components/x-2026.tsx",
+"group": "数字",
+"use": "先说总数，再说「其中……」：总数让位，下面分出几支各自数出来",
+"avoid": "分项超过 4 个；分项加起来不等于总数",
+"props": "total · unit · label · parts（name、value、color）· at 总数出现 · splitAt 拆开的时刻"
+},
+{
+"id": "U03",
+"name": "翻牌",
+"export": "SplitFlap",
+"file": "components/x-2026.tsx",
+"group": "数字",
+"use": "日期、股票代号、航班号这种短的数字和英文：机场出发牌那样一格格翻到位",
+"avoid": "中文；超过 12 格",
+"props": "text 数字和英文 · at · size · color"
+},
+{
+"id": "U04",
+"name": "逐词滑框",
+"export": "SlideBoxCaption",
+"file": "components/x-2026.tsx",
+"group": "文字与强调",
+"use": "读一句定义、一条规定：一块色块跟着念到的词滑过去",
+"avoid": "超过两行；当全片的常驻字幕用（骨架自己有字幕）",
+"props": "words（t 词、at 念到的时刻）· size · hot 色块颜色 · width"
+},
+{
+"id": "U05",
+"name": "胶囊放大",
+"export": "PillTakeover",
+"file": "components/x-2026.tsx",
+"group": "文字与强调",
+"use": "把句子里的一个词升格成这一章的主题：它变成胶囊，把两边挤开，长成大字",
+"avoid": "关键词超过 6 个字；一条片子用两次以上",
+"props": "before 前半句 · word 关键词 · after 后半句 · at · growAt 放大的时刻 · color · size"
+},
+{
+"id": "U06",
+"name": "句子自改",
+"export": "SentenceEdit",
+"file": "components/x-2026.tsx",
+"group": "文字与强调",
+"use": "「原话是 A，其实是 B」「口径从 A 改成了 B」：句子里那一段被选中、划掉、换掉",
+"avoid": "改动的部分超过 8 个字；用来编造别人没说过的话",
+"props": "head 前面 · from 原来 · to 改成 · tail 后面 · at · editAt 开始改的时刻 · hot · size"
+},
+{
+"id": "U07",
+"name": "融化换字",
+"export": "MorphText",
+"file": "components/x-2026.tsx",
+"group": "文字与强调",
+"use": "两个概念「其实是一回事」或「从 A 变成了 B」：一个词糊开再凝成另一个",
+"avoid": "超过 5 个字的词；连续换三个以上",
+"props": "words 几个词 · ats 每个词出现的时刻 · size · color · dur 融化多久"
+},
+{
+"id": "U08",
+"name": "流向图",
+"export": "SankeyFlow",
+"file": "components/x-2026.tsx",
+"group": "关系与流程",
+"use": "钱从哪来花到哪去、流量从哪来去了哪：彩带按数量粗细流过去",
+"avoid": "两边各超过 4 项；只知道来源和去向的总数、不知道对应关系时要说明是按比例估的",
+"props": "from 来源（name、value、color）· to 去向（name、value）· at · unit · width · height"
+},
+{
+"id": "U09",
+"name": "光束连线",
+"export": "BeamLink",
+"file": "components/x-2026.tsx",
+"group": "关系与流程",
+"use": "谁连着谁、谁给谁供货、数据从哪传到哪：亮光沿着线一遍遍跑",
+"avoid": "节点超过 6 个；线互相交叉",
+"props": "nodes（name、x、y 占比 0 到 1、hot）· links 第几个连第几个 · at · color"
+},
+{
+"id": "U10",
+"name": "前后哑铃图",
+"export": "DumbbellShift",
+"file": "components/x-2026.tsx",
+"group": "数据图表",
+"use": "很多项各有「之前」「之后」两个数：点滑过去拉出一根杠，变化最大的那行亮起来",
+"avoid": "超过 6 行；只有一两项（用双条对比）",
+"props": "rows（name、before、after）· at · shiftAt 滑动的时刻 · unit · labels 图例两个词"
+},
+{
+"id": "U11",
+"name": "分段重分配",
+"export": "TimeBreakdown",
+"file": "components/x-2026.tsx",
+"group": "数据图表",
+"use": "时间、预算原来怎么花的，用了新办法后怎么花：各段缩小，空出来的亮成「省下来的」",
+"avoid": "超过 5 段；之后的总数比之前还大；某一段缩到不足总长的 8%（字会放不下）",
+"props": "segs（name、before、after、color）· at · shiftAt 变化的时刻 · unit · saved 那个词"
+},
+{
+"id": "U12",
+"name": "冲破图表",
+"export": "OffTheCharts",
+"file": "components/x-2026.tsx",
+"group": "数据图表",
+"use": "破纪录、远超同行：最高那根柱子把图表边框顶弯、冲出去",
+"avoid": "差距不到两倍（会显得夸大）；一条片子用两次",
+"props": "bars（name、value）· hero 冲出去的是第几根 · at · unit"
+},
+{
+"id": "U13",
+"name": "像素块显影",
+"export": "PixelReveal",
+"file": "components/x-2026.tsx",
+"group": "视频与图片",
+"use": "证据照片、当事人照片、现场图：一块块亮出来，先灰后彩",
+"avoid": "带小字的截图（看不清）；连续几张都这么出",
+"props": "src 图片 · at · width · height · grid 横向分几块 · dur · caption 图下小字"
 }
 ]

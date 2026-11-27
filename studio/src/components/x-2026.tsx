@@ -20,7 +20,7 @@ export const RollingNumber: React.FC<{ to: number; at: number; dur?: number; pre
     <div style={{ display: 'inline-flex', alignItems: 'flex-end', fontSize: size, fontWeight: 900, color, lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>
       {prefix ? <span style={{ fontSize: size * 0.5, marginRight: 10, alignSelf: 'center' }}>{prefix}</span> : null}
       {s.split('').map((d, i) => { const place = n - 1 - i, p = out4((t - at - place * 0.08) / (dur * (0.55 + 0.45 * (i + 1) / n))), turns = (i + 1) * 10 + Number(d), pos = turns * p, show = p > 0 || place === 0;
-        return <React.Fragment key={i}>{place % 3 === 2 && i > 0 ? <span style={{ opacity: show ? 0.6 : 0, width: size * 0.22 }}>,</span> : null}
+        return <React.Fragment key={i}>{place % 3 === 2 && i > 0 ? <span style={{ opacity: show ? 0.55 : 0, width: size * 0.2, fontSize: size * 0.6, textAlign: 'center' }}>,</span> : null}
           <span style={{ display: 'inline-block', height: H, width: size * 0.62, overflow: 'hidden', opacity: show ? 1 : 0, position: 'relative' }}><span style={{ position: 'absolute', left: 0, right: 0, top: -(pos % 10) * H, textAlign: 'center' }}>{Array.from({ length: 11 }, (_, k) => <span key={k} style={{ display: 'block', height: H, lineHeight: `${H}px` }}>{k % 10}</span>)}</span></span></React.Fragment>; })}
       {unit ? <span style={{ fontSize: size * 0.34, marginLeft: 14, marginBottom: size * 0.1 }}>{unit}</span> : null}
     </div></div>;
@@ -54,10 +54,10 @@ export const SlideBoxCaption: React.FC<{ words: { t: string; at: number }[]; siz
 /** 胶囊放大：句子里的一个关键词先变成一枚胶囊，把两边的字挤开，两边的字虚掉，胶囊长成满屏的大字。适合「把一个词升格成这一章的标题」。 */
 export const PillTakeover: React.FC<{ before: string; word: string; after?: string; at: number; growAt: number; color?: string; size?: number }> = ({ before, word, after = '', at, growAt, color = C.accent, size = 72 }) => {
   const t = useT(), open = prog(t, at, 0.4), g = inOut((t - growAt) / 0.8), side: React.CSSProperties = { opacity: 1 - g, filter: `blur(${g * 14}px)`, transform: `scale(${1 - g * 0.1})`, whiteSpace: 'nowrap' };
-  return <div style={{ fontFamily: FONT, fontSize: size, fontWeight: 800, color: C.text, display: 'flex', alignItems: 'center', gap: mix(0, 26, open) + g * 40 }}>
-    <span style={side}>{before}</span>
+  return <div style={{ fontFamily: FONT, fontSize: size, fontWeight: 800, color: C.text, display: 'flex', alignItems: 'center', width: 1700, gap: mix(0, 26, open) + g * 40 }}>
+    <span style={{ ...side, flex: '1 1 0', textAlign: 'right' }}>{before}</span>
     <span style={{ background: `rgba(91,155,255,${open * (1 - g * 0.2)})`, backgroundColor: color, color: '#fff', padding: `${mix(0, 10, open)}px ${mix(0, 34, open)}px`, borderRadius: 999, fontWeight: 900, transform: `scale(${1 + g * 2.1})`, boxShadow: `0 ${20 * g}px ${70 * g}px rgba(0,0,0,.45)`, whiteSpace: 'nowrap', zIndex: 2, opacity: open > 0 ? 1 : 0.999 }}>{word}</span>
-    <span style={side}>{after}</span></div>;
+    <span style={{ ...side, flex: '1 1 0', textAlign: 'left' }}>{after}</span></div>;
 };
 
 /** 句子自改：一句话摆好，其中一段被选中、换成另一个说法，其余的字自动挪位。适合「原话是 A，其实是 B」「口径从 A 改成了 B」。 */
@@ -101,7 +101,7 @@ export const TimeBreakdown: React.FC<{ segs: { name: string; before: number; aft
   const t = useT(), sb = segs.reduce((a, x) => a + x.before, 0), sa = segs.reduce((a, x) => a + x.after, 0), s = inOut((t - shiftAt) / 1.1), cols = [C.accent, '#C084FC', C.warm, C.down, '#38BDF8'], p = prog(t, at, 0.6), free = (sb - sa) * s;
   return <div style={{ width, fontFamily: FONT }}>
     <div style={{ display: 'flex', height: 130, gap: 6, transform: `scaleX(${p})`, transformOrigin: 'left' }}>
-      {segs.map((x, i) => { const v = mix(x.before, x.after, s); return <div key={i} style={{ flex: v, minWidth: 0, background: x.color ?? cols[i % 5], borderRadius: 10, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}><div style={{ fontSize: 32, fontWeight: 900, color: '#0B0E14', whiteSpace: 'nowrap' }}>{x.name}</div><div style={{ fontSize: 26, color: 'rgba(11,14,20,.75)', fontVariantNumeric: 'tabular-nums' }}>{fmt(v)}{unit}</div></div>; })}
+      {segs.map((x, i) => { const v = mix(x.before, x.after, s); return <div key={i} style={{ flex: v, minWidth: 0, background: x.color ?? cols[i % 5], borderRadius: 10, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}><div style={{ fontSize: 28, fontWeight: 900, color: '#0B0E14', whiteSpace: 'nowrap' }}>{x.name}</div><div style={{ fontSize: 22, color: 'rgba(11,14,20,.75)', fontVariantNumeric: 'tabular-nums', whiteSpace: 'nowrap' }}>{fmt(v)}{unit}</div></div>; })}
       {free > 0.001 ? <div style={{ flex: free, minWidth: 0, border: `4px dashed #4ADE80`, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#4ADE80', fontSize: 30, fontWeight: 900, overflow: 'hidden', whiteSpace: 'nowrap' }}>{s > 0.6 ? saved : ''}</div> : null}
     </div>
     <div style={{ marginTop: 44, textAlign: 'center', opacity: cl(s * 2 - 0.6) }}><span style={{ fontSize: 40, color: C.muted, marginRight: 20 }}>{saved}</span><span style={{ fontSize: 150, fontWeight: 900, color: '#4ADE80', fontVariantNumeric: 'tabular-nums' }}>{fmt(free)}</span><span style={{ fontSize: 56, color: '#4ADE80', marginLeft: 8 }}>{unit}</span></div></div>;

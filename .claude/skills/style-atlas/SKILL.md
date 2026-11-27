@@ -11,7 +11,7 @@ description: 视觉图鉴：选骨架（对标大 V 的整套审美）、挑这�
 |---|---|---|---|
 | 骨架 | 整套定了型的审美（版式、节奏、字体、字幕、配色关系）。出镜的六个对标大 V，另两个自己定的 | 骨架库、帮我选骨架（都是真实成片） | `python3 scripts/skeleton.py list / pick / show` |
 | 可换件 | 署名、强调色、素材、配乐、片尾 | 选骨架页里的个人指纹 | `brands/<品牌>/fingerprint.json` |
-| 组件 | 填进骨架的一块块内容，266 个带真渲小样 | 组件积木（选了骨架只留它能用的） | `python3 scripts/skeleton.py blocks <骨架>` |
+| 组件 | 填进骨架的一块块内容，279 个带真渲小样 | 组件积木（选了骨架只留它能用的） | `python3 scripts/skeleton.py blocks <骨架>` |
 | 名词 | 跟 AI 描述动作的标准叫法，216 个 | 专业名词库 | `python3 scripts/atlas.py find <词>` |
 | 候选 | 没拆过对标片的风格、15 种动态设计风格、动作线框 | 候选区 | 不进自动流程 |
 
