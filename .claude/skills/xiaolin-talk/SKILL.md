@@ -15,15 +15,28 @@ description: 口播剪辑的「财经解读风」（对标小 Lin 的竖屏口�
 
 | 步 | 做什么 | 命令 | 要用户确认 |
 |---|---|---|---|
-| 0 | 环境 | `python3 scripts/doctor.py --line talk --fix` | |
+| 0 | 环境（**你来装，不让用户装**）和开工单（要用户定的事**一次问完**） | `python3 scripts/doctor.py --line talk --fix` | ✔ 开工单 |
 | 1 | 收原片，建期（没拍就先写稿） | `episode.py new` | ✔ 稿子（已经拍好就跳过） |
 | 2 | 转写、找口误和重录、粗剪、对齐 | `talk_prep.py transcribe` → `cut` | ✔ **剪掉了哪几句** |
 | 3 | 排版式表 | 写 `03_制作过程/版式表.md` | ✔ **版式表和素材清单** |
 | 4 | 备素材 | 放进 `studio/public/<代号>/footage/` | |
 | 5 | 搭画面 → 关键帧 → 成片 → 自查 | `remotion still / render`，`qc.py`，`talk_check.py` | ✔ **成片** |
-| 6 | 封面 | 竖屏 1080×1440 | 封面和标题 |
+| 6 | 发布包：三版封面、三个标题、简介、话题 | `publish_kit.py init / build` | ✔ 挑封面和标题 |
 
 每确认一步：`python3 scripts/episode.py done <期名> <步骤号> --note "做了什么"`。中断后 `python3 scripts/episode.py status` 看到哪了。
+
+## 第 0 步 · 环境和开工单
+
+**环境你来装**：`python3 scripts/doctor.py --line talk --fix` 会装 Python 包、渲染依赖、语音模型、字体，缺 ffmpeg / Node.js 也会用包管理器装。没装上的照它打印的命令你接着装。只有系统弹密码框、没网时才找用户。
+
+**开工单一次问完**（装环境的同时发出去，别让他干等）：让用户双击打开最外层的「开工单.html」，点完按「复制给 AI」贴回来；他的工具打不开网页，就把下面几项在聊天里**一条消息**列完，让他回一行。贴回来之后这些不再问：
+
+1. 署名三件套（不想要的留空）：角标（底部小牌子，像「小 Lin 说」，2 到 6 个字）、称呼和一行身份（开头出 4 秒）、简介（结尾才出）。不替他编。
+2. 要哪些处理：降噪、调光、配乐。去重录、去口吃、收紧停顿默认就做。
+3. 片子里要不要用网上的画面：帮我接 TikHub 自动找 / 我自己给链接或文件 / 不用。
+4. 怎么确认：每一步给我看一眼 / 不用问我，一路做到底。
+
+**横拍还是竖拍不用问。** 成片固定是竖屏 1080×1920；原片是横的还是竖的由程序自己看，自动以人脸为中心裁好（第 2 步）。横屏原片裁完清晰度会降一截，转写时它会提示，你转告用户一句就行。
 
 ## 第 1 步 · 收原片，建期
 
@@ -57,9 +70,9 @@ python3 scripts/talk_prep.py <期名> transcribe
 - 看第 3 秒截图顶部有没有水印。
 
 ```bash
-python3 scripts/talk_prep.py <期名> cut --drop "你补的时间段" --auto-drop --vf "<它建议的 crop>" [--grade] [--beauty 0.3] [--denoise auto]
+python3 scripts/talk_prep.py <期名> cut --drop "你补的时间段" --auto-drop [--grade] [--beauty 0.3] [--denoise auto]
 ```
-- `--auto-drop` 把「自动删」的一起剪。`--vf` 把画面裁成 1080×1620。
+- `--auto-drop` 把「自动删」的一起剪。**画面不用管**：横屏竖屏都按 `transcribe` 算好的自动裁成 1080×1620（要去水印等特殊处理才自己写 `--vf`，写了就以你写的为准，结尾要带 `scale=1080:1620`）。
 - 光线不好加 `--grade`（**先看 `03_制作过程/调光对比.jpg`**，肤色不自然就去掉重跑）；环境吵加 `--denoise auto`。
 - 它会剪片、收紧长停顿、对齐字幕，产出 `studio/public/<代号>/person.mp4`、`voice.wav` 和 `studio/src/episodes/<代号>/timing.json`、`cuts.json`。
 
@@ -117,8 +130,14 @@ python3 scripts/talk_prep.py <期名> cut --drop "你补的时间段" --auto-dro
 ## 第 4 步 · 备素材
 
 放进 `studio/public/<代号>/footage/`，图片视频都行，横的最好（素材带是 1080×842，接近 4:3）。来源按顺序：
+**接 TikHub（自动找素材用）**：`python3 scripts/doctor.py --line news` 里 TikHub 那行是「·」说明没接。片子要用网上的画面而用户在开工单里选了「帮我接」时，把这段原样发给他，等他回「接好了」：
+
+> 接 TikHub 三步：1. 打开 tikhub.io 注册，充一点钱（按次计费，一条片子几毛到几块）；2. 在后台复制 API Token 那串字符；3. 在这个文件夹最外层新建一个文本文件，起名「钥匙.txt」，把那串字符贴进去保存。**不要把那串字符发在聊天里。** 好了回我「接好了」。
+
+接好后：`python3 scripts/tikhub.py search "<关键词>"` 搜抖音、`xsearch` 搜海外，`get` / `xget` / `url <链接>` 下载（`python3 scripts/tikhub.py -h`）。他不想接：请他把视频链接或文件直接发来。**搜来的都是别人的公开内容，没有授权，交片时要告诉用户，发不发他自己定。**
+
 1. **用户给的**。
-2. **搜来的**：`python3 scripts/tikhub.py`（要 TikHub 钥匙），或用户发链接。每条都要登记来源，在 `Band` 的 `credit` 里写「画面：谁 · 日期」。有别人字幕、水印、贴纸的不用。
+2. **搜来的**：`python3 scripts/tikhub.py`（要 TikHub 钥匙，接法见上），或用户发链接。每条都要登记来源，在 `Band` 的 `credit` 里写「画面：谁 · 日期」。有别人字幕、水印、贴纸的不用。
 3. **截图**：新闻页、公告、帖子、应用页面，用 `fit: 'contain'` 完整放进去。**必须真实存在**，不编造。
 4. **自己画**：数据用组件库的图表（`studio/src/components/`），放在素材带的位置。
 
@@ -128,7 +147,8 @@ python3 scripts/talk_prep.py <期名> cut --drop "你补的时间段" --auto-dro
 
 在 `studio/src/episodes/<代号>/index.tsx` 里搭（骨架已生成）。**照抄 `studio/src/episodes/talk02/index.tsx`**，它把每种版式和挂件各用了一遍。引擎在 `studio/src/kit/talk2.tsx`，每个组件上面有说明。
 
-- `FACE` 填 `transcribe` 打印的人脸位置（裁切后的坐标）。
+- `FACE` 填 `transcribe` 打印的「裁切后的人脸」。
+- `SIGN` 填开工单里的署名三件套（留空的不出）。角标只在人全屏时在；称呼和身份在开头出 4 秒；简介在结尾，落在底部黑边里。规矩见 `docs/署名规则.md`。
 - 时间全部用 `at(行号)` 或 `at(行号, '词')`，不写秒数。
 - 字体默认是庞门正道标题体（最接近对标片）。用户想换：`python3 scripts/fonts.py preview --style xiaolin` 出样张挑，`fonts.py use <包> --style xiaolin`。
 
@@ -149,13 +169,20 @@ python3 scripts/talk_check.py studio/out/<代号>.mp4 --full-w <全屏时脸宽�
 3. 素材和这句话是不是说的同一件事，不是「大概相关」。
 4. 有没有连续三张关键帧长得一样（素材换得太慢）。
 
-选了配乐：`python3 scripts/polish.py studio/out/<代号>.mp4 --music auto -o studio/out/<代号>-配乐.mp4`（在成片上做，不用重渲）。
+**配乐**（开工单里选了才做）：`python3 scripts/polish.py studio/out/<代号>.mp4 --music auto --mood light --no-credit -o studio/out/<代号>-配乐.mp4`（在成片上做，不用重渲；人说话时自动压低；`--mood` 可选 light 轻快、calm 安静、warm 温暖、drive 推进；用户自己给曲子就 `--music 曲子.mp3`）。它用到要署名的曲子时会打印署名文字，交片时原样转给用户。
 
 交付时说清：剪掉了哪几句；哪些素材是别人的（来源）、哪些是占位；机器查不了的——嘴型、剪口顺不顺、素材出现得早还是晚、降噪后人声闷不闷、配乐响不响，「这几处请你看一遍」。
 
-## 第 6 步 · 封面
+## 第 6 步 · 发布包（成片点头后主动做）
 
-竖屏 1080×1440：从人全屏的画面里挑一帧眼睛睁开、嘴没张大的，压一行大字（题眼，不超过 8 个字）。给两版让用户选。
+```bash
+python3 scripts/publish_kit.py init <期名>      # 生成 发布.json，你来填：封面两行字（合起来不超过 10 个字）、时效标签、三个标题、简介、话题、提醒
+python3 scripts/publish_kit.py build <期名>     # 三版封面（大字压底、满图描边、色块分屏）× 抖音和视频号两个尺寸 + 封面总览 + 发布文案
+```
+- 封面主图自动取粗剪后干净原片里脸最清楚的一帧；想指定就 `--at 秒数`。
+- **用看图工具看「封面总览.jpg」**：字有没有压脸、有没有被切。
+- 发给用户，一次问完：「封面回 A、B 或 C；标题回 1、2 或 3。」
+- 提醒里如实写：哪些画面是别人的没有授权、口播里哪些说法你没查到出处、配乐要不要署名。
 
 ## 不能破的规矩
 

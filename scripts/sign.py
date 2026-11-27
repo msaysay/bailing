@@ -58,7 +58,7 @@ def main():
             if getattr(a, k) is not None: s[k] = getattr(a, k).replace("\\n", "\n").strip()
         bad = check(s)
         if bad: sys.exit("要改：\n  - " + "\n  - ".join(bad))
-        d["sign"] = s; os.makedirs(os.path.dirname(fp(a.brand)), exist_ok=True); json.dump(d, open(fp(a.brand), "w", encoding="utf8"), ensure_ascii=False, indent=1); print("已存：", fp(a.brand))
+        d["sign"] = s; d["name"] = d.get("name") or s.get("badge") or s.get("name") or ""; os.makedirs(os.path.dirname(fp(a.brand)), exist_ok=True); json.dump(d, open(fp(a.brand), "w", encoding="utf8"), ensure_ascii=False, indent=1); print("已存：", fp(a.brand))
     if a.cmd in ("show", "set"):
         for k, q in ASK.items(): print(("✓ " if s.get(k) else "✗ ") + q.split("（")[0] + "：" + (s.get(k, "").replace("\n", " / ") or "还没填 → 问用户：" + q))
         return

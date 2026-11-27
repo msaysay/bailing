@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>开工单 · 小 Lin 风格口播</title>
+<style>
+  :root { --ink: #0A0A0B; --ink2: #131417; --line: #2a2c31; --paper: #F4F2EC; --mute: #9b9b9b; --lime: #D6FF3D; --gold: #FFD84A; }
+  * { box-sizing: border-box; margin: 0; }
+  body { background: var(--ink); color: var(--paper); font: 16px/1.6 "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif; padding: 0 16px 140px; }
+  main { max-width: 980px; margin: 0 auto; }
+  header { padding: 44px 0 10px; }
+  h1 { font-size: 34px; font-weight: 900; line-height: 1.25; text-wrap: balance; } h1 em { font-style: normal; color: var(--lime); }
+  header p { color: var(--mute); margin-top: 10px; max-width: 62ch; }
+  section { border-top: 1px solid var(--line); margin-top: 34px; padding-top: 26px; }
+  h2 { font-size: 21px; font-weight: 900; display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; } h2 i { font-style: normal; color: var(--lime); font-variant-numeric: tabular-nums; } h2 small { font-weight: 400; font-size: 13.5px; color: var(--mute); }
+  .opts { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+  .opts button { font: inherit; color: var(--paper); background: var(--ink2); border: 1px solid var(--line); padding: 10px 16px; cursor: pointer; text-align: left; }
+  .opts button small { display: block; color: var(--mute); font-size: 12.5px; }
+  .opts button.on { background: var(--lime); border-color: var(--lime); color: #111; font-weight: 800; } .opts button.on small { color: #333; }
+  .opts button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid var(--lime); outline-offset: 2px; }
+  .skels { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; margin-top: 16px; }
+  .skel { border: 1px solid var(--line); background: var(--ink2); cursor: pointer; padding: 0; color: inherit; font: inherit; text-align: left; display: flex; flex-direction: column; position: relative; }
+  .skel img { width: 100%; aspect-ratio: 16 / 10; object-fit: contain; background: #000; display: block; }
+  .skel div { padding: 12px 14px 14px; } .skel b { font-size: 17px; font-weight: 900; display: block; } .skel u { text-decoration: none; color: var(--lime); font-size: 12.5px; display: block; } .skel p { color: var(--mute); font-size: 13px; margin-top: 6px; line-height: 1.55; }
+  .skel.on { border-color: var(--lime); box-shadow: 0 0 0 2px var(--lime); } .skel .rec { position: absolute; left: 8px; top: 8px; background: var(--gold); color: #111; font-size: 12px; font-weight: 900; padding: 2px 8px; }
+  .skel.dim { opacity: .38; }
+  .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px 18px; margin-top: 14px; }
+  label { display: block; font-size: 13.5px; color: var(--mute); margin-bottom: 4px; } label b { color: var(--paper); }
+  input[type=text], textarea { width: 100%; font: inherit; color: var(--paper); background: var(--ink2); border: 1px solid var(--line); padding: 10px 12px; }
+  textarea { resize: vertical; min-height: 64px; }
+  .mock { margin-top: 18px; display: grid; grid-template-columns: 200px 1fr; gap: 18px; align-items: start; } .mock .ph { aspect-ratio: 9 / 16; background: linear-gradient(180deg, #3a3f4a, #1b1d22); position: relative; overflow: hidden; font-size: 11px; }
+  .mock .ph .a { position: absolute; left: 10px; top: 24px; border-left: 3px solid var(--lime); background: rgba(0,0,0,.55); padding: 3px 8px; } .mock .ph .a b { display: block; font-size: 14px; } .mock .ph .b { position: absolute; left: 0; right: 0; bottom: 12px; text-align: center; } .mock .ph .b span { background: var(--lime); color: #111; font-weight: 900; padding: 2px 10px; border-radius: 5px; display: inline-block; transform: skewX(-7deg); }
+  .mock .ph .c { position: absolute; left: 10px; right: 10px; bottom: 44px; color: #fff; opacity: .9; white-space: pre-line; } .mock ol { color: var(--mute); font-size: 14px; padding-left: 20px; } .mock ol b { color: var(--paper); }
+  .bar { position: fixed; left: 0; right: 0; bottom: 0; background: rgba(10,10,11,.96); border-top: 1px solid var(--line); padding: 12px 16px; }
+  .bar div { max-width: 980px; margin: 0 auto; display: flex; gap: 14px; align-items: center; flex-wrap: wrap; } .bar span { color: var(--mute); font-size: 14px; flex: 1; min-width: 200px; }
+  .bar button { font: inherit; font-weight: 900; background: var(--lime); color: #111; border: 0; padding: 12px 26px; cursor: pointer; }
+  pre { white-space: pre-wrap; word-break: break-word; background: #0d0e10; border: 1px solid var(--line); padding: 16px; margin-top: 14px; font: 14px/1.7 inherit; }
+  @media (max-width: 560px) { .mock { grid-template-columns: 1fr; } .mock .ph { max-width: 200px; } h1 { font-size: 27px; } }
+</style>
+</head>
+<body>
+<main>
+<header>
+  <h1>开工单：<em>一页点完，发给 AI</em></h1>
+  <p>把下面四项点一遍（不确定的可以不动），点底部的「复制给 AI」，粘贴到聊天里，它就直接开工。横拍竖拍不用选，它自己看你的原片。</p>
+</header>
+
+<section>
+  <h2><i>1</i>署名 <small>三样东西，都不是全程挂着</small></h2>
+  <div class="grid2">
+    <div><label><b>角标</b>（底部小牌子，像「小 Lin 说」，2 到 6 个字）</label><input type="text" id="s-badge" maxlength="6" placeholder="例如：宁少说"></div>
+    <div><label><b>称呼</b>（上方个人介绍第一行，2 到 6 个字）</label><input type="text" id="s-name" maxlength="6" placeholder="例如：宁少"></div>
+    <div><label><b>身份</b>（称呼下面一行，不超过 14 个字）</label><input type="text" id="s-title" maxlength="14" placeholder="例如：十年财经记者"></div>
+    <div><label><b>简介</b>（结尾才出，最多两行，每行不超过 18 个字）</label><textarea id="s-bio" placeholder="例如：每周讲一个 AI 获客的真实案例"></textarea></div>
+  </div>
+  <div class="mock">
+    <div class="ph"><div class="a"><b id="m-name">称呼</b><span id="m-title">一行身份</span></div><div class="c" id="m-bio">简介</div><div class="b"><span id="m-badge">角标</span></div></div>
+    <ol>
+      <li><b>个人介绍（上方）</b>：开头那句话说完、你第一次全屏出现时出一次，停 4 秒就走。长视频每隔两分钟以上、新一章开头再出一次。</li>
+      <li><b>角标（底部）</b>：只在你全屏出镜时在；切到素材、卡片、大字时收起来。</li>
+      <li><b>简介（底部）</b>：只在最后几秒出，和称呼一起当片尾。</li>
+      <li>不想要哪样就留空。</li>
+    </ol>
+  </div>
+</section>
+
+<section><h2><i>2</i>要不要这些处理？<small>可多选；去重录、去口吃、收紧停顿默认都做</small></h2><div class="opts" id="q-opts"></div></section>
+<section><h2><i>3</i>片子里要用网上的画面吗？<small>新闻画面、案例画面这类</small></h2><div class="opts" id="q-tik"></div></section>
+<section><h2><i>4</i>怎么跟你确认？</h2><div class="opts" id="q-mode"></div></section>
+
+<section><h2>发给 AI 的话 <small>点底部按钮复制</small></h2><pre id="out"></pre></section>
+</main>
+<div class="bar"><div><span id="hint">点完了就复制，粘贴给 AI。</span><button id="copy">复制给 AI</button></div></div>
+
+<script>
+(function () {
+  var $ = function (s) { return document.querySelector(s); }, st = { opts: {}, tik: 'link', mode: 'step' };
+  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  function chips(id, list, key, multi) { var box = $(id); list.forEach(function (o) { var b = document.createElement('button'); b.type = 'button'; b.innerHTML = esc(o[0]) + (o[2] ? '<small>' + esc(o[2]) + '</small>' : ''); b.onclick = function () { if (multi) st.opts[o[1]] = !st.opts[o[1]]; else st[key] = o[1]; draw(); }; b._v = o[1]; box.appendChild(b); }); box._key = key; box._multi = multi; }
+  function draw() {
+    ['#q-opts', '#q-tik', '#q-mode'].forEach(function (id) { var box = $(id); [].forEach.call(box.children, function (b) { b.classList.toggle('on', box._multi ? !!st.opts[b._v] : st[box._key] === b._v); }); });
+    var v = function (id) { return $(id).value.trim(); }, s = { badge: v('#s-badge'), name: v('#s-name'), title: v('#s-title'), bio: v('#s-bio') };
+    $('#m-name').textContent = s.name || '称呼'; $('#m-title').textContent = s.title || '一行身份'; $('#m-bio').textContent = s.bio || '简介（结尾才出）'; $('#m-badge').textContent = s.badge || '角标';
+    var on = Object.keys(st.opts).filter(function (x) { return st.opts[x]; }), N = { denoise: '降噪', grade: '调光', beauty: '轻磨皮', music: '配乐' };
+    $('#out').textContent = '这是我填好的开工单，请照它直接开工，这些不用再问我：\n\n' +
+      '1. 署名：角标「' + (s.badge || '不要') + '」；称呼「' + (s.name || '不要') + '」；身份「' + (s.title || '不要') + '」；简介「' + (s.bio.replace(/\n/g, ' / ') || '不要') + '」\n' +
+      '2. 处理：' + (on.length ? on.map(function (x) { return N[x]; }).join('、') : '只要默认的') + '（去重录、去口吃、收紧停顿默认都做）\n' +
+      '3. 网上的画面：' + ({ tik: '要用，请教我接 TikHub', link: '要用的话我自己给你链接或文件', none: '不用' }[st.tik]) + '\n' +
+      '4. 确认方式：' + (st.mode === 'step' ? '每做完一步给我看一眼再往下' : '不用问我，一路做到底，最后告诉我剪掉了什么、哪些要我看') + '\n\n' +
+      '风格固定用小 Lin 的财经解读风；横屏竖屏你自己看原片适配。环境你来查、你来装。然后告诉我下一步要我给你什么（应该是原片）。';
+  }
+  chips('#q-opts', [['降噪', 'denoise', '录的地方吵'], ['调光', 'grade', '脸偏暗'], ['轻磨皮', 'beauty'], ['配乐', 'music', '很轻地垫在下面']], 'opts', true);
+  chips('#q-tik', [['我自己给链接或文件', 'link'], ['帮我接 TikHub，自动找', 'tik', '按次计费，一条片子几毛到几块'], ['不用网上的画面', 'none']], 'tik');
+  chips('#q-mode', [['每一步给我看一眼', 'step', '稳，推荐第一次用'], ['一路做到底', 'auto', '快，最后一起看']], 'mode');
+  ['#s-badge', '#s-name', '#s-title', '#s-bio'].forEach(function (id) { $(id).oninput = draw; });
+  $('#copy').onclick = function () { var t = $('#out').textContent, ok = function () { $('#hint').textContent = '已复制。回到聊天窗口粘贴发送。'; }; if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(t).then(ok, fb); else fb(); function fb() { var a = document.createElement('textarea'); a.value = t; document.body.appendChild(a); a.select(); try { document.execCommand('copy'); ok(); } catch (e) { $('#hint').textContent = '复制不了，请手动选中上面那段话。'; } a.remove(); } };
+  draw();
+})();
+</script>
+</body>
+</html>

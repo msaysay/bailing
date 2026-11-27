@@ -83,7 +83,7 @@ def main():
     if a.wide: sizes["横版-1920x1080"] = (1920, 1080)
     for lk, lname in LAYOUTS.items():
         for sname, (w, h) in sizes.items():
-            props = {"img": f"{slug}/cover.jpg", "layout": lk, "w": w, "h": h, "tag": c.get("tag", ""), "l1": c["l1"], "l2": c["l2"], "chips": c.get("chips", []), "brand": fp.get("name", ""), "bg": col.get("底色", "#0A0A0B"), "hot": col.get("主色", "#D6FF3D"), "fg": col.get("辅色", "#F4F2EC"), "font": fp.get("font", ""),
+            props = {"img": f"{slug}/cover.jpg", "layout": lk, "w": w, "h": h, "tag": c.get("tag", ""), "l1": c["l1"], "l2": c["l2"], "chips": c.get("chips", []), "brand": fp.get("name", ""), "bg": col.get("底色", "#0A0A0B"), "hot": col.get("主色", "#F2E26B" if not fp else "#D6FF3D"), "fg": col.get("辅色", "#F4F2EC"), "font": fp.get("font", ""),
                      "faceX": face[0] if face else 0.5, "faceY": face[1] if face else 0.3}
             pf = os.path.join(PUB, slug, "props.json"); json.dump(props, open(pf, "w", encoding="utf8"), ensure_ascii=False); o = os.path.join(out, f"封面-{lname}-{sname}.png")
             subprocess.run(["npx", "remotion", "still", "src/index.tsx", "COVERKIT", o, "--props", pf, "--log", "error", *browser()], cwd=STUDIO, check=True); made.append(o)

@@ -21,6 +21,8 @@ export const signPlan = (total: number, full?: [number, number][], hookEnd = 2.5
   const badge = F.map(([a, b]) => [Math.max(a, hookEnd), Math.min(b, total)] as [number, number]).filter(([a, b]) => b - a > 0.6);
   return { intro, bio: [bioAt, total], badge };
 };
+/** 从版式时间表里取出「人全屏」的时间段，给 <Sign full={…}> 用。 */
+export const fullOf = (beats: { at: number; mode: string }[], total: number): [number, number][] => beats.map((b, i) => [b.at, i + 1 < beats.length ? beats[i + 1].at : total] as [number, number]).filter((_, i) => beats[i].mode === 'full');
 const lum = (c: string) => { const m = /^#?([0-9a-f]{6})$/i.exec(c.trim()); if (!m) return 0.5; const n = parseInt(m[1], 16); return (0.299 * (n >> 16) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255; };
 const win = (t: number, a: number, b: number, i = 0.3, o = 0.22) => Math.max(0, Math.min(1, (t - a) / i, (b - t) / o));
 const ease = (x: number) => 1 - Math.pow(1 - Math.max(0, Math.min(1, x)), 4);
@@ -28,7 +30,7 @@ const ease = (x: number) => 1 - Math.pow(1 - Math.max(0, Math.min(1, x)), 4);
 export const Sign: React.FC<{ sign: SignInfo; total: number; full?: [number, number][]; hookEnd?: number; chapters?: number[]; hot?: string; fg?: string; font?: string; parts?: ('badge' | 'intro' | 'bio')[]; badgeBottom?: number; introTop?: number }> = ({ sign, total, full, hookEnd, chapters, hot = '#FFD84A', fg = '#FFFFFF', font, parts = ['badge', 'intro', 'bio'], badgeBottom, introTop }) => {
   const { width: W, height: H, fps } = useVideoConfig(), t = useCurrentFrame() / fps, U = Math.min(W, H) / 1080, tall = H > W, P = signPlan(total, full, hookEnd, chapters), onHot = lum(hot) > 0.55 ? '#111' : '#fff';
   const [h] = React.useState(() => delayRender('sign-font'));
-  React.useEffect(() => { new FontFace('Sign Hei', `url(${staticFile('fonts/SourceHanSansSC-Heavy.otf')})`, { weight: '100 900' }).load().then((f) => document.fonts.add(f)).catch(() => undefined).then(() => continueRender(h)); }, [h]);
+  React.useEffect(() => { new FontFace('Sign Hei', `url(${staticFile('fonts/MiSans-Heavy.otf')})`, { weight: '100 900' }).load().then((f) => document.fonts.add(f)).catch(() => undefined).then(() => continueRender(h)); }, [h]);
   const F = font ?? '"Sign Hei", "PingFang SC", "Microsoft YaHei", sans-serif', ending = win(t, P.bio[0], total + 9, 0.4), pad = (tall ? 64 : 80) * U;
   const badgeOn = Math.max(...P.badge.map(([a, b]) => win(t, a, b, 0.25, 0.18)), ending, 0), introOn = Math.max(...P.intro.map(([a, b]) => win(t, a, b)), 0), introIn = Math.max(...P.intro.map(([a]) => ease((t - a) / 0.45)).filter((_, i) => t >= P.intro[i][0] && t <= P.intro[i][1]), 0);
   const top = introTop ?? (tall ? H * 0.12 : H * 0.09), bb = badgeBottom ?? (tall ? H * 0.045 : H * 0.04);

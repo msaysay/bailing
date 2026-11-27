@@ -37,7 +37,16 @@ if a.cmd == "transcribe":
     import cv2
     im = cv2.imread(fr); h, w = im.shape[:2]; det = cv2.FaceDetectorYN.create(os.path.expanduser("~/.cache/video-studio/yunet.onnx"), "", (w, h), .6, .3, 50); _, fs = det.detect(im)
     print(f"\n画面 {w}×{h}，{fps} 帧/秒；第 3 秒截图在 {fr}（看一眼顶部有没有水印）")
-    if w > h:      # 横屏原片（横屏深度解读风）：不裁成竖的，统一成 1920×1080
+    autof = os.path.join(work, "自动裁切.json")
+    if st.get("line") != "wide" and fs is not None:      # 竖屏口播线：横拍竖拍都自动以人脸为准裁成 1080×1620，后面 cut 不用再写 --vf
+        x, y, fw, fh = [int(v) for v in max(fs, key=lambda f: f[2] * f[3])[:4]]; cx, cy = x + fw // 2, y + fh // 2
+        if w > h: ch = h; cw = int(h * 2 / 3) // 2 * 2; x0 = max(0, min(w - cw, cx - cw // 2)); y0 = 0
+        else: cw = w; ch = min(h, int(w * 1.5) // 2 * 2); x0 = 0; y0 = max(0, min(h - ch, cy - int(.38 * ch)))
+        k = 1080 / cw; face = {"x": int((cx - x0) * k), "y": int((cy - y0) * k), "w": int(fw * k)}; vf = f"crop={cw}:{ch}:{x0}:{y0},scale=1080:1620"
+        json.dump({"vf": vf, "face": face, "landscape": w > h}, open(autof, "w", encoding="utf-8"), ensure_ascii=False)
+        print(("这是横屏原片：会自动以人脸为中心裁成竖屏（画面只留中间三分之一多，清晰度会降一截；人别站太偏）。" if w > h else "竖屏原片。") + f"自动裁切：{vf}（cut 时不写 --vf 就用它）")
+        print(f"裁切后的人脸：FACE = {{ x: {face['x']}, y: {face['y']}, w: {face['w']} }}（脸宽占画面 {face['w'] / 1080:.0%}，对标片约 20%）")
+    elif w > h:      # 横屏原片（横屏深度解读风）：不裁成竖的，统一成 1920×1080
         if fs is not None:
             x, y, fw, fh = [int(v) for v in max(fs, key=lambda f: f[2] * f[3])[:4]]; k = 1920 / w
             print(f"横屏原片。人脸：中心 ({x + fw // 2}, {y + fh // 2})，宽 {fw}（占画面宽 {fw / w:.0%}）；转成 1920×1080 后是 FACE = {{ x: {int((x + fw / 2) * k)}, y: {int((y + fh / 2) * k)}, w: {int(fw * k)} }}")
@@ -59,7 +68,8 @@ else:
         if not os.path.exists(rj): subprocess.run([PY, os.path.join(R, "scripts", "retakes.py"), asr0, "--out", rj], check=True, capture_output=True)
         auto = json.load(open(rj, encoding="utf-8")).get("drop", ""); drop = ",".join(x for x in (drop, auto) if x)
         print("自动剪掉的重录、结巴、语气词：" + (auto or "没有"))
-    vf = a.vf
+    vf = a.vf; autof = os.path.join(work, "自动裁切.json")
+    if not vf and os.path.exists(autof): vf = json.load(open(autof, encoding="utf-8"))["vf"]; print("画面按自动裁切处理：" + vf)
     if a.grade or a.beauty > 0:
         g = subprocess.run([PY, os.path.join(R, "scripts", "grade.py"), raw, os.path.join(work, "调光.json"), "--beauty", str(a.beauty), "--preview", os.path.join(work, "调光对比.jpg")], capture_output=True, text=True)
         if g.returncode == 0 and g.stdout.strip(): vf = ",".join(x for x in (g.stdout.strip().splitlines()[-1], vf) if x); print("调光：" + g.stderr.strip() + "；对比图 03_制作过程/调光对比.jpg（左原片右调后，肤色不自然就去掉 --grade 重跑）")

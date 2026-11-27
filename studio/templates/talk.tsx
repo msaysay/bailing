@@ -7,10 +7,12 @@ import { ClockCtx, makeClock, Timing } from '../../kit/clock';
 import { useFonts } from '../../kit/kit';
 import { Beat } from '../../kit/talk';
 import { Band, ChannelTag, Stage2, Subs2 } from '../../kit/talk2';
+import { Sign, fullOf } from '../../kit/sign';
 import timing from './timing.json';
 
 const SLUG = '__SLUG__';
-const CHANNEL = '';   // 频道名，显示在人物区底边正中的小牌子上；留空就不显示
+// 署名三件套（用户在开工单里填的；留空的那样不出）：badge 角标（底边正中的小牌子，只在人全屏时在）、name + title 个人介绍（开头出 4 秒）、bio 简介（结尾才出）。规矩见 docs/署名规则.md
+const SIGN = { badge: '', name: '', title: '', bio: '' };
 export const clock = makeClock(timing as Timing);
 const { at } = clock;
 const FACE = { x: 540, y: 620, w: 300 };   // 人脸在剪好的人物视频（1080×1620）里的中心和宽度，talk_prep.py transcribe 会打印
@@ -28,8 +30,9 @@ export const Episode: React.FC = () => {
         </>}>
         {/* 卡片和挂件：Chest + Card2、Progress、ChapterTag、SideTitle、HeadSide、BandQuote、BandStat、BigWord，见 talk02 */}
         <Subs2 />
-        {CHANNEL && <ChannelTag name={CHANNEL} beats={beats} />}
+        {SIGN.badge && <ChannelTag name={SIGN.badge} beats={beats} />}
       </Stage2>
+      <Sign sign={SIGN} total={(timing as Timing).total} full={fullOf(beats, (timing as Timing).total)} hookEnd={0} parts={['intro', 'bio']} hot="#F2E26B" introTop={150} />
       <Audio src={staticFile(`${SLUG}/voice.wav`)} />
     </ClockCtx.Provider>
   );
