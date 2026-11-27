@@ -1,0 +1,281 @@
+{
+ "说明": "积木清单：整套工作流拆成三类包。改拆法就改这个文件，然后 python3 scripts/blocks_pack.py 重新打包。每一项是仓库里的文件或文件夹（文件夹整个带上）；fonts 写字体库里的风格名，会带上那套默认字体的文件；所有包解压到同一个 video-studio 文件夹里合并。",
+ "base": {
+  "name": "底层包",
+  "file": "1-底层包.zip",
+  "intro": "入口引导、粗剪、声音、找素材、署名、发布包、出画面的工程底座。任何风格都要它。",
+  "groups": {
+   "入口和引导": [
+    ".claude/skills/video-start",
+    ".claude/skills/make-talk",
+    "scripts/doctor.py",
+    "scripts/episode.py",
+    "scripts/talk.py",
+    "scripts/skeleton.py",
+    "styles/skeletons.json",
+    "styles/talk-styles.json",
+    "styles/开工单-模板.html",
+    "docs/流程总览.md",
+    "docs/口播剪辑-标准流程.md",
+    "docs/aesthetic-rules.md",
+    "requirements.txt"
+   ],
+   "粗剪（转写、去重录去口吃、收停顿、对齐）": [
+    "scripts/asr.py",
+    "scripts/retakes.py",
+    "scripts/roughcut.py",
+    "scripts/align.py",
+    "scripts/talk_prep.py",
+    "scripts/faces.py",
+    "scripts/facecheck.py"
+   ],
+   "声音和画面修整（降噪、调光、配乐）": [
+    "scripts/polish.py",
+    "scripts/soundlib.py",
+    "scripts/grade.py",
+    "scripts/music_lib.py",
+    "music/CREDITS.txt"
+   ],
+   "找素材": [
+    "scripts/tikhub.py"
+   ],
+   "署名和发布包": [
+    "scripts/sign.py",
+    "scripts/publish_kit.py",
+    "docs/署名规则.md",
+    "studio/src/kit/sign.tsx",
+    "studio/src/kit/coverkit.tsx"
+   ],
+   "字体工具": [
+    "scripts/fonts.py",
+    "scripts/fontlib.py",
+    "fonts/library.json",
+    "fonts/字体包样张.jpg",
+    "studio/public/fonts/MiSans-Regular.otf",
+    "studio/public/fonts/MiSans-Semibold.otf",
+    "studio/public/fonts/MiSans-Heavy.otf",
+    "studio/public/fonts/MiSans-License.txt"
+   ],
+   "出画面的工程底座": [
+    "studio/package.json",
+    "studio/package-lock.json",
+    "studio/tsconfig.json",
+    "studio/src/kit/kit.tsx",
+    "studio/src/kit/clock.ts",
+    "studio/src/kit/motion.ts",
+    "studio/src/kit/chrome.tsx",
+    "studio/src/kit/footage.tsx",
+    "studio/src/kit/fontpack.json",
+    "studio/src/packs/base.tsx",
+    "studio/public/sfx",
+    "scripts/qc.py",
+    "scripts/seg_render.py"
+   ]
+  },
+  "music": "no-credit"
+ },
+ "components": {
+  "name": "组件包",
+  "file": "2-组件包.zip",
+  "needs": [
+   "base"
+  ],
+  "intro": "298 个动效组件的源码、目录和演示工程。不出镜解读片必须装；口播风格用到图表、流程、对比这些时也从这里取。",
+  "files": [
+   "studio/src/components",
+   "studio/src/gallery",
+   "studio/public/gallery",
+   "studio/src/packs/components.tsx",
+   "styles/components.json",
+   "scripts/build_pack.py",
+   "studio/tools/gallery_check.sh",
+   ".claude/skills/style-atlas"
+  ]
+ },
+ "styles": [
+  {
+   "id": "xiaolin",
+   "name": "财经解读风（对标小Lin）",
+   "needs": [
+    "base"
+   ],
+   "fonts": "xiaolin",
+   "files": [
+    ".claude/skills/xiaolin-talk",
+    "studio/src/kit/talk.tsx",
+    "studio/src/kit/talk2.tsx",
+    "studio/src/kit/talk3.tsx",
+    "studio/templates/talk.tsx",
+    "studio/src/episodes/talk02",
+    "studio/src/packs/xiaolin.tsx",
+    "scripts/talk_check.py",
+    "docs/对标拆解-小Lin口播.md",
+    "docs/对标拆解-小Lin口播-第三批.md",
+    "docs/steps/talk-01-shoot.md",
+    "docs/steps/talk-02-roughcut.md",
+    "docs/steps/talk-03-layout.md",
+    "docs/steps/talk-04-build.md",
+    "docs/reference/xiaolin",
+    "styles/previews/xiaolin.jpg"
+   ]
+  },
+  {
+   "id": "ziqi",
+   "name": "横屏深度解读风（对标子祺见微）",
+   "needs": [
+    "base"
+   ],
+   "fonts": "ziqi",
+   "files": [
+    ".claude/skills/ziqi-wide",
+    "studio/src/kit/wide.tsx",
+    "studio/src/kit/widefont.json",
+    "studio/templates/wide.tsx",
+    "studio/src/episodes/wide01",
+    "studio/src/packs/ziqi.tsx",
+    "scripts/wide_check.py",
+    "docs/对标拆解-子祺见微.md",
+    "docs/reference/ziqi",
+    "styles/previews/ziqi.jpg"
+   ]
+  },
+  {
+   "id": "zhanpeng",
+   "name": "知识科普风（对标张展鹏）",
+   "needs": [
+    "base"
+   ],
+   "fonts": "zhanpeng",
+   "files": [
+    ".claude/skills/zhanpeng-talk",
+    "scripts/zp.py",
+    "scripts/zplib",
+    "studio/src/zhanpeng",
+    "studio/src/packs/zhanpeng.tsx",
+    "styles/previews/zhanpeng.jpg"
+   ]
+  },
+  {
+   "id": "redtop",
+   "name": "红顶双标题口播风（对标得到脱不花）",
+   "needs": [
+    "base"
+   ],
+   "font_files": [
+    "AlibabaPuHuiTi-3-105-Heavy.ttf"
+   ],
+   "files": [
+    ".claude/skills/redtop-talk",
+    "scripts/redtop.py",
+    "studio/src/kit/redtop.tsx",
+    "studio/src/packs/redtop.tsx",
+    "docs/对标拆解-红顶双标题口播.md",
+    "docs/reference/redtop",
+    "styles/previews/redtop.jpg"
+   ]
+  },
+  {
+   "id": "frame",
+   "name": "相框老板风（对标约读书房）",
+   "needs": [
+    "base"
+   ],
+   "fonts": "frame",
+   "files": [
+    ".claude/skills/frame-talk",
+    "scripts/frame_setup.py",
+    "scripts/frame_ingest.py",
+    "scripts/frame_plan.py",
+    "scripts/frame_audio.py",
+    "scripts/frame_render.py",
+    "scripts/frame_check.py",
+    "scripts/frame_demo_fixture.py",
+    "scripts/library_index.py",
+    "studio/src/yuedu",
+    "studio/tools/yuedu_stills.cjs",
+    "brands/yuedu",
+    "docs/约读书房-口播成片工作流设计.md",
+    "styles/previews/frame.jpg"
+   ]
+  },
+  {
+   "id": "danjie",
+   "name": "商业快节奏风（对标蛋解创业）",
+   "needs": [
+    "base"
+   ],
+   "fonts": "danjie",
+   "files": [
+    ".claude/skills/danjie-cut",
+    "cutflow",
+    "brands/danjie",
+    "styles/previews/danjie.jpg"
+   ]
+  },
+  {
+   "id": "interview",
+   "name": "访谈纪实风（对标天图通逊）",
+   "needs": [
+    "base"
+   ],
+   "fonts": "interview",
+   "files": [
+    ".claude/skills/tiantu-interview-cut",
+    "styles/previews/interview.jpg"
+   ]
+  },
+  {
+   "id": "news",
+   "name": "横屏新闻解读（不出镜）",
+   "needs": [
+    "base",
+    "components"
+   ],
+   "files": [
+    ".claude/skills/make-news",
+    "scripts/voice.py",
+    "scripts/tts.py",
+    "scripts/commons.py",
+    "studio/templates/news.tsx",
+    "studio/tools/prep_footage.sh",
+    "docs/steps/video-01-script.md",
+    "docs/steps/video-02-factcheck.md",
+    "docs/steps/video-03-audio.md",
+    "docs/steps/video-04-footage.md",
+    "docs/steps/video-05-storyboard.md",
+    "docs/steps/video-06-build.md",
+    "docs/steps/video-07-qc.md",
+    "docs/steps/video-08-cover.md",
+    "styles/previews/news.jpg"
+   ]
+  }
+ ],
+ "extras": [
+  {
+   "id": "fonts-all",
+   "name": "字体扩展包（其余全部字体）",
+   "file": "4-可选-字体扩展包.zip",
+   "intro": "字体库里各风格默认字体以外的那些。想换字体包又不想联网下载时装。"
+  },
+  {
+   "id": "music-all",
+   "name": "配乐扩展包（要署名的曲子）",
+   "file": "4-可选-配乐扩展包.zip",
+   "intro": "底层包只带代码合成、不用署名的曲子；这里是另外那些下载来的曲子，用了要在简介里署名。"
+  },
+  {
+   "id": "pet",
+   "name": "频道宠物",
+   "file": "4-可选-频道宠物.zip",
+   "intro": "右下角那只随数据成长的海豹。要另装 Blender。",
+   "files": [
+    ".claude/skills/pet",
+    "scripts/pet.py",
+    "pet",
+    "docs/宠物成长规则.md",
+    "docs/steps/pet-01-growth.md",
+    "docs/steps/pet-02-shots.md"
+   ]
+  }
+ ]
+}

@@ -11,7 +11,9 @@
 import argparse, json, os, sys
 
 R = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-D = json.load(open(os.path.join(R, "styles", "skeletons.json"), encoding="utf8")); SK = D["skeletons"]
+D = json.load(open(os.path.join(R, "styles", "skeletons.json"), encoding="utf8"))
+# 只列装了的风格：技能文件夹和样图都在才算（风格包解压进来就自动出现，删掉就自动消失）
+SK = [s for s in D["skeletons"] if os.path.exists(os.path.join(R, ".claude", "skills", s["skill"], "SKILL.md")) and os.path.exists(os.path.join(R, "styles", "previews", s["id"] + ".jpg"))]
 
 
 def find(k):
@@ -33,7 +35,7 @@ def comps():
     f = os.path.join(R, "site", "data.js")
     if os.path.exists(f):
         s = open(f, encoding="utf8").read(); return json.loads(s[s.index("{"): s.rindex("}") + 1])["components"]
-    return json.load(open(CJ, encoding="utf8"))
+    return json.load(open(CJ, encoding="utf8")) if os.path.exists(CJ) else []     # 没装组件包就是空的
 
 
 def show(s):
@@ -87,10 +89,12 @@ def main():
     elif a.cmd == "show": show(find(a.id))
     elif a.cmd == "blocks":
         s = find(a.id); ok = set(s["blocks"])
+        if not comps(): print("还没装组件包（2-组件包.zip）。这个骨架自带的专属组件不受影响。")
         for c in comps():
             if c["group"] in ok: print(f"  {c['id']:<5}{c['name']}　[{c['group']}]　{c['use']}")
     elif a.cmd == "build":
-        json.dump([{k: c[k] for k in ("id", "name", "export", "file", "group", "use", "avoid", "props")} for c in comps()], open(CJ, "w", encoding="utf8"), ensure_ascii=False, indent=0); print(CJ)
+        if os.path.exists(os.path.join(R, "site", "data.js")): json.dump([{k: c[k] for k in ("id", "name", "export", "file", "group", "use", "avoid", "props")} for c in comps()], open(CJ, "w", encoding="utf8"), ensure_ascii=False, indent=0); print(CJ)
+        if not SK: print("还没装任何风格包。把风格包解压合并进来，再跑一遍。"); return
         sheet(); form()
         if not os.path.isdir(os.path.join(R, "site")): return
         o = os.path.join(R, "site", "atlas-skel.js"); open(o, "w", encoding="utf8").write("window.ATLAS_SKEL = " + json.dumps({"rules": D["总规矩"], "gate": D["入库门槛"], "skeletons": SK}, ensure_ascii=False) + ";\n"); print(o)

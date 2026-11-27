@@ -82,6 +82,7 @@ for name, lines, ok, how, fixer in C:
     rows.append({"item": name, "ok": bool(ok), "how": "" if ok else how, "auto": bool(fixer), "optional": name.startswith(("TikHub", "Blender", "海豹"))})
 if a.json: print(json.dumps(rows, ensure_ascii=False, indent=1)); sys.exit(0)
 for r in rows: print(("✓ " if r["ok"] else ("· " if r["optional"] else "✗ ")) + r["item"] + ("" if r["ok"] else "  →  " + r["how"] + ("（加 --fix 可自动补）" if r["auto"] and not a.fix else "")))
+if os.path.exists(os.path.join(R, "scripts", "skeleton.py")): subprocess.run([sys.executable, os.path.join(R, "scripts", "skeleton.py"), "build"], capture_output=True)   # 按现在装了的风格刷新开工单和总览图
 bad = [r for r in rows if not r["ok"] and not r["optional"]]
 print("\n全部就绪。" if not bad else f"\n还差 {len(bad)} 项。" + ("这几项自动装没装上：助手照上面「→」后面的命令接着装，装完再跑一遍；不要把命令丢给用户。" if a.fix else "助手先跑 python3 scripts/doctor.py --fix 自动装。"))
 sys.exit(1 if bad else 0)

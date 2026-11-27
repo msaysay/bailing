@@ -37,8 +37,9 @@ def parse_opts(text, style, base=None):
     return [k for k in O if k in on and k not in none]
 
 def cmd_styles(a):
-    print("口播剪辑有六种风格（五种竖屏，一种横屏长视频）。把下面的讲给用户听（不用念编号），让他挑一种；拿不准就按「适合谁」替他选一个再问他行不行。\n")
-    for k, v in S.items():
+    have = {k: v for k, v in S.items() if os.path.exists(os.path.join(R, ".claude", "skills", SKILL[k], "SKILL.md"))}       # 只讲装了的风格
+    print(f"口播剪辑现在装了 {len(have)} 种风格。把下面的讲给用户听（不用念编号），让他挑一种；拿不准就按「适合谁」替他选一个再问他行不行。\n")
+    for k, v in have.items():
         print(f"【{v['name']}】（{k}）{v['ref']}")
         print(f"  适合谁：{v['who']}\n  长什么样：{v['look']}\n  要你给：{v['give']}\n  品牌件：{v['brand']}\n")
     print("定了风格再问可选功能：scripts/talk.py options --style <风格>")
