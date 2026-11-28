@@ -36,6 +36,7 @@ def get(aid, out):
                         if not b: break
                         fh.write(b)
                 if os.path.getsize(dst) > 500000:
+                    if "unknown" in subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=codec_name", "-of", "csv=p=0", dst], capture_output=True, text=True).stdout: break    # 这一档是本机解不了的编码（比如 bvc2），换下一档
                     wh = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v", "-show_entries", "stream=width,height:format=duration", "-of", "csv=p=0", dst], capture_output=True, text=True).stdout.split()
                     json.dump({"id": aid, "desc": a.get("desc", ""), "likes": (a.get("statistics") or {}).get("digg_count"), "page": "https://www.douyin.com/video/" + aid}, open(os.path.join(out, aid + ".json"), "w", encoding="utf8"), ensure_ascii=False)
                     print(f"下好 {aid}  {' '.join(wh)}  {os.path.getsize(dst) / 1e6:.0f}MB  {a.get('desc', '')[:24]}"); return dst

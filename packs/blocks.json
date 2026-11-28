@@ -293,6 +293,20 @@
     "docs/steps/pet-01-growth.md",
     "docs/steps/pet-02-shots.md"
    ]
+  },
+  {
+   "id": "motion-match",
+   "name": "动效与匹配工作包（人后面的字、文案配画面配乐）",
+   "file": "4-可选-动效与匹配工作包.zip",
+   "intro": "两样工具：把字、数字、光环、卡片放到人身后的 14 个效果（带抠像脚本）；按文案逐句出「配什么画面、找什么素材、配乐音效怎么走」的匹配表。哪种风格都能加。",
+   "files": [
+    ".claude/skills/motion-match",
+    "scripts/matte.py",
+    "scripts/match.py",
+    "studio/src/kit/depth.tsx",
+    "studio/src/packs/depth.tsx",
+    "docs/匹配规则.md"
+   ]
   }
  ]
 }
