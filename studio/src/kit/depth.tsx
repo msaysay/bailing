@@ -49,13 +49,13 @@ export const Depth: React.FC<{ base: string; fg?: string; head?: Head; w?: numbe
 export const BehindWord: React.FC<{ text: string; at: number; until?: number; color?: string; mode?: 'rise' | 'slam' | 'slide'; size?: number; dy?: number; stroke?: boolean }> = ({ text, at, until, color = '#F2E26B', mode = 'rise', size, dy = 0, stroke }) => {
   const t = useT(), { head, w, h } = useDepth(), n = Math.max(1, text.length), fs = size ?? Math.min((w * 0.94) / n, h * 0.3), p = mode === 'slam' ? back((t - at) / 0.32) : out3((t - at) / 0.45), v = vis(t, at, until, 0.12);
   const tf = mode === 'rise' ? `translateY(${mix(fs * 0.7, 0, p)}px)` : mode === 'slam' ? `scale(${mix(1.9, 1, p)})` : `translateX(${mix(-w * 0.6, 0, p)}px)`;
-  return <div style={{ position: 'absolute', left: 0, right: 0, top: head.y * h - fs * 0.62 + dy * h, textAlign: 'center', fontFamily: FONT, fontWeight: 900, fontSize: fs, lineHeight: 1, letterSpacing: fs * 0.02, color: stroke ? 'transparent' : color, WebkitTextStroke: stroke ? `${Math.max(4, fs * 0.02)}px ${color}` : undefined, opacity: v, transform: tf, textShadow: stroke ? undefined : '0 10px 40px rgba(0,0,0,.45)', whiteSpace: 'nowrap' }}>{text}</div>;
+  return <div style={{ position: 'absolute', left: 0, right: 0, top: head.y * h - fs * 0.98 + dy * h, textAlign: 'center', fontFamily: FONT, fontWeight: 900, fontSize: fs, lineHeight: 1, letterSpacing: fs * 0.02, color: stroke ? 'transparent' : color, WebkitTextStroke: stroke ? `${Math.max(4, fs * 0.02)}px ${color}` : undefined, opacity: v, transform: tf, textShadow: stroke ? undefined : '0 10px 40px rgba(0,0,0,.45)', whiteSpace: 'nowrap' }}>{text}</div>;
 };
 
 /** 身后大数字：数字在人身后一路数上去，单位小一号跟在后面。适合「三千亿」「涨了 47%」这类一句话里最重的那个数。 */
 export const BehindNumber: React.FC<{ to: number; at: number; until?: number; unit?: string; prefix?: string; decimals?: number; color?: string; dur?: number; label?: string }> = ({ to, at, until, unit = '', prefix = '', decimals = 0, color = '#F2E26B', dur = 1.1, label }) => {
   const t = useT(), { head, w, h } = useDepth(), p = out3((t - at) / dur), s = (to * p).toFixed(decimals), fs = Math.min((w * 0.86) / Math.max(2, (prefix + s).length * 0.62 + unit.length * 0.5), h * 0.26), v = vis(t, at, until, 0.15);
-  return <div style={{ position: 'absolute', left: 0, right: 0, top: head.y * h - fs * 0.7, textAlign: 'center', fontFamily: FONT, color, opacity: v, transform: `translateY(${mix(fs * 0.4, 0, out3((t - at) / 0.4))}px)`, textShadow: '0 10px 40px rgba(0,0,0,.45)', whiteSpace: 'nowrap' }}>
+  return <div style={{ position: 'absolute', left: 0, right: 0, top: head.y * h - fs * 1.08, textAlign: 'center', fontFamily: FONT, color, opacity: v, transform: `translateY(${mix(fs * 0.4, 0, out3((t - at) / 0.4))}px)`, textShadow: '0 10px 40px rgba(0,0,0,.45)', whiteSpace: 'nowrap' }}>
     {label ? <div style={{ fontSize: fs * 0.2, fontWeight: 700, color: '#fff', marginBottom: fs * 0.04 }}>{label}</div> : null}
     <span style={{ fontSize: fs, fontWeight: 900, lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>{prefix}{s}</span><span style={{ fontSize: fs * 0.42, fontWeight: 900, marginLeft: fs * 0.04 }}>{unit}</span></div>;
 };
@@ -92,17 +92,17 @@ export const BgSwap: React.FC<{ at: number; until?: number; kind?: 'color' | 'im
 /** 环绕字：一圈字绕着头转，转到后面的那半圈被头挡住。要放两次：behind 里放一次 side="behind"，front 里放一次 side="front"，其余参数一样。
  *  省事的写法：const o = orbit({ text: '…', at: 2 })，然后 behind={o.behind} front={o.front}。 */
 export const OrbitText: React.FC<{ text: string; at: number; until?: number; side: 'behind' | 'front'; color?: string; size?: number; speed?: number; tilt?: number; ry?: number }> = ({ text, at, until, side, color = '#fff', size, speed = 0.16, tilt = -10, ry = 0.3 }) => {
-  const t = useT(), { head, w, h } = useDepth(), v = vis(t, at, until, 0.4), chars = (text + '　').split(''), n = chars.length, RX = Math.min(w * 0.44, head.r * h * 3.6), RY = RX * ry, fs = size ?? Math.min(RX * 0.3, (2 * Math.PI * RX) / n * 0.92), cy = head.y * h + head.r * h * 0.2, grow = out3((t - at) / 0.6);
-  return <div style={{ position: 'absolute', left: head.x * w, top: cy, transform: `rotate(${tilt}deg)`, opacity: v }}>{chars.map((c, i) => { const a = (i / n + (t - at) * speed) * Math.PI * 2, z = Math.sin(a), isBack = z < 0;
+  const t = useT(), { head, w, h } = useDepth(), v = vis(t, at, until, 0.4), chars = (text + '　').split(''), n = chars.length, RX = Math.min(w * 0.42, head.r * h * 2.5), RY = RX * ry, fs = size ?? Math.min(RX * 0.3, ((2 * Math.PI * RX) / n) * 0.62), cy = head.y * h + head.r * h * 1.55, grow = out3((t - at) / 0.6);
+  return <div style={{ position: 'absolute', left: head.x * w, top: cy, transform: `rotate(${tilt}deg)`, opacity: v }}>{chars.map((c, i) => { const a = (i / n - (t - at) * speed) * Math.PI * 2, z = Math.sin(a), isBack = z < 0;
     if ((side === 'behind') !== isBack) return null;
-    return <span key={i} style={{ position: 'absolute', left: Math.cos(a) * RX * grow - fs / 2, top: z * RY * grow - fs / 2, width: fs, textAlign: 'center', fontFamily: FONT, fontWeight: 900, fontSize: fs, lineHeight: 1, color, transform: `scale(${0.82 + 0.3 * (z + 1) / 2}, 1) scaleX(${Math.max(0.25, Math.abs(z) * 0.75 + 0.25)})`, opacity: isBack ? 0.75 : 1, textShadow: '0 4px 14px rgba(0,0,0,.6)' }}>{c}</span>; })}</div>;
+    return <span key={i} style={{ position: 'absolute', left: -Math.cos(a) * RX * grow - fs / 2, top: z * RY * grow - fs / 2, width: fs, textAlign: 'center', fontFamily: FONT, fontWeight: 900, fontSize: fs, lineHeight: 1, color, transform: `scale(${0.78 + 0.34 * (z + 1) / 2})`, opacity: isBack ? 0.7 : 1, textShadow: '0 4px 14px rgba(0,0,0,.6)' }}>{c}</span>; })}</div>;
 };
 export const orbit = (p: Omit<React.ComponentProps<typeof OrbitText>, 'side'>) => ({ behind: <OrbitText {...p} side="behind" />, front: <OrbitText {...p} side="front" /> });
 
 /** 肩后弹卡：几张图或几张字卡从肩膀后面弹出来，扇形排开，下半截被人挡住。说到「这几家公司」「这几样东西」时用，最多 4 张。 */
 export const PopCards: React.FC<{ items: { img?: string; title?: string; sub?: string; color?: string }[]; at: number; until?: number; gap?: number; size?: number }> = ({ items, at, until, gap = 0.12, size = 0.3 }) => {
   const t = useT(), { head, w, h } = useDepth(), n = items.length, cw = w * size, ch = cw * 1.2, v = until === undefined ? 1 : 1 - cl((t - until) / 0.25);
-  return <>{items.map((it, i) => { const k = n === 1 ? 0 : (i / (n - 1)) * 2 - 1, p = back((t - at - i * gap) / 0.42), sideX = k < 0 ? -1 : 1, x = head.x * w + k * w * 0.36 - cw / 2 + (Math.abs(k) < 0.34 && n > 2 ? sideX * 0 : 0), y0 = head.y * h + head.r * h * 2.2, y = mix(y0, head.y * h - ch * (0.72 - Math.abs(k) * 0.22), p);
+  return <>{items.map((it, i) => { const k = n === 1 ? 0 : (i / (n - 1)) * 2 - 1, p = back((t - at - i * gap) / 0.42), sideX = k < 0 ? -1 : 1, x = head.x * w + k * w * 0.36 - cw / 2 + (Math.abs(k) < 0.34 && n > 2 ? sideX * 0 : 0), y0 = head.y * h + head.r * h * 2.2, y = mix(y0, head.y * h - ch * (1.2 - Math.abs(k) * 0.62), p);
     return <div key={i} style={{ position: 'absolute', left: x, top: y, width: cw, height: ch, borderRadius: 22, overflow: 'hidden', background: it.color ?? '#151A24', border: '5px solid #fff', boxShadow: '0 18px 44px rgba(0,0,0,.5)', transform: `rotate(${k * 9}deg) scale(${mix(0.5, 1, p)})`, opacity: cl((t - at - i * gap) / 0.1) * v, fontFamily: FONT, color: '#fff', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
       {it.img ? <Img src={src(it.img)} style={{ width: '100%', height: it.title ? '62%' : '100%', objectFit: 'cover' }} /> : null}
       {it.title ? <div style={{ padding: `${cw * 0.07}px ${cw * 0.08}px` }}><div style={{ fontSize: cw * 0.17, fontWeight: 900, lineHeight: 1.15 }}>{it.title}</div>{it.sub ? <div style={{ fontSize: cw * 0.09, opacity: 0.75, marginTop: 6 }}>{it.sub}</div> : null}</div> : null}</div>; })}</>;
@@ -140,9 +140,9 @@ export const Spot: React.FC<{ at: number; until?: number; color?: string; dark?:
 };
 
 /** 身后问号 / 叹号 / 符号雨：一堆符号从人身后往上冒。设问句、「凭什么」「真的吗」时用。 */
-export const SymbolBurst: React.FC<{ at: number; until?: number; symbol?: string; count?: number; color?: string }> = ({ at, until, symbol = '？', count = 9, color = '#fff' }) => {
+export const SymbolBurst: React.FC<{ at: number; until?: number; symbol?: string; count?: number; color?: string }> = ({ at, until, symbol = '？', count = 13, color = '#fff' }) => {
   const t = useT(), { head, w, h } = useDepth(), end = until ?? at + 2.2;
-  return <>{Array.from({ length: count }, (_, i) => { const r = (n: number) => { const x = Math.sin((i + 1) * 91.7 * n) * 43758.5453; return x - Math.floor(x); }, st = at + r(1) * 0.5, p = cl((t - st) / (end - st)), a = -Math.PI / 2 + (r(2) - 0.5) * 2.4, dist = head.r * h * (2.2 + r(3) * 2.6) * out3(p * 1.6), fs = w * (0.09 + r(4) * 0.12);
+  return <>{Array.from({ length: count }, (_, i) => { const r = (n: number) => { const x = Math.sin((i + 1) * 91.7 * n) * 43758.5453; return x - Math.floor(x); }, st = at + r(1) * 0.5, p = cl((t - st) / (end - st)), a = -Math.PI / 2 + (r(2) - 0.5) * 2.4, dist = head.r * h * (2.2 + r(3) * 2.6) * out3(p * 1.6), fs = w * (0.12 + r(4) * 0.15);
     return <div key={i} style={{ position: 'absolute', left: head.x * w + Math.cos(a) * dist - fs / 2, top: head.y * h + Math.sin(a) * dist - fs / 2, fontFamily: FONT, fontWeight: 900, fontSize: fs, lineHeight: 1, color: i % 3 === 0 ? '#F2E26B' : color, opacity: cl(p * 8) * (1 - cl((p - 0.7) / 0.3)), transform: `rotate(${(r(5) - 0.5) * 50}deg) scale(${back(p * 3)})`, textShadow: '0 6px 18px rgba(0,0,0,.5)' }}>{symbol}</div>; })}</>;
 };
 
