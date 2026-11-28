@@ -289,6 +289,51 @@
    "own_from": "studio/src/kit/redtop.tsx（拆解见 docs/对标拆解-红顶双标题口播.md）；也可以单独打包：python3 scripts/redtop_pack.py"
   },
   {
+   "id": "zhinan",
+   "name": "网格取景框口播风",
+   "ref": "对标直男财经的竖屏口播",
+   "face": true,
+   "orient": "竖屏",
+   "fits": [
+    "财经",
+    "商业",
+    "新闻",
+    "科技",
+    "生活"
+   ],
+   "skill": "zhinan-talk",
+   "style": "",
+   "img": "styles/previews/zhinan.jpg",
+   "tall": 1,
+   "look": "人全屏两秒一换景别；橄榄色网格底的取景框面板里放素材；满屏素材带小人窗；胸口贴素材、表情、黄色大数字和词牌；身后大黄字；粗斜宋体白字幕一句一句出；全部硬切，没有片头片尾。",
+   "lock": [
+    "全部硬切",
+    "画面平均两秒变一次",
+    "字幕整句出、不逐词变色",
+    "人全屏时不常驻任何东西",
+    "没有片头片尾"
+   ],
+   "swap": [
+    "账号名（取景框角上）",
+    "黄色（默认柠檬黄）",
+    "配乐（默认很轻，可以不要）",
+    "素材",
+    "表情符号"
+   ],
+   "blocks": [],
+   "avoid": [
+    "数据图表",
+    "炫技动效",
+    "广播风 · 系统与文字",
+    "广播风 · 粒子与终端",
+    "纸面风 · 手机大字"
+   ],
+   "own": [
+    "整条片子由 plan.json 驱动，不用组件：python3 scripts/zhinan.py"
+   ],
+   "own_from": "studio/src/kit/zhinan.tsx（拆解见 docs/对标拆解-直男财经.md）；也可以单独打包：python3 scripts/zhinan_pack.py"
+  },
+  {
    "id": "ziqi",
    "name": "横屏深度解读风",
    "ref": "对标子祺见微",

@@ -179,6 +179,30 @@
    ]
   },
   {
+   "id": "zhinan",
+   "name": "网格取景框口播风（对标直男财经）",
+   "needs": [
+    "base"
+   ],
+   "font_files": [
+    "SourceHanSerifSC-Heavy.otf",
+    "AlimamaShuHeiTi-Bold.ttf"
+   ],
+   "files": [
+    ".claude/skills/zhinan-talk",
+    "scripts/zhinan.py",
+    "scripts/redtop.py",
+    "scripts/matte.py",
+    "scripts/match.py",
+    "studio/src/kit/zhinan.tsx",
+    "studio/src/packs/zhinan.tsx",
+    "docs/对标拆解-直男财经.md",
+    "docs/reference/zhinan",
+    "docs/匹配规则.md",
+    "styles/previews/zhinan.jpg"
+   ]
+  },
+  {
    "id": "frame",
    "name": "相框老板风（对标约读书房）",
    "needs": [

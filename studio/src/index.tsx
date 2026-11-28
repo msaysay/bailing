@@ -16,6 +16,7 @@ import { SkinTalk, skinDefault } from './kit/skin';
 import { CoverKit, coverDefault } from './kit/coverkit';
 import { SignDemo, signDemoDefault } from './kit/sign';
 import { Redtop, rtDefault } from './kit/redtop';
+import { Zhinan, znDefault } from './kit/zhinan';
 import { Talk3Demo, TALK3_DEMO_SEC } from './kit/talk3';
 import { DepthDemo, depthDemoDefault, DEPTH_DEMOS } from './kit/depth';
 import { Cover01, Cover01V } from './episodes/cover01';
@@ -59,6 +60,7 @@ registerRoot(() => (
     {/* 手势全息风：数据驱动。scripts/hud.py render 用 --props 传每期的 plan。 */}
     <Composition id="HUD" component={HudFilm} width={HUD_W} height={HUD_H} fps={HUD_FPS} durationInFrames={90} defaultProps={hudDefault} calculateMetadata={({ props }) => ({ durationInFrames: Math.max(1, Math.round(props.total * HUD_FPS)), width: props.w ?? HUD_W, height: props.h ?? HUD_H })} />
     <Composition id="DEPTH-DEMO" component={DepthDemo} width={1080} height={1920} fps={30} durationInFrames={300} defaultProps={depthDemoDefault} calculateMetadata={({ props }) => ({ width: props.w, height: props.h, durationInFrames: Math.round(props.clip * 30) * DEPTH_DEMOS.length })} />
+    <Composition id="ZHINAN" component={Zhinan} width={1080} height={1920} fps={30} durationInFrames={300} defaultProps={znDefault} calculateMetadata={({ props }) => ({ durationInFrames: Math.max(1, Math.round(props.total * 30)) })} />
     <Composition id="PET-DEMO" component={PetDemo} width={1920} height={1080} fps={30} durationInFrames={PET_DEMO_SEC * 30} />
     <Composition id="GALLERY" component={Gallery} width={1920} height={1080} fps={GFPS} durationInFrames={CATALOG.length * SLOT * GFPS} />
     <Composition id="DEMO-CLIP" component={DemoClip} width={1920} height={1080} fps={30} durationInFrames={240} />

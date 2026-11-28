@@ -28,6 +28,8 @@
 | `tiantu-interview-cut` | 骨架：访谈纪实风（竖屏） | `.claude/skills/tiantu-interview-cut/SKILL.md` |
 | `ziqi-wide` | 骨架：横屏深度解读风（长视频） | `.claude/skills/ziqi-wide/SKILL.md` |
 | `redtop-talk` | 骨架：红顶双标题口播风（竖屏；丢一条原片就出片，不用写画面代码） | `.claude/skills/redtop-talk/SKILL.md` |
+| `zhinan-talk` | 骨架：网格取景框口播风（竖屏；对标直男财经，丢一条原片就出片，不用写画面代码） | `.claude/skills/zhinan-talk/SKILL.md` |
+| `motion-match` | 加料：把字放到人身后的效果；按文案逐句出「配什么画面、找什么素材、配乐音效怎么走」的匹配表 | `.claude/skills/motion-match/SKILL.md` |
 | `footage-guide` | 找素材：先用没风险的，不够再引导接 TikHub；查水印、裁进素材框、记来源 | `.claude/skills/footage-guide/SKILL.md` |
 | `style-atlas` | 选骨架、挑组件、查专业名词、把新风格拆成新骨架 | `.claude/skills/style-atlas/SKILL.md` |
 | `pet` | 频道宠物（用户提到才做） | `.claude/skills/pet/SKILL.md` |

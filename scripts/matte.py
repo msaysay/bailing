@@ -28,7 +28,9 @@ URL = {"fine": ("rvm.onnx", "https://github.com/PeterL1n/RobustVideoMatting/rele
 
 
 def model(kind):
-    import onnxruntime as ort
+    try: import onnxruntime as ort
+    except ImportError:                                  # 抠像才用到，第一次用时自己装
+        print("安装 onnxruntime …"); subprocess.run([sys.executable, "-m", "pip", "install", "-q", "onnxruntime"], check=True); import onnxruntime as ort
     n, u = URL[kind]; p = os.path.join(CACHE, n)
     if not os.path.exists(p) or os.path.getsize(p) < 1e6:
         os.makedirs(CACHE, exist_ok=True); print("下载抠像模型 …", n); urllib.request.urlretrieve(u, p)
